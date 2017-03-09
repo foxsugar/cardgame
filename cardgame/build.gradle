@@ -1,0 +1,52 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.2.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+jar {
+	baseName = 'cardgame'
+	version = '0.0.1-SNAPSHOT'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-aop')
+	compile('org.springframework.boot:spring-boot-starter-data-redis')
+
+	compile group: 'io.netty', name: 'netty-all', version: '4.1.6.Final'
+
+	//protobuf-json-format
+	compile 'com.googlecode.protobuf-java-format:protobuf-java-format:1.2'
+
+	//mysql driver
+	compile 'mysql:mysql-connector-java:5.1.36'
+
+	//jackson
+	compile 'com.fasterxml.jackson.core:jackson-core:2.6.0'
+	compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.0'
+	compile 'com.fasterxml.jackson.core:jackson-databind:2.6.0'
+
+//    compile group: 'net.sf.json-lib', name: 'json-lib', version: '2.4'
+	compile "net.sf.json-lib:json-lib:2.4:jdk15"
+
+	compile 'com.google.code.gson:gson:2.6.2'
+
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
