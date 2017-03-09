@@ -3,6 +3,7 @@ package com.code.server.db.model;
 import com.sun.istack.internal.NotNull;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by win7 on 2017/3/8.
@@ -19,7 +20,7 @@ public class User {
     private long id;
 
     @NotNull
-    private long userId22222;
+    private long userId;
 
     @NotNull
     private String account;
@@ -27,64 +28,234 @@ public class User {
     @NotNull
     private String password;
 
-    @NotNull
-    private String username;
+    @Column(columnDefinition = "varchar(4000)")
+    private String name;
 
     @NotNull
     private String ipConfig;
 
-    @NotNull
-    private int money;//虚拟货币
+    @Column(columnDefinition = "double(10,2)")
+    private double money;//虚拟货币
 
-    @NotNull
-    private int cash;//货币
+    @Column(columnDefinition = "double(10,2)")
+    private double cash;//货币
 
-    @NotNull
+    @Column(columnDefinition = "varchar(4000)")
     private String image;//头像
 
     @NotNull
     private String vip;//vip
 
-    @NotNull
     private String fatherId;//代理id
 
-    @NotNull
     private String uuid;//uuid
 
-    @NotNull
     private String openId;//openId
 
     @NotNull
     private String sex;//
 
-    @NotNull
     private String aliId;
 
-    @NotNull
+    @Column(columnDefinition = "varchar(2000)")
     private String email;
 
-    @NotNull
+    private Date registDate;
+
+    private Date lastLoginDate;
+
     private String column1;
 
-    @NotNull
     private String column2;
 
-    @NotNull
     private String column3;
 
-    @NotNull
     private String column4;
 
-    @NotNull
-    private String column5;
+    @Column(columnDefinition = "text")
+    private String column5;//text类型
 
-    // ==============
-    // PUBLIC METHODS
-    // ==============
-    public User() { }
-    public User(long id) {
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
         this.id = id;
     }
-    // Getter and setter methods
-    // ...
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getIpConfig() {
+        return ipConfig;
+    }
+
+    public void setIpConfig(String ipConfig) {
+        this.ipConfig = ipConfig;
+    }
+
+    public double getMoney() {
+        return money;
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
+    }
+
+    public double getCash() {
+        return cash;
+    }
+
+    public void setCash(double cash) {
+        this.cash = cash;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getVip() {
+        return vip;
+    }
+
+    public void setVip(String vip) {
+        this.vip = vip;
+    }
+
+    public String getFatherId() {
+        return fatherId;
+    }
+
+    public void setFatherId(String fatherId) {
+        this.fatherId = fatherId;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getAliId() {
+        return aliId;
+    }
+
+    public void setAliId(String aliId) {
+        this.aliId = aliId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Date getRegistDate() {
+        return registDate;
+    }
+
+    public void setRegistDate(Date registDate) {
+        this.registDate = registDate;
+    }
+
+    public Date getLastLoginDate() {
+        return lastLoginDate;
+    }
+
+    public void setLastLoginDate(Date lastLoginDate) {
+        this.lastLoginDate = lastLoginDate;
+    }
+
+    public String getColumn1() {
+        return column1;
+    }
+
+    public void setColumn1(String column1) {
+        this.column1 = column1;
+    }
+
+    public String getColumn2() {
+        return column2;
+    }
+
+    public void setColumn2(String column2) {
+        this.column2 = column2;
+    }
+
+    public String getColumn3() {
+        return column3;
+    }
+
+    public void setColumn3(String column3) {
+        this.column3 = column3;
+    }
+
+    public String getColumn4() {
+        return column4;
+    }
+
+    public void setColumn4(String column4) {
+        this.column4 = column4;
+    }
+
+    public String getColumn5() {
+        return column5;
+    }
+
+    public void setColumn5(String column5) {
+        this.column5 = column5;
+    }
 } // class User
