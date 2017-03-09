@@ -27,8 +27,10 @@ public class LoginAction {
     @RequestMapping("/")
     @ResponseBody
     String home() {
-//        userService.test();
 
+
+
+        String a;
         return "Hello World!";
     }
 
