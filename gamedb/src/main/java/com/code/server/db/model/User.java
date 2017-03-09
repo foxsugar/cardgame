@@ -19,7 +19,7 @@ public class User {
     private long id;
 
     @NotNull
-    private long userId;
+    private long userId1111;
 
     @NotNull
     private String account;
