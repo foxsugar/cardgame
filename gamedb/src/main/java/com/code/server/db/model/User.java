@@ -21,6 +21,10 @@ public class User {
     @NotNull
     private long userId;
 
+
+
+    @NotNull
+    private long userId2;
     @NotNull
     private String account;
 
