@@ -28,6 +28,7 @@ repositories {
 
 
 dependencies {
+	compile project(path: ':gamedb')
 	compile('org.springframework.boot:spring-boot-starter-aop')
 	compile('org.springframework.boot:spring-boot-starter-data-redis')
 
