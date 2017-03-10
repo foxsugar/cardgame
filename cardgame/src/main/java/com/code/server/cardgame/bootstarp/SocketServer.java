@@ -1,5 +1,6 @@
 package com.code.server.cardgame.bootstarp;
 
+import com.code.server.cardgame.handler.GameProcessor;
 import com.code.server.cardgame.utils.ProperitesUtil;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -26,7 +27,7 @@ public class SocketServer implements Runnable{
         Properties p = null;
         int port = 8081;
         try {
-            p = ProperitesUtil.loadProperties("application.properites");
+            p = ProperitesUtil.loadProperties("application.properties");
             port = Integer.valueOf(p.getProperty("socket.port"));
 
         } catch (Exception e) {
@@ -68,6 +69,8 @@ public class SocketServer implements Runnable{
     public void run() {
         try {
             start();
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }

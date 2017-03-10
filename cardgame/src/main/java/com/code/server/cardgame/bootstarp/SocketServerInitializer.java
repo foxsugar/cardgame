@@ -19,6 +19,7 @@ package com.code.server.cardgame.bootstarp;
 import com.code.server.cardgame.encoding.GameCharsDecoder;
 import com.code.server.cardgame.encoding.GameCharsEncoder;
 import com.code.server.cardgame.handler.ChatMsgHandler;
+import com.code.server.cardgame.handler.GameMsgHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -46,6 +47,6 @@ public class SocketServerInitializer extends ChannelInitializer<SocketChannel> {
         p.addLast("encoder", new GameCharsEncoder());
         p.addLast("decoder", new GameCharsDecoder());
 //        p.addLast(new SocketHandler());
-        p.addLast("chatHandler", new ChatMsgHandler());
+        p.addLast("chatHandler", new GameMsgHandler());
     }
 }

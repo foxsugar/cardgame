@@ -4,6 +4,9 @@ package com.code.server.cardgame.handler;
 
 import com.code.server.cardgame.Message.MessageHandler;
 import com.code.server.cardgame.Message.MessageHolder;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -13,6 +16,8 @@ import java.util.concurrent.TimeUnit;
  *
  */
 public class GameProcessor implements Runnable{
+    @Autowired
+    private MessageHandler messageHandler;
 
     private GameProcessor(){}
 
@@ -34,6 +39,7 @@ public class GameProcessor implements Runnable{
     public void run() {
        while(true){
 
+
            //timer
            MessageHolder messHolder = null;
            try {
@@ -44,7 +50,10 @@ public class GameProcessor implements Runnable{
            if(messHolder != null&&messHolder.message !=null){
                System.out.println("-111111111111111");
                handler.handleMessage(messHolder);
+//               MessageHandler handler1 = ApplicationContext.getBean(MessageHandler.class);
+
            }
+//           System.out.println("------------");
        }
     }
 

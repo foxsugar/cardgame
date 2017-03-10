@@ -20,6 +20,7 @@ public class GameMsgHandler extends ChannelInboundHandlerAdapter {
         MessageHolder messageHolder = new MessageHolder();
         messageHolder.ctx = ctx;
         messageHolder.message = msg;
+        System.out.println(msg);
 
         JSONObject jSONObject = (JSONObject)msg;
         String service = jSONObject.getString("service");

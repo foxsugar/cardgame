@@ -11,14 +11,16 @@ import java.util.Properties;
 public class ProperitesUtil {
     public static void main(String[] args) throws Exception {
 
-        Properties p = loadProperties("server.properites");
+        Properties p = loadProperties("application.properties");
         System.out.println(p.getProperty("url"));
 
     }
 
     public static Properties loadProperties(String name) throws Exception {
         Properties p = new Properties();
+        System.out.println(ProperitesUtil.class.getResource("/" + name));
         URL url = ProperitesUtil.class.getResource("/" + name);
+//        System.out.println(url.getAuthority());
         if(url==null){
             throw new Exception("找不到文件");
         }
