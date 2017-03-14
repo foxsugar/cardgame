@@ -7,6 +7,7 @@ import java.util.Map;
  * Created by sunxianping on 2017/3/14.
  */
 public class CardStruct {
+
     private static final int type_单 = 1;
     private static final int type_对 = 2;
     private static final int type_三 = 3;
