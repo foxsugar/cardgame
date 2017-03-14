@@ -60,6 +60,8 @@ public class ServerInfo {
     @Column(columnDefinition = "text")
     private String column5;//text类型
 
+    private int appleCheck;
+
     public long getId() {
         return id;
     }
@@ -210,5 +212,14 @@ public class ServerInfo {
 
     public void setColumn5(String column5) {
         this.column5 = column5;
+    }
+
+    public int getAppleCheck() {
+        return appleCheck;
+    }
+
+    public ServerInfo setAppleCheck(int appleCheck) {
+        this.appleCheck = appleCheck;
+        return this;
     }
 }

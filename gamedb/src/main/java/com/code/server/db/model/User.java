@@ -29,7 +29,7 @@ public class User {
     private String password;
 
     @Column(columnDefinition = "varchar(4000)")
-    private String name;
+    private String username;
 
     @NotNull
     private String ipConfig;
@@ -43,8 +43,7 @@ public class User {
     @Column(columnDefinition = "varchar(4000)")
     private String image;//头像
 
-    @NotNull
-    private String vip;//vip
+    private int vip;//vip
 
     private String fatherId;//代理id
 
@@ -52,8 +51,7 @@ public class User {
 
     private String openId;//openId
 
-    @NotNull
-    private String sex;//
+    private int sex;//
 
     private String aliId;
 
@@ -99,12 +97,13 @@ public class User {
         this.account = account;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public User setUsername(String username) {
+        this.username = username;
+        return this;
     }
 
     public String getPassword() {
@@ -147,13 +146,7 @@ public class User {
         this.image = image;
     }
 
-    public String getVip() {
-        return vip;
-    }
 
-    public void setVip(String vip) {
-        this.vip = vip;
-    }
 
     public String getFatherId() {
         return fatherId;
@@ -179,12 +172,22 @@ public class User {
         this.openId = openId;
     }
 
-    public String getSex() {
+    public int getVip() {
+        return vip;
+    }
+
+    public User setVip(int vip) {
+        this.vip = vip;
+        return this;
+    }
+
+    public int getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public User setSex(int sex) {
         this.sex = sex;
+        return this;
     }
 
     public String getAliId() {
@@ -258,4 +261,5 @@ public class User {
     public void setColumn5(String column5) {
         this.column5 = column5;
     }
+
 } // class User

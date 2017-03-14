@@ -4,6 +4,8 @@ package com.code.server.cardgame.core;
 import com.code.server.db.model.User;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.util.List;
+
 /**
  * Created by win7 on 2017/3/9.
  */
@@ -38,4 +40,23 @@ public class Player {
         this.ctx = ctx;
         return this;
     }
+
+    public void sendMsg(Object msg){
+        this.ctx.writeAndFlush(msg);
+    }
+
+    public static void sendMsg2Player(Object msg, long userId) {
+        Player other = GameManager.getInstance().players.get(userId);
+        if (other != null) {
+            other.ctx.writeAndFlush(msg);
+        }
+    }
+
+    public static void sendMsg2Player(Object msg, List<Long> users) {
+        for (long id : users) {
+            sendMsg2Player(msg,id);
+        }
+    }
+
+
 }

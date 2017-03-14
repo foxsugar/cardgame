@@ -16,11 +16,19 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    private IUserDao userDao;
+    public IUserDao userDao;
 
 
     public void test(){
-        List<User> users = userDao.findByName("1");
-        System.out.println(users.size());
+    }
+
+
+    public User getUserByAccountAndPassword(String account, String password) {
+        return userDao.getUserByAccountAndPassword(account, password);
+    }
+
+    public User save(User user) {
+        return userDao.save(user);
+
     }
 }

@@ -1,5 +1,6 @@
-package com.code.server.cardgame.Message;
+package com.code.server.cardgame.core;
 
+import com.code.server.cardgame.Message.MessageHolder;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.response.ResponseVo;
@@ -23,24 +24,19 @@ import java.net.InetSocketAddress;
  */
 
 @Service
-public class MessageHandler {
-
-
-
-    @Autowired
-    private UserService userServicedao;
-
-    @Autowired
-    private IUserDao userDao;
+public class MsgDispatch {
 
     public static AttributeKey<Long> attributeKey = AttributeKey.newInstance("userId");
-    private Gson gson = new Gson();
-    private IdWorker idWorker = new IdWorker(1, 1);
+
+    public static void sendMsg(ChannelHandlerContext ctx,Object msg){
+        ctx.writeAndFlush(msg);
+    }
+
 
     public void handleMessage(MessageHolder msgHolder) {
-        System.out.println("000000000000000000000");
         Object message = msgHolder.message;
         JSONObject jSONObject = (JSONObject) message;
+        System.out.println("处理消息== "+jSONObject);
         String service = jSONObject.getString("service");
         String method = jSONObject.getString("method");
         JSONObject params = jSONObject.getJSONObject("params");
@@ -48,8 +44,10 @@ public class MessageHandler {
         //逻辑
         int code = dispatchAllMsg(service, method, params, msgHolder.ctx);
         //客户端要的方法返回
-        ResponseVo vo = new ResponseVo(service, method, code);
-        msgHolder.ctx.write(gson.toJson(vo));
+        if (code != 0) {
+            ResponseVo vo = new ResponseVo(service, method, code);
+            sendMsg(msgHolder.ctx,vo);
+        }
 
     }
 
@@ -65,18 +63,21 @@ public class MessageHandler {
     }
 
     private int dispatchUserService(String method, JSONObject params, ChannelHandlerContext ctx) {
-//        UserService userService1 = SpringUtil.getBean(UserService.class);
-//        System.out.println(userService1);
+
         GameUserService gameUserService = SpringUtil.getBean(GameUserService.class);
         switch (method) {
             case "login":
+                String account = params.getString("account");
+                String password = params.getString("password");
+                return gameUserService.login(account, password, ctx);
             case "appleCheck":
-
-//                UserService userService1 = SpringUtil.getBean(UserService.class);
-//                UserService userService = (UserService)SpringUtil.getBean("userService");
-//                System.out.println(userService == userService1);
                 return gameUserService.appleCheck(ctx);
-
+            case "checkOpenId":
+                String openId = params.getString("openId");
+                String username = params.getString("username");
+                String image = params.getString("image");
+                int sex = Integer.parseInt(params.getString("sex"));
+                return gameUserService.checkOpenId(openId,username,image,sex,ctx);
             default:
 
                 return -1;
