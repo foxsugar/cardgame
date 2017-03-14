@@ -29,8 +29,6 @@ import java.util.UUID;
 public class GameUserService {
 
 
-
-
     private void doLogin(User user ,ChannelHandlerContext ctx){
         InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
         String clientIP = insocket.getAddress().getHostAddress();
@@ -44,6 +42,7 @@ public class GameUserService {
 
 
     }
+
     public int login(String account, String password, ChannelHandlerContext ctx) {
 
         Player player = GameManager.getInstance().getPlayerByAccount(account);
@@ -130,8 +129,6 @@ public class GameUserService {
         return 0;
     }
 
-
-
     public int checkOpenId(final String openId,String username, final String image,int sex,ChannelHandlerContext ctx){
 
         ThreadPool.getInstance().executor.execute(()->{
@@ -201,7 +198,6 @@ public class GameUserService {
         return 0;
     }
 
-
     private User createUser(String account,String password){
         User newUser = new User();
         newUser.setId(-100);
@@ -217,16 +213,68 @@ public class GameUserService {
         newUser.setImage("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=253777390,947512827&fm=23&gp=0.jpg/96");
         newUser.setSex(1);
         newUser.setVip(0);
-
         newUser.setUuid("0");
         newUser.setMoney(100);
 
-
-
-
-
-
-
         return newUser;
+    }
+
+    public int getUserMessage(String userId,ChannelHandlerContext ctx) {
+
+        ThreadPool.getInstance().executor.execute(()->{
+            UserService userService = SpringUtil.getBean(UserService.class);
+            Player player  = GameManager.getInstance().players.get(userId);
+            User user = null;
+            if (player != null) {
+                user = player.getUser();
+            } else {
+                user = userService.userDao.getUserByUserId(userId);
+            }
+            ResponseVo vo = new ResponseVo("userService","getUserMessage",getUserVo(user));
+            MsgDispatch.sendMsg(ctx,vo);
+        });
+        return 0;
+    }
+
+    public int getUserImage(String userId,ChannelHandlerContext ctx) {
+        ThreadPool.getInstance().executor.execute(()->{
+            UserService userService = SpringUtil.getBean(UserService.class);
+            Player player  = GameManager.getInstance().players.get(userId);
+            User user = null;
+            if (player != null) {
+                user = player.getUser();
+            } else {
+                user = userService.userDao.getUserByUserId(userId);
+            }
+
+            JSONObject jSONObject = new JSONObject();
+            jSONObject.put("Image", user.getImage());
+
+            ResponseVo vo = new ResponseVo("userService","getUserImage",jSONObject);
+            MsgDispatch.sendMsg(ctx,vo);
+        });
+        return 0;
+    }
+
+    public int register(String userId,ChannelHandlerContext ctx) {
+
+        ThreadPool.getInstance().executor.execute(()->{
+            UserService userService = SpringUtil.getBean(UserService.class);
+            Player player  = GameManager.getInstance().players.get(userId);
+            User user = null;
+            if (player != null) {
+                user = player.getUser();
+            } else {
+                user = userService.userDao.getUserByUserId(userId);
+            }
+            if(user==null){
+                ResponseVo vo = new ResponseVo("userService","register",0);
+                MsgDispatch.sendMsg(ctx,vo);
+            }else{
+                ResponseVo vo = new ResponseVo("userService","register",getUserVo(user));
+                MsgDispatch.sendMsg(ctx,vo);
+            }
+        });
+        return 0;
     }
 }

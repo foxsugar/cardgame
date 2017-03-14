@@ -65,6 +65,7 @@ public class MsgDispatch {
     private int dispatchUserService(String method, JSONObject params, ChannelHandlerContext ctx) {
 
         GameUserService gameUserService = SpringUtil.getBean(GameUserService.class);
+        String userId = params.getString("userId");
         switch (method) {
             case "login":
                 String account = params.getString("account");
@@ -78,6 +79,15 @@ public class MsgDispatch {
                 String image = params.getString("image");
                 int sex = Integer.parseInt(params.getString("sex"));
                 return gameUserService.checkOpenId(openId,username,image,sex,ctx);
+            case "getUserMessage":
+                return gameUserService.getUserMessage(userId,ctx);
+
+            case "getUserImage":
+                return gameUserService.getUserImage(userId,ctx);
+
+            case "register":
+                return gameUserService.register(userId,ctx);
+
             default:
 
                 return -1;
