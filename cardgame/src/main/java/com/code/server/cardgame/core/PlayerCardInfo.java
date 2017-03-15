@@ -8,10 +8,11 @@ import java.util.List;
  * Created by sunxianping on 2017/3/14.
  */
 public class PlayerCardInfo {
-    protected List<Integer> cards = new ArrayList<>();//手上的牌
+    public long userId;
+    public List<Integer> cards = new ArrayList<>();//手上的牌
     protected List<Integer> disCards = new ArrayList<>();//丢弃的牌
 
-
+    protected CardStruct onCard = new CardStruct();//上一个人出的牌
 
     public void init(){
         initCards();
@@ -38,5 +39,19 @@ public class PlayerCardInfo {
 
     public boolean isCanPlay(CardStruct cardStruct){
 
+        return false;
+    }
+
+
+    public boolean isCanCard(CardStruct cardStruct){
+
+        return false;
+    }
+
+    //检测出牌是否合法
+    public boolean checkPlayCard(CardStruct cardStruct){
+        List<Integer> cardList = onCard.cards;
+
+        return false;
     }
 }

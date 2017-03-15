@@ -36,3 +36,7 @@ dependencies {
 	compile('com.google.code.gson:gson:2.6.2')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
+
+tasks.withType(JavaCompile) {
+	options.encoding = "UTF-8"
+}
