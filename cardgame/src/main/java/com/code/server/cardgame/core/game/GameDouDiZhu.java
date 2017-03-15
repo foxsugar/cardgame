@@ -18,6 +18,7 @@ public class GameDouDiZhu extends Game{
     protected List<Long> jiaoList = new ArrayList<>();
     protected long dizhu;
     protected List<Long> users = new ArrayList<>();
+    private Random rand = new Random();
 
 
 
@@ -58,18 +59,23 @@ public class GameDouDiZhu extends Game{
         }
     }
 
-    protected void chooseDizhu(long lastDizhu) {
+    protected void chooseDizhu(long lastJiaoUser) {
+        long canJiao = 0;
         //随机叫地主
-        if(lastDizhu == 0){
-
+        if (lastJiaoUser == 0) {
+            int index = rand.nextInt(3);
+            canJiao = users.get(index);
+        } else {
+            canJiao = nextTurnId(lastJiaoUser);
         }
+
     }
 
     protected void jiaoDizhu(long lastDizhu){
 
     }
 
-    public long nextTurnId(int curId) {
+    public long nextTurnId(long curId) {
         int index = users.indexOf(curId);
 
         int nextId = index + 1;

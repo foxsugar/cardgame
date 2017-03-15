@@ -83,18 +83,15 @@ public class MsgDispatch {
                 int sex = Integer.parseInt(params.getString("sex"));
                 return gameUserService.checkOpenId(openId,username,image,sex,ctx);
             case "getUserMessage":
-<<<<<<< HEAD
-                return gameUserService.getUserMessage(userId,ctx);
+                return gameUserService.getUserMessage(getPlayerByCtx(ctx));
 
             case "getUserImage":
                 return gameUserService.getUserImage(userId,ctx);
 
             case "register":
                 return gameUserService.register(userId,ctx);
-=======
-                return gameUserService.getUserMessage(getPlayerByCtx(ctx));
+
             case "reconnection":
->>>>>>> 95a1d35c610720295447625a7f963f958689a00f
 
             default:
 

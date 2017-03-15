@@ -27,6 +27,8 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.*;
 
+import static com.code.server.cardgame.core.GameManager.getUserVo;
+
 /**
  * Created by win7 on 2017/3/10.
  */
@@ -63,7 +65,7 @@ public class GameUserService {
                 player.getCtx().close();
             }
             doLogin(player.getUser(),ctx);
-            ResponseVo vo = new ResponseVo("userService", "login", GameManager.getUserVo(player.getUser()));
+            ResponseVo vo = new ResponseVo("userService", "login", getUserVo(player.getUser()));
             MsgDispatch.sendMsg(ctx,vo);
 
 
@@ -88,7 +90,7 @@ public class GameUserService {
                 }
                 //加入缓存
                 doLogin(user, ctx);
-                vo.setParams(GameManager.getUserVo(user));
+                vo.setParams(getUserVo(user));
                 MsgDispatch.sendMsg(ctx,vo);
             });
         }
@@ -115,15 +117,13 @@ public class GameUserService {
         return 0;
     }
 
-<<<<<<< HEAD
-=======
 
     public int getUserMessage(Player player){
         if (player == null || player.getUser() == null) {
             return ErrorCode.USERID_ERROR;
         }
         User user = player.getUser();
-        UserVo userVo = GameManager.getUserVo(user);
+        UserVo userVo = getUserVo(user);
         ResponseVo vo = new ResponseVo("userService", "getUserMessage", userVo);
         player.sendMsg(vo);
         return 0;
@@ -162,7 +162,7 @@ public class GameUserService {
         return 0;
     }
 
->>>>>>> 95a1d35c610720295447625a7f963f958689a00f
+
     public int checkOpenId(final String openId,String username, final String image,int sex,ChannelHandlerContext ctx){
 
         ThreadPool.getInstance().executor.execute(()->{
@@ -209,7 +209,7 @@ public class GameUserService {
                 userService.userDao.save(user);
 
                 doLogin(user,ctx);
-                vo = new ResponseVo("userService", "checkOpenId", GameManager.getUserVo(user));
+                vo = new ResponseVo("userService", "checkOpenId", getUserVo(user));
                 MsgDispatch.sendMsg(ctx,vo);
 
             }else{
@@ -223,7 +223,7 @@ public class GameUserService {
                 userService.userDao.save(user);
 
                 doLogin(user,ctx);
-                vo = new ResponseVo("userService", "checkOpenId", GameManager.getUserVo(user));
+                vo = new ResponseVo("userService", "checkOpenId", getUserVo(user));
                 MsgDispatch.sendMsg(ctx,vo);
 
             }
@@ -290,7 +290,7 @@ public class GameUserService {
         return 0;
     }
 
-<<<<<<< HEAD
+
     public int register(String userId,ChannelHandlerContext ctx) {
 
         ThreadPool.getInstance().executor.execute(()->{
@@ -311,8 +311,8 @@ public class GameUserService {
             }
         });
         return 0;
-=======
-        return newUser;
->>>>>>> 95a1d35c610720295447625a7f963f958689a00f
+
+
+
     }
 }
