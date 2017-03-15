@@ -4,22 +4,28 @@ package com.code.server.cardgame.service;
 import com.code.server.cardgame.core.MsgDispatch;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
+import com.code.server.cardgame.core.game.Game;
+import com.code.server.cardgame.core.room.Room;
 import com.code.server.cardgame.response.ErrorCode;
+import com.code.server.cardgame.response.ReconnectResp;
 import com.code.server.cardgame.response.ResponseVo;
+import com.code.server.cardgame.response.RoomVo;
 import com.code.server.cardgame.utils.SpringUtil;
 import com.code.server.cardgame.utils.ThreadPool;
 import com.code.server.db.Service.UserService;
 import com.code.server.db.model.ServerInfo;
 import com.code.server.db.model.User;
 import com.code.server.gamedata.UserVo;
+import com.google.gson.Gson;
 import io.netty.channel.ChannelHandlerContext;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by win7 on 2017/3/10.
@@ -58,7 +64,7 @@ public class GameUserService {
                 player.getCtx().close();
             }
             doLogin(player.getUser(),ctx);
-            ResponseVo vo = new ResponseVo("userService", "login", getUserVo(player.getUser()));
+            ResponseVo vo = new ResponseVo("userService", "login", GameManager.getUserVo(player.getUser()));
             MsgDispatch.sendMsg(ctx,vo);
 
 
@@ -83,7 +89,7 @@ public class GameUserService {
                 }
                 //加入缓存
                 doLogin(user, ctx);
-                vo.setParams(getUserVo(user));
+                vo.setParams(GameManager.getUserVo(user));
                 MsgDispatch.sendMsg(ctx,vo);
             });
         }
@@ -93,27 +99,7 @@ public class GameUserService {
         return 0;
     }
 
-    private UserVo getUserVo(User user){
-        UserVo vo = new UserVo();
 
-
-        vo.setId(user.getUserId());
-        vo.setIpConfig(user.getIpConfig());
-        vo.setAccount(user.getAccount());
-        vo.setImage(user.getImage());
-        vo.setMarquee(GameManager.getInstance().constant.getMarquee());
-        vo.setSex(user.getSex());
-        vo.setOpenId(user.getOpenId());
-        vo.setMoney(user.getMoney());
-        vo.setVip(user.getVip());
-        vo.setUsername(user.getUsername());
-
-        vo.setSeatId("0");
-        vo.setRoomId("0");
-
-
-        return vo;
-    }
 
     public int appleCheck(ChannelHandlerContext ctx){
 
@@ -131,6 +117,49 @@ public class GameUserService {
     }
 
 
+    public int getUserMessage(Player player){
+        if (player == null || player.getUser() == null) {
+            return ErrorCode.USERID_ERROR;
+        }
+        User user = player.getUser();
+        UserVo userVo = GameManager.getUserVo(user);
+        ResponseVo vo = new ResponseVo("userService", "getUserMessage", userVo);
+        player.sendMsg(vo);
+        return 0;
+    }
+
+    public int reconnection(Player player){
+        JSONObject result = new JSONObject();
+
+
+        if(player == null ||player.getUser() == null) {
+            return ErrorCode.USERID_ERROR;
+        }
+        User user = player.getUser();
+
+
+        ReconnectResp reconnectResp = new ReconnectResp();
+
+
+
+
+        reconnectResp.setExist(false);
+
+        Room room = GameManager.getInstance().getRoomByUser(player.getUserId());
+
+        if(room != null) {
+
+
+            reconnectResp.setExist(true);
+            reconnectResp.setRoom(new RoomVo(room));
+        }
+
+        ResponseVo vo = new ResponseVo("userService", "reconnection", reconnectResp);
+
+        player.sendMsg(vo);
+
+        return 0;
+    }
 
     public int checkOpenId(final String openId,String username, final String image,int sex,ChannelHandlerContext ctx){
 
@@ -178,7 +207,7 @@ public class GameUserService {
                 userService.userDao.save(user);
 
                 doLogin(user,ctx);
-                vo = new ResponseVo("userService", "checkOpenId", getUserVo(user));
+                vo = new ResponseVo("userService", "checkOpenId", GameManager.getUserVo(user));
                 MsgDispatch.sendMsg(ctx,vo);
 
             }else{
@@ -192,7 +221,7 @@ public class GameUserService {
                 userService.userDao.save(user);
 
                 doLogin(user,ctx);
-                vo = new ResponseVo("userService", "checkOpenId", getUserVo(user));
+                vo = new ResponseVo("userService", "checkOpenId", GameManager.getUserVo(user));
                 MsgDispatch.sendMsg(ctx,vo);
 
             }
@@ -220,7 +249,6 @@ public class GameUserService {
 
         newUser.setUuid("0");
         newUser.setMoney(100);
-
 
 
 

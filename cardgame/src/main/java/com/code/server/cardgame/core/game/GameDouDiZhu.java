@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * Created by sunxianping on 2017/3/13.
  */
-public class GameDouDiZhu {
+public class GameDouDiZhu extends Game{
     private static final int initCardNum = 16;
 
     protected long userId;
@@ -16,6 +16,8 @@ public class GameDouDiZhu {
     protected List<Integer> tableCards = new ArrayList<>();//底牌
     protected List<PlayerCardInfo> playerCardInfos = new ArrayList<>();
     protected List<Long> jiaoList = new ArrayList<>();
+    protected long dizhu;
+    protected List<Long> users = new ArrayList<>();
 
 
 
@@ -30,7 +32,7 @@ public class GameDouDiZhu {
 
         shuffle();
         deal();
-        jiaoDizhu(dizhuUser);
+        chooseDizhu(dizhuUser);
 
     }
 
@@ -56,12 +58,27 @@ public class GameDouDiZhu {
         }
     }
 
-    protected void jiaoDizhu(long lastDizhu){
+    protected void chooseDizhu(long lastDizhu) {
         //随机叫地主
         if(lastDizhu == 0){
 
         }
     }
+
+    protected void jiaoDizhu(long lastDizhu){
+
+    }
+
+    public long nextTurnId(int curId) {
+        int index = users.indexOf(curId);
+
+        int nextId = index + 1;
+        if (nextId >= users.size()) {
+            nextId = 0;
+        }
+        return users.get(nextId);
+    }
+
 
 
 
