@@ -3,6 +3,9 @@ package com.code.server.cardgame.core;
 import com.code.server.cardgame.Message.MessageHolder;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
+import com.code.server.cardgame.core.game.Game;
+import com.code.server.cardgame.core.room.RoomDouDiZhu;
+import com.code.server.cardgame.response.ErrorCode;
 import com.code.server.cardgame.response.ResponseVo;
 import com.code.server.cardgame.service.GameUserService;
 import com.code.server.cardgame.utils.IdWorker;
@@ -78,20 +81,63 @@ public class MsgDispatch {
                 String image = params.getString("image");
                 int sex = Integer.parseInt(params.getString("sex"));
                 return gameUserService.checkOpenId(openId,username,image,sex,ctx);
+            case "getUserMessage":
+                return gameUserService.getUserMessage(getPlayerByCtx(ctx));
+            case "reconnection":
+
             default:
 
                 return -1;
         }
     }
 
-    private int dispatchRoomService(String method, JSONObject params, ChannelHandlerContext ctx) {
+    private Player getPlayerByCtx(ChannelHandlerContext ctx){
         if (ctx.channel().attr(attributeKey).get() != null) {
             long uid = ctx.channel().attr(attributeKey).get();
-            Player player = GameManager.getInstance().players.get(uid);
+            return GameManager.getInstance().players.get(uid);
+        }
+        return null;
+    }
+    private int dispatchRoomService(String method, JSONObject params, ChannelHandlerContext ctx) {
+        Player player = getPlayerByCtx(ctx);
+        if (player == null) {
+            return -1;
         }
 
         switch (method) {
-            case "create":
+            case "createRoom":
+                int gameNumber = params.getInt("gameNumber");
+                int multiple = params.getInt("maxMultiple");
+                return RoomDouDiZhu.createRoom(player, gameNumber, multiple);
+            case "joinRoom":
+                String roomId = params.getString("roomId");
+
+                RoomDouDiZhu room = GameManager.getInstance().rooms.get(roomId);
+                if (room == null) {
+                    return ErrorCode.CANNOT_JOIN_ROOM_NOT_EXIST;
+                }
+                return room.joinRoom(player);
+            case "quitRoom":
+                String roomId1 = GameManager.getInstance().getUserRoom().get(player.getUserId());
+                if (roomId1 == null) {
+                    return ErrorCode.CANNOT_QUIT_ROOM_NOT_IN_ROOM;
+                }
+                RoomDouDiZhu room1 = GameManager.getInstance().rooms.get(roomId1);
+                if (room1 == null) {
+                    return ErrorCode.CANNOT_QUIT_ROOM_NOT_IN_ROOM;
+                }
+                return room1.quitRoom(player);
+
+            case "getReady":
+                String roomId2 = GameManager.getInstance().getUserRoom().get(player.getUserId());
+                if (roomId2 == null) {
+                    return ErrorCode.CANNOT_QUIT_ROOM_NOT_IN_ROOM;
+                }
+                RoomDouDiZhu room2 = GameManager.getInstance().rooms.get(roomId2);
+                if (room2 == null) {
+                    return ErrorCode.CANNOT_QUIT_ROOM_NOT_IN_ROOM;
+                }
+                return room2.getReady(player);
             default:
 
                 return -1;

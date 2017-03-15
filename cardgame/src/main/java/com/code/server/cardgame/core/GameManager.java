@@ -1,9 +1,12 @@
 package com.code.server.cardgame.core;
 
 import com.code.server.cardgame.core.room.Room;
+import com.code.server.cardgame.core.room.RoomDouDiZhu;
 import com.code.server.cardgame.utils.IdWorker;
 import com.code.server.db.model.Constant;
 import com.code.server.db.model.ServerInfo;
+import com.code.server.db.model.User;
+import com.code.server.gamedata.UserVo;
 import io.netty.channel.ChannelHandlerContext;
 import org.apache.commons.collections.map.HashedMap;
 
@@ -21,10 +24,10 @@ public class GameManager {
     public Map<Long, ChannelHandlerContext> ctxs = new HashMap<>();
     public Map<Long,String> id_nameMap = new HashMap<>();
     public Map<String, Long> name_idMap = new HashMap<>();
-    public Map<String, Long> openId_uid = new HashedMap();
-    public Map<Long, String> uid_openId = new HashedMap();
-    public Map<Long, String> userRoom = new HashedMap();
-    public Map<String, Room> rooms = new HashedMap();
+    public Map<String, Long> openId_uid = new HashMap<>();
+    public Map<Long, String> uid_openId = new HashMap<>();
+    public Map<Long, String> userRoom = new HashMap<>();
+    public Map<String, RoomDouDiZhu> rooms = new HashMap<>();
     public Set<ChannelHandlerContext> ctxSet = new HashSet<>();
     public ServerInfo serverInfo;
     public Constant constant;
@@ -38,7 +41,29 @@ public class GameManager {
 
 
 
+    public static UserVo getUserVo(User user){
+        UserVo vo = new UserVo();
 
+
+        vo.setId(user.getUserId());
+        vo.setIpConfig(user.getIpConfig());
+        vo.setAccount(user.getAccount());
+        vo.setImage(user.getImage());
+        vo.setMarquee(GameManager.getInstance().constant.getMarquee());
+        vo.setSex(user.getSex());
+        vo.setOpenId(user.getOpenId());
+        vo.setMoney(user.getMoney());
+        vo.setVip(user.getVip());
+        vo.setUsername(user.getUsername());
+
+        String room = GameManager.getInstance().userRoom.get(user.getUserId());
+        if (room!=null && GameManager.getInstance().rooms.containsKey(room)) {
+            vo.setRoomId(room);
+        } else {
+            vo.setRoomId("0");
+        }
+        return vo;
+    }
 
 
 
@@ -89,6 +114,13 @@ public class GameManager {
         player.getCtx().channel().attr(MsgDispatch.attributeKey).setIfAbsent(-1L);
     }
 
+    public Room getRoomByUser(long userId) {
+        String roomId = userRoom.get(userId);
+        if (roomId == null) {
+            return null;
+        }
+        return rooms.get(roomId);
+    }
 
     public Map<Long, String> getUserRoom() {
         return userRoom;
