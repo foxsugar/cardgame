@@ -9,7 +9,8 @@ import java.util.Map;
  * Created by sunxianping on 2017/3/14.
  */
 public class PlayerCardInfo {
-    protected List<Integer> cards = new ArrayList<>();//手上的牌
+    public long userId;
+    public List<Integer> cards = new ArrayList<>();//手上的牌
     protected List<Integer> disCards = new ArrayList<>();//丢弃的牌
 
     protected CardStruct lastcardStruct = new CardStruct();//上一个人出的牌

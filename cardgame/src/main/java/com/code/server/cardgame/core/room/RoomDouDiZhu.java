@@ -2,6 +2,7 @@ package com.code.server.cardgame.core.room;
 
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
+import com.code.server.cardgame.core.game.Game;
 import com.code.server.cardgame.core.game.GameDouDiZhu;
 import com.code.server.cardgame.response.*;
 import com.code.server.cardgame.timer.GameTimer;
@@ -70,6 +71,27 @@ public class RoomDouDiZhu {
     protected boolean isCanDissloution = false;
 
 
+
+    public static int createRoom(Player player,int gameNumber){
+        if(GameManager.getInstance().userRoom.containsKey(player.getUserId())){
+            return ErrorCode.CANNOT_CREATE_ROOM_ROLE_HAS_IN_ROOM;
+        }
+        int needMoney = getNeedMoney(gameNumber);
+//        if(player.getUser().getMoney()<)
+
+        return 0;
+    }
+
+    public static int getNeedMoney(int gameNumber) {
+        if (gameNumber == 10) {
+            return 1;
+        } else if (gameNumber == 20) {
+            return 2;
+        }else {
+            return 2;
+        }
+
+    }
 
     public void init(String roomId, int userId, String modeTotal, String mode, int multiple, int gameNumber, int createUser, int bankerId) {
         this.roomId = roomId;
@@ -175,6 +197,7 @@ public class RoomDouDiZhu {
         if (readyNum >= personNumber) {
             startGame();
         }
+        return 0;
     }
 
 
@@ -217,15 +240,8 @@ public class RoomDouDiZhu {
         if (curGameNumber == 1) {
             spendMoney();
         }
-        gameInfo.init(game.getId(), this.bankerId, this.users, this, roomDao, userRecodeDao, userDao, gameDao);
-        gameInfo.fapai(this.serverContext);
-        this.gameInfo = gameInfo;
-        this.game = game;
-        game.setGameInfo(gameInfo);
+        game.startGame(users,bankerId);
 
-
-        gameDao.saveGame(game);
-        GameManager.getInstance().addGame(game);
 
 
         //通知其他人游戏已经开始
@@ -234,9 +250,9 @@ public class RoomDouDiZhu {
         JSONObject beginResult = new JSONObject();
         beginResult.put("service", "gameService");
         beginResult.put("method", "gameBegin");
-        beginResult.put("params", game.toJSONObjectOfGameBegin());
+        beginResult.put("params", game);
         beginResult.put("code", "0");
-        serverContext.sendToOnlinePlayer(beginResult, this.getUsers());
+        Player.sendMsg2Player(beginResult, this.getUsers());
         pushScoreChange();
     }
 
@@ -252,9 +268,9 @@ public class RoomDouDiZhu {
     }
 
 
-    public void dissolution(long userId, boolean agreeOrNot) {
+    public int dissolution(long userId, boolean agreeOrNot) {
         if (!this.users.contains(userId)) {
-            return ErrorCode.CANNOT_FIND_THIS_USER
+            return ErrorCode.CANNOT_FIND_THIS_USER;
 
         }
 
@@ -267,15 +283,12 @@ public class RoomDouDiZhu {
             //第一次申请 五分钟后解散
             long start = System.currentTimeMillis();
             TimerNode node = new TimerNode(start, FIVE_MIN, false, ()-> {
-                @Override
-                public void fire() {
 
-                        if (isCanDissloution) {
-                            dissolutionRoom();
-                            logger.info("===2定时解散 roomId: "+roomId);
-                        }
-
+                if (isCanDissloution) {
+                    dissolutionRoom();
+                    logger.info("===2定时解散 roomId: "+roomId);
                 }
+
             });
             this.timerNode = node;
             GameTimer.getInstance().addTimerNode(node);
@@ -322,12 +335,9 @@ public class RoomDouDiZhu {
 
         //同意解散
         if (agreeNum >= personNumber - 1) {
-            try {
-                GameTimer.getInstance().removeNode(timerNode);
-                dissolutionRoom(userDao, userRecodeDao, serverContext);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            GameTimer.getInstance().removeNode(timerNode);
+            dissolutionRoom();
+
         }
         //不同意的人数大于2 解散取消
         if (disAgreeNum >= 1) {
@@ -338,6 +348,7 @@ public class RoomDouDiZhu {
                 GameTimer.getInstance().removeNode(timerNode);
             }
         }
+        return 0;
     }
 
     private void dissolutionRoom(){
@@ -353,27 +364,19 @@ public class RoomDouDiZhu {
 
         for(User user : this.userMap.values()){
             UserOfResult resultObj = new UserOfResult();
-            User eashUser = userMap(this.users.get(i));
-            eashUser.setRoomId("0");
-            eashUser.setSeatId("0");
-            userDao.saveUser(eashUser);
-
             try {
-                resultObj.setUsername(URLDecoder.decode(eashUser.getUsername(), "utf-8"));
+                resultObj.setUsername(URLDecoder.decode(user.getUsername(), "utf-8"));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            resultObj.setImage(eashUser.getImage());
-            resultObj.setScores(this.userScores.get(this.users.get(i)) + "");
+            resultObj.setImage(user.getImage());
+            resultObj.setScores(""+this.userScores.get(user.getUserId()));
             resultObj.setUserId(user.getUserId());
             resultObj.setTime(time);
 
-
-
-
             userOfResultList.add(resultObj);
             //删除映射关系
-            GameManager.getInstance().getUserRoom().remove(users.get(i));
+            GameManager.getInstance().getUserRoom().remove(user.getUserId());
         }
 
 
@@ -393,7 +396,7 @@ public class RoomDouDiZhu {
         JSONObject noticeEndResult = new JSONObject();
         noticeEndResult.put("service", "gameService");
         noticeEndResult.put("method", "askNoticeDissolutionResult");
-        noticeEndResult.put("params", gameOfResult.toJSONObject());
+        noticeEndResult.put("params", gameOfResult);
         noticeEndResult.put("code", "0");
         Player.sendMsg2Player(noticeEndResult, this.users);
 
