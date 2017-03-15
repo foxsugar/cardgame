@@ -4,11 +4,13 @@ import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.game.Game;
 import com.code.server.cardgame.core.game.GameDouDiZhu;
+import com.code.server.cardgame.encoding.Notice;
 import com.code.server.cardgame.response.*;
 import com.code.server.cardgame.timer.GameTimer;
 import com.code.server.cardgame.timer.ITimeHandler;
 import com.code.server.cardgame.timer.TimerNode;
 import com.code.server.db.model.User;
+import com.code.server.gamedata.UserVo;
 import com.google.gson.Gson;
 import net.sf.json.JSONObject;
 import org.apache.commons.collections.map.HashedMap;
@@ -17,15 +19,12 @@ import org.apache.log4j.Logger;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by sunxianping on 2017/3/13.
  */
-public class RoomDouDiZhu {
+public class RoomDouDiZhu extends Room{
 
 
     private static final Logger logger = Logger.getLogger("game");
@@ -37,10 +36,13 @@ public class RoomDouDiZhu {
     public static final int STATUS_AGREE_DISSOLUTION = 4;
 
     public static final long FIVE_MIN = 1000L * 60 * 5;
+    public static final int PERSONNUM = 3;
+
 
     protected String roomId;
 
     protected int createNeedMoney;
+    protected static Random random = new Random();
 
     protected Map<Long, Integer> userStatus = new HashMap<>();//用户状态
     protected List<Long> users = new ArrayList<>();//用户列表
@@ -51,7 +53,7 @@ public class RoomDouDiZhu {
     protected int gameNumber;
     protected int curGameNumber = 1;
     protected int personNumber;
-    protected int createUser;
+    protected long createUser;
     protected int bankerId;//庄家
 
     protected boolean isInGame;
@@ -72,14 +74,51 @@ public class RoomDouDiZhu {
 
 
 
-    public static int createRoom(Player player,int gameNumber){
+    public static int createRoom(Player player,int gameNumber,int multiple){
         if(GameManager.getInstance().userRoom.containsKey(player.getUserId())){
             return ErrorCode.CANNOT_CREATE_ROOM_ROLE_HAS_IN_ROOM;
         }
         int needMoney = getNeedMoney(gameNumber);
-//        if(player.getUser().getMoney()<)
+        if (player.getUser().getMoney() < needMoney) {
+            return ErrorCode.CANNOT_CREATE_ROOM_MONEY;
+        }
+        RoomDouDiZhu room = new RoomDouDiZhu();
+        room.personNumber = PERSONNUM;
+
+        room.roomId = getRoomIdStr(genRoomId());
+        room.createUser = player.getUserId();
+        room.init(gameNumber,multiple);
+        //房间加入列表
+        room.roomAddUser(player);
+        GameManager.getInstance().rooms.put(room.roomId, room);
+
+
+
+        player.sendMsg(new ResponseVo("roomService","createRoom",new RoomVo(room)));
 
         return 0;
+    }
+
+    private static String getRoomIdStr(int roomId){
+        String s = "000000" + roomId;
+        int len = s.length();
+        return s.substring(len-6,len);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getRoomIdStr(99999));
+    }
+    private static int genRoomId(){
+
+        while (true) {
+            int id = random.nextInt(999999);
+
+            boolean isHas = GameManager.getInstance().rooms.containsKey(""+id);
+            if (!isHas) {
+                return id;
+            }
+
+        }
     }
 
     public static int getNeedMoney(int gameNumber) {
@@ -93,8 +132,7 @@ public class RoomDouDiZhu {
 
     }
 
-    public void init(String roomId, int userId, String modeTotal, String mode, int multiple, int gameNumber, int createUser, int bankerId) {
-        this.roomId = roomId;
+    public void init(int gameNumber, int multiple) {
         this.multiple = multiple;
         this.gameNumber = gameNumber;
         this.personNumber = personNumber;
@@ -108,7 +146,8 @@ public class RoomDouDiZhu {
 
 
 
-    public int joinRoom(Player player,long userId) {
+    public int joinRoom(Player player) {
+        long userId = player.getUserId();
         if (this.users.contains(userId)) {
             return ErrorCode.CANNOT_CREATE_ROOM_USER_HAS_IN_ROOM;
 
@@ -122,12 +161,53 @@ public class RoomDouDiZhu {
         }
 
 
+
+        roomAddUser(player);
+        //加进玩家-房间映射表
+        GameManager.getInstance().getUserRoom().put(userId, roomId);
+        noticeJoinRoom(player);
+
+        return 0;
+    }
+
+    private void roomAddUser(Player player) {
+        User user = player.getUser();
+        long userId = user.getUserId();
         this.users.add(userId);
         this.userStatus.put(userId, 0);
         this.userScores.put(userId, 0);
-        //加进玩家-房间映射表
-        GameManager.getInstance().getUserRoom().put(userId, roomId);
-        return -2;
+        this.userMap.put(userId, player.getUser());
+        GameManager.getInstance().getUserRoom().put(player.getUserId(),roomId);
+    }
+
+    private void roomRemoveUser(Player player) {
+        User user = player.getUser();
+        long userId = user.getUserId();
+        this.users.remove(userId);
+        this.userStatus.remove(userId);
+        this.userScores.remove(userId);
+        this.userMap.remove(userId);
+        GameManager.getInstance().getUserRoom().remove(userId);
+    }
+
+
+    private void noticeJoinRoom(Player player){
+        List<UserVo> usersList = new ArrayList<>();
+        UserOfRoom userOfRoom = new UserOfRoom();
+        int readyNumber = 0;
+        for (User user : this.userMap.values()) {
+           usersList.add(GameManager.getUserVo(user));
+        }
+        userOfRoom.setUserList(usersList);
+        userOfRoom.setInRoomNumber(users.size());
+        userOfRoom.setReadyNumber(readyNumber);
+
+
+        player.sendMsg(new ResponseVo("roomService","joinRoom",new RoomVo(this)));
+
+        Player.sendMsg2Player(new ResponseVo("roomService","roomNotice",userOfRoom), this.getUsers());
+
+
     }
 
     protected boolean isCanJoinCheckMoney(Player player) {
@@ -142,7 +222,8 @@ public class RoomDouDiZhu {
     }
 
 
-    public int quitRoom(long userId) {
+    public int quitRoom(Player player) {
+        long userId = player.getUserId();
         if (!this.users.contains(userId)) {
             return ErrorCode.CANNOT_QUIT_ROOM_NOT_EXIST;
 
@@ -152,16 +233,64 @@ public class RoomDouDiZhu {
             return ErrorCode.CANNOT_QUIT_ROOM_IS_IN_GAME;
         }
 
-        this.userStatus.remove(userId);
-        this.users.remove(userId);
-        this.userScores.remove(userId);
+        roomRemoveUser(player);
         //删除玩家房间映射关系
         GameManager.getInstance().getUserRoom().remove(userId);
-        return -2;
+
+        if (this.createUser == player.getUserId()) {//房主解散
+
+            //退钱
+            User user = userMap.get(createUser);
+            if (user != null) {
+                user.setMoney(user.getMoney() + getNeedMoney(this.gameNumber));
+            }
+            Notice n = new Notice();
+            n.setMessage("roomNum "+this.getRoomId()+" :has destroy success!");
+            Player.sendMsg2Player(new ResponseVo("roomService","destroyRoom",n), this.getUsers());
+            //删除房间
+            GameManager.getInstance().rooms.remove(roomId);
+        }
+
+        noticeQuitRoom(player);
+
+        return 0;
     }
 
 
-    public int getReady(Player player,long userId) {
+    private void noticeQuitRoom(Player player){
+        List<UserVo> usersList = new ArrayList<>();
+        UserOfRoom userOfRoom = new UserOfRoom();
+
+        List<Long> noticeList = this.getUsers();
+
+        for(User user : userMap.values()){
+            usersList.add(GameManager.getUserVo(user));
+        }
+        int inRoomNumber = this.getUsers().size();
+        int readyNumber = 0;
+
+        for (int i : this.getUserStatus().values()) {
+            if(i==STATUS_READY){
+                readyNumber++;
+            }
+        }
+        userOfRoom.setUserList(usersList);
+        userOfRoom.setInRoomNumber(inRoomNumber);
+        userOfRoom.setReadyNumber(readyNumber);
+
+        ResponseVo noticeResult = new ResponseVo("roomService", "roomNotice", userOfRoom);
+        Player.sendMsg2Player(noticeResult, noticeList);
+
+        Notice n = new Notice();
+        n.setMessage("quit room success!");
+
+        ResponseVo result = new ResponseVo("roomService","quitRoom",n);
+        player.sendMsg(result);
+
+    }
+
+    public int getReady(Player player) {
+        long userId = player.getUserId();
         if (!this.users.contains(userId)) {
             return ErrorCode.CANNOT_FIND_THIS_USER;
 
@@ -186,12 +315,7 @@ public class RoomDouDiZhu {
         }
         NoticeReady noticeReady = new NoticeReady();
         noticeReady.setUserStatus(userStatus);
-        JSONObject getReadyResult = new JSONObject();
-        getReadyResult.put("service", "roomService");
-        getReadyResult.put("method", "noticeReady");
-        getReadyResult.put("params", noticeReady.toJSONObject());
-        getReadyResult.put("code", "0");
-        Player.sendMsg2Player(getReadyResult, this.users);
+        Player.sendMsg2Player(new ResponseVo("roomService","noticeReady",noticeReady), this.users);
 
         //开始游戏
         if (readyNum >= personNumber) {
@@ -247,12 +371,7 @@ public class RoomDouDiZhu {
         //通知其他人游戏已经开始
         CardEntity cardBegin = new CardEntity();
         cardBegin.setCurrentUserId(this.getBankerId() + "");
-        JSONObject beginResult = new JSONObject();
-        beginResult.put("service", "gameService");
-        beginResult.put("method", "gameBegin");
-        beginResult.put("params", game);
-        beginResult.put("code", "0");
-        Player.sendMsg2Player(beginResult, this.getUsers());
+        Player.sendMsg2Player(new ResponseVo("gameService","gameBegin",game), this.getUsers());
         pushScoreChange();
     }
 
@@ -516,11 +635,11 @@ public class RoomDouDiZhu {
         return this;
     }
 
-    public int getCreateUser() {
+    public long getCreateUser() {
         return createUser;
     }
 
-    public RoomDouDiZhu setCreateUser(int createUser) {
+    public RoomDouDiZhu setCreateUser(long createUser) {
         this.createUser = createUser;
         return this;
     }

@@ -17,13 +17,13 @@ public class CardStruct {
     private static final int type_连对 = 7;
     private static final int type_飞机 = 8;
     private static final int type_飞机带翅膀 = 9;
-    private static final int type_炸 = 10;
-    private static final int type_火箭 =11;
-    private static final int type_四带二 = 12;
+    private static final int type_四带二 = 10;
+    private static final int type_炸 =11;
+    private static final int type_火箭 = 12;
 
     List<Integer> cards;
     int type;
-    int dan;
+    List<Integer> dan;
     List<Integer> dui; //对
     List<Integer> san;  //三
     List<Integer> si;   //四
@@ -31,8 +31,39 @@ public class CardStruct {
     List<Integer> feiji; //飞机
     List<Integer> shun; //顺
     List<Integer> liandui; //连对
-    List<Map<Integer,Integer>> sandaidan; //三带一   第一Integer 存3张一样，第二Integer 存1张
-    List<Map<Integer,List<Integer>>> sandaier; //三带二  第一Integer 存3张一样，第二Lsit 存2张
-    List<Map<Integer,List<Integer>>> sidaier; //四带二   第一Integer 存4张一样，第二Lsit 存2张
-    List<Map<Integer,Integer>> feiji_chibang;//飞机带翅膀  第一Integer 存3张一样，第二Integer 存1张
+    List<Integer> sandaidan; //三带一
+    List<Integer> sandaidui; //三带二
+    List<Integer> sidaier; //四带二
+    List<Integer> feiji_chibang;//飞机带翅膀
+    List<Integer> huojian; //火箭
+
+    public  List<Integer> getByTypeList(int type){
+        if(type == 1){
+            return dan;
+        }else if(type == 2){
+            return dui;
+        }else if(type == 3){
+            return san;
+        }else if(type == 4){
+            return sandaidan;
+        }else if(type == 5){
+            return sandaidui;
+        }else if(type == 6){
+            return shun;
+        }else if(type == 7){
+            return liandui;
+        }else if(type == 8){
+            return feiji;
+        }else if(type == 9){
+            return feiji_chibang;
+        }else if(type == 10){
+            return sidaier;
+        }else if(type == 11){
+            return zha;
+        }else if(type == 12){
+            return huojian;
+        }else{
+            return null;
+        }
+    }
 }
