@@ -41,7 +41,7 @@ public class GoldRoomPool {
     }
 
     //房间不足人数，添加到房间  超过房间人数(4),其他返回房间人数
-    public int addRoom(double roomType,int userId){
+    public int addRoom(double roomType,long userId){
         if(this.getRoomLock().containsKey(roomType)){
             int personNumber = this.getRoomLock().get(roomType).getUsers().size();
             if(personNumber >= GAME_PERSON_NUMBER-1){
