@@ -1,5 +1,6 @@
 package com.code.server.cardgame.core.game;
 
+import com.code.server.cardgame.core.CardStruct;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.PlayerCardInfo;
 import com.code.server.cardgame.response.ErrorCode;
@@ -26,6 +27,11 @@ public class GameDouDiZhu extends Game{
     protected Set<Long> chooseJiaoSet = new HashSet<>();
     protected Set<Long> chooseQiangSet = new HashSet<>();
     protected Set<Long> bujiaoSet = new HashSet<>();
+
+    protected CardStruct currentCardStruct = new CardStruct();// 当前这个人出的牌
+    protected CardStruct lastcardStruct = new CardStruct();//上一个人出的牌
+    protected int lasttype = 0;//上一个人出牌的类型
+
     private long canJiaoUser;//可以叫地主的人
     private long canQiangUser;//可以抢地主的人
     private long jiaoUser;//叫的人
@@ -53,6 +59,17 @@ public class GameDouDiZhu extends Game{
         chooseDizhu(dizhuUser);
 
     }
+
+    /**
+     * 出牌
+     */
+    public void outCard(){
+        if(playerCardInfos.get(playTurn).checkPlayCard(lastcardStruct,currentCardStruct,lasttype)){
+
+        }
+        lasttype = lastcardStruct.getType(); //保存上次出牌的类型
+    }
+
 
     /**
      * 洗牌

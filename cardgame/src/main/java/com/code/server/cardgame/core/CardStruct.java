@@ -1,7 +1,7 @@
 package com.code.server.cardgame.core;
 
 import java.util.List;
-import java.util.Map;
+
 
 /**
  * Created by sunxianping on 2017/3/14.
@@ -65,5 +65,8 @@ public class CardStruct {
         }else{
             return null;
         }
+    }
+    public int getType(){
+        return type;
     }
 }
