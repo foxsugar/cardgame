@@ -39,6 +39,7 @@ public class RoomDouDiZhu extends Room{
     public static final int PERSONNUM = 3;
 
 
+
     protected String roomId;
 
     protected int createNeedMoney;
@@ -49,10 +50,10 @@ public class RoomDouDiZhu extends Room{
     protected Map<Long, Integer> userScores = new HashMap<>();
     protected Map<Long,User> userMap = new HashMap<>();//用户列表
 
+    protected double roomType;//几倍房
     protected int multiple;//倍数
     protected int gameNumber;
     protected int curGameNumber = 1;
-    protected int personNumber;
     protected long createUser;
     protected int bankerId;//庄家
 
@@ -64,6 +65,7 @@ public class RoomDouDiZhu extends Room{
     private GameDouDiZhu game;
 
 
+    protected int personNumber;
     protected String gameType;//麻将项目名称
 
 
@@ -99,7 +101,7 @@ public class RoomDouDiZhu extends Room{
         return 0;
     }
 
-    private static String getRoomIdStr(int roomId){
+    protected static String getRoomIdStr(int roomId){
         String s = "000000" + roomId;
         int len = s.length();
         return s.substring(len-6,len);
@@ -108,7 +110,7 @@ public class RoomDouDiZhu extends Room{
     public static void main(String[] args) {
         System.out.println(getRoomIdStr(99999));
     }
-    private static int genRoomId(){
+    protected static int genRoomId(){
 
         while (true) {
             int id = random.nextInt(999999);
@@ -170,7 +172,7 @@ public class RoomDouDiZhu extends Room{
         return 0;
     }
 
-    private void roomAddUser(Player player) {
+    protected void roomAddUser(Player player) {
         User user = player.getUser();
         long userId = user.getUserId();
         this.users.add(userId);
@@ -180,7 +182,7 @@ public class RoomDouDiZhu extends Room{
         GameManager.getInstance().getUserRoom().put(player.getUserId(),roomId);
     }
 
-    private void roomRemoveUser(Player player) {
+    protected void roomRemoveUser(Player player) {
         User user = player.getUser();
         long userId = user.getUserId();
         this.users.remove(userId);
@@ -257,7 +259,7 @@ public class RoomDouDiZhu extends Room{
     }
 
 
-    private void noticeQuitRoom(Player player){
+    protected void noticeQuitRoom(Player player){
         List<UserVo> usersList = new ArrayList<>();
         UserOfRoom userOfRoom = new UserOfRoom();
 
@@ -545,6 +547,13 @@ public class RoomDouDiZhu extends Room{
         }
     }
 
+    public double getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(double roomType) {
+        this.roomType = roomType;
+    }
 
     public String getRoomId() {
         return roomId;
