@@ -25,6 +25,7 @@ public class CardgameApplication {
 		ThreadPool.getInstance().executor.execute(new SocketServer());
 		ThreadPool.getInstance().executor.execute(GameProcessor.getInstance());
 		GameTimer.getInstance().fire();
+
 	}
 
 	public static void init(){
