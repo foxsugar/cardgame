@@ -321,6 +321,7 @@ public class RoomDouDiZhu extends Room{
         if (readyNum >= personNumber) {
             startGame();
         }
+        player.sendMsg(new ResponseVo("roomService","getReady",0));
         return 0;
     }
 

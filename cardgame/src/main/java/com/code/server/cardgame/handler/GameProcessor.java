@@ -36,21 +36,20 @@ public class GameProcessor implements Runnable{
     @Override
     public void run() {
        while(true){
-
-
-           //timer
-           MessageHolder messHolder = null;
            try {
-               messHolder = messageQueue.poll(10, TimeUnit.MILLISECONDS);
-           } catch (InterruptedException e) {
+               //timer
+               MessageHolder messHolder = null;
+               try {
+                   messHolder = messageQueue.poll(10, TimeUnit.MILLISECONDS);
+               } catch (InterruptedException e) {
+                   e.printStackTrace();
+               }
+               if(messHolder != null&&messHolder.message !=null){
+                   handler.handleMessage(messHolder);
+               }
+           } catch (Exception e) {
                e.printStackTrace();
            }
-           if(messHolder != null&&messHolder.message !=null){
-               handler.handleMessage(messHolder);
-//               MessageHandler handler1 = ApplicationContext.getBean(MessageHandler.class);
-
-           }
-//           System.out.println("------------");
        }
     }
 

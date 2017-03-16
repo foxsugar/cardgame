@@ -1,5 +1,6 @@
 package com.code.server.cardgame.core.game;
 
+import com.code.server.cardgame.core.CardStruct;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.PlayerCardInfo;
 import com.code.server.cardgame.response.ErrorCode;
@@ -11,7 +12,7 @@ import java.util.*;
  * Created by sunxianping on 2017/3/13.
  */
 public class GameDouDiZhu extends Game{
-    private static final int initCardNum = 16;
+    private static final int INITCARDNUM = 16;
     private static final int STEP_JIAO_DIZHU = 1;
     private static final int STEP_QIANG_DIZHU = 2;
     private static final int STEP_PLAY = 3;
@@ -33,6 +34,8 @@ public class GameDouDiZhu extends Game{
 
     private long playTurn;//该出牌的人
 
+    protected CardStruct lastCardStruct;
+
     private int step;//步骤
 
 
@@ -46,12 +49,18 @@ public class GameDouDiZhu extends Game{
             playerCardInfo.userId = uid;
             playerCardInfos.put(uid,playerCardInfo);
         }
+        this.users.addAll(users);
 
 
         shuffle();
         deal();
         chooseDizhu(dizhuUser);
 
+    }
+
+    protected void play(Player player){
+        PlayerCardInfo playerCardInfo = playerCardInfos.get(player.getUserId());
+        playerCardInfo.checkPlayCard(lastCardStruct);
     }
 
     /**
@@ -72,7 +81,9 @@ public class GameDouDiZhu extends Game{
      */
     protected void deal(){
         for(PlayerCardInfo playerCardInfo : playerCardInfos.values()){
-            playerCardInfo.cards.addAll(cards.subList(0, 15));
+            for(int i=0;i<INITCARDNUM;i++){
+                playerCardInfo.cards.add(cards.remove(0));
+            }
             //通知发牌
             Player.sendMsg2Player(new ResponseVo("gameService","deal",playerCardInfo.cards),playerCardInfo.userId);
         }
@@ -108,7 +119,7 @@ public class GameDouDiZhu extends Game{
      * @param isJiao
      * @return
      */
-    protected int jiaoDizhu(Player player,boolean isJiao){
+    public int jiaoDizhu(Player player,boolean isJiao){
 
         if (canJiaoUser != player.getUserId()) {
             return ErrorCode.CAN_NOT_JIAO_TURN;
@@ -180,7 +191,7 @@ public class GameDouDiZhu extends Game{
      * @param isQiang
      * @return
      */
-    protected int qiangDizhu(Player player,boolean isQiang) {
+    public int qiangDizhu(Player player,boolean isQiang) {
         if(player.getUserId() != canQiangUser){
             return ErrorCode.CAN_NOT_QIANG_TURN;
         }
