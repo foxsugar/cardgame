@@ -49,6 +49,10 @@ public class ErrorCode {
 	//当前人没有操作权限
 	public static final int MJ_CURRENTUSER_IS_NOT_THE_USER = 150003;
 
+
+	public static final int CAN_NOT_JIAO_TURN = 200000;
+	public static final int CAN_NOT_QIANG_TURN = 200001;
+
 	
 	
 	static class ErrorCodeRepeatChecker {

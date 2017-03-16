@@ -1,5 +1,6 @@
 package com.code.server.cardgame.core.room;
 
+import com.code.server.cardgame.core.game.Game;
 import com.code.server.cardgame.timer.TimerNode;
 import com.code.server.db.model.User;
 
@@ -30,6 +31,8 @@ public class Room {
 
     protected boolean isHasDissolutionRequest;
     protected transient TimerNode timerNode;
+
+    protected Game game;
 
 
     public String getRoomId() {
@@ -172,6 +175,15 @@ public class Room {
 
     public Room setTimerNode(TimerNode timerNode) {
         this.timerNode = timerNode;
+        return this;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public Room setGame(Game game) {
+        this.game = game;
         return this;
     }
 }

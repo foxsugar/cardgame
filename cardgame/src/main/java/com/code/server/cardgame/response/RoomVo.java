@@ -41,7 +41,7 @@ public class RoomVo {
             userList.add(GameManager.getUserVo(user));
         }
 
-        this.game = new GameVo();
+        this.game = GameVo.getGameVo(roomDouDiZhu.getGame());
 
     }
 
