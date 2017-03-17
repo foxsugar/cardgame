@@ -28,7 +28,6 @@ public class LoginAction {
     @ResponseBody
     String home() {
 
-    new Thread(new Test()).start();
 
         String a;
         return "Hello World!";

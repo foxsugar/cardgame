@@ -3,8 +3,10 @@ package com.code.server.cardgame;
 import com.code.server.cardgame.bootstarp.SocketServer;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.handler.GameProcessor;
+import com.code.server.cardgame.timer.GameTimer;
 import com.code.server.cardgame.utils.ProperitesUtil;
 import com.code.server.cardgame.utils.SpringUtil;
+import com.code.server.cardgame.utils.ThreadPool;
 import com.code.server.db.Service.ConstantService;
 import com.code.server.db.Service.ServerService;
 import com.code.server.db.model.Constant;
@@ -20,8 +22,10 @@ public class CardgameApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CardgameApplication.class, args);
 		init();
-		new Thread(new SocketServer()).start();
-		new Thread(GameProcessor.getInstance()).start();
+		ThreadPool.getInstance().executor.execute(new SocketServer());
+		ThreadPool.getInstance().executor.execute(GameProcessor.getInstance());
+		GameTimer.getInstance().fire();
+
 	}
 
 	public static void init(){
