@@ -1,7 +1,11 @@
 package com.code.server.cardgame.bootstarp;
 
+import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.handler.GameProcessor;
-import com.code.server.cardgame.utils.ProperitesUtil;
+import com.code.server.cardgame.utils.*;
+import com.code.server.cardgame.utils.ThreadPool;
+import com.code.server.db.Service.UserService;
+import com.code.server.db.model.User;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
@@ -13,7 +17,7 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by SunXianping on 2016/6/15 0015.
@@ -21,6 +25,7 @@ import java.util.Properties;
 public class SocketServer implements Runnable{
 
     static final boolean SSL = System.getProperty("ssl") != null;
+    UserService userService = SpringUtil.getBean(UserService.class);
 
 
     private void start() throws Exception{
@@ -70,7 +75,22 @@ public class SocketServer implements Runnable{
     public void run() {
         try {
             start();
-
+            Timer timer = new Timer();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            ArrayList<User> users = new ArrayList<>();
+                            users = (ArrayList) GameManager.getInstance().getPlayers().values();
+                            for (User u: users) {
+                                userService.userDao.save(u);
+                            }
+                        }
+                    }, new Date(), 1000 * 60 * 5);
+                }
+            }).start();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,6 +98,6 @@ public class SocketServer implements Runnable{
     }
 
     public static void main(String[] args) {
-        new Thread(new SocketServer()).start();
+
     }
 }
