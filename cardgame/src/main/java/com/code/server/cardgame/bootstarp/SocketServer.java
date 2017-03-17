@@ -22,6 +22,7 @@ public class SocketServer implements Runnable{
 
     static final boolean SSL = System.getProperty("ssl") != null;
 
+
     private void start() throws Exception{
 
         Properties p = null;

@@ -4,6 +4,9 @@ package com.code.server.cardgame.handler;
 
 import com.code.server.cardgame.core.MsgDispatch;
 import com.code.server.cardgame.Message.MessageHolder;
+import com.code.server.cardgame.timer.GameTimer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.concurrent.LinkedBlockingQueue;
@@ -14,14 +17,16 @@ import java.util.concurrent.TimeUnit;
  *
  */
 public class GameProcessor implements Runnable{
-    @Autowired
-    private MsgDispatch messageHandler;
+
+
+    private static final Logger logger = LoggerFactory.getLogger(GameProcessor.class);
 
     private GameProcessor(){}
 
     public static GameProcessor instance;
 
-    public LinkedBlockingQueue<MessageHolder> messageQueue = new LinkedBlockingQueue<>();
+    public LinkedBlockingQueue<MessageHolder> messageQueue = new LinkedBlockingQueue<>(1000);
+
     public MsgDispatch handler = new MsgDispatch();
 
     public static GameProcessor getInstance(){
@@ -37,18 +42,13 @@ public class GameProcessor implements Runnable{
     public void run() {
        while(true){
            try {
-               //timer
-               MessageHolder messHolder = null;
-               try {
-                   messHolder = messageQueue.poll(10, TimeUnit.MILLISECONDS);
-               } catch (InterruptedException e) {
-                   e.printStackTrace();
-               }
+               MessageHolder messHolder = messageQueue.poll(10, TimeUnit.MILLISECONDS);
                if(messHolder != null&&messHolder.message !=null){
                    handler.handleMessage(messHolder);
                }
+               GameTimer.getInstance().handle();
            } catch (Exception e) {
-               e.printStackTrace();
+               logger.error("handle message error ",e);
            }
        }
     }
