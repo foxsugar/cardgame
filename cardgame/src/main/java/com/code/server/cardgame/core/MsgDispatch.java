@@ -4,6 +4,7 @@ import com.code.server.cardgame.Message.MessageHolder;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.game.Game;
+import com.code.server.cardgame.core.game.GameDouDiZhu;
 import com.code.server.cardgame.core.room.RoomDouDiZhu;
 import com.code.server.cardgame.response.ErrorCode;
 import com.code.server.cardgame.response.ResponseVo;
@@ -60,6 +61,8 @@ public class MsgDispatch {
                 return dispatchUserService(method, params, ctx);
             case "roomService":
                 return dispatchRoomService(method, params, ctx);
+            case "gameService":
+
             default:
                 return -1;
         }
@@ -68,7 +71,6 @@ public class MsgDispatch {
     private int dispatchUserService(String method, JSONObject params, ChannelHandlerContext ctx) {
 
         GameUserService gameUserService = SpringUtil.getBean(GameUserService.class);
-        String userId = params.getString("userId");
         switch (method) {
             case "login":
                 String account = params.getString("account");
@@ -86,10 +88,10 @@ public class MsgDispatch {
                 return gameUserService.getUserMessage(getPlayerByCtx(ctx));
 
             case "getUserImage":
-                return gameUserService.getUserImage(userId,ctx);
+//                return gameUserService.getUserImage(userId,ctx);
 
             case "register":
-                return gameUserService.register(userId,ctx);
+//                return gameUserService.register(userId,ctx);
 
             case "reconnection":
 
@@ -146,6 +148,36 @@ public class MsgDispatch {
                     return ErrorCode.CANNOT_QUIT_ROOM_NOT_IN_ROOM;
                 }
                 return room2.getReady(player);
+            default:
+
+                return -1;
+        }
+    }
+
+
+
+    private int dispatchGameService(String method, JSONObject params, ChannelHandlerContext ctx) {
+        Player player = getPlayerByCtx(ctx);
+        if (player == null) {
+            return -1;
+        }
+
+        String roomId1 = GameManager.getInstance().getUserRoom().get(player.getUserId());
+        if (roomId1 == null) {
+            return ErrorCode.CAN_NOT_NO_ROOM_;
+        }
+        RoomDouDiZhu room1 = GameManager.getInstance().rooms.get(roomId1);
+        if (room1 == null) {
+            return ErrorCode.CAN_NOT_NO_ROOM_;
+        }
+        GameDouDiZhu game = room1.getGame();
+
+        switch (method) {
+            case "jiaoDizhu":
+                game.jiaoDizhu(player, true);
+            case "qiangDizhu":
+            case "play":
+
             default:
 
                 return -1;

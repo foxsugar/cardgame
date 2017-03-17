@@ -35,13 +35,13 @@ public class GameVo {
 
     public static GameVo getGameVo(Game game){
         GameVo vo = new GameVo();
-        try {
-            BeanUtils.copyProperties(vo,game);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            BeanUtils.copyProperties(vo,game);
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        } catch (InvocationTargetException e) {
+//            e.printStackTrace();
+//        }
        return vo;
 
     }
