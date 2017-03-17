@@ -69,13 +69,6 @@ public class SocketServer implements Runnable{
     public void run() {
         try {
             start();
-            Timer timer = new Timer();
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    timer.schedule(new SaveUserTimerTask() , new Date(), 1000 * 60 * 5);
-                }
-            }).start();
 
         } catch (Exception e) {
             e.printStackTrace();

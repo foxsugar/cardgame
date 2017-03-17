@@ -24,10 +24,6 @@ public class SaveUserTimerTask extends TimerTask{
     UserService userService = SpringUtil.getBean(UserService.class);
     @Override
     public void run() {
-        ArrayList<User> users = new ArrayList<>();
-        users = (ArrayList) GameManager.getInstance().getPlayers().values();
-        for (User u: users) {
-            userService.userDao.save(u);
-        }
+        DbUtils.saveUsers();
     }
 }
