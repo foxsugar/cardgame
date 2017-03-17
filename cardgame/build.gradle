@@ -33,6 +33,8 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-aop')
 	compile('org.springframework.boot:spring-boot-starter-data-redis')
 	compile('org.springframework.boot:spring-boot-starter-logging')
+	compile('org.springframework.boot:spring-boot-starter-actuator')
+	compile('org.springframework.boot:spring-boot-starter-remote-shell')
 
 	compile group: 'io.netty', name: 'netty-all', version: '4.1.6.Final'
 
