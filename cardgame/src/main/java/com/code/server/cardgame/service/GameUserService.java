@@ -28,6 +28,7 @@ import java.net.URLEncoder;
 import java.util.*;
 
 import static com.code.server.cardgame.core.GameManager.getUserVo;
+import static com.code.server.cardgame.utils.DbUtils.userService;
 
 /**
  * Created by win7 on 2017/3/10.
@@ -249,6 +250,7 @@ public class GameUserService {
         newUser.setVip(0);
         newUser.setUuid("0");
         newUser.setMoney(100);
+        userService.userDao.save(newUser);
 
         return newUser;
     }

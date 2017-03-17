@@ -251,6 +251,7 @@ public class RoomDouDiZhu extends Room{
             Player.sendMsg2Player(new ResponseVo("roomService","destroyRoom",n), this.getUsers());
             //删除房间
             GameManager.getInstance().rooms.remove(roomId);
+            GameManager.getInstance().getUsers().put(user.getId(),user);
         }
 
         noticeQuitRoom(player);
@@ -538,6 +539,7 @@ public class RoomDouDiZhu extends Room{
         if (user != null) {
             user.setMoney(user.getMoney() + createNeedMoney);
         }
+        GameManager.getInstance().getUsers().put(user.getId(),user);
     }
 
     public void spendMoney() {
@@ -545,6 +547,7 @@ public class RoomDouDiZhu extends Room{
         if (user != null) {
             user.setMoney(user.getMoney() - createNeedMoney);
         }
+        GameManager.getInstance().getUsers().put(user.getId(),user);
     }
 
     public double getRoomType() {
