@@ -46,6 +46,7 @@ public class GameProcessor implements Runnable{
                if(messHolder != null&&messHolder.message !=null){
                    handler.handleMessage(messHolder);
                }
+               //定时任务
                GameTimer.getInstance().handle();
            } catch (Exception e) {
                logger.error("handle message error ",e);
