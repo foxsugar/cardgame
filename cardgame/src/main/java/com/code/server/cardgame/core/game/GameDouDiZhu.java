@@ -1,6 +1,7 @@
 package com.code.server.cardgame.core.game;
 
 import com.code.server.cardgame.core.CardStruct;
+import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.PlayerCardInfo;
 import com.code.server.cardgame.response.ErrorCode;
@@ -63,20 +64,25 @@ public class GameDouDiZhu extends Game{
 
     }
 
-    protected void play(Player player){
-        PlayerCardInfo playerCardInfo = playerCardInfos.get(player.getUserId());
-        playerCardInfo.checkPlayCard(lastCardStruct);
-    }
-
     /**
      * 出牌
+     * @param player
      */
-    public void outCard(){
-        if(playerCardInfos.get(playTurn).checkPlayCard(lastcardStruct,currentCardStruct,lasttype)){
-
+    protected void play(Player player){
+        PlayerCardInfo playerCardInfo = playerCardInfos.get(player.getUserId());
+        if(playerCardInfo.checkPlayCard(lastcardStruct,currentCardStruct,lasttype)){
+            currentCardStruct.setOutCard(0);   //可以出牌
+        }else{
+            currentCardStruct.setOutCard(1);    //不可出牌
         }
-        lasttype = lastcardStruct.getType(); //保存上次出牌的类型
+       List<Long> users = GameManager.getInstance().rooms.get(GameManager.getInstance().userRoom.get(player.getUserId())).getUsers();
+
+        Player.sendMsg2Player(new ResponseVo("gameService","play",currentCardStruct),users);
+
+        lasttype = lastcardStruct.getType();
     }
+
+
 
 
     /**

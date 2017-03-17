@@ -21,6 +21,8 @@ public class CardStruct {
     private static final int type_炸 =11;
     private static final int type_火箭 = 12;
 
+    int outCard = 0;//默认是出牌  0   ，1是不能出牌
+    long Userid;
     List<Integer> cards;
     int type;
     List<Integer> dan;
@@ -68,5 +70,12 @@ public class CardStruct {
     }
     public int getType(){
         return type;
+    }
+
+    public int getOutCard (){
+        return outCard;
+    }
+    public void setOutCard(int card){
+        this.outCard = card;
     }
 }
