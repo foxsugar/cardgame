@@ -1,6 +1,7 @@
 package com.code.server.cardgame;
 
 import com.code.server.cardgame.bootstarp.SocketServer;
+import com.code.server.cardgame.config.ServerConfig;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.handler.GameProcessor;
 import com.code.server.cardgame.timer.GameTimer;
@@ -13,32 +14,27 @@ import com.code.server.db.model.Constant;
 import com.code.server.db.model.ServerInfo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import java.util.Properties;
 
 @SpringBootApplication(scanBasePackages={"com.code.server.*"})
+@EnableConfigurationProperties({ServerConfig.class})
 public class CardgameApplication {
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(CardgameApplication.class, args);
 		init();
 		ThreadPool.getInstance().executor.execute(new SocketServer());
 		ThreadPool.getInstance().executor.execute(GameProcessor.getInstance());
-		GameTimer.getInstance().fire();
 
 	}
 
 	public static void init(){
 
-		Properties p = null;
-		try {
-			p = ProperitesUtil.loadProperties("application.properties");
-			int serverId = Integer.valueOf(p.getProperty("gameServerId"));
-			GameManager.getInstance().serverId = serverId;
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		ServerConfig serverConfig = SpringUtil.getBean(ServerConfig.class);
+		GameManager.getInstance().serverId = serverConfig.getServerId();
 
 		//初始化服务器信息
 		ServerService serverService = SpringUtil.getBean(ServerService.class);

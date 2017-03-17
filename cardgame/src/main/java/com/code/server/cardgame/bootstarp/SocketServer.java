@@ -1,5 +1,6 @@
 package com.code.server.cardgame.bootstarp;
 
+import com.code.server.cardgame.config.ServerConfig;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.handler.GameProcessor;
 import com.code.server.cardgame.utils.*;
@@ -26,18 +27,12 @@ public class SocketServer implements Runnable{
 
     static final boolean SSL = System.getProperty("ssl") != null;
     UserService userService = SpringUtil.getBean(UserService.class);
+    ServerConfig serverConfig = SpringUtil.getBean(ServerConfig.class);
+
 
     private void start() throws Exception{
+        int port = serverConfig.getPort();
 
-        Properties p = null;
-        int port = 8081;
-        try {
-            p = ProperitesUtil.loadProperties("application.properties");
-            port = Integer.valueOf(p.getProperty("socket.port"));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         final SslContext sslCtx;
         if (SSL) {
