@@ -1,6 +1,7 @@
 package com.code.server.cardgame.core.game;
 
 import com.code.server.cardgame.core.CardStruct;
+import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.PlayerCardInfo;
 import com.code.server.cardgame.response.ErrorCode;
@@ -27,6 +28,11 @@ public class GameDouDiZhu extends Game{
     protected Set<Long> chooseJiaoSet = new HashSet<>();
     protected Set<Long> chooseQiangSet = new HashSet<>();
     protected Set<Long> bujiaoSet = new HashSet<>();
+
+    protected CardStruct currentCardStruct = new CardStruct();// 当前这个人出的牌
+    protected CardStruct lastcardStruct = new CardStruct();//上一个人出的牌
+    protected int lasttype = 0;//上一个人出牌的类型
+
     private long canJiaoUser;//可以叫地主的人
     private long canQiangUser;//可以抢地主的人
     private long jiaoUser;//叫的人
@@ -58,10 +64,26 @@ public class GameDouDiZhu extends Game{
 
     }
 
+    /**
+     * 出牌
+     * @param player
+     */
     protected void play(Player player){
         PlayerCardInfo playerCardInfo = playerCardInfos.get(player.getUserId());
-        playerCardInfo.checkPlayCard(lastCardStruct);
+        if(playerCardInfo.checkPlayCard(lastcardStruct,currentCardStruct,lasttype)){
+            currentCardStruct.setOutCard(0);   //可以出牌
+        }else{
+            currentCardStruct.setOutCard(1);    //不可出牌
+        }
+       List<Long> users = GameManager.getInstance().rooms.get(GameManager.getInstance().userRoom.get(player.getUserId())).getUsers();
+
+        Player.sendMsg2Player(new ResponseVo("gameService","play",currentCardStruct),users);
+
+        lasttype = lastcardStruct.getType();
     }
+
+
+
 
     /**
      * 洗牌
