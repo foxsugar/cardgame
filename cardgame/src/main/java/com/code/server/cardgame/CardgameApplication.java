@@ -4,8 +4,6 @@ import com.code.server.cardgame.bootstarp.SocketServer;
 import com.code.server.cardgame.config.ServerConfig;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.handler.GameProcessor;
-import com.code.server.cardgame.timer.GameTimer;
-import com.code.server.cardgame.utils.ProperitesUtil;
 import com.code.server.cardgame.utils.SpringUtil;
 import com.code.server.cardgame.utils.ThreadPool;
 import com.code.server.db.Service.ConstantService;
@@ -15,8 +13,6 @@ import com.code.server.db.model.ServerInfo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-
-import java.util.Properties;
 
 @SpringBootApplication(scanBasePackages={"com.code.server.*"})
 @EnableConfigurationProperties({ServerConfig.class})
@@ -28,6 +24,7 @@ public class CardgameApplication {
 		init();
 		ThreadPool.getInstance().executor.execute(new SocketServer());
 		ThreadPool.getInstance().executor.execute(GameProcessor.getInstance());
+
 
 	}
 
