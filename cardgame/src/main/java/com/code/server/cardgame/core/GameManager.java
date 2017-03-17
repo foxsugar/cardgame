@@ -130,4 +130,11 @@ public class GameManager {
         this.userRoom = userRoom;
         return this;
     }
+
+    public Map<Long, Player> getPlayers() {
+        return players;
+    }
+
+
+
 }
