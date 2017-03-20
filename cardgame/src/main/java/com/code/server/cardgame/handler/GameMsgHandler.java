@@ -40,4 +40,11 @@ public class GameMsgHandler extends ChannelDuplexHandler {
         super.write(ctx, msg, promise);
     }
 
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx);
+    }
+
+
 }

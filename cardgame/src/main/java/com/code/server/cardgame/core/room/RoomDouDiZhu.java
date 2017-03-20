@@ -388,7 +388,8 @@ public class RoomDouDiZhu extends Room{
     }
 
 
-    public int dissolution(long userId, boolean agreeOrNot) {
+    public int dissolution(Player player,boolean agreeOrNot) {
+        long userId = player.getUserId();
         if (!this.users.contains(userId)) {
             return ErrorCode.CANNOT_FIND_THIS_USER;
 
@@ -432,14 +433,7 @@ public class RoomDouDiZhu extends Room{
         AskQuitRoom accept = new AskQuitRoom();
         accept.setUserId(userId + "");
         accept.setAnswerList(answerUsers);
-
-        JSONObject noticeResult = new JSONObject();
-        noticeResult.put("service", "roomService");
-        noticeResult.put("method", "noticeAnswerIfDissolveRoom");
-        noticeResult.put("params", accept.toJSONObject());
-        noticeResult.put("code", "0");
-
-        Player.sendMsg2Player(noticeResult, this.users);
+        Player.sendMsg2Player(new ResponseVo("roomService","noticeAnswerIfDissolveRoom",accept), this.users);
 
 
         int agreeNum = 0;
@@ -457,7 +451,6 @@ public class RoomDouDiZhu extends Room{
         if (agreeNum >= personNumber - 1) {
             GameTimer.getInstance().removeNode(timerNode);
             dissolutionRoom();
-
         }
         //不同意的人数大于2 解散取消
         if (disAgreeNum >= 1) {
@@ -468,6 +461,18 @@ public class RoomDouDiZhu extends Room{
                 GameTimer.getInstance().removeNode(timerNode);
             }
         }
+
+
+        AskQuitRoom accept1 = new AskQuitRoom();
+        accept1.setUserId(""+userId);
+        Player.sendMsg2Player("roomService","noticeDissolveRoom",accept1,users);
+
+        AskQuitRoom send = new AskQuitRoom();
+        send.setNote("ask quit room success,wait for other players accept.");
+        player.sendMsg("roomService","dissolveRoom",send);
+
+
+
         return 0;
     }
 

@@ -15,20 +15,18 @@ import java.util.*;
 public class GameVo {
 
 
-    protected List<Integer> cards = new ArrayList<>();//牌
     protected List<Integer> tableCards = new ArrayList<>();//底牌
     protected Map<Long,PlayerCardInfoVo> playerCardInfos = new HashMap<>();
-    protected List<Long> users = new ArrayList<>();
     protected long dizhu;//地主
 
-    private long canJiaoUser;//可以叫地主的人
-    private long canQiangUser;//可以抢地主的人
-    private long jiaoUser;//叫的人
-    private long qiangUser;//抢的人
+    protected long canJiaoUser;//可以叫地主的人
+    protected long canQiangUser;//可以抢地主的人
+    protected long jiaoUser;//叫的人
+    protected long qiangUser;//抢的人
 
-    private long playTurn;//该出牌的人
+    protected long playTurn;//该出牌的人
 
-    private int step;//步骤
+    protected int step;//步骤
 
     public GameVo(){}
 

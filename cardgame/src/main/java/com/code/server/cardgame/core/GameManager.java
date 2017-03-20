@@ -18,7 +18,7 @@ import java.util.*;
  */
 public class GameManager {
 
-    public static GameManager instance;
+    private static GameManager instance;
 
     public int serverId;
     public Map<Long, Player> players = new HashMap<>();
@@ -32,6 +32,7 @@ public class GameManager {
     public Set<ChannelHandlerContext> ctxSet = new HashSet<>();
     public ServerInfo serverInfo;
     public Constant constant;
+
 
     public Map<Long, User> users = new HashMap<>();
 

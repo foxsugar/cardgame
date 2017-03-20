@@ -1,0 +1,114 @@
+{
+  "service": "gameService",
+  "method": "gameBegin",
+  "params": {
+    "cards": [
+      11,
+      34,
+      26,
+      43
+    ],
+    "disCards": [],
+    "tableCards": [],
+    "playerCardInfos": {
+      "6247656516686581760": {
+        "userId": 6247656516686581760,
+        "cards": [
+          39,
+          28,
+          35,
+          29,
+          25,
+          32,
+          21,
+          12,
+          22,
+          40,
+          41,
+          5,
+          48,
+          17,
+          2,
+          47
+        ],
+        "disCards": []
+      },
+      "6247649570835271680": {
+        "userId": 6247649570835271680,
+        "cards": [
+          42,
+          15,
+          45,
+          46,
+          24,
+          18,
+          20,
+          49,
+          51,
+          31,
+          13,
+          33,
+          54,
+          10,
+          50,
+          36
+        ],
+        "disCards": []
+      },
+      "6247607509570424832": {
+        "userId": 6247607509570424832,
+        "cards": [
+          53,
+          27,
+          14,
+          30,
+          9,
+          23,
+          37,
+          6,
+          19,
+          44,
+          52,
+          4,
+          1,
+          16,
+          38,
+          3
+        ],
+        "disCards": []
+      }
+    },
+    "users": [
+      6247607509570424832,
+      6247649570835271680,
+      6247656516686581760
+    ],
+    "rand": {
+      "seed": 136603653350646,
+      "nextNextGaussian": 0.0,
+      "haveNextNextGaussian": false
+    },
+    "dizhu": 0,
+    "chooseJiaoSet": [],
+    "chooseQiangSet": [],
+    "bujiaoSet": [],
+    "currentCardStruct": {
+      "outCard": 0,
+      "Userid": 0,
+      "type": 0
+    },
+    "lastcardStruct": {
+      "outCard": 0,
+      "Userid": 0,
+      "type": 0
+    },
+    "lasttype": 0,
+    "canJiaoUser": 6247607509570424832,
+    "canQiangUser": 0,
+    "jiaoUser": 0,
+    "qiangUser": 0,
+    "playTurn": 0,
+    "step": 1
+  },
+  "code": 0
+}

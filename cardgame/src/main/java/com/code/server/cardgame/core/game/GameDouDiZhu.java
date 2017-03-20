@@ -68,7 +68,7 @@ public class GameDouDiZhu extends Game{
      * 出牌
      * @param player
      */
-    protected void play(Player player){
+    public int play(Player player,CardStruct cardStruct){
         PlayerCardInfo playerCardInfo = playerCardInfos.get(player.getUserId());
         if(playerCardInfo.checkPlayCard(lastcardStruct,currentCardStruct,lasttype)){
             currentCardStruct.setOutCard(0);   //可以出牌
@@ -80,6 +80,7 @@ public class GameDouDiZhu extends Game{
         Player.sendMsg2Player(new ResponseVo("gameService","play",currentCardStruct),users);
 
         lasttype = lastcardStruct.getType();
+        return 0;
     }
 
 
