@@ -250,7 +250,6 @@ public class GameUserService {
         newUser.setVip(0);
         newUser.setUuid("0");
         newUser.setMoney(100);
-        userService.userDao.save(newUser);
 
         return newUser;
     }

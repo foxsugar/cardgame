@@ -21,7 +21,6 @@ import java.util.TimerTask;
  */
 public class SaveUserTimerTask extends TimerTask{
 
-    UserService userService = SpringUtil.getBean(UserService.class);
     @Override
     public void run() {
         DbUtils.saveUsers();

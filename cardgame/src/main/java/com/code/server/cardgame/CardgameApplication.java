@@ -4,8 +4,6 @@ import com.code.server.cardgame.bootstarp.SocketServer;
 import com.code.server.cardgame.config.ServerConfig;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.handler.GameProcessor;
-import com.code.server.cardgame.timer.GameTimer;
-import com.code.server.cardgame.utils.ProperitesUtil;
 import com.code.server.cardgame.utils.SaveUserTimerTask;
 import com.code.server.cardgame.utils.SpringUtil;
 import com.code.server.cardgame.utils.ThreadPool;
@@ -18,7 +16,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import java.util.Date;
-import java.util.Properties;
 import java.util.Timer;
 
 @SpringBootApplication(scanBasePackages={"com.code.server.*"})
@@ -28,19 +25,18 @@ public class CardgameApplication {
 
 	public static void main(String[] args) {
 
-		ServerConfig serverConfig = SpringUtil.getBean(ServerConfig.class);
+
 
 		SpringApplication.run(CardgameApplication.class, args);
 		init();
 		ThreadPool.getInstance().executor.execute(new SocketServer());
 		ThreadPool.getInstance().executor.execute(GameProcessor.getInstance());
 		//定时保存User数据
-		ThreadPool.getInstance().executor.execute(new Runnable() {
-			@Override
-			public void run() {
+        ServerConfig serverConfig = SpringUtil.getBean(ServerConfig.class);
+		ThreadPool.getInstance().executor.execute(()->{
 				Timer timer = new Timer();
 				timer.schedule(new SaveUserTimerTask() , new Date(), serverConfig.getDbSaveTime());
-			}
+
 		});
 	}
 
