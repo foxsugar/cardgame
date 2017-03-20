@@ -33,6 +33,7 @@ public class GameManager {
     public ServerInfo serverInfo;
     public Constant constant;
 
+    public Map<Long, User> users = new HashMap<>();
 
     private IdWorker idWorker;
 
@@ -107,7 +108,7 @@ public class GameManager {
     }
 
     public void removePlayer(Player player) {
-        DbUtils.saveUser(player);
+        DbUtils.saveUser(player.getUser());
         this.players.remove(player.getUserId());
         this.name_idMap.remove(player.getUser().getAccount());
         this.id_nameMap.remove(player.getUserId());
@@ -137,6 +138,11 @@ public class GameManager {
         return players;
     }
 
+    public Map<Long, User> getUsers() {
+        return users;
+    }
 
-
+    public void setUsers(Map<Long, User> users) {
+        this.users = users;
+    }
 }
