@@ -320,7 +320,183 @@ public class GameDouDiZhu extends Game{
     }
 
 
+    public List<Integer> getCards() {
+        return cards;
+    }
 
+    public GameDouDiZhu setCards(List<Integer> cards) {
+        this.cards = cards;
+        return this;
+    }
 
+    public List<Integer> getDisCards() {
+        return disCards;
+    }
 
+    public GameDouDiZhu setDisCards(List<Integer> disCards) {
+        this.disCards = disCards;
+        return this;
+    }
+
+    public List<Integer> getTableCards() {
+        return tableCards;
+    }
+
+    public GameDouDiZhu setTableCards(List<Integer> tableCards) {
+        this.tableCards = tableCards;
+        return this;
+    }
+
+    public Map<Long, PlayerCardInfo> getPlayerCardInfos() {
+        return playerCardInfos;
+    }
+
+    public GameDouDiZhu setPlayerCardInfos(Map<Long, PlayerCardInfo> playerCardInfos) {
+        this.playerCardInfos = playerCardInfos;
+        return this;
+    }
+
+    public List<Long> getUsers() {
+        return users;
+    }
+
+    public GameDouDiZhu setUsers(List<Long> users) {
+        this.users = users;
+        return this;
+    }
+
+    public Random getRand() {
+        return rand;
+    }
+
+    public GameDouDiZhu setRand(Random rand) {
+        this.rand = rand;
+        return this;
+    }
+
+    public long getDizhu() {
+        return dizhu;
+    }
+
+    public GameDouDiZhu setDizhu(long dizhu) {
+        this.dizhu = dizhu;
+        return this;
+    }
+
+    public Set<Long> getChooseJiaoSet() {
+        return chooseJiaoSet;
+    }
+
+    public GameDouDiZhu setChooseJiaoSet(Set<Long> chooseJiaoSet) {
+        this.chooseJiaoSet = chooseJiaoSet;
+        return this;
+    }
+
+    public Set<Long> getChooseQiangSet() {
+        return chooseQiangSet;
+    }
+
+    public GameDouDiZhu setChooseQiangSet(Set<Long> chooseQiangSet) {
+        this.chooseQiangSet = chooseQiangSet;
+        return this;
+    }
+
+    public Set<Long> getBujiaoSet() {
+        return bujiaoSet;
+    }
+
+    public GameDouDiZhu setBujiaoSet(Set<Long> bujiaoSet) {
+        this.bujiaoSet = bujiaoSet;
+        return this;
+    }
+
+    public CardStruct getCurrentCardStruct() {
+        return currentCardStruct;
+    }
+
+    public GameDouDiZhu setCurrentCardStruct(CardStruct currentCardStruct) {
+        this.currentCardStruct = currentCardStruct;
+        return this;
+    }
+
+    public CardStruct getLastcardStruct() {
+        return lastcardStruct;
+    }
+
+    public GameDouDiZhu setLastcardStruct(CardStruct lastcardStruct) {
+        this.lastcardStruct = lastcardStruct;
+        return this;
+    }
+
+    public int getLasttype() {
+        return lasttype;
+    }
+
+    public GameDouDiZhu setLasttype(int lasttype) {
+        this.lasttype = lasttype;
+        return this;
+    }
+
+    public long getCanJiaoUser() {
+        return canJiaoUser;
+    }
+
+    public GameDouDiZhu setCanJiaoUser(long canJiaoUser) {
+        this.canJiaoUser = canJiaoUser;
+        return this;
+    }
+
+    public long getCanQiangUser() {
+        return canQiangUser;
+    }
+
+    public GameDouDiZhu setCanQiangUser(long canQiangUser) {
+        this.canQiangUser = canQiangUser;
+        return this;
+    }
+
+    public long getJiaoUser() {
+        return jiaoUser;
+    }
+
+    public GameDouDiZhu setJiaoUser(long jiaoUser) {
+        this.jiaoUser = jiaoUser;
+        return this;
+    }
+
+    public long getQiangUser() {
+        return qiangUser;
+    }
+
+    public GameDouDiZhu setQiangUser(long qiangUser) {
+        this.qiangUser = qiangUser;
+        return this;
+    }
+
+    public long getPlayTurn() {
+        return playTurn;
+    }
+
+    public GameDouDiZhu setPlayTurn(long playTurn) {
+        this.playTurn = playTurn;
+        return this;
+    }
+
+    public CardStruct getLastCardStruct() {
+        return lastCardStruct;
+    }
+
+    public GameDouDiZhu setLastCardStruct(CardStruct lastCardStruct) {
+        this.lastCardStruct = lastCardStruct;
+        return this;
+    }
+
+    public int getStep() {
+        return step;
+    }
+
+    public GameDouDiZhu setStep(int step) {
+        this.step = step;
+        return this;
+    }
 }

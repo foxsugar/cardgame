@@ -96,7 +96,7 @@ public class RoomDouDiZhu extends Room{
 
 
 
-        player.sendMsg(new ResponseVo("roomService","createRoom",new RoomVo(room)));
+        player.sendMsg(new ResponseVo("roomService","createRoom",new RoomVo(room,player)));
 
         return 0;
     }
@@ -137,9 +137,6 @@ public class RoomDouDiZhu extends Room{
     public void init(int gameNumber, int multiple) {
         this.multiple = multiple;
         this.gameNumber = gameNumber;
-        this.personNumber = personNumber;
-        this.createUser = createUser;
-        this.bankerId = bankerId;
         this.isInGame = false;
 
         //todo
@@ -205,7 +202,7 @@ public class RoomDouDiZhu extends Room{
         userOfRoom.setReadyNumber(readyNumber);
 
 
-        player.sendMsg(new ResponseVo("roomService","joinRoom",new RoomVo(this)));
+        player.sendMsg(new ResponseVo("roomService","joinRoom",new RoomVo(this,player)));
 
         Player.sendMsg2Player(new ResponseVo("roomService","roomNotice",userOfRoom), this.getUsers());
 

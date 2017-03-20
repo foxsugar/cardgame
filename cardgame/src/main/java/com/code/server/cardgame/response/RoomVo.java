@@ -1,6 +1,7 @@
 package com.code.server.cardgame.response;
 
 import com.code.server.cardgame.core.GameManager;
+import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.room.Room;
 import com.code.server.cardgame.core.room.RoomDouDiZhu;
 import com.code.server.db.model.User;
@@ -30,7 +31,7 @@ public class RoomVo {
 
     public RoomVo(){}
 
-    public RoomVo(Room roomDouDiZhu){
+    public RoomVo(Room roomDouDiZhu, Player player){
         this.roomId = roomDouDiZhu.getRoomId();
         this.multiple = roomDouDiZhu.getMultiple();
         this.gameNumber = roomDouDiZhu.getGameNumber();
@@ -41,7 +42,7 @@ public class RoomVo {
             userList.add(GameManager.getUserVo(user));
         }
 
-        this.game = GameVo.getGameVo(roomDouDiZhu.getGame());
+        this.game = GameVo.getGameVo(roomDouDiZhu.getGame(),player);
 
     }
 

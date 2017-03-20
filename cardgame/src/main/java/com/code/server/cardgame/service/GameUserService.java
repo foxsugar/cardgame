@@ -153,7 +153,7 @@ public class GameUserService {
 
 
             reconnectResp.setExist(true);
-            reconnectResp.setRoom(new RoomVo(room));
+            reconnectResp.setRoom(new RoomVo(room,player));
         }
 
         ResponseVo vo = new ResponseVo("userService", "reconnection", reconnectResp);
