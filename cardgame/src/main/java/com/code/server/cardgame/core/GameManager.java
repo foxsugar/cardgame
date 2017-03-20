@@ -2,6 +2,7 @@ package com.code.server.cardgame.core;
 
 import com.code.server.cardgame.core.room.Room;
 import com.code.server.cardgame.core.room.RoomDouDiZhu;
+import com.code.server.cardgame.utils.DbUtils;
 import com.code.server.cardgame.utils.IdWorker;
 import com.code.server.db.model.Constant;
 import com.code.server.db.model.ServerInfo;
@@ -106,6 +107,7 @@ public class GameManager {
     }
 
     public void removePlayer(Player player) {
+        DbUtils.saveUser(player);
         this.players.remove(player.getUserId());
         this.name_idMap.remove(player.getUser().getAccount());
         this.id_nameMap.remove(player.getUserId());
@@ -130,4 +132,11 @@ public class GameManager {
         this.userRoom = userRoom;
         return this;
     }
+
+    public Map<Long, Player> getPlayers() {
+        return players;
+    }
+
+
+
 }
