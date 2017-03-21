@@ -7,7 +7,7 @@ import java.util.List;
  * Created by Administrator on 2017/3/21.
  */
 public class CardUtil {
-    protected List<List<Integer>> typeCard = new ArrayList<>();//牌大小排列
+    protected static List<List<Integer>> typeCard = new ArrayList<>();//牌大小排列
 
 
     public void getCardUtil(){
