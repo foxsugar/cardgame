@@ -21,11 +21,11 @@ public final class DbUtils {
 
         int temp = 0;
         Collection<User> users = new ArrayList<>();
-        users = GameManager.getInstance().getUsers().values();
+        users = GameManager.getInstance().getUsersSaveInDB().values();
 
         for (User u : users) {
             userService.userDao.save(u);
-            GameManager.getInstance().getUsers().remove(u.getId());
+            GameManager.getInstance().getUsersSaveInDB().remove(u.getId());
             temp++;
             if (temp%1000==0){//每1000次保存休眠
                 try {
@@ -40,7 +40,7 @@ public final class DbUtils {
 
     public static void saveUser(User user) {
         userService.userDao.save(user);
-        GameManager.getInstance().getUsers().remove(user.getId());
+        GameManager.getInstance().getUsersSaveInDB().remove(user.getId());
     }
 
 }

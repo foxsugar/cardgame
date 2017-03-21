@@ -33,7 +33,7 @@ public class GameManager {
     public ServerInfo serverInfo;
     public Constant constant;
 
-    public Map<Long, User> users = new HashMap<>();
+    public Map<Long, User> usersSaveInDB = new HashMap<>();
 
     private IdWorker idWorker;
 
@@ -138,11 +138,11 @@ public class GameManager {
         return players;
     }
 
-    public Map<Long, User> getUsers() {
-        return users;
+    public Map<Long, User> getUsersSaveInDB() {
+        return usersSaveInDB;
     }
 
-    public void setUsers(Map<Long, User> users) {
-        this.users = users;
+    public void setUsersSaveInDB(Map<Long, User> usersSaveInDB) {
+        this.usersSaveInDB = usersSaveInDB;
     }
 }
