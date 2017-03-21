@@ -46,8 +46,10 @@ public class GameUserService {
         player.setUser(user);
         player.setCtx(ctx);
         player.setUserId(user.getUserId());
-        ctx.channel().attr(MsgDispatch.attributeKey).set(user.getUserId());
+        ctx.channel().attr(GameManager.attributeKey).set(user.getUserId());
         GameManager.getInstance().addPlayer(player);
+        player.setLastSendMsgTime(System.currentTimeMillis());
+        GameManager.getInstance().getKickUser().remove(player.getUserId());
 
 
     }

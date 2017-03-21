@@ -19,22 +19,4 @@ public class GameCharsEncoder extends MessageToByteEncoder<Object> {
         out.writeInt(data.length);
         out.writeBytes(data);
     }
-    
-//    @Override
-//    protected Object encode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
-//        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//        DataOutputStream oos = new DataOutputStream(bos);
-//        //oos.writeObject(msg);
-//        //oos.writeUTF(((JSONObject)msg).toString());
-//        oos.write(msg.toString().getBytes("utf-8"));
-//        oos.flush();
-//        byte[] bytes = bos.toByteArray();
-//
-//        ChannelBuffer buf = ChannelBuffers.buffer(4 + bytes.length);
-//        buf.writeInt(bytes.length);
-//        buf.writeBytes(bytes);
-//
-//
-//        return buf;
-//    }
 }

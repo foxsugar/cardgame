@@ -9,6 +9,7 @@ import com.code.server.db.model.ServerInfo;
 import com.code.server.db.model.User;
 import com.code.server.gamedata.UserVo;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.AttributeKey;
 import org.apache.commons.collections.map.HashedMap;
 
 import java.util.*;
@@ -19,19 +20,19 @@ import java.util.*;
 public class GameManager {
 
     private static GameManager instance;
+    public static AttributeKey<Long> attributeKey = AttributeKey.newInstance("userId");
 
     public int serverId;
     public Map<Long, Player> players = new HashMap<>();
-    public Map<Long, ChannelHandlerContext> ctxs = new HashMap<>();
     public Map<Long,String> id_nameMap = new HashMap<>();
     public Map<String, Long> name_idMap = new HashMap<>();
     public Map<String, Long> openId_uid = new HashMap<>();
     public Map<Long, String> uid_openId = new HashMap<>();
     public Map<Long, String> userRoom = new HashMap<>();
     public Map<String, RoomDouDiZhu> rooms = new HashMap<>();
-    public Set<ChannelHandlerContext> ctxSet = new HashSet<>();
     public ServerInfo serverInfo;
     public Constant constant;
+    public Map<Long, Player> kickUser = new HashMap<>();
 
 
     public Map<Long, User> users = new HashMap<>();
@@ -104,18 +105,17 @@ public class GameManager {
         this.id_nameMap.put(player.getUserId(), player.getUser().getAccount());
         this.uid_openId.put(player.getUserId(), player.getUser().getOpenId());
         this.openId_uid.put(player.getUser().getOpenId(), player.getUserId());
-        player.getCtx().channel().attr(MsgDispatch.attributeKey).setIfAbsent(player.getUserId());
+        player.getCtx().channel().attr(attributeKey).setIfAbsent(player.getUserId());
 
     }
 
     public void removePlayer(Player player) {
-        DbUtils.saveUser(player.getUser());
         this.players.remove(player.getUserId());
         this.name_idMap.remove(player.getUser().getAccount());
         this.id_nameMap.remove(player.getUserId());
         this.uid_openId.remove(player.getUserId());
         this.openId_uid.remove(player.getUser().getOpenId());
-        player.getCtx().channel().attr(MsgDispatch.attributeKey).setIfAbsent(-1L);
+        player.getCtx().channel().attr(attributeKey).setIfAbsent(-1L);
     }
 
     public Room getRoomByUser(long userId) {
@@ -124,6 +124,19 @@ public class GameManager {
             return null;
         }
         return rooms.get(roomId);
+    }
+
+    public static Player getPlayerByCtx(ChannelHandlerContext ctx) {
+        if (ctx.channel().attr(attributeKey).get() != null) {
+            long uid = ctx.channel().attr(attributeKey).get();
+            Player player = GameManager.getInstance().players.get(uid);
+            if (player != null) {
+                player.setLastSendMsgTime(System.currentTimeMillis());
+                GameManager.getInstance().getKickUser().remove(player.getUserId());
+            }
+            return player;
+        }
+        return null;
     }
 
     public Map<Long, String> getUserRoom() {
@@ -145,5 +158,14 @@ public class GameManager {
 
     public void setUsers(Map<Long, User> users) {
         this.users = users;
+    }
+
+    public Map<Long, Player> getKickUser() {
+        return kickUser;
+    }
+
+    public GameManager setKickUser(Map<Long, Player> kickUser) {
+        this.kickUser = kickUser;
+        return this;
     }
 }

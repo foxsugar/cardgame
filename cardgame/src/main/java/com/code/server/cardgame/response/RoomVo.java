@@ -38,11 +38,11 @@ public class RoomVo {
         this.createUser = roomDouDiZhu.getCreateUser();
         this.userStatus.putAll(roomDouDiZhu.getUserStatus());
         this.userScores.putAll(roomDouDiZhu.getUserScores());
-        for(User user : roomDouDiZhu.getUserMap().values()){
-            userList.add(GameManager.getUserVo(user));
+        for(long uid : roomDouDiZhu.getUsers()){
+            userList.add(GameManager.getUserVo(roomDouDiZhu.getUserMap().get(uid)));
         }
 
-        this.game = GameVo.getGameVo(roomDouDiZhu.getGame(),player);
+        this.game = GameVo.getGameVo(roomDouDiZhu.getGame(),player.getUserId());
 
     }
 

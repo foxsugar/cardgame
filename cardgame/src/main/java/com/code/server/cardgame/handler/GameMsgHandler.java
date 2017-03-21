@@ -1,6 +1,9 @@
 package com.code.server.cardgame.handler;
 
 import com.code.server.cardgame.Message.MessageHolder;
+import com.code.server.cardgame.core.GameManager;
+import com.code.server.cardgame.core.MsgDispatch;
+import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.utils.JsonUtil;
 import com.google.gson.Gson;
 import io.netty.channel.ChannelDuplexHandler;
@@ -43,6 +46,11 @@ public class GameMsgHandler extends ChannelDuplexHandler {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        //可从内存中剔除的玩家
+        Player player = GameManager.getPlayerByCtx(ctx);
+        if (player != null) {
+            GameManager.getInstance().getKickUser().put(player.getUserId(), player);
+        }
         super.channelInactive(ctx);
     }
 

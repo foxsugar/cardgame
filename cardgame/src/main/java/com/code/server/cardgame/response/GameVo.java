@@ -30,7 +30,7 @@ public class GameVo {
 
     public GameVo(){}
 
-    public static GameVo getGameVo(Game game, Player player){
+    public static GameVo getGameVo(Game game, long uid){
         GameVo vo = new GameVo();
         if (game instanceof GameDouDiZhu) {
             GameDouDiZhu douDiZhu = (GameDouDiZhu) game;
@@ -44,14 +44,14 @@ public class GameVo {
             vo.qiangUser = douDiZhu.getQiangUser();
             //该出牌的玩家
             vo.playTurn = douDiZhu.getPlayTurn();
-            if(player.getUserId() == douDiZhu.getDizhu()){//玩家是地主
+            if(uid == douDiZhu.getDizhu()){//玩家是地主
                 vo.tableCards.addAll(douDiZhu.getTableCards());
 
             }
 
             //玩家牌信息
             for (PlayerCardInfo playerCardInfo : douDiZhu.getPlayerCardInfos().values()) {
-                vo.playerCardInfos.put(playerCardInfo.userId, new PlayerCardInfoVo(playerCardInfo, player));
+                vo.playerCardInfos.put(playerCardInfo.userId, new PlayerCardInfoVo(playerCardInfo, uid));
             }
 
         }

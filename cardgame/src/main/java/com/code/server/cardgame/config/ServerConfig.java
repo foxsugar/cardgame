@@ -11,6 +11,7 @@ public class ServerConfig {
     private int serverId;
     private int dbSaveTime;
     private int port;
+    private int kickTime;
 
 
     public int getServerId() {
@@ -37,6 +38,15 @@ public class ServerConfig {
 
     public ServerConfig setPort(int port) {
         this.port = port;
+        return this;
+    }
+
+    public int getKickTime() {
+        return kickTime;
+    }
+
+    public ServerConfig setKickTime(int kickTime) {
+        this.kickTime = kickTime;
         return this;
     }
 }

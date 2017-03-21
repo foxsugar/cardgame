@@ -158,7 +158,9 @@ public class GameDouDiZhu extends Game{
                 //todo 重新洗牌
 
             } else {
-                long nextJiao = nextTurnId(player.getUserId());
+//                long nextJiao = nextTurnId(player.getUserId());
+                long nextJiao = users.get(2);
+
                 canJiaoUser = nextJiao;
                 noticeCanJiao(nextJiao);
             }

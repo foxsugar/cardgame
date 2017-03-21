@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MsgDispatch {
 
-    public static AttributeKey<Long> attributeKey = AttributeKey.newInstance("userId");
+
     private Gson gson = new Gson();
 
     public static void sendMsg(ChannelHandlerContext ctx, Object msg) {
@@ -77,9 +77,9 @@ public class MsgDispatch {
                 int sex = Integer.parseInt(params.getString("sex"));
                 return gameUserService.checkOpenId(openId, username, image, sex, ctx);
             case "getUserMessage":
-                return gameUserService.getUserMessage(getPlayerByCtx(ctx));
+                return gameUserService.getUserMessage(GameManager.getPlayerByCtx(ctx));
             case "reconnection":
-                return gameUserService.reconnection(getPlayerByCtx(ctx));
+                return gameUserService.reconnection(GameManager.getPlayerByCtx(ctx));
 
             case "getUserImage":
 //                return gameUserService.getUserImage(userId,ctx);
@@ -95,7 +95,7 @@ public class MsgDispatch {
     }
 
     private int dispatchRoomService(String method, JSONObject params, ChannelHandlerContext ctx) {
-        Player player = getPlayerByCtx(ctx);
+        Player player = GameManager.getPlayerByCtx(ctx);
         if (player == null) {
             return -1;
         }
@@ -106,9 +106,10 @@ public class MsgDispatch {
                 int multiple = params.getInt("maxMultiple");
                 return RoomDouDiZhu.createRoom(player, gameNumber, multiple);
             case "joinRoom": {
-                RoomDouDiZhu room = getRoomByPlayer(player);
+                String roomId = params.getString("roomId");
+                RoomDouDiZhu room = GameManager.getInstance().rooms.get(roomId);
                 if (room == null) {
-                    return ErrorCode.CAN_NOT_NO_ROOM;
+                    return ErrorCode.CANNOT_JOIN_ROOM_NOT_EXIST;
                 }
                 return room.joinRoom(player);
             }
@@ -141,7 +142,7 @@ public class MsgDispatch {
 
 
     private int dispatchGameService(String method, JSONObject params, ChannelHandlerContext ctx) {
-        Player player = getPlayerByCtx(ctx);
+        Player player = GameManager.getPlayerByCtx(ctx);
         if (player == null) {
             return -1;
         }
@@ -181,13 +182,5 @@ public class MsgDispatch {
         return GameManager.getInstance().rooms.get(roomId);
     }
 
-    private Player getPlayerByCtx(ChannelHandlerContext ctx) {
-        if (ctx.channel().attr(attributeKey).get() != null) {
-            long uid = ctx.channel().attr(attributeKey).get();
-            Player player = GameManager.getInstance().players.get(uid);
-            player.setLastSendMsgTime(System.currentTimeMillis());
-            return player;
-        }
-        return null;
-    }
+
 }

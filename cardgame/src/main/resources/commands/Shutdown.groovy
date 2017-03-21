@@ -12,6 +12,7 @@ class Shutdown {
     @Command
     def main(InvocationContext context) {
 
+        Shutdown.
         return "shutdown"
     }
 

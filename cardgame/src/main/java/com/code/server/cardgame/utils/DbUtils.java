@@ -18,6 +18,7 @@ public final class DbUtils {
     public static ServerConfig serverConfig = SpringUtil.getBean(ServerConfig.class);
 
     public static void saveUsers() {
+        System.out.println("保存玩家");
 
         int temp = 0;
         Collection<User> users = new ArrayList<>();

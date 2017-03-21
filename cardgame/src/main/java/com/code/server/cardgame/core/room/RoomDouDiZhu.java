@@ -194,9 +194,11 @@ public class RoomDouDiZhu extends Room{
         List<UserVo> usersList = new ArrayList<>();
         UserOfRoom userOfRoom = new UserOfRoom();
         int readyNumber = 0;
-        for (User user : this.userMap.values()) {
-           usersList.add(GameManager.getUserVo(user));
+        for(long userId : users){
+            User user = this.userMap.get(userId);
+            usersList.add(GameManager.getUserVo(user));
         }
+
         userOfRoom.setUserList(usersList);
         userOfRoom.setInRoomNumber(users.size());
         userOfRoom.setReadyNumber(readyNumber);
@@ -248,7 +250,7 @@ public class RoomDouDiZhu extends Room{
             Player.sendMsg2Player(new ResponseVo("roomService","destroyRoom",n), this.getUsers());
             //删除房间
             GameManager.getInstance().rooms.remove(roomId);
-            GameManager.getInstance().getUsers().put(user.getId(),user);
+            GameManager.getInstance().getUsers().put(user.getUserId(),user);
         }
 
         noticeQuitRoom(player);
@@ -263,9 +265,11 @@ public class RoomDouDiZhu extends Room{
 
         List<Long> noticeList = this.getUsers();
 
-        for(User user : userMap.values()){
+        for (long userId : users) {
+            User user = userMap.get(userId);
             usersList.add(GameManager.getUserVo(user));
         }
+
         int inRoomNumber = this.getUsers().size();
         int readyNumber = 0;
 
@@ -372,7 +376,11 @@ public class RoomDouDiZhu extends Room{
         //通知其他人游戏已经开始
         CardEntity cardBegin = new CardEntity();
         cardBegin.setCurrentUserId(this.getBankerId() + "");
-        Player.sendMsg2Player(new ResponseVo("gameService","gameBegin",game), this.getUsers());
+        for(long uid : this.getUsers()){
+
+            Player.sendMsg2Player("gameService","gameBegin",GameVo.getGameVo(game,uid), uid);
+        }
+
         pushScoreChange();
     }
 

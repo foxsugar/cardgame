@@ -17,9 +17,9 @@ public class PlayerCardInfoVo {
     public PlayerCardInfoVo() {
     }
 
-    public PlayerCardInfoVo(PlayerCardInfo playerCardInfo, Player player) {
+    public PlayerCardInfoVo(PlayerCardInfo playerCardInfo, long uid) {
         this.userId = playerCardInfo.userId;
-        if (playerCardInfo.userId == player.getUserId()) {
+        if (playerCardInfo.userId == uid) {
             this.cards.addAll(playerCardInfo.cards);
         } else {
             this.cardNum = playerCardInfo.cards.size();
