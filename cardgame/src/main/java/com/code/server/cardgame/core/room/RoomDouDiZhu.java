@@ -137,6 +137,9 @@ public class RoomDouDiZhu extends Room{
     public void init(int gameNumber, int multiple) {
         this.multiple = multiple;
         this.gameNumber = gameNumber;
+        this.personNumber = personNumber;
+        this.createUser = createUser;
+        this.bankerId = bankerId;
         this.isInGame = false;
 
         //todo
@@ -204,7 +207,7 @@ public class RoomDouDiZhu extends Room{
         userOfRoom.setReadyNumber(readyNumber);
 
 
-        player.sendMsg(new ResponseVo("roomService","joinRoom",new RoomVo(this,player)));
+        player.sendMsg(new ResponseVo("roomService","joinRoom",new RoomVo(this)));
 
         Player.sendMsg2Player(new ResponseVo("roomService","roomNotice",userOfRoom), this.getUsers());
 
@@ -250,7 +253,7 @@ public class RoomDouDiZhu extends Room{
             Player.sendMsg2Player(new ResponseVo("roomService","destroyRoom",n), this.getUsers());
             //删除房间
             GameManager.getInstance().rooms.remove(roomId);
-            GameManager.getInstance().getUsers().put(user.getUserId(),user);
+            GameManager.getInstance().getUsersSaveInDB().put(user.getId(),user);
         }
 
         noticeQuitRoom(player);
@@ -265,11 +268,9 @@ public class RoomDouDiZhu extends Room{
 
         List<Long> noticeList = this.getUsers();
 
-        for (long userId : users) {
-            User user = userMap.get(userId);
+        for(User user : userMap.values()){
             usersList.add(GameManager.getUserVo(user));
         }
-
         int inRoomNumber = this.getUsers().size();
         int readyNumber = 0;
 
@@ -376,11 +377,7 @@ public class RoomDouDiZhu extends Room{
         //通知其他人游戏已经开始
         CardEntity cardBegin = new CardEntity();
         cardBegin.setCurrentUserId(this.getBankerId() + "");
-        for(long uid : this.getUsers()){
-
-            Player.sendMsg2Player("gameService","gameBegin",GameVo.getGameVo(game,uid), uid);
-        }
-
+        Player.sendMsg2Player(new ResponseVo("gameService","gameBegin",game), this.getUsers());
         pushScoreChange();
     }
 
@@ -396,8 +393,7 @@ public class RoomDouDiZhu extends Room{
     }
 
 
-    public int dissolution(Player player,boolean agreeOrNot) {
-        long userId = player.getUserId();
+    public int dissolution(long userId, boolean agreeOrNot) {
         if (!this.users.contains(userId)) {
             return ErrorCode.CANNOT_FIND_THIS_USER;
 
@@ -441,7 +437,14 @@ public class RoomDouDiZhu extends Room{
         AskQuitRoom accept = new AskQuitRoom();
         accept.setUserId(userId + "");
         accept.setAnswerList(answerUsers);
-        Player.sendMsg2Player(new ResponseVo("roomService","noticeAnswerIfDissolveRoom",accept), this.users);
+
+        JSONObject noticeResult = new JSONObject();
+        noticeResult.put("service", "roomService");
+        noticeResult.put("method", "noticeAnswerIfDissolveRoom");
+        noticeResult.put("params", accept.toJSONObject());
+        noticeResult.put("code", "0");
+
+        Player.sendMsg2Player(noticeResult, this.users);
 
 
         int agreeNum = 0;
@@ -459,6 +462,7 @@ public class RoomDouDiZhu extends Room{
         if (agreeNum >= personNumber - 1) {
             GameTimer.getInstance().removeNode(timerNode);
             dissolutionRoom();
+
         }
         //不同意的人数大于2 解散取消
         if (disAgreeNum >= 1) {
@@ -469,18 +473,6 @@ public class RoomDouDiZhu extends Room{
                 GameTimer.getInstance().removeNode(timerNode);
             }
         }
-
-
-        AskQuitRoom accept1 = new AskQuitRoom();
-        accept1.setUserId(""+userId);
-        Player.sendMsg2Player("roomService","noticeDissolveRoom",accept1,users);
-
-        AskQuitRoom send = new AskQuitRoom();
-        send.setNote("ask quit room success,wait for other players accept.");
-        player.sendMsg("roomService","dissolveRoom",send);
-
-
-
         return 0;
     }
 
@@ -549,7 +541,7 @@ public class RoomDouDiZhu extends Room{
         if (user != null) {
             user.setMoney(user.getMoney() + createNeedMoney);
         }
-        GameManager.getInstance().getUsers().put(user.getId(),user);
+        GameManager.getInstance().getUsersSaveInDB().put(user.getId(),user);
     }
 
     public void spendMoney() {
@@ -557,7 +549,7 @@ public class RoomDouDiZhu extends Room{
         if (user != null) {
             user.setMoney(user.getMoney() - createNeedMoney);
         }
-        GameManager.getInstance().getUsers().put(user.getId(),user);
+        GameManager.getInstance().getUsersSaveInDB().put(user.getId(),user);
     }
 
     public double getRoomType() {
