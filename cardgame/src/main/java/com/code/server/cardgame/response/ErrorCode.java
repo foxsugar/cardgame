@@ -50,9 +50,11 @@ public class ErrorCode {
 	public static final int MJ_CURRENTUSER_IS_NOT_THE_USER = 150003;
 
 
+	public static final int REQUEST_PARAM_ERROR = 190000;
 	public static final int CAN_NOT_JIAO_TURN = 200000;
 	public static final int CAN_NOT_QIANG_TURN = 200001;
-	public static final int CAN_NOT_NO_ROOM_ = 200002;
+	public static final int CAN_NOT_NO_ROOM = 200002;
+	public static final int CAN_NOT_NO_GAME = 200003;
 
 	
 	

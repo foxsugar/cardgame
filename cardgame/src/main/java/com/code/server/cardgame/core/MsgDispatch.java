@@ -1,27 +1,18 @@
 package com.code.server.cardgame.core;
 
 import com.code.server.cardgame.Message.MessageHolder;
-import com.code.server.cardgame.core.GameManager;
-import com.code.server.cardgame.core.Player;
-import com.code.server.cardgame.core.game.Game;
 import com.code.server.cardgame.core.game.GameDouDiZhu;
+import com.code.server.cardgame.core.room.Room;
 import com.code.server.cardgame.core.room.RoomDouDiZhu;
 import com.code.server.cardgame.response.ErrorCode;
 import com.code.server.cardgame.response.ResponseVo;
 import com.code.server.cardgame.service.GameUserService;
-import com.code.server.cardgame.utils.IdWorker;
 import com.code.server.cardgame.utils.SpringUtil;
-import com.code.server.db.Service.UserService;
-import com.code.server.db.dao.IUserDao;
 import com.google.gson.Gson;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
 import net.sf.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
-import java.net.InetSocketAddress;
 
 /**
  * Created by sun on 2015/8/21.
@@ -30,9 +21,10 @@ import java.net.InetSocketAddress;
 @Service
 public class MsgDispatch {
 
-    public static AttributeKey<Long> attributeKey = AttributeKey.newInstance("userId");
 
-    public static void sendMsg(ChannelHandlerContext ctx,Object msg){
+    private Gson gson = new Gson();
+
+    public static void sendMsg(ChannelHandlerContext ctx, Object msg) {
         ctx.writeAndFlush(msg);
     }
 
@@ -40,7 +32,7 @@ public class MsgDispatch {
     public void handleMessage(MessageHolder msgHolder) {
         Object message = msgHolder.message;
         JSONObject jSONObject = (JSONObject) message;
-        System.out.println("处理消息== "+jSONObject);
+        System.out.println("处理消息== " + jSONObject);
         String service = jSONObject.getString("service");
         String method = jSONObject.getString("method");
         JSONObject params = jSONObject.getJSONObject("params");
@@ -50,7 +42,7 @@ public class MsgDispatch {
         //客户端要的方法返回
         if (code != 0) {
             ResponseVo vo = new ResponseVo(service, method, code);
-            sendMsg(msgHolder.ctx,vo);
+            sendMsg(msgHolder.ctx, vo);
         }
 
     }
@@ -62,9 +54,9 @@ public class MsgDispatch {
             case "roomService":
                 return dispatchRoomService(method, params, ctx);
             case "gameService":
-
+                return dispatchGameService(method, params, ctx);
             default:
-                return -1;
+                return ErrorCode.REQUEST_PARAM_ERROR;
         }
     }
 
@@ -83,9 +75,11 @@ public class MsgDispatch {
                 String username = params.getString("username");
                 String image = params.getString("image");
                 int sex = Integer.parseInt(params.getString("sex"));
-                return gameUserService.checkOpenId(openId,username,image,sex,ctx);
+                return gameUserService.checkOpenId(openId, username, image, sex, ctx);
             case "getUserMessage":
-                return gameUserService.getUserMessage(getPlayerByCtx(ctx));
+                return gameUserService.getUserMessage(GameManager.getPlayerByCtx(ctx));
+            case "reconnection":
+                return gameUserService.reconnection(GameManager.getPlayerByCtx(ctx));
 
             case "getUserImage":
 //                return gameUserService.getUserImage(userId,ctx);
@@ -93,23 +87,15 @@ public class MsgDispatch {
             case "register":
 //                return gameUserService.register(userId,ctx);
 
-            case "reconnection":
 
             default:
 
-                return -1;
+                return ErrorCode.REQUEST_PARAM_ERROR;
         }
     }
 
-    private Player getPlayerByCtx(ChannelHandlerContext ctx){
-        if (ctx.channel().attr(attributeKey).get() != null) {
-            long uid = ctx.channel().attr(attributeKey).get();
-            return GameManager.getInstance().players.get(uid);
-        }
-        return null;
-    }
     private int dispatchRoomService(String method, JSONObject params, ChannelHandlerContext ctx) {
-        Player player = getPlayerByCtx(ctx);
+        Player player = GameManager.getPlayerByCtx(ctx);
         if (player == null) {
             return -1;
         }
@@ -119,69 +105,81 @@ public class MsgDispatch {
                 int gameNumber = params.getInt("gameNumber");
                 int multiple = params.getInt("maxMultiple");
                 return RoomDouDiZhu.createRoom(player, gameNumber, multiple);
-            case "joinRoom":
+            case "joinRoom": {
                 String roomId = params.getString("roomId");
-
                 RoomDouDiZhu room = GameManager.getInstance().rooms.get(roomId);
                 if (room == null) {
                     return ErrorCode.CANNOT_JOIN_ROOM_NOT_EXIST;
                 }
                 return room.joinRoom(player);
-            case "quitRoom":
-                String roomId1 = GameManager.getInstance().getUserRoom().get(player.getUserId());
-                if (roomId1 == null) {
-                    return ErrorCode.CANNOT_QUIT_ROOM_NOT_IN_ROOM;
+            }
+            case "quitRoom": {
+                RoomDouDiZhu room = getRoomByPlayer(player);
+                if (room == null) {
+                    return ErrorCode.CAN_NOT_NO_ROOM;
                 }
-                RoomDouDiZhu room1 = GameManager.getInstance().rooms.get(roomId1);
-                if (room1 == null) {
-                    return ErrorCode.CANNOT_QUIT_ROOM_NOT_IN_ROOM;
+                return room.quitRoom(player);
+            }
+            case "getReady": {
+                RoomDouDiZhu room = getRoomByPlayer(player);
+                if (room == null) {
+                    return ErrorCode.CAN_NOT_NO_ROOM;
                 }
-                return room1.quitRoom(player);
-
-            case "getReady":
-                String roomId2 = GameManager.getInstance().getUserRoom().get(player.getUserId());
-                if (roomId2 == null) {
-                    return ErrorCode.CANNOT_QUIT_ROOM_NOT_IN_ROOM;
+                return room.getReady(player);
+            }
+            case "dissolveRoom": {
+                RoomDouDiZhu room = getRoomByPlayer(player);
+                if (room == null) {
+                    return ErrorCode.CAN_NOT_NO_ROOM;
                 }
-                RoomDouDiZhu room2 = GameManager.getInstance().rooms.get(roomId2);
-                if (room2 == null) {
-                    return ErrorCode.CANNOT_QUIT_ROOM_NOT_IN_ROOM;
-                }
-                return room2.getReady(player);
+                boolean isAgree = params.getBoolean("agreeOrNot");
+                return room.dissolution(player, isAgree);
+            }
             default:
-
-                return -1;
+                return ErrorCode.REQUEST_PARAM_ERROR;
         }
     }
 
 
-
     private int dispatchGameService(String method, JSONObject params, ChannelHandlerContext ctx) {
-        Player player = getPlayerByCtx(ctx);
+        Player player = GameManager.getPlayerByCtx(ctx);
         if (player == null) {
             return -1;
         }
 
-        String roomId1 = GameManager.getInstance().getUserRoom().get(player.getUserId());
-        if (roomId1 == null) {
-            return ErrorCode.CAN_NOT_NO_ROOM_;
+        RoomDouDiZhu room = getRoomByPlayer(player);
+        if (room == null) {
+            return ErrorCode.CAN_NOT_NO_ROOM;
         }
-        RoomDouDiZhu room1 = GameManager.getInstance().rooms.get(roomId1);
-        if (room1 == null) {
-            return ErrorCode.CAN_NOT_NO_ROOM_;
+        GameDouDiZhu game = room.getGame();
+        if (game == null) {
+            return ErrorCode.CAN_NOT_NO_GAME;
         }
-        GameDouDiZhu game = room1.getGame();
 
         switch (method) {
             case "jiaoDizhu":
-                game.jiaoDizhu(player, true);
+                boolean isJiao = params.getBoolean("isJiao");
+                return game.jiaoDizhu(player, isJiao);
             case "qiangDizhu":
+                boolean isQiang = params.getBoolean("isQiang");
+                return game.qiangDizhu(player, isQiang);
             case "play":
+                CardStruct cardStruct = gson.fromJson(params.getString("cards"), CardStruct.class);
+                return game.play(player, cardStruct);
 
             default:
 
-                return -1;
+                return ErrorCode.REQUEST_PARAM_ERROR;
         }
+    }
+
+
+    private RoomDouDiZhu getRoomByPlayer(Player player) {
+        String roomId = GameManager.getInstance().getUserRoom().get(player.getUserId());
+        if (roomId == null) {
+            return null;
+        }
+        return GameManager.getInstance().rooms.get(roomId);
     }
 
 

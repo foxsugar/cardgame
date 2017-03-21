@@ -28,6 +28,7 @@ import java.net.URLEncoder;
 import java.util.*;
 
 import static com.code.server.cardgame.core.GameManager.getUserVo;
+import static com.code.server.cardgame.utils.DbUtils.userService;
 
 /**
  * Created by win7 on 2017/3/10.
@@ -45,8 +46,10 @@ public class GameUserService {
         player.setUser(user);
         player.setCtx(ctx);
         player.setUserId(user.getUserId());
-        ctx.channel().attr(MsgDispatch.attributeKey).set(user.getUserId());
+        ctx.channel().attr(GameManager.attributeKey).set(user.getUserId());
         GameManager.getInstance().addPlayer(player);
+        player.setLastSendMsgTime(System.currentTimeMillis());
+        GameManager.getInstance().getKickUser().remove(player.getUserId());
 
 
     }
@@ -152,7 +155,7 @@ public class GameUserService {
 
 
             reconnectResp.setExist(true);
-            reconnectResp.setRoom(new RoomVo(room));
+            reconnectResp.setRoom(new RoomVo(room,player));
         }
 
         ResponseVo vo = new ResponseVo("userService", "reconnection", reconnectResp);

@@ -69,22 +69,6 @@ public class SocketServer implements Runnable{
     public void run() {
         try {
             start();
-//            Timer timer = new Timer();
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    timer.schedule(new TimerTask() {
-//                        @Override
-//                        public void run() {
-//                            ArrayList<User> users = new ArrayList<>();
-//                            users = (ArrayList) GameManager.getInstance().getPlayers().values();
-//                            for (User u: users) {
-//                                userService.userDao.save(u);
-//                            }
-//                        }
-//                    }, new Date(), 1000 * 60 * 5);
-//                }
-//            }).start();
 
         } catch (Exception e) {
             e.printStackTrace();

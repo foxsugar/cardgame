@@ -14,26 +14,9 @@ public class GameCharsEncoder extends MessageToByteEncoder<Object> {
 //        byte[] data = json.toString().getBytes("utf-8");
         String json = gson.toJson(object);
         byte[] data = json.getBytes("utf-8");
-        System.out.println("发送消息=== "+json);
+        System.out.println("发送消息=== ");
+        System.out.println(json);
         out.writeInt(data.length);
         out.writeBytes(data);
     }
-    
-//    @Override
-//    protected Object encode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
-//        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//        DataOutputStream oos = new DataOutputStream(bos);
-//        //oos.writeObject(msg);
-//        //oos.writeUTF(((JSONObject)msg).toString());
-//        oos.write(msg.toString().getBytes("utf-8"));
-//        oos.flush();
-//        byte[] bytes = bos.toByteArray();
-//
-//        ChannelBuffer buf = ChannelBuffers.buffer(4 + bytes.length);
-//        buf.writeInt(bytes.length);
-//        buf.writeBytes(bytes);
-//
-//
-//        return buf;
-//    }
 }

@@ -2,12 +2,14 @@ package com.code.server.cardgame.core;
 
 import com.code.server.cardgame.core.room.Room;
 import com.code.server.cardgame.core.room.RoomDouDiZhu;
+import com.code.server.cardgame.utils.DbUtils;
 import com.code.server.cardgame.utils.IdWorker;
 import com.code.server.db.model.Constant;
 import com.code.server.db.model.ServerInfo;
 import com.code.server.db.model.User;
 import com.code.server.gamedata.UserVo;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.AttributeKey;
 import org.apache.commons.collections.map.HashedMap;
 
 import java.util.*;
@@ -17,21 +19,23 @@ import java.util.*;
  */
 public class GameManager {
 
-    public static GameManager instance;
+    private static GameManager instance;
+    public static AttributeKey<Long> attributeKey = AttributeKey.newInstance("userId");
 
     public int serverId;
     public Map<Long, Player> players = new HashMap<>();
-    public Map<Long, ChannelHandlerContext> ctxs = new HashMap<>();
     public Map<Long,String> id_nameMap = new HashMap<>();
     public Map<String, Long> name_idMap = new HashMap<>();
     public Map<String, Long> openId_uid = new HashMap<>();
     public Map<Long, String> uid_openId = new HashMap<>();
     public Map<Long, String> userRoom = new HashMap<>();
     public Map<String, RoomDouDiZhu> rooms = new HashMap<>();
-    public Set<ChannelHandlerContext> ctxSet = new HashSet<>();
     public ServerInfo serverInfo;
     public Constant constant;
+    public Map<Long, Player> kickUser = new HashMap<>();
 
+
+    public Map<Long, User> usersSaveInDB = new HashMap<>();
 
     private IdWorker idWorker;
 
@@ -101,7 +105,7 @@ public class GameManager {
         this.id_nameMap.put(player.getUserId(), player.getUser().getAccount());
         this.uid_openId.put(player.getUserId(), player.getUser().getOpenId());
         this.openId_uid.put(player.getUser().getOpenId(), player.getUserId());
-        player.getCtx().channel().attr(MsgDispatch.attributeKey).setIfAbsent(player.getUserId());
+        player.getCtx().channel().attr(attributeKey).setIfAbsent(player.getUserId());
 
     }
 
@@ -111,7 +115,7 @@ public class GameManager {
         this.id_nameMap.remove(player.getUserId());
         this.uid_openId.remove(player.getUserId());
         this.openId_uid.remove(player.getUser().getOpenId());
-        player.getCtx().channel().attr(MsgDispatch.attributeKey).setIfAbsent(-1L);
+        player.getCtx().channel().attr(attributeKey).setIfAbsent(-1L);
     }
 
     public Room getRoomByUser(long userId) {
@@ -122,12 +126,46 @@ public class GameManager {
         return rooms.get(roomId);
     }
 
+    public static Player getPlayerByCtx(ChannelHandlerContext ctx) {
+        if (ctx.channel().attr(attributeKey).get() != null) {
+            long uid = ctx.channel().attr(attributeKey).get();
+            Player player = GameManager.getInstance().players.get(uid);
+            if (player != null) {
+                player.setLastSendMsgTime(System.currentTimeMillis());
+                GameManager.getInstance().getKickUser().remove(player.getUserId());
+            }
+            return player;
+        }
+        return null;
+    }
+
     public Map<Long, String> getUserRoom() {
         return userRoom;
     }
 
     public GameManager setUserRoom(Map<Long, String> userRoom) {
         this.userRoom = userRoom;
+        return this;
+    }
+
+    public Map<Long, Player> getPlayers() {
+        return players;
+    }
+
+    public Map<Long, User> getUsersSaveInDB() {
+        return usersSaveInDB;
+    }
+
+    public void setUsersSaveInDB(Map<Long, User> usersSaveInDB) {
+        this.usersSaveInDB = usersSaveInDB;
+    }
+
+    public Map<Long, Player> getKickUser() {
+        return kickUser;
+    }
+
+    public GameManager setKickUser(Map<Long, Player> kickUser) {
+        this.kickUser = kickUser;
         return this;
     }
 }
