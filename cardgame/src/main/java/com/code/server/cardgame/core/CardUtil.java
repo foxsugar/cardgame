@@ -9,8 +9,7 @@ import java.util.List;
 public class CardUtil {
     protected static List<List<Integer>> typeCard = new ArrayList<>();//牌大小排列
 
-
-    public void getCardUtil(){
+    static {
         for(int i=9;i<=52;i+=4){
             List<Integer> l = new ArrayList<>();
             l.add(i);
