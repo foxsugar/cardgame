@@ -75,9 +75,8 @@ public class GameDouDiZhu extends Game{
         }else{
             currentCardStruct.setOutCard(1);    //不可出牌
         }
-       List<Long> users = GameManager.getInstance().rooms.get(GameManager.getInstance().userRoom.get(player.getUserId())).getUsers();
 
-        Player.sendMsg2Player(new ResponseVo("gameService","play",currentCardStruct),users);
+        Player.sendMsg2Player(new ResponseVo("gameService","play",currentCardStruct),this.users);
 
         lasttype = lastcardStruct.getType();
     }
