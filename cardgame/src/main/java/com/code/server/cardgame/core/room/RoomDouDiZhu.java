@@ -370,6 +370,7 @@ public class RoomDouDiZhu extends Room{
             spendMoney();
         }
         game.startGame(users,bankerId);
+        this.game = game;
 
 
 
