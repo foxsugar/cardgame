@@ -8,24 +8,24 @@ import java.util.List;
  */
 public class CardStruct {
 
-    private static final int type_单 = 1;
-    private static final int type_对 = 2;
-    private static final int type_三 = 3;
-    private static final int type_三带单 = 4;
-    private static final int type_三带对 = 5;
-    private static final int type_顺 = 6;
-    private static final int type_连对 = 7;
-    private static final int type_飞机 = 8;
-    private static final int type_飞机带翅膀 = 9;
-    private static final int type_四带二 = 10;
-    private static final int type_炸 =11;
-    private static final int type_火箭 = 12;
+    protected static final int type_单 = 1;
+    protected static final int type_对 = 2;
+    protected static final int type_三 = 3;
+    protected static final int type_三带单 = 4;
+    protected static final int type_三带对 = 5;
+    protected static final int type_顺 = 6;
+    protected static final int type_连对 = 7;
+    protected static final int type_飞机 = 8;
+    protected static final int type_飞机带翅膀 = 9;
+    protected static final int type_四带二 = 10;
+    protected static final int type_炸 =11;
+    protected static final int type_火箭 = 12;
 
-    int outCard = 0;//默认是出牌  0   ，1是不能出牌
+    int outCard = 0;//默认是出牌  0
     long Userid;
     List<Integer> cards;
     int type;
-    List<Integer> dan;
+    List<Integer> dan;// 单
     List<Integer> dui; //对
     List<Integer> san;  //三
     List<Integer> si;   //四
@@ -40,29 +40,29 @@ public class CardStruct {
     List<Integer> huojian; //火箭
 
     public  List<Integer> getByTypeList(int type){
-        if(type == 1){
+        if(type == type_单){
             return dan;
-        }else if(type == 2){
+        }else if(type == type_对){
             return dui;
-        }else if(type == 3){
+        }else if(type == type_三){
             return san;
-        }else if(type == 4){
+        }else if(type == type_三带单){
             return sandaidan;
-        }else if(type == 5){
+        }else if(type == type_三带对){
             return sandaidui;
-        }else if(type == 6){
+        }else if(type == type_顺){
             return shun;
-        }else if(type == 7){
+        }else if(type == type_连对){
             return liandui;
-        }else if(type == 8){
+        }else if(type == type_飞机){
             return feiji;
-        }else if(type == 9){
+        }else if(type == type_飞机带翅膀){
             return feiji_chibang;
-        }else if(type == 10){
+        }else if(type == type_四带二){
             return sidaier;
-        }else if(type == 11){
+        }else if(type == type_炸){
             return zha;
-        }else if(type == 12){
+        }else if(type == type_火箭){
             return huojian;
         }else{
             return null;
