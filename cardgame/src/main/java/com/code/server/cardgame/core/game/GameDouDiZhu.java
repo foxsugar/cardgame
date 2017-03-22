@@ -1,11 +1,12 @@
 package com.code.server.cardgame.core.game;
 
 import com.code.server.cardgame.core.CardStruct;
-import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.PlayerCardInfo;
 import com.code.server.cardgame.response.ErrorCode;
 import com.code.server.cardgame.response.ResponseVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -13,6 +14,8 @@ import java.util.*;
  * Created by sunxianping on 2017/3/13.
  */
 public class GameDouDiZhu extends Game{
+    private static final Logger logger = LoggerFactory.getLogger(GameDouDiZhu.class);
+
     private static final int INITCARDNUM = 16;
     private static final int STEP_JIAO_DIZHU = 1;
     private static final int STEP_QIANG_DIZHU = 2;
@@ -110,6 +113,8 @@ public class GameDouDiZhu extends Game{
             Player.sendMsg2Player(new ResponseVo("gameService","deal",playerCardInfo.cards),playerCardInfo.userId);
         }
 
+        //底牌
+        tableCards.addAll(cards);
 
     }
 
@@ -143,6 +148,7 @@ public class GameDouDiZhu extends Game{
      */
     public int jiaoDizhu(Player player,boolean isJiao){
 
+        logger.info(player.getUser().getAccount() +"  叫地主 "+ isJiao);
         if (canJiaoUser != player.getUserId()) {
             return ErrorCode.CAN_NOT_JIAO_TURN;
         }
@@ -158,8 +164,8 @@ public class GameDouDiZhu extends Game{
 
             } else {
                 //todo
-//                long nextJiao = nextTurnId(player.getUserId());
-                long nextJiao = users.get(2);
+                long nextJiao = nextTurnId(player.getUserId());
+//                long nextJiao = users.get(2);
 
                 canJiaoUser = nextJiao;
                 noticeCanJiao(nextJiao);
@@ -168,11 +174,12 @@ public class GameDouDiZhu extends Game{
             jiaoUser = player.getUserId();
             //第三个人叫的 直接开始游戏
             if (chooseJiaoSet.size() >= users.size()) {
-
+                startPlay(jiaoUser);
             } else {
 
                 step = STEP_QIANG_DIZHU;
                 long nextId = nextTurnId(player.getUserId());
+                this.canQiangUser = nextId;
                 noticeCanQiang(nextId);
             }
 
@@ -217,10 +224,12 @@ public class GameDouDiZhu extends Game{
      * @return
      */
     public int qiangDizhu(Player player,boolean isQiang) {
+        logger.info(player.getUser().getAccount() +"  抢地主 "+isQiang);
+
         if(player.getUserId() != canQiangUser){
             return ErrorCode.CAN_NOT_QIANG_TURN;
         }
-        this.chooseJiaoSet.add(player.getUserId());
+        this.chooseQiangSet.add(player.getUserId());
         int jiaoIndex = chooseJiaoSet.size();
 
         if (jiaoIndex == 1) {
@@ -240,21 +249,22 @@ public class GameDouDiZhu extends Game{
      * @param isQiang
      */
     private void handleQiang1(long qiangUser,boolean isQiang){
+        logger.info("第一个人叫");
         if (isQiang) {
             this.qiangUser = qiangUser;
-            if (chooseJiaoSet.size() == 1) {
+            if (chooseQiangSet.size() == 1) {
                 canQiangUser = nextTurnId(qiangUser);
                 noticeCanQiang(canQiangUser);
-            } else if(chooseJiaoSet.size() ==2) {
+            } else if(chooseQiangSet.size() ==2) {
                 startPlay(qiangUser);
             }
 
 
         } else {//不抢
-            if (chooseJiaoSet.size() == 1) {
+            if (chooseQiangSet.size() == 1) {
                 canQiangUser = nextTurnId(qiangUser);
                 noticeCanQiang(canQiangUser);
-            } else if(chooseJiaoSet.size() ==2) {
+            } else if(chooseQiangSet.size() ==2) {
                 long dizhu = this.qiangUser == 0?jiaoUser:qiangUser;
                 startPlay(dizhu);
             }
@@ -268,12 +278,13 @@ public class GameDouDiZhu extends Game{
      * @param isQiang
      */
     private void handleQiang2(long qiangUser,boolean isQiang){
+        logger.info("第二个人叫");
         if (isQiang) {
             this.qiangUser = qiangUser;
-            if (chooseJiaoSet.size() == 1) {
+            if (chooseQiangSet.size() == 1) {
                 canQiangUser = nextTurnId(qiangUser);
                 noticeCanQiang(canQiangUser);
-            } else if(chooseJiaoSet.size() ==2) {
+            } else if(chooseQiangSet.size() ==2) {
                 startPlay(qiangUser);
             }
 

@@ -32,7 +32,7 @@ public class MsgDispatch {
     public void handleMessage(MessageHolder msgHolder) {
         Object message = msgHolder.message;
         JSONObject jSONObject = (JSONObject) message;
-        System.out.println("处理消息== " + jSONObject);
+        System.out.println("handle message== " + jSONObject);
         String service = jSONObject.getString("service");
         String method = jSONObject.getString("method");
         JSONObject params = jSONObject.getJSONObject("params");
@@ -132,9 +132,15 @@ public class MsgDispatch {
                 if (room == null) {
                     return ErrorCode.CAN_NOT_NO_ROOM;
                 }
-                boolean isAgree = params.getBoolean("agreeOrNot");
-                return room.dissolution(player, isAgree);
+                return room.dissolution(player, true,method);
             }
+            case "answerIfDissolveRoom":
+                RoomDouDiZhu room = getRoomByPlayer(player);
+                if (room == null) {
+                    return ErrorCode.CAN_NOT_NO_ROOM;
+                }
+                boolean isAgree = "2".equals(params.getString("answer"));
+                return room.dissolution(player,isAgree,method);
             default:
                 return ErrorCode.REQUEST_PARAM_ERROR;
         }

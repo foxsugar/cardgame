@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class GameProcessor implements Runnable{
 
 
-    private static final Logger logger = LoggerFactory.getLogger(GameProcessor.class);
+    private final Logger logger = LoggerFactory.getLogger(GameProcessor.class);
 
     private GameProcessor(){}
 

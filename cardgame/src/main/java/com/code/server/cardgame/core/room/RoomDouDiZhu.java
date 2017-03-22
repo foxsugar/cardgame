@@ -377,7 +377,7 @@ public class RoomDouDiZhu extends Room{
         //通知其他人游戏已经开始
         CardEntity cardBegin = new CardEntity();
         cardBegin.setCurrentUserId(this.getBankerId() + "");
-        Player.sendMsg2Player(new ResponseVo("gameService","gameBegin",game), this.getUsers());
+        Player.sendMsg2Player(new ResponseVo("gameService","gameBegin","ok"), this.getUsers());
         pushScoreChange();
     }
 
@@ -393,7 +393,7 @@ public class RoomDouDiZhu extends Room{
     }
 
 
-    public int dissolution(Player player,boolean agreeOrNot) {
+    public int dissolution(Player player,boolean agreeOrNot,String methodName) {
         long userId = player.getUserId();
         if (!this.users.contains(userId)) {
             return ErrorCode.CANNOT_FIND_THIS_USER;
@@ -473,8 +473,11 @@ public class RoomDouDiZhu extends Room{
         Player.sendMsg2Player("roomService","noticeDissolveRoom",accept1,users);
 
         AskQuitRoom send = new AskQuitRoom();
-        send.setNote("ask quit room success,wait for other players accept.");
-        player.sendMsg("roomService","dissolveRoom",send);
+        send.setNote("ok");
+        player.sendMsg("roomService",methodName,send);
+
+
+
 
 
 
