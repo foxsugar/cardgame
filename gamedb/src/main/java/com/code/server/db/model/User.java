@@ -1,6 +1,6 @@
 package com.code.server.db.model;
 
-import com.sun.istack.internal.NotNull;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -8,6 +8,7 @@ import java.util.Date;
 /**
  * Created by win7 on 2017/3/8.
  */
+@DynamicUpdate
 @Entity
 @Table(name = "users")
 public class User {
@@ -19,19 +20,19 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @NotNull
+    @Column(nullable = false)
     private long userId;
 
-    @NotNull
+    @Column(nullable = false)
     private String account;
 
-    @NotNull
+    @Column(nullable = false)
     private String password;
 
     @Column(columnDefinition = "varchar(4000)")
     private String username;
 
-    @NotNull
+    @Column(nullable = false)
     private String ipConfig;
 
     @Column(columnDefinition = "double(10,2)")
