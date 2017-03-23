@@ -16,10 +16,14 @@ public class CardStruct {
     protected static final int type_顺 = 6;
     protected static final int type_连对 = 7;
     protected static final int type_飞机 = 8;
-    protected static final int type_飞机带翅膀 = 9;
-    protected static final int type_四带二 = 10;
-    protected static final int type_炸 =11;
-    protected static final int type_火箭 = 12;
+    protected static final int type_飞机带翅膀_单 = 9;
+    protected static final int type_飞机带翅膀_对 = 10;
+    protected static final int type_四带二 = 11;
+    protected static final int type_炸 =12;
+    protected static final int type_火箭 = 13;
+
+    protected static final int type_飞机带翅膀 = 20;
+
 
     int outCard = 0;//默认是出牌  0
     long Userid;
@@ -28,7 +32,6 @@ public class CardStruct {
     List<Integer> dan;// 单
     List<Integer> dui; //对
     List<Integer> san;  //三
-    List<Integer> si;   //四
     List<Integer> zha;  //炸
     List<Integer> feiji; //飞机
     List<Integer> shun; //顺
@@ -36,7 +39,8 @@ public class CardStruct {
     List<Integer> sandaidan; //三带一
     List<Integer> sandaidui; //三带二
     List<Integer> sidaier; //四带二
-    List<Integer> feiji_chibang;//飞机带翅膀
+    List<Integer> feiji_chibang_dan;//飞机带翅膀_单
+    List<Integer> feiji_chibang_dui;//飞机带翅膀_对
     List<Integer> huojian; //火箭
 
     public  List<Integer> getByTypeList(int type){
@@ -56,8 +60,10 @@ public class CardStruct {
             return liandui;
         }else if(type == type_飞机){
             return feiji;
-        }else if(type == type_飞机带翅膀){
-            return feiji_chibang;
+        }else if(type == type_飞机带翅膀_单){
+            return feiji_chibang_dan;
+        }else if(type == type_飞机带翅膀_对){
+            return feiji_chibang_dui;
         }else if(type == type_四带二){
             return sidaier;
         }else if(type == type_炸){

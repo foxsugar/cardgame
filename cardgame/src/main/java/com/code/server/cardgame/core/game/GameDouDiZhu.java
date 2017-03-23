@@ -70,15 +70,15 @@ public class GameDouDiZhu extends Game{
      */
     public int play(Player player,CardStruct cardStruct){
         PlayerCardInfo playerCardInfo = playerCardInfos.get(player.getUserId());
-        if(playerCardInfo.checkPlayCard(lastcardStruct,currentCardStruct,lasttype)){
+        if(playerCardInfo.checkPlayCard(lastcardStruct,cardStruct,lasttype)){
             currentCardStruct.setOutCard(0);   //可以出牌
         }else{
             currentCardStruct.setOutCard(1);    //不可出牌
         }
 
         Player.sendMsg2Player(new ResponseVo("gameService","play",currentCardStruct),this.users);
-
-        lasttype = lastcardStruct.getType();
+        lasttype = cardStruct.getType();//保存这次出牌的类型
+        lastcardStruct = cardStruct;//保存这次出牌的牌型
         return 0;
     }
 
