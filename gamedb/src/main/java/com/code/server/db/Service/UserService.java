@@ -6,6 +6,9 @@ import com.code.server.db.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -15,11 +18,15 @@ import java.util.List;
 @Service("userService")
 public class UserService {
 
+    @PersistenceContext
+    public EntityManager em;
+
     @Autowired
     public IUserDao userDao;
 
 
     public void test(){
+
     }
 
 
@@ -32,5 +39,16 @@ public class UserService {
         return userDao.save(user);
 
 
+    }
+
+    @Transactional
+    public void batchUpdate(List list) {
+        for (int i = 0; i < list.size(); i++) {
+            em.merge(list.get(i));
+            if (i % 30 == 0) {
+                em.flush();
+                em.clear();
+            }
+        }
     }
 }

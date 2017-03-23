@@ -1,6 +1,5 @@
 package com.code.server.db.model;
 
-import com.sun.istack.internal.NotNull;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -19,15 +18,15 @@ public class ServerInfo {
 
     private long areaId;
 
-    @NotNull
+    @Column(nullable = false)
     private String serverName;
 
     private int serverType;
 
-    @NotNull
+    @Column(nullable = false)
     private String address;
 
-    @NotNull
+    @Column(nullable = false)
     private String port;
 
     private int serverStatus;

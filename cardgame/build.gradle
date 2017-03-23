@@ -64,12 +64,13 @@ tasks.withType(JavaCompile) {
 
 task hello{
 	print("hello")
+
 }
 
-task copyJars(type: Copy) {
-	from configurations.runtime
-	into 'build/libs/lib'
-}
+//task copyJars(type: Copy) {
+//	from configurations.runtime
+//	into 'build/libs/lib'
+//}
 
 ////依赖编译，然后打包JAR
 //task taskJar(type:Jar, dependsOn: compileJava) {

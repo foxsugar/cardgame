@@ -35,7 +35,8 @@ public class GameMsgHandler extends ChannelDuplexHandler {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        super.exceptionCaught(ctx, cause);
+        cause.printStackTrace();
+//        super.exceptionCaught(ctx, cause);
     }
 
     @Override

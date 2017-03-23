@@ -23,6 +23,7 @@ public class RoomVo {
     protected int gameNumber;
     protected long createUser;
     private GameVo game;
+    private int curGameNumber;
 
     protected Map<Long, Integer> userStatus = new HashMap<>();//用户状态
     protected List<UserVo> userList = new ArrayList<>();//用户列表
@@ -38,6 +39,7 @@ public class RoomVo {
         this.createUser = roomDouDiZhu.getCreateUser();
         this.userStatus.putAll(roomDouDiZhu.getUserStatus());
         this.userScores.putAll(roomDouDiZhu.getUserScores());
+        this.curGameNumber = roomDouDiZhu.getCurGameNumber();
         for(long uid : roomDouDiZhu.getUsers()){
             userList.add(GameManager.getUserVo(roomDouDiZhu.getUserMap().get(uid)));
         }
