@@ -26,7 +26,8 @@ public class CardStruct {
 
 
     int outCard = 0;//默认是出牌  0
-    long Userid;
+    long Userid;//当前出牌的人
+    long nextUserId;//下一个要出牌的人
     List<Integer> cards;
     int type;
     List<Integer> dan;// 单
@@ -77,11 +78,14 @@ public class CardStruct {
     public int getType(){
         return type;
     }
-
     public int getOutCard (){
         return outCard;
     }
     public void setOutCard(int card){
         this.outCard = card;
     }
+    public void setUserId(long userid){ this.Userid = userid;}
+    public long getUserId(){ return this.Userid;}
+    public void setNextUserId(long nextUserId){this.nextUserId = nextUserId;}
+    public long getNextUserId(){return this.nextUserId;}
 }
