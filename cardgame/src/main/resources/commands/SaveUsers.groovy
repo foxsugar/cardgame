@@ -25,13 +25,17 @@ class SaveUsers {
     @Usage("saveAll")
     @Command
     def saveAll(InvocationContext context) {
+        UserService userService = SpringUtil.getBean(UserService.class)
         List<User> users = new ArrayList<>()
 
+        for (Player player : GameManager.getInstance().players.values()) {
+            User user = player.getUser();
 
+            user.column1 = 11
+            users.add(user)
 
-        UserService userService = SpringUtil.getBean(UserService.class)
-
-        users.addAll(userService.userDao.findAll())
+        }
+        println(users.size())
         userService.batchUpdate(users);
 //        userService.userDao.save(users)
         return "save success!"
