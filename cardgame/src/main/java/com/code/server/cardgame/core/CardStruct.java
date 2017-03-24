@@ -8,19 +8,19 @@ import java.util.List;
  */
 public class CardStruct {
 
-    protected static final int type_单 = 1;
-    protected static final int type_对 = 2;
-    protected static final int type_三 = 3;
-    protected static final int type_三带单 = 4;
-    protected static final int type_三带对 = 5;
-    protected static final int type_顺 = 6;
-    protected static final int type_连对 = 7;
-    protected static final int type_飞机 = 8;
-    protected static final int type_飞机带翅膀_单 = 9;
-    protected static final int type_飞机带翅膀_对 = 10;
-    protected static final int type_四带二 = 11;
-    protected static final int type_炸 =12;
-    protected static final int type_火箭 = 13;
+    public static final int type_单 = 1;
+    public static final int type_对 = 2;
+    public static final int type_三 = 3;
+    public static final int type_三带单 = 4;
+    public static final int type_三带对 = 5;
+    public static final int type_顺 = 6;
+    public static final int type_连对 = 7;
+    public static final int type_飞机 = 8;
+    public static final int type_飞机带翅膀_单 = 9;
+    public static final int type_飞机带翅膀_对 = 10;
+    public static final int type_四带二 = 11;
+    public static final int type_炸 =12;
+    public static final int type_火箭 = 13;
 
     protected static final int type_飞机带翅膀 = 20;
 

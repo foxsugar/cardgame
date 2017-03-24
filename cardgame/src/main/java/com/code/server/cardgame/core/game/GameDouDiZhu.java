@@ -85,6 +85,10 @@ public class GameDouDiZhu extends Game{
         Player.sendMsg2Player(new ResponseVo("gameService","play",cardStruct),this.users);
         lasttype = cardStruct.getType();//保存这次出牌的类型
         lastcardStruct = cardStruct;//保存这次出牌的牌型
+
+        if(cardStruct.getType()==CardStruct.type_炸){
+
+        }
         return 0;
     }
 
