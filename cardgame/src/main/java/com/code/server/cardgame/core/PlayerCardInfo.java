@@ -41,7 +41,7 @@ public class PlayerCardInfo {
 
                  if(list.size()>lastList.size()){     //3333 > 22
                     results = true;
-                 }else if(getTypeByCard(list.get(0))>getTypeByCard(lastList.get(0))){
+                 }else if(CardUtil.getTypeByCard(list.get(0))>CardUtil.getTypeByCard(lastList.get(0))){
                     results = true;
                 }
             }else if(currenttype==CardStruct.type_火箭){ // 出牌是火箭
@@ -53,21 +53,6 @@ public class PlayerCardInfo {
             results = true;
         }
         return results;
-    }
-
-    public Integer getTypeByCard (Integer card){
-        for(int i=0;i<=CardUtil.typeCard.size();i++){
-            if(card.intValue()==CardUtil.typeCard.get(i).get(0).intValue()){
-                return i;
-            }else if(card.intValue()==CardUtil.typeCard.get(i).get(1).intValue()){
-                return i;
-            }else if(card.intValue()==CardUtil.typeCard.get(i).get(2).intValue()){
-                return i;
-            }else if(card.intValue()==CardUtil.typeCard.get(i).get(3).intValue()){
-                return i;
-            }
-        }
-        return 0;
     }
 
     public Integer getListByIsType(List<Integer> cards) {
@@ -85,16 +70,16 @@ public class PlayerCardInfo {
                         return CardStruct.type_炸;
                 }
             }
-            if (len == 2 && getTypeByCard(cards.get(0)).intValue() == 12
-                    && getTypeByCard(cards.get(1)).intValue() == 12) {
+            if (len == 2 && CardUtil.getTypeByCard(cards.get(0)).intValue() == 12
+                    && CardUtil.getTypeByCard(cards.get(1)).intValue() == 12) {
                 return CardStruct.type_炸;
             }
-            if (len == 2 && getTypeByCard(cards.get(0)).intValue() == 13
-                    && getTypeByCard(cards.get(1)).intValue() == 14) {
+            if (len == 2 && CardUtil.getTypeByCard(cards.get(0)).intValue() == 13
+                    && CardUtil.getTypeByCard(cards.get(1)).intValue() == 14) {
                 return CardStruct.type_火箭;
             }
-            if (len == 4 && getTypeByCard(cards.get(0)).intValue() == getTypeByCard(cards.get(len - 2)).intValue()
-                    && getTypeByCard(cards.get(1)).intValue() == getTypeByCard(cards.get(len - 1)).intValue()) {
+            if (len == 4 && CardUtil.getTypeByCard(cards.get(0)).intValue() == CardUtil.getTypeByCard(cards.get(len - 2)).intValue()
+                    && CardUtil.getTypeByCard(cards.get(1)).intValue() == CardUtil.getTypeByCard(cards.get(len - 1)).intValue()) {
                 return CardStruct.type_三带单;
             } else {
                 return 0;
@@ -102,23 +87,23 @@ public class PlayerCardInfo {
         }
 
         if (len >= 5) {
-            if (getTypeByCard(cards.get(0)) != 13 && getTypeByCard(cards.get(len - 1)) - getTypeByCard(cards.get(0)) == len - 1) {
+            if (CardUtil.getTypeByCard(cards.get(0)) != 13 && CardUtil.getTypeByCard(cards.get(len - 1)) - CardUtil.getTypeByCard(cards.get(0)) == len - 1) {
                 return CardStruct.type_顺;
             }
-            if (len % 2 == 0 && (len / 2 == 3 || len / 2 > 3) && getTypeByCard(cards.get(len - 1)) - getTypeByCard(cards.get(0)) == len / 2 - 1) {
+            if (len % 2 == 0 && (len / 2 == 3 || len / 2 > 3) && CardUtil.getTypeByCard(cards.get(len - 1)) - CardUtil.getTypeByCard(cards.get(0)) == len / 2 - 1) {
                 return CardStruct.type_连对;
             }
-            if (len == 6 && getTypeByCard(cards.get(0)).intValue() == getTypeByCard(cards.get(len - 3)).intValue()
-                    && getTypeByCard(cards.get(1)).intValue() == getTypeByCard(cards.get(len - 3)).intValue()
-                    && getTypeByCard(cards.get(2)).intValue() == getTypeByCard(cards.get(len - 3)).intValue()) {
+            if (len == 6 && CardUtil.getTypeByCard(cards.get(0)).intValue() == CardUtil.getTypeByCard(cards.get(len - 3)).intValue()
+                    && CardUtil.getTypeByCard(cards.get(1)).intValue() == CardUtil.getTypeByCard(cards.get(len - 3)).intValue()
+                    && CardUtil.getTypeByCard(cards.get(2)).intValue() == CardUtil.getTypeByCard(cards.get(len - 3)).intValue()) {
                 return CardStruct.type_四带二;
             }
-            if (len % 3 == 0 && (len / 3 == 2 || len / 3 > 2) && getTypeByCard(cards.get(len - 1)) - getTypeByCard(cards.get(0)) == len / 3 - 1) {
+            if (len % 3 == 0 && (len / 3 == 2 || len / 3 > 2) && CardUtil.getTypeByCard(cards.get(len - 1)) - CardUtil.getTypeByCard(cards.get(0)) == len / 3 - 1) {
                 return CardStruct.type_飞机;
             }
             List<Integer> cardList = new ArrayList<>();
             for(Integer card :cards){
-                cardList.add(getTypeByCard(card));
+                cardList.add(CardUtil.getTypeByCard(card));
             }
             if (getfeijichibang(cards)) {
                 return CardStruct.type_飞机带翅膀;

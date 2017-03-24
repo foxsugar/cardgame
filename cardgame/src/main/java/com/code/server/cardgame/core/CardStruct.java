@@ -22,7 +22,7 @@ public class CardStruct {
     public static final int type_炸 =12;
     public static final int type_火箭 = 13;
 
-    protected static final int type_飞机带翅膀 = 20;
+    public static final int type_飞机带翅膀 = 20;
 
 
     int outCard = 0;//默认是出牌  0
@@ -88,4 +88,6 @@ public class CardStruct {
     public long getUserId(){ return this.Userid;}
     public void setNextUserId(long nextUserId){this.nextUserId = nextUserId;}
     public long getNextUserId(){return this.nextUserId;}
+    public List<Integer> getCards(){return this.cards;}
+
 }

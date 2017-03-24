@@ -37,4 +37,20 @@ public class CardUtil {
         typeCard.add(cardxiao);
         typeCard.add(cardda);
     }
+
+
+    public static Integer getTypeByCard (Integer card){
+        for(int i=0;i<=CardUtil.typeCard.size();i++){
+            if(card.intValue()==CardUtil.typeCard.get(i).get(0).intValue()){
+                return i;
+            }else if(card.intValue()==CardUtil.typeCard.get(i).get(1).intValue()){
+                return i;
+            }else if(card.intValue()==CardUtil.typeCard.get(i).get(2).intValue()){
+                return i;
+            }else if(card.intValue()==CardUtil.typeCard.get(i).get(3).intValue()){
+                return i;
+            }
+        }
+        return 0;
+    }
 }

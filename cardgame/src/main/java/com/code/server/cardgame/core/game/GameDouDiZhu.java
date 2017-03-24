@@ -1,6 +1,7 @@
 package com.code.server.cardgame.core.game;
 
 import com.code.server.cardgame.core.CardStruct;
+import com.code.server.cardgame.core.CardUtil;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.PlayerCardInfo;
 import com.code.server.cardgame.core.room.Room;
@@ -92,9 +93,26 @@ public class GameDouDiZhu extends Game{
         lasttype = cardStruct.getType();//保存这次出牌的类型
         lastcardStruct = cardStruct;//保存这次出牌的牌型
 
-        if(cardStruct.getType()==CardStruct.type_炸){
-
-        }
+         if(multiple < room.getMultiple()){
+            if(cardStruct.getType()==CardStruct.type_炸){
+                List<Integer> cards = cardStruct.getCards();
+                if (cards.size()==4){
+                    if(CardUtil.getTypeByCard(cards.get(0)).intValue() == 0 && CardUtil.getTypeByCard(cards.get(cards.size()-1)).intValue()==0){ //3333
+                        zhaCount += 1;//记录炸的数量
+                        multiple *= 8;//记录倍数
+                    }else{ //除4个三的炸
+                        zhaCount += 1;//记录炸的数量
+                        multiple *= 2;//记录倍数
+                    }
+                }else{//22   33
+                    zhaCount += 1;//记录炸的数量
+                    multiple *= 2;//记录倍数
+                }
+            }else if(cardStruct.getType()==CardStruct.type_火箭){
+                zhaCount += 1;//记录炸的数量
+                multiple *= 2;//记录倍数
+            }
+         }
         return 0;
     }
 
