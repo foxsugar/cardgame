@@ -14,13 +14,12 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'application'
 
-jar {
-	baseName = 'cardgame'
-	version = '0.0.1-SNAPSHOT'
-}
+
 
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
 //	mavenCentral()
@@ -62,32 +61,50 @@ tasks.withType(JavaCompile) {
 	options.encoding = "UTF-8"
 }
 
-task hello{
-	print("hello")
 
+jar {
+	baseName = 'cardgame'
+	version =  '0.1'
+	manifest {
+		attributes 'Implementation-Title': 'cardgame',
+				'Implementation-Version': version,
+				'Start-Class': 'com.code.server.cardgame.CardgameApplication',
+				'Main-Class': 'org.springframework.boot.loader.JarLauncher'
+	}
+	//是否启用spring boot打包
+//	enabled = false
 }
 
-//task copyJars(type: Copy) {
-//	from configurations.runtime
-//	into 'build/libs/lib'
+
+
+
+springBoot {
+	backupSource = false
+	layout='DIR'
+}
+
+//启动服务
+bootRun {
+	addResources = true
+}
+
+//task  hello11(type:Exec,description:'just for test bat  task'){
+//	print("zhixing---")
+//	commandLine 'cmd',"jar -xf build\\libs\\cardgame-0.1.jar"
 //}
 
-////依赖编译，然后打包JAR
-//task taskJar(type:Jar, dependsOn: compileJava) {
-//	from 'build/classes'
-//	destinationDir = file('build/libs')
-//}
-//
-////清除上次的编译过的文件
-//task clearPj(type:Delete){
-//	delete 'build','target'
-//}
-//
-//
-////把JAR复制到目标目录
-//task release(type: Copy,dependsOn: [clearPj,taskJar]) {
-//	from('build/libs') {
-//		include '*.jar'
-//	}
-//	into ('target')
-//}
+
+//String cmd = 'cmd cd build/libs'
+
+task hello {
+	doLast {
+		exec {
+			workingDir 'build/libs/'
+			commandLine 'cmd','c','cd build/libs','jar -xf cardgame-0.1.jar'
+		}
+		exec {
+			workingDir 'build/libs/'
+			commandLine 'jar -xf cardgame-0.1.jar'
+		}
+	}
+}
