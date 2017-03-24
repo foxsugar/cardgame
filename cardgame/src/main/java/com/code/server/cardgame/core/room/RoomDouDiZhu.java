@@ -52,6 +52,7 @@ public class RoomDouDiZhu extends Room{
 
     protected double roomType;//几倍房
     protected int multiple;//倍数
+    protected int maxZhaCount;//最大炸的个数
     protected int gameNumber;
     protected int curGameNumber = 1;
     protected long createUser;
@@ -138,6 +139,7 @@ public class RoomDouDiZhu extends Room{
         this.multiple = multiple;
         this.gameNumber = gameNumber;
         this.isInGame = false;
+        this.maxZhaCount = multiple;
 
         //todo
         this.createNeedMoney = 1;
@@ -369,7 +371,7 @@ public class RoomDouDiZhu extends Room{
         if (curGameNumber == 1) {
             spendMoney();
         }
-        game.startGame(users,bankerId);
+        game.startGame(users,bankerId,this);
         this.game = game;
 
 
@@ -727,6 +729,15 @@ public class RoomDouDiZhu extends Room{
 
     public RoomDouDiZhu setCanDissloution(boolean canDissloution) {
         isCanDissloution = canDissloution;
+        return this;
+    }
+
+    public int getMaxZhaCount() {
+        return maxZhaCount;
+    }
+
+    public RoomDouDiZhu setMaxZhaCount(int maxZhaCount) {
+        this.maxZhaCount = maxZhaCount;
         return this;
     }
 }
