@@ -79,6 +79,7 @@ public class GameDouDiZhu extends Game{
             currentCardStruct.setOutCard(1);    //不可出牌
         }
 
+
         Player.sendMsg2Player(new ResponseVo("gameService","play",currentCardStruct),this.users);
         lasttype = cardStruct.getType();//保存这次出牌的类型
         lastcardStruct = cardStruct;//保存这次出牌的牌型
@@ -185,6 +186,9 @@ public class GameDouDiZhu extends Game{
 
         }
 
+        Map<Long, Boolean> jiao = new HashMap<>();
+        jiao.put(player.getUserId(), isJiao);
+        Player.sendMsg2Player("gameService","jiaoResponse",jiao,users);
         player.sendMsg(new ResponseVo("gameService","jiaoDizhu",0));
         return 0;
     }
@@ -238,6 +242,9 @@ public class GameDouDiZhu extends Game{
             handleQiang2(player.getUserId(), isQiang);
         }
 
+        Map<Long, Boolean> qiang = new HashMap<>();
+        qiang.put(player.getUserId(), isQiang);
+        Player.sendMsg2Player("gameService","qiangResponse",qiang,users);
         player.sendMsg(new ResponseVo("gameService","qiangDizhu",0));
         return 0;
     }
