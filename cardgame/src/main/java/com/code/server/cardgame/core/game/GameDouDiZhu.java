@@ -3,6 +3,7 @@ package com.code.server.cardgame.core.game;
 import com.code.server.cardgame.core.CardStruct;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.PlayerCardInfo;
+import com.code.server.cardgame.core.room.Room;
 import com.code.server.cardgame.response.ErrorCode;
 import com.code.server.cardgame.response.ResponseVo;
 import org.slf4j.Logger;
@@ -47,8 +48,13 @@ public class GameDouDiZhu extends Game{
 
     private int step;//步骤
 
+    private int zhaCount;
+    private int multiple = 1;
+    private Room room;
 
-    public void startGame(List<Long> users,long dizhuUser){
+
+    public void startGame(List<Long> users,long dizhuUser,Room room){
+        this.room = room;
         init(users,dizhuUser);
     }
     public void init(List<Long> users,long dizhuUser){
