@@ -39,8 +39,3 @@ dependencies {
 tasks.withType(JavaCompile) {
 	options.encoding = "UTF-8"
 }
-
-task copyJars(type: Copy) {
-	from configurations.runtime
-	into 'build/libs/lib'
-}

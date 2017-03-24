@@ -74,13 +74,15 @@ public class GameDouDiZhu extends Game{
     public int play(Player player,CardStruct cardStruct){
         PlayerCardInfo playerCardInfo = playerCardInfos.get(player.getUserId());
         if(playerCardInfo.checkPlayCard(lastcardStruct,cardStruct,lasttype)){
-            currentCardStruct.setOutCard(0);   //可以出牌
+            cardStruct.setOutCard(0);   //可以出牌
         }else{
-            currentCardStruct.setOutCard(1);    //不可出牌
+            cardStruct.setOutCard(1);    //不可出牌
         }
+        long nextUserCard = nextTurnId(cardStruct.getUserId()); //下一个出牌的人
 
+        currentCardStruct.setNextUserId(nextUserCard);
 
-        Player.sendMsg2Player(new ResponseVo("gameService","play",currentCardStruct),this.users);
+        Player.sendMsg2Player(new ResponseVo("gameService","play",cardStruct),this.users);
         lasttype = cardStruct.getType();//保存这次出牌的类型
         lastcardStruct = cardStruct;//保存这次出牌的牌型
         return 0;
@@ -186,9 +188,6 @@ public class GameDouDiZhu extends Game{
 
         }
 
-        Map<Long, Boolean> jiao = new HashMap<>();
-        jiao.put(player.getUserId(), isJiao);
-        Player.sendMsg2Player("gameService","jiaoResponse",jiao,users);
         player.sendMsg(new ResponseVo("gameService","jiaoDizhu",0));
         return 0;
     }
@@ -242,9 +241,6 @@ public class GameDouDiZhu extends Game{
             handleQiang2(player.getUserId(), isQiang);
         }
 
-        Map<Long, Boolean> qiang = new HashMap<>();
-        qiang.put(player.getUserId(), isQiang);
-        Player.sendMsg2Player("gameService","qiangResponse",qiang,users);
         player.sendMsg(new ResponseVo("gameService","qiangDizhu",0));
         return 0;
     }
