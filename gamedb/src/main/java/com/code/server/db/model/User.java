@@ -74,6 +74,12 @@ public class User {
     @Column(columnDefinition = "text")
     private String column5;//text类型
 
+    @Column(columnDefinition = "text")
+    private String recordStr;
+
+    @Transient
+    private Record record;
+
     public long getId() {
         return id;
     }
@@ -263,4 +269,21 @@ public class User {
         this.column5 = column5;
     }
 
+    public String getRecordStr() {
+        return recordStr;
+    }
+
+    public User setRecordStr(String recordStr) {
+        this.recordStr = recordStr;
+        return this;
+    }
+
+    public Record getRecord() {
+        return record;
+    }
+
+    public User setRecord(Record record) {
+        this.record = record;
+        return this;
+    }
 } // class User
