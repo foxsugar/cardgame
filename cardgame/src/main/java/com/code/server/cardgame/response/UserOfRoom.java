@@ -1,8 +1,5 @@
 package com.code.server.cardgame.response;
 
-import com.code.server.gamedata.UserVo;
-import net.sf.json.JSONObject;
-
 import java.util.List;
 
 public class UserOfRoom {

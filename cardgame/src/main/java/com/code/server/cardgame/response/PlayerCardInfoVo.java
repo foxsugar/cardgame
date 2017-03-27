@@ -25,4 +25,9 @@ public class PlayerCardInfoVo {
             this.cardNum = playerCardInfo.cards.size();
         }
     }
+
+    public PlayerCardInfoVo(PlayerCardInfo playerCardInfo) {
+        this.userId = playerCardInfo.userId;
+        this.cards.addAll(playerCardInfo.cards);
+    }
 }

@@ -55,6 +55,7 @@ public class ErrorCode {
 	public static final int CAN_NOT_QIANG_TURN = 200001;
 	public static final int CAN_NOT_NO_ROOM = 200002;
 	public static final int CAN_NOT_NO_GAME = 200003;
+	public static final int CAN_NOT_PLAY = 200004;
 
 	
 	

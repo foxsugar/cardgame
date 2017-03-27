@@ -1,34 +1,26 @@
 package com.code.server.cardgame.service;
 
 
-import com.code.server.cardgame.core.MsgDispatch;
 import com.code.server.cardgame.core.GameManager;
+import com.code.server.cardgame.core.MsgDispatch;
 import com.code.server.cardgame.core.Player;
-import com.code.server.cardgame.core.game.Game;
 import com.code.server.cardgame.core.room.Room;
-import com.code.server.cardgame.response.ErrorCode;
-import com.code.server.cardgame.response.ReconnectResp;
-import com.code.server.cardgame.response.ResponseVo;
-import com.code.server.cardgame.response.RoomVo;
+import com.code.server.cardgame.response.*;
 import com.code.server.cardgame.utils.SpringUtil;
 import com.code.server.cardgame.utils.ThreadPool;
 import com.code.server.db.Service.UserService;
 import com.code.server.db.model.ServerInfo;
 import com.code.server.db.model.User;
-import com.code.server.gamedata.UserVo;
-import com.google.gson.Gson;
 import io.netty.channel.ChannelHandlerContext;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.UUID;
 
 import static com.code.server.cardgame.core.GameManager.getUserVo;
-import static com.code.server.cardgame.utils.DbUtils.userService;
 
 /**
  * Created by win7 on 2017/3/10.
@@ -83,7 +75,7 @@ public class GameUserService {
                 if (user == null) {
                     if (GameManager.getInstance().serverInfo.getAppleCheck() == 1) {
                         user = createUser(account, password);
-                        userService.userDao.save(user);
+                        userService.save(user);
                     } else {
 
                         vo.setCode(ErrorCode.USERID_ERROR);
@@ -171,7 +163,7 @@ public class GameUserService {
             if (player != null) {
                 user = player.getUser();
             } else {
-                user = userService.userDao.getUserByOpenId(openId);
+                user = userService.getUserByOpenId(openId);
             }
 
             String img = image;
@@ -197,7 +189,7 @@ public class GameUserService {
                 user.setVip(0);
                 user.setUuid("0");
                 user.setMoney(GameManager.getInstance().constant.getInitMoney());
-                userService.userDao.save(user);
+                userService.save(user);
 
                 doLogin(user,ctx);
                 vo = new ResponseVo("userService", "checkOpenId", getUserVo(user));
@@ -211,7 +203,7 @@ public class GameUserService {
                 }
                 user.setImage(image);
                 user.setSex(sex);
-                userService.userDao.save(user);
+                userService.save(user);
 
                 doLogin(user,ctx);
                 vo = new ResponseVo("userService", "checkOpenId", getUserVo(user));
@@ -244,7 +236,7 @@ public class GameUserService {
         return newUser;
     }
 
-    public int getUserMessage(String userId,ChannelHandlerContext ctx) {
+    public int getUserMessage(long userId,ChannelHandlerContext ctx) {
 
         ThreadPool.getInstance().executor.execute(()->{
             UserService userService = SpringUtil.getBean(UserService.class);
@@ -253,7 +245,7 @@ public class GameUserService {
             if (player != null) {
                 user = player.getUser();
             } else {
-                user = userService.userDao.getUserByUserId(userId);
+                user = userService.getUserByUserId(userId);
             }
             ResponseVo vo = new ResponseVo("userService","getUserMessage",getUserVo(user));
             MsgDispatch.sendMsg(ctx,vo);
@@ -261,7 +253,7 @@ public class GameUserService {
         return 0;
     }
 
-    public int getUserImage(String userId,ChannelHandlerContext ctx) {
+    public int getUserImage(long userId,ChannelHandlerContext ctx) {
         ThreadPool.getInstance().executor.execute(()->{
             UserService userService = SpringUtil.getBean(UserService.class);
             Player player  = GameManager.getInstance().players.get(userId);
@@ -269,7 +261,7 @@ public class GameUserService {
             if (player != null) {
                 user = player.getUser();
             } else {
-                user = userService.userDao.getUserByUserId(userId);
+                user = userService.getUserByUserId(userId);
             }
 
             JSONObject jSONObject = new JSONObject();
@@ -282,7 +274,7 @@ public class GameUserService {
     }
 
 
-    public int register(String userId,ChannelHandlerContext ctx) {
+    public int register(long userId,ChannelHandlerContext ctx) {
 
         ThreadPool.getInstance().executor.execute(()->{
             UserService userService = SpringUtil.getBean(UserService.class);
@@ -291,7 +283,7 @@ public class GameUserService {
             if (player != null) {
                 user = player.getUser();
             } else {
-                user = userService.userDao.getUserByUserId(userId);
+                user = userService.getUserByUserId(userId);
             }
             if(user==null){
                 ResponseVo vo = new ResponseVo("userService","register",0);

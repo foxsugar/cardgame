@@ -1,8 +1,5 @@
 package com.code.server.cardgame.response;
 
-import com.code.server.gamedata.UserVo;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 

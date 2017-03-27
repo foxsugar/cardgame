@@ -157,7 +157,7 @@ public class MsgDispatch {
         if (room == null) {
             return ErrorCode.CAN_NOT_NO_ROOM;
         }
-        GameDouDiZhu game = room.getGame();
+        GameDouDiZhu game = (GameDouDiZhu)room.getGame();
         if (game == null) {
             return ErrorCode.CAN_NOT_NO_GAME;
         }
@@ -172,7 +172,8 @@ public class MsgDispatch {
             case "play":
                 CardStruct cardStruct = gson.fromJson(params.getString("cards"), CardStruct.class);
                 return game.play(player, cardStruct);
-
+            case "pass":
+                return game.pass(player);
             default:
 
                 return ErrorCode.REQUEST_PARAM_ERROR;

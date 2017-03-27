@@ -10,6 +10,7 @@ public class PlayerCardInfo {
     public List<Integer> cards = new ArrayList<>();//手上的牌
     protected List<Integer> disCards = new ArrayList<>();//丢弃的牌
     private boolean isQiang;
+    private double score;
 
 
 
@@ -28,6 +29,9 @@ public class PlayerCardInfo {
 
     //检测出牌是否合法
     public boolean checkPlayCard(CardStruct lastcardStruct ,CardStruct currentCardStruct , int lasttype){
+        if (lastcardStruct == null || lastcardStruct.getUserId()==0) {
+            return true;
+        }
         boolean results = false;
         //判断牌型是否合法
         if(getListByIsType(currentCardStruct.cards) == 0){
@@ -70,12 +74,12 @@ public class PlayerCardInfo {
                         return CardStruct.type_炸;
                 }
             }
-            if (len == 2 && CardUtil.getTypeByCard(cards.get(0)).intValue() == 12
-                    && CardUtil.getTypeByCard(cards.get(1)).intValue() == 12) {
+            if (len == 2 && CardUtil.getTypeByCard(cards.get(0)) == 12
+                    && CardUtil.getTypeByCard(cards.get(1)) == 12) {
                 return CardStruct.type_炸;
             }
-            if (len == 2 && CardUtil.getTypeByCard(cards.get(0)).intValue() == 13
-                    && CardUtil.getTypeByCard(cards.get(1)).intValue() == 14) {
+            if (len == 2 && CardUtil.getTypeByCard(cards.get(0)) == 13
+                    && CardUtil.getTypeByCard(cards.get(1)) == 14) {
                 return CardStruct.type_火箭;
             }
             if (len == 4 && CardUtil.getTypeByCard(cards.get(0)).intValue() == CardUtil.getTypeByCard(cards.get(len - 2)).intValue()
@@ -153,7 +157,50 @@ public class PlayerCardInfo {
     }
 
 
+    public long getUserId() {
+        return userId;
+    }
 
+    public PlayerCardInfo setUserId(long userId) {
+        this.userId = userId;
+        return this;
+    }
+
+    public List<Integer> getCards() {
+        return cards;
+    }
+
+    public PlayerCardInfo setCards(List<Integer> cards) {
+        this.cards = cards;
+        return this;
+    }
+
+    public List<Integer> getDisCards() {
+        return disCards;
+    }
+
+    public PlayerCardInfo setDisCards(List<Integer> disCards) {
+        this.disCards = disCards;
+        return this;
+    }
+
+    public boolean isQiang() {
+        return isQiang;
+    }
+
+    public PlayerCardInfo setQiang(boolean qiang) {
+        isQiang = qiang;
+        return this;
+    }
+
+    public double getScore() {
+        return score;
+    }
+
+    public PlayerCardInfo setScore(double score) {
+        this.score = score;
+        return this;
+    }
 }
 
 

@@ -1,5 +1,6 @@
 package com.code.server.cardgame.response;
 
+import com.code.server.cardgame.core.CardStruct;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.PlayerCardInfo;
 import com.code.server.cardgame.core.game.Game;
@@ -25,6 +26,7 @@ public class GameVo {
     protected long qiangUser;//抢的人
 
     protected long playTurn;//该出牌的人
+    protected CardStruct lastCardStruct;
 
     protected int step;//步骤
 
@@ -42,6 +44,7 @@ public class GameVo {
             vo.canQiangUser = douDiZhu.getCanQiangUser();
             vo.jiaoUser = douDiZhu.getJiaoUser();
             vo.qiangUser = douDiZhu.getQiangUser();
+            vo.lastCardStruct = douDiZhu.getLastCardStruct();
             //该出牌的玩家
             vo.playTurn = douDiZhu.getPlayTurn();
             if(uid == douDiZhu.getDizhu()){//玩家是地主
