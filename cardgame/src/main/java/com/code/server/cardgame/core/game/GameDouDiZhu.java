@@ -294,6 +294,7 @@ public class GameDouDiZhu extends Game{
             gameResultDouDizhu.getPlayerCardInfos().add(new PlayerCardInfoVo(playerCardInfo));
 
         }
+        Player.sendMsg2Player("gameService","gameResult",gameResultDouDizhu,users);
     }
 
     /**

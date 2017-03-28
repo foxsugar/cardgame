@@ -58,7 +58,13 @@ public class CardUtil {
     }
 
 
+    public static int getCardType(int card) {
+        return (card -1)/4+1;
+    }
     public static Integer getTypeByCard (Integer card){
+        if(card == 54){
+            return 15;
+        }
         return CardUtil.card.indexOf((card -1)/4+1);
 
 //

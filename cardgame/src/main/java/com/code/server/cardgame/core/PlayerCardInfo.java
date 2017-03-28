@@ -2,6 +2,8 @@ package com.code.server.cardgame.core;
 
 import java.util.*;
 
+import static com.code.server.cardgame.core.CardUtil.getCardType;
+
 /**
  * Created by sunxianping on 2017/3/14.
  */
@@ -62,10 +64,18 @@ public class PlayerCardInfo {
         return results;
     }
 
+    private boolean isSameType(List<Integer> cards) {
+        Set<Integer> types = new HashSet<>();
+        for (int card : cards) {
+            int cardType = getCardType(card);
+            types.add(cardType);
+        }
+        return types.size() == 1;
+    }
     public Integer getListByIsType(List<Integer> cards) {
         int len = cards.size();
         if (len <= 4) {
-            if (cards.size() > 0 && cards.get(0).intValue() == cards.get(len - 1).intValue()) {
+            if (cards.size() > 0 &&isSameType(cards)) {
                 switch (len) {
                     case 1:
                         return CardStruct.type_单;
@@ -90,7 +100,7 @@ public class PlayerCardInfo {
                 return CardStruct.type_火箭;
             }
             if (len == 4 && CardUtil.getTypeByCard(cards.get(0)).intValue() == CardUtil.getTypeByCard(cards.get(len - 2)).intValue()
-                    && CardUtil.getTypeByCard(cards.get(1)).intValue() == CardUtil.getTypeByCard(cards.get(len - 1)).intValue()) {
+                    && CardUtil.getTypeByCard(cards.get(0)).intValue() == CardUtil.getTypeByCard(cards.get(len - 3)).intValue()) {
                 return CardStruct.type_三带单;
             } else {
                 return 0;
