@@ -16,7 +16,7 @@ import java.util.*;
 public class GameTianDaKeng extends Game{
     private static final Logger logger = LoggerFactory.getLogger(GameTianDaKeng.class);
 
-    private static final int INIT_CARD_NUM = 2;
+    private static final int INIT_CARD_NUM = 3;
 
     protected List<Integer> cards = new ArrayList<>();//牌
 
@@ -39,8 +39,6 @@ public class GameTianDaKeng extends Game{
             playerCardInfos.put(uid,playerCardInfo);
         }
         this.users.addAll(users);
-
-
         shuffle();
         deal();
 

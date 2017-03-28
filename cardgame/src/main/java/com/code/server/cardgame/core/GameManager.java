@@ -2,6 +2,7 @@ package com.code.server.cardgame.core;
 
 import com.code.server.cardgame.core.room.Room;
 import com.code.server.cardgame.core.room.RoomDouDiZhu;
+import com.code.server.cardgame.core.room.RoomTanDaKeng;
 import com.code.server.cardgame.utils.DbUtils;
 import com.code.server.cardgame.utils.IdWorker;
 import com.code.server.db.model.Constant;
@@ -30,6 +31,7 @@ public class GameManager {
     public Map<Long, String> uid_openId = new HashMap<>();
     public Map<Long, String> userRoom = new HashMap<>();
     public Map<String, RoomDouDiZhu> rooms = new HashMap<>();
+    public Map<String, RoomTanDaKeng> roomsOfTanDaKeng = new HashMap<>();
     public ServerInfo serverInfo;
     public Constant constant;
     public Map<Long, Player> kickUser = new HashMap<>();
