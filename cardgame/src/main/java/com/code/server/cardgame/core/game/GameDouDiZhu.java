@@ -400,7 +400,7 @@ public class GameDouDiZhu extends Game{
         } else {//不抢
 
 //            long dizhu = this.qiangUser == 0?jiaoUser:qiangUser;
-            startPlay(dizhu);
+            startPlay(jiaoUser);
         }
     }
 
