@@ -32,6 +32,9 @@ public class PlayerCardInfo {
         if (lastcardStruct == null || lastcardStruct.getUserId()==0) {
             return true;
         }
+        if (lastcardStruct.getUserId() == userId) {
+            return true;
+        }
         boolean results = false;
         //判断牌型是否合法
         if(getListByIsType(currentCardStruct.cards) == 0){
@@ -76,6 +79,10 @@ public class PlayerCardInfo {
             }
             if (len == 2 && CardUtil.getTypeByCard(cards.get(0)) == 12
                     && CardUtil.getTypeByCard(cards.get(1)) == 12) {
+                return CardStruct.type_炸;
+            }
+            if (len == 2 && CardUtil.getTypeByCard(cards.get(0)) == 0
+                    && CardUtil.getTypeByCard(cards.get(1)) == 0) {
                 return CardStruct.type_炸;
             }
             if (len == 2 && CardUtil.getTypeByCard(cards.get(0)) == 13
