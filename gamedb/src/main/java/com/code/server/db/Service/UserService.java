@@ -2,7 +2,9 @@ package com.code.server.db.Service;
 
 
 import com.code.server.db.dao.IUserDao;
+import com.code.server.db.model.Record;
 import com.code.server.db.model.User;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,28 +19,45 @@ import java.util.List;
 
 @Service("userService")
 public class UserService {
+    private Gson gson = new Gson();
 
     @PersistenceContext
     public EntityManager em;
 
     @Autowired
-    public IUserDao userDao;
+    private IUserDao userDao;
 
 
-    public void test(){
-
+    public User getUserByOpenId(String openId) {
+        return loadFromDb(userDao.getUserByOpenId(openId));
     }
 
+    public User getUserByUserId(long userId) {
+        return loadFromDb(userDao.getUserByUserId(userId));
+    }
 
     public User getUserByAccountAndPassword(String account, String password) {
-        return userDao.getUserByAccountAndPassword(account, password);
+        return loadFromDb(userDao.getUserByAccountAndPassword(account, password));
     }
 
     public User save(User user) {
+        return userDao.save(save2Db(user));
+    }
 
-        return userDao.save(user);
+    public User loadFromDb(User user){
+        String str = user.getRecordStr();
+        if (str == null || "".equals(str)) {
+            user.setRecord(new Record());
+        } else {
+            Record record = gson.fromJson(user.getRecordStr(), Record.class);
+            user.setRecord(record);
+        }
+        return user;
+    }
 
-
+    private User save2Db(User user){
+        user.setRecordStr(gson.toJson(user.getRecord()));
+        return user;
     }
 
     @Transactional

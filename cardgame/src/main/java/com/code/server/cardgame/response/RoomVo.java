@@ -3,9 +3,6 @@ package com.code.server.cardgame.response;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.room.Room;
-import com.code.server.cardgame.core.room.RoomDouDiZhu;
-import com.code.server.db.model.User;
-import com.code.server.gamedata.UserVo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +24,7 @@ public class RoomVo {
 
     protected Map<Long, Integer> userStatus = new HashMap<>();//用户状态
     protected List<UserVo> userList = new ArrayList<>();//用户列表
-    protected Map<Long, Integer> userScores = new HashMap<>();
+    protected Map<Long, Double> userScores = new HashMap<>();
 
 
     public RoomVo(){}

@@ -25,7 +25,7 @@ public final class DbUtils {
         users = GameManager.getInstance().getUsersSaveInDB().values();
 
         for (User u : users) {
-            userService.userDao.save(u);
+            userService.save(u);
             GameManager.getInstance().getUsersSaveInDB().remove(u.getId());
             temp++;
             if (temp%1000==0){//每1000次保存休眠
@@ -40,7 +40,7 @@ public final class DbUtils {
     }
 
     public static void saveUser(User user) {
-        userService.userDao.save(user);
+        userService.save(user);
         GameManager.getInstance().getUsersSaveInDB().remove(user.getId());
     }
 

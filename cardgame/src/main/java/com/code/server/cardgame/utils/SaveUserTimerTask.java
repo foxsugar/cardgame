@@ -45,7 +45,7 @@ public class SaveUserTimerTask extends TimerTask{
                  continue;
             }
             if (now - player.getLastSendMsgTime() >= serverConfig.getKickTime()) {
-                userService.userDao.save(player.getUser());
+                userService.save(player.getUser());
                 GameManager.getInstance().removePlayer(player);
             }
         }

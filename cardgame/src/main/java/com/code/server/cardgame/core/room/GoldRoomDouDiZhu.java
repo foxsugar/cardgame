@@ -8,7 +8,6 @@ import com.code.server.cardgame.response.*;
 import com.code.server.cardgame.timer.GameTimer;
 import com.code.server.cardgame.timer.TimerNode;
 import com.code.server.db.model.User;
-import com.code.server.gamedata.UserVo;
 import com.google.gson.Gson;
 import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;

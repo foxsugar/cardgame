@@ -24,6 +24,9 @@ public class Player {
         sendMsg(new ResponseVo(service,method,msg));
     }
 
+    public void sendMsg(String service, String method, int code) {
+        sendMsg(new ResponseVo(service,method,code));
+    }
     public static void sendMsg2Player(Object msg, long userId) {
         Player other = GameManager.getInstance().players.get(userId);
         if (other != null) {
@@ -41,10 +44,17 @@ public class Player {
         sendMsg2Player(new ResponseVo(service,method,msg),users);
     }
 
+    public static void sendMsg2Player(String service, String method, int code, List<Long> users) {
+        sendMsg2Player(new ResponseVo(service,method,code),users);
+    }
+
     public static void sendMsg2Player(String service, String method, Object msg, long userId) {
         sendMsg2Player(new ResponseVo(service,method,msg),userId);
     }
 
+    public static void sendMsg2Player(String service, String method, int code, long userId) {
+        sendMsg2Player(new ResponseVo(service,method,code),userId);
+    }
 
 
 

@@ -29,7 +29,7 @@ repositories {
 
 dependencies {
 	compile project(path: ':gamedb')
-	compile project(path: ':gamedata')
+//	compile project(path: ':gamedata')
 	compile('org.springframework.boot:spring-boot-starter-aop')
 	compile('org.springframework.boot:spring-boot-starter-data-redis')
 	compile('org.springframework.boot:spring-boot-starter-logging')
@@ -91,15 +91,15 @@ bootRun {
 
 
 
-task hello {
-	doLast {
-		exec {
-			workingDir 'build/libs/'
-			commandLine 'cmd','c','cd build/libs','jar -xf cardgame.jar'
-		}
-		exec {
-			workingDir 'E:\\workspace\\game\\cardgame\\build\\libs'
-			commandLine 'jar -xf E:\\workspace\\game\\cardgame\\build\\libs\\cardgame.jar'
-		}
-	}
-}
+//task hello {
+//	doLast {
+//		exec {
+//			workingDir 'build/libs/'
+//			commandLine 'cmd','c','cd build/libs','jar -xf cardgame.jar'
+//		}
+//		exec {
+//			workingDir 'E:\\workspace\\game\\cardgame\\build\\libs'
+//			commandLine 'jar -xf E:\\workspace\\game\\cardgame\\build\\libs\\cardgame.jar'
+//		}
+//	}
+//}
