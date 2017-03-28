@@ -61,9 +61,11 @@ public class UserService {
     }
 
     @Transactional
-    public void batchUpdate(List list) {
+    public void batchUpdate(List<User> list) {
         for (int i = 0; i < list.size(); i++) {
-            em.merge(list.get(i));
+            User user = list.get(i);
+            save2Db(user);
+            em.merge(user);
             if (i % 30 == 0) {
                 em.flush();
                 em.clear();
