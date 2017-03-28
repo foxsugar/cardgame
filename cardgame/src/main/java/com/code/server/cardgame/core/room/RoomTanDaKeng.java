@@ -9,7 +9,6 @@ import com.code.server.cardgame.response.*;
 import com.code.server.cardgame.timer.GameTimer;
 import com.code.server.cardgame.timer.TimerNode;
 import com.code.server.db.model.User;
-import com.code.server.gamedata.UserVo;
 import com.google.gson.Gson;
 import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
@@ -43,7 +42,7 @@ public class RoomTanDaKeng extends Room{
 
     protected Map<Long, Integer> userStatus = new HashMap<>();//用户状态
     protected List<Long> users = new ArrayList<>();//用户列表
-    protected Map<Long, Integer> userScores = new HashMap<>();
+    protected Map<Long, Double> userScores = new HashMap<>();
     protected Map<Long,User> userMap = new HashMap<>();//用户列表
 
     protected double roomType;//几倍房
@@ -155,7 +154,7 @@ public class RoomTanDaKeng extends Room{
         long userId = user.getUserId();
         this.users.add(userId);
         this.userStatus.put(userId, 0);
-        this.userScores.put(userId, 0);
+        this.userScores.put(userId, 0.0);
         this.userMap.put(userId, player.getUser());
         GameManager.getInstance().getUserRoom().put(player.getUserId(),roomId);
     }
@@ -316,7 +315,7 @@ public class RoomTanDaKeng extends Room{
             logger.error("===设置分数时出错 userId = "+userId +"users: "+userScores.toString());
             return;
         }
-        int s = userScores.get(userId);
+        double s = userScores.get(userId);
         userScores.put(userId, s + score);
     }
 
@@ -330,7 +329,7 @@ public class RoomTanDaKeng extends Room{
     }
 
 
-    private void startGame() {
+    public void startGame() {
         this.isInGame = true;
         GameTianDaKeng game = new GameTianDaKeng();
 
@@ -494,7 +493,7 @@ public class RoomTanDaKeng extends Room{
     }
 
     public boolean scoreIsChange() {
-        for (int score : userScores.values()) {
+        for (double score : userScores.values()) {
             if (score != 0) {
                 return true;
             }
@@ -555,11 +554,11 @@ public class RoomTanDaKeng extends Room{
         return this;
     }
 
-    public Map<Long, Integer> getUserScores() {
+    public Map<Long, Double> getUserScores() {
         return userScores;
     }
 
-    public RoomTanDaKeng setUserScores(Map<Long, Integer> userScores) {
+    public RoomTanDaKeng setUserScores(Map<Long, Double> userScores) {
         this.userScores = userScores;
         return this;
     }

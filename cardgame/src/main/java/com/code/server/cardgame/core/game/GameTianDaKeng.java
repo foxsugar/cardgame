@@ -1,8 +1,6 @@
 package com.code.server.cardgame.core.game;
 
-import com.code.server.cardgame.core.CardStruct;
-import com.code.server.cardgame.core.Player;
-import com.code.server.cardgame.core.PlayerCardInfo;
+import com.code.server.cardgame.core.*;
 import com.code.server.cardgame.response.ErrorCode;
 import com.code.server.cardgame.response.ResponseVo;
 import org.slf4j.Logger;
@@ -21,7 +19,7 @@ public class GameTianDaKeng extends Game{
     protected List<Integer> cards = new ArrayList<>();//牌
 
     protected List<Integer> tableCards = new ArrayList<>();//剩余牌
-    protected Map<Long,PlayerCardInfo> playerCardInfos = new HashMap<>();
+    protected Map<Long,PlayerCardInfoTianDaKeng> playerCardInfos = new HashMap<>();
     protected List<Long> users = new ArrayList<>();
     private Random rand = new Random();
 
@@ -34,7 +32,7 @@ public class GameTianDaKeng extends Game{
     public void init(List<Long> users){
         //初始化玩家
         for(Long uid : users){
-            PlayerCardInfo playerCardInfo = new PlayerCardInfo();
+            PlayerCardInfoTianDaKeng playerCardInfo = new PlayerCardInfoTianDaKeng();
             playerCardInfo.userId = uid;
             playerCardInfos.put(uid,playerCardInfo);
         }
@@ -73,7 +71,7 @@ public class GameTianDaKeng extends Game{
      * 发牌
      */
     protected void deal(){
-        for(PlayerCardInfo playerCardInfo : playerCardInfos.values()){
+        for(PlayerCardInfoTianDaKeng playerCardInfo : playerCardInfos.values()){
             for(int i=0;i<INIT_CARD_NUM;i++){
                 playerCardInfo.cards.add(cards.remove(0));
             }
@@ -87,11 +85,27 @@ public class GameTianDaKeng extends Game{
     }
 
 
+    /**
+     * 获取第一个叫牌的人
+     * @param number    比较第几张牌，第一次为第一张
+     * @return
+     */
+    public Long getMaxCardUser(int number){
+        Long userId = null;
+        int temp = 0;
+        for (PlayerCardInfoTianDaKeng playerCardInfoTianDaKeng :playerCardInfos.values()) {
+            if(temp < CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.cards.get(number-1))){
+                temp = CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.cards.get(number-1));
+                userId = playerCardInfoTianDaKeng.userId;
+            }
+        }
+        return userId;
+    }
 
 
 
     /**
-     * 开始打牌
+     * 开始打牌:下注，弃牌
      * @param dizhu
      */
     private void startPlay(long dizhu){
@@ -159,11 +173,11 @@ public class GameTianDaKeng extends Game{
         this.tableCards = tableCards;
     }
 
-    public Map<Long, PlayerCardInfo> getPlayerCardInfos() {
+    public Map<Long, PlayerCardInfoTianDaKeng> getPlayerCardInfos() {
         return playerCardInfos;
     }
 
-    public void setPlayerCardInfos(Map<Long, PlayerCardInfo> playerCardInfos) {
+    public void setPlayerCardInfos(Map<Long, PlayerCardInfoTianDaKeng> playerCardInfos) {
         this.playerCardInfos = playerCardInfos;
     }
 
