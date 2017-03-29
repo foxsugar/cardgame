@@ -87,7 +87,7 @@ public class GameDouDiZhu extends Game{
     public int play(Player player,CardStruct cardStruct){
         PlayerCardInfo playerCardInfo = playerCardInfos.get(player.getUserId());
         //不可出牌
-        if(!playerCardInfo.checkPlayCard(lastCardStruct,cardStruct,lasttype)){
+        if(!playerCardInfo.checkPlayCard(lastCardStruct,cardStruct,lasttype,cards)){
             return ErrorCode.CAN_NOT_PLAY;
         }
 
