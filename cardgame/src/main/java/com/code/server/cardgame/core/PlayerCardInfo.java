@@ -13,6 +13,7 @@ public class PlayerCardInfo {
     protected List<Integer> disCards = new ArrayList<>();//丢弃的牌
     private boolean isQiang;
     private double score;
+    private int playCount;
 
 
 
@@ -216,6 +217,15 @@ public class PlayerCardInfo {
 
     public PlayerCardInfo setScore(double score) {
         this.score = score;
+        return this;
+    }
+
+    public int getPlayCount() {
+        return playCount;
+    }
+
+    public PlayerCardInfo setPlayCount(int playCount) {
+        this.playCount = playCount;
         return this;
     }
 }

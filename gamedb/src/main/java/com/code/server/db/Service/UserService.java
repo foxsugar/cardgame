@@ -41,7 +41,9 @@ public class UserService {
     }
 
     public User save(User user) {
-        return userDao.save(save2Db(user));
+        User newUser = userDao.save(save2Db(user));
+        user.setId(newUser.getUserId());
+        return user;
     }
 
     public User loadFromDb(User user){

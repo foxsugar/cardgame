@@ -10,7 +10,9 @@ import java.util.Date;
  */
 @DynamicUpdate
 @Entity
-@Table(name = "users")
+@Table(name = "users",
+        indexes = {@Index(name = "userId", columnList = "userId"),
+                    @Index(name="openId",columnList = "openId")})
 public class User {
     // ==============
     // PRIVATE FIELDS
@@ -20,7 +22,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(nullable = false)
+
+    @Column(nullable = false,unique=true)
     private long userId;
 
     @Column(nullable = false)
@@ -74,7 +77,8 @@ public class User {
     @Column(columnDefinition = "text")
     private String column5;//text类型
 
-    @Column(columnDefinition = "text")
+    @Lob
+    @Column( length = 16777215)
     private String recordStr;
 
     @Transient
