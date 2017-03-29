@@ -2,15 +2,16 @@ package com.code.server.cardgame.core;
 
 import com.code.server.cardgame.Message.MessageHolder;
 import com.code.server.cardgame.core.game.GameDouDiZhu;
-import com.code.server.cardgame.core.room.Room;
+import com.code.server.cardgame.core.game.GameTianDaKeng;
 import com.code.server.cardgame.core.room.RoomDouDiZhu;
+import com.code.server.cardgame.core.room.RoomTanDaKeng;
 import com.code.server.cardgame.response.ErrorCode;
 import com.code.server.cardgame.response.ResponseVo;
+import com.code.server.cardgame.service.GameChatService;
 import com.code.server.cardgame.service.GameUserService;
 import com.code.server.cardgame.utils.SpringUtil;
 import com.google.gson.Gson;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.util.AttributeKey;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +55,11 @@ public class MsgDispatch {
             case "roomService":
                 return dispatchRoomService(method, params, ctx);
             case "gameService":
+                return dispatchGameService(method, params, ctx);
+            case "chatService":
+                return dispatchChatService(method, params, ctx);
+
+            case "gameTDKService":
                 return dispatchGameService(method, params, ctx);
             default:
                 return ErrorCode.REQUEST_PARAM_ERROR;
@@ -132,7 +138,7 @@ public class MsgDispatch {
                 if (room == null) {
                     return ErrorCode.CAN_NOT_NO_ROOM;
                 }
-                return room.dissolution(player, true,method);
+                return room.dissolution(player, true, method);
             }
             case "answerIfDissolveRoom":
                 RoomDouDiZhu room = getRoomByPlayer(player);
@@ -140,7 +146,7 @@ public class MsgDispatch {
                     return ErrorCode.CAN_NOT_NO_ROOM;
                 }
                 boolean isAgree = "2".equals(params.getString("answer"));
-                return room.dissolution(player,isAgree,method);
+                return room.dissolution(player, isAgree, method);
             default:
                 return ErrorCode.REQUEST_PARAM_ERROR;
         }
@@ -157,7 +163,7 @@ public class MsgDispatch {
         if (room == null) {
             return ErrorCode.CAN_NOT_NO_ROOM;
         }
-        GameDouDiZhu game = (GameDouDiZhu)room.getGame();
+        GameDouDiZhu game = (GameDouDiZhu) room.getGame();
         if (game == null) {
             return ErrorCode.CAN_NOT_NO_GAME;
         }
@@ -181,6 +187,69 @@ public class MsgDispatch {
     }
 
 
+    private int dispatchGameTDKService(String method, JSONObject params, ChannelHandlerContext ctx) {
+        Player player = GameManager.getPlayerByCtx(ctx);
+        if (player == null) {
+            return -1;
+        }
+
+        RoomTanDaKeng room = getRoomTDKByPlayer(player);
+        if (room == null) {
+            return ErrorCode.CAN_NOT_NO_ROOM;
+        }
+        GameTianDaKeng game = (GameTianDaKeng) room.getGame();
+        if (game == null) {
+            return ErrorCode.CAN_NOT_NO_GAME;
+        }
+
+        switch (method) {
+            case "bet"://下注
+                int chip = params.getInt("chip");
+                return game.bet(player, chip);
+            case "call"://跟注
+                return game.call(player);
+            case "raise"://加注，踢
+                return game.raise(player);
+            case "pass"://不跟
+                return game.pass(player);
+            case "fold"://弃牌
+                return game.fold(player);
+            case "deal"://发牌
+                return game.deal(player);
+            default:
+
+                return ErrorCode.REQUEST_PARAM_ERROR;
+        }
+    }
+
+
+    private int dispatchChatService(String method, JSONObject params, ChannelHandlerContext ctx) {
+        Player player = GameManager.getPlayerByCtx(ctx);
+        if (player == null) {
+            return -1;
+        }
+        GameChatService chatService = SpringUtil.getBean(GameChatService.class);
+        switch (method) {
+            case "sendMessageToOne": {
+                long acceptUserId = params.getLong("acceptUserId");
+                String messageType = params.getString("messageType");
+                String message = params.getString("message");
+                return chatService.sendMessageToOne(player, acceptUserId, messageType, message);
+            }
+            case "sendMessage": {
+                String messageType = params.getString("messageType");
+                String message = params.getString("message");
+                return chatService.sendMessage(player, messageType, message);
+            }
+            default: {
+                return ErrorCode.REQUEST_PARAM_ERROR;
+            }
+
+
+        }
+
+    }
+
     private RoomDouDiZhu getRoomByPlayer(Player player) {
         String roomId = GameManager.getInstance().getUserRoom().get(player.getUserId());
         if (roomId == null) {
@@ -190,4 +259,11 @@ public class MsgDispatch {
     }
 
 
+    private RoomTanDaKeng getRoomTDKByPlayer(Player player) {
+        String roomId = GameManager.getInstance().getUserRoom().get(player.getUserId());
+        if (roomId == null) {
+            return null;
+        }
+        return GameManager.getInstance().roomsOfTanDaKeng.get(roomId);
+    }
 }

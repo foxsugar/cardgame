@@ -11,6 +11,7 @@ import com.code.server.db.model.User;
 
 import java.lang.reflect.GenericArrayType;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TimerTask;
 
 /**
@@ -28,19 +29,23 @@ import java.util.TimerTask;
 public class SaveUserTimerTask extends TimerTask{
     private ServerConfig serverConfig = SpringUtil.getBean(ServerConfig.class);
     private UserService userService = SpringUtil.getBean(UserService.class);
-    private ConstantService constantService = SpringUtil.getBean(ConstantService.class);
 
 
     @Override
     public void run() {
-        DbUtils.saveUsers();
-        constantService.constantDao.save(GameManager.getInstance().constant);
+
+        //保存玩家
+        List<User> users = new ArrayList<>();
+        users.addAll(GameManager.getInstance().getUsersSaveInDB().values());
+        GameManager.getInstance().getUsersSaveInDB().clear();
+        userService.batchUpdate(users);
 
 
         //从内存中删除玩家
         long now = System.currentTimeMillis();
 
         for (Player player : GameManager.getInstance().getKickUser().values()) {
+            //在房间中的玩家 不清理
              if(GameManager.getInstance().getUserRoom().containsKey(player.getUserId())){
                  continue;
             }

@@ -13,6 +13,8 @@ public class PlayerCardInfoVo {
     public long userId;
     public List<Integer> cards = new ArrayList<>();//手上的牌
     public int cardNum;
+    public boolean isQiang;
+    public double score;
 
     public PlayerCardInfoVo() {
     }
@@ -23,11 +25,14 @@ public class PlayerCardInfoVo {
             this.cards.addAll(playerCardInfo.cards);
         } else {
             this.cardNum = playerCardInfo.cards.size();
+            this.isQiang = playerCardInfo.isQiang();
         }
     }
 
     public PlayerCardInfoVo(PlayerCardInfo playerCardInfo) {
         this.userId = playerCardInfo.userId;
         this.cards.addAll(playerCardInfo.cards);
+        this.isQiang = playerCardInfo.isQiang();
+        this.score = playerCardInfo.getScore();
     }
 }
