@@ -315,7 +315,7 @@ public class GameDouDiZhu extends Game{
 
         }
         room.getUserMap().forEach((k,v)->
-            v.getRecord().addRoomRecord(roomRecord);
+            v.getRecord().addRoomRecord(roomRecord));
 
 
 
