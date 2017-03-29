@@ -237,13 +237,14 @@ public class Room {
             User user = userMap.get(createUser);
             if (user != null) {
                 user.setMoney(user.getMoney() + getNeedMoney(this.gameNumber));
+                GameManager.getInstance().getUsersSaveInDB().put(user.getUserId(),user);
             }
             Notice n = new Notice();
             n.setMessage("roomNum "+this.getRoomId()+" :has destroy success!");
             Player.sendMsg2Player(new ResponseVo("roomService","destroyRoom",n), this.getUsers());
             //删除房间
             GameManager.getInstance().rooms.remove(roomId);
-            GameManager.getInstance().getUsersSaveInDB().put(user.getUserId(),user);
+
         }
 
         noticeQuitRoom(player);

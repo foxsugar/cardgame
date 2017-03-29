@@ -9,6 +9,8 @@ import com.code.server.cardgame.response.ErrorCode;
 import com.code.server.cardgame.response.GameResultDouDizhu;
 import com.code.server.cardgame.response.PlayerCardInfoVo;
 import com.code.server.cardgame.response.ResponseVo;
+import com.code.server.db.model.Record;
+import com.code.server.db.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,6 +59,7 @@ public class GameDouDiZhu extends Game{
     private Set<Long> userPlayCount = new HashSet<>();
 
 
+
     public void startGame(List<Long> users,long dizhuUser,Room room){
         this.room = room;
         init(users,dizhuUser);
@@ -89,6 +92,7 @@ public class GameDouDiZhu extends Game{
         }
 
 //        userPlayCount.add(player.getUserId());
+        playerCardInfo.setPlayCount(playerCardInfo.getPlayCount() + 1);
 
         long nextUserCard = nextTurnId(cardStruct.getUserId()); //下一个出牌的人
 
@@ -120,8 +124,9 @@ public class GameDouDiZhu extends Game{
 
          //牌打完
         if (playerCardInfo.cards.size() == 0) {
+            PlayerCardInfo playerCardInfoDizhu = playerCardInfos.get(dizhu);
             //是否是春天
-            if (userPlayCount.size() == 1) {
+            if (userPlayCount.size() == 1 || playerCardInfoDizhu.getPlayCount() == 1) {
                 isSpring = true;
                 multiple *= 2;
             }
@@ -279,8 +284,8 @@ public class GameDouDiZhu extends Game{
             }
         }
 
-        playerCardInfoDizhu.setScore(subScore);
-        room.addUserSocre(dizhu,subScore);
+        playerCardInfoDizhu.setScore(-subScore);
+        room.addUserSocre(dizhu,-subScore);
 
     }
 
@@ -297,6 +302,24 @@ public class GameDouDiZhu extends Game{
         Player.sendMsg2Player("gameService","gameResult",gameResultDouDizhu,users);
     }
 
+    private void genRecord(){
+        Record.RoomRecord roomRecord = new Record.RoomRecord();
+        for (long userId : users) {
+            PlayerCardInfo playerCardInfo = playerCardInfos.get(userId);
+            User user = room.getUserMap().get(userId);
+            Record.UserRecord userRecord = new Record.UserRecord();
+            userRecord.setName(user.getUsername());
+            userRecord.setScore(playerCardInfo.getScore());
+            userRecord.setUserId(userId);
+            roomRecord.addRecord(userRecord);
+
+        }
+        room.getUserMap().forEach((k,v)->
+            v.getRecord().addRoomRecord(roomRecord);
+
+
+
+    }
     /**
      * 开始打牌
      * @param dizhu
