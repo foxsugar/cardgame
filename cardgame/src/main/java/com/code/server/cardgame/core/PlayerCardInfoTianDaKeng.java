@@ -7,7 +7,8 @@ import java.util.*;
  */
 public class PlayerCardInfoTianDaKeng {
     public long userId;
-    public List<Integer> cards = new ArrayList<>();//手上的牌
+    public List<Integer> myselfCards = new ArrayList<>();//手上的牌(暗)
+    public List<Integer> everyknowCards = new ArrayList<>();//手上的牌(明)
 
 
 

@@ -1,10 +1,14 @@
 package com.code.server.cardgame.core.game;
 
-import com.code.server.cardgame.core.*;
-import com.code.server.cardgame.response.ErrorCode;
+import com.code.server.cardgame.core.CardStruct;
+import com.code.server.cardgame.core.CardUtilOfTangDaKeng;
+import com.code.server.cardgame.core.Player;
+import com.code.server.cardgame.core.PlayerCardInfoTianDaKeng;
 import com.code.server.cardgame.response.ResponseVo;
+import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.code.server.cardgame.response.ErrorCodeTDK;
 
 import java.util.*;
 
@@ -15,6 +19,7 @@ public class GameTianDaKeng extends Game{
     private static final Logger logger = LoggerFactory.getLogger(GameTianDaKeng.class);
 
     private static final int INIT_CARD_NUM = 3;
+    private static final int MAX_BET_NUM = 5;
 
     protected List<Integer> cards = new ArrayList<>();//牌
 
@@ -23,6 +28,10 @@ public class GameTianDaKeng extends Game{
     protected List<Long> users = new ArrayList<>();
     private Random rand = new Random();
 
+    protected Map<Long,Integer> allChip = new HashedMap();//总下注数
+    protected Map<Long,Integer> curChip = new HashedMap();//当前下注数
+
+
     private long currentTurn;//当前操作人
 
 
@@ -30,6 +39,7 @@ public class GameTianDaKeng extends Game{
         init(users);
     }
     public void init(List<Long> users){
+
         //初始化玩家
         for(Long uid : users){
             PlayerCardInfoTianDaKeng playerCardInfo = new PlayerCardInfoTianDaKeng();
@@ -39,7 +49,9 @@ public class GameTianDaKeng extends Game{
         this.users.addAll(users);
         shuffle();
         deal();
-
+        mustBet();
+        currentTurn = getMaxCardUser(1);
+        noticeCanBet(getMaxCardUser(1));
     }
 
     /**
@@ -73,10 +85,18 @@ public class GameTianDaKeng extends Game{
     protected void deal(){
         for(PlayerCardInfoTianDaKeng playerCardInfo : playerCardInfos.values()){
             for(int i=0;i<INIT_CARD_NUM;i++){
-                playerCardInfo.cards.add(cards.remove(0));
+                if(playerCardInfo.myselfCards.size()<2){
+                    playerCardInfo.myselfCards.add(cards.remove(0));
+                }else if(playerCardInfo.myselfCards.size()==2){
+                    playerCardInfo.everyknowCards.add(cards.remove(0));
+                }else{
+                    break;
+                }
             }
-            //通知发牌
-            Player.sendMsg2Player(new ResponseVo("gameService","deal",playerCardInfo.cards),playerCardInfo.userId);
+            //通知自己发的2张底牌
+            Player.sendMsg2Player(new ResponseVo("gameTDKService","dealmyself",playerCardInfo.myselfCards),playerCardInfo.userId);
+            //通知其他人的第三张明牌
+            Player.sendMsg2Player(new ResponseVo("gameTDKService","dealevery",playerCardInfo.everyknowCards),users);
         }
 
         //底牌
@@ -94,8 +114,8 @@ public class GameTianDaKeng extends Game{
         Long userId = null;
         int temp = 0;
         for (PlayerCardInfoTianDaKeng playerCardInfoTianDaKeng :playerCardInfos.values()) {
-            if(temp < CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.cards.get(number-1))){
-                temp = CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.cards.get(number-1));
+            if(temp < CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(number-1))){
+                temp = CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(number-1));
                 userId = playerCardInfoTianDaKeng.userId;
             }
         }
@@ -105,35 +125,94 @@ public class GameTianDaKeng extends Game{
 
 
     /**
-     * 开始打牌:下注，弃牌
-     * @param dizhu
+     * 下注
+     * @param player
+     * @return
      */
-    private void startPlay(long dizhu){
+    public int bet(Player player,int chip){
 
+        logger.info(player.getUser().getAccount() +"  下注: "+ chip);
+        if (currentTurn != player.getUserId()) {
+            return ErrorCodeTDK.CANNOT_BET;
+        }
+
+        if(chip > MAX_BET_NUM){//下注错误
+            return ErrorCodeTDK.MORE_BET;
+        }
+
+
+
+        player.sendMsg(new ResponseVo("gameTDKService","bet",0));
+        return 0;
     }
 
 
-
-
     /**
-     * 通知可以叫地主
-     * @param userId
+     * 必须下底注
      */
-    private void noticeCanJiao(long userId){
-        Map<String, Long> result = new HashMap<>();
-        result.put("userId",userId);
-        ResponseVo vo = new ResponseVo("gameService","canjiao",result);
-        Player.sendMsg2Player(vo,users);
+    private void mustBet(){
+        for (Long user : users) {
+            allChip.put(user,1);
+        }
     }
 
     /**
-     * 通知可以抢地主
+     * 跟注
+     * @param player
+     * @return
+     */
+    public int raise(Player player){
+
+        return 0;
+    }
+
+    /**
+     * 加注，踢
+     * @param player
+     * @return
+     */
+    public int call(Player player){
+
+        return 0;
+    }
+    /**
+     * 不跟
+     * @param player
+     * @return
+     */
+    public int pass(Player player){
+
+        return 0;
+    }
+    /**
+     * 弃牌
+     * @param player
+     * @return
+     */
+    public int fold(Player player){
+
+        return 0;
+    }
+
+    /**
+     * 发牌
+     * @param player
+     * @return
+     */
+    public int deal(Player player){
+
+        return 0;
+    }
+
+
+    /**
+     * 通知可以下注
      * @param userId
      */
-    private void noticeCanQiang(long userId) {
+    private void noticeCanBet(long userId){
         Map<String, Long> result = new HashMap<>();
         result.put("userId",userId);
-        ResponseVo vo = new ResponseVo("gameService","canqiang",result);
+        ResponseVo vo = new ResponseVo("gameTDKService","canBet",result);
         Player.sendMsg2Player(vo,users);
     }
 
