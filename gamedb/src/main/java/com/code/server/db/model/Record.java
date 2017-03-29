@@ -7,8 +7,24 @@ import java.util.List;
  * Created by sunxianping on 2017/3/24.
  */
 public class Record {
+    private static final int MAX_SIZE = 20;
 
-    private List<UserRecord> userRecords = new ArrayList<>();
+    private List<RoomRecord> roomRecords = new ArrayList<>();
+
+    public void addRoomRecord(RoomRecord roomRecord){
+        this.roomRecords.add(roomRecord);
+        if(roomRecords.size()>MAX_SIZE){
+            this.roomRecords.remove(0);
+        }
+    }
+
+    public static class RoomRecord{
+        List<UserRecord> records = new ArrayList<>();
+
+        public void addRecord(UserRecord userRecord){
+            records.add(userRecord);
+        }
+    }
 
     public static class UserRecord{
         public UserRecord(){
@@ -52,12 +68,12 @@ public class Record {
         }
     }
 
-    public List<UserRecord> getUserRecords() {
-        return userRecords;
+    public List<RoomRecord> getRoomRecords() {
+        return roomRecords;
     }
 
-    public Record setUserRecords(List<UserRecord> userRecords) {
-        this.userRecords = userRecords;
+    public Record setRoomRecords(List<RoomRecord> roomRecords) {
+        this.roomRecords = roomRecords;
         return this;
     }
 }
