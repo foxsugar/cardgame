@@ -1,0 +1,145 @@
+洗牌 Shuffle,
+
+發牌 Deal
+
+盲注 The Blinds
+
+發牌員 The dealer
+
+鈕扣 Button
+
+小盲注 Small Blind
+
+大盲注 Big Blind
+
+窩牌 Hole Cards
+
+懸牌 The Flop Cards
+
+轉牌 The Turn Card
+
+河牌 The River Card
+
+棄牌 Fold
+
+看牌 Check
+
+下注 Bet
+
+跟注 Call
+
+加注 Raise
+
+再加注 Re-Raise
+
+賭注總額 Pot
+
+全進 All-in
+
+輪盤賭的常用英語
+
+輪盤賭:Roulette
+
+直註：Straight bet
+
+分註：split bet
+
+路註：street bet
+
+角注:corner bet
+
+線注:line bet
+
+列注:column bet
+
+12注:dozen bet
+
+對注: even bet
+
+骰子賭的常用英語
+
+入牢：en prison色子:crap
+
+擲手:shooter
+
+出場擲:come out roll
+
+垃圾點:crap
+
+基本點:the point
+
+鎮盤:puck
+
+通過注: Pass bet
+
+通過線: pass line
+
+不通過注: don't pass bet
+
+不通過線: don't pass line
+
+來注: come bet
+
+不來注: don't come bet
+
+機會註：Odds bet
+
+壓數註：Place Number bet
+
+預測註：preposition bet
+
+放註：Place bet
+
+買註：buy bet
+
+置註：lay bet
+
+失註：lost bet
+
+補註：Put Bet
+
+大6： big 6
+
+大8： big 8
+
+難4： hard 4
+
+難6： hard 6
+
+難8： hard 8
+
+難10： hard 10
+
+易4： easy 4
+
+易6： easy 6
+
+易8： easy 8
+
+易10： easy 10
+
+任何垃圾點註：Any Craps bet
+
+範圍註：field bet
+
+跳注: hop bet
+
+角注: horn bet
+
+賭2:2 bet
+
+賭3:3 bet
+
+賭7:7 bet
+
+賭11: 11 bet
+
+賭12: 12 bet
+
+置注機會註：lay odds
+
+買注機會註：buy odds
+
+贏註：win bet
+
+輸註：lose bet
