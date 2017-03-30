@@ -31,14 +31,28 @@ public class PlayerCardInfo {
     }
 
     //检测出牌是否合法
-    public boolean checkPlayCard(CardStruct lastcardStruct ,CardStruct currentCardStruct , int lasttype){
+    public boolean checkPlayCard(CardStruct lastcardStruct ,CardStruct currentCardStruct , int lasttype,List<Integer> cards){
         if (lastcardStruct == null || lastcardStruct.getUserId()==0) {
             return true;
         }
         if (lastcardStruct.getUserId() == userId) {
             return true;
         }
+
+        List<Integer> copyCards = new ArrayList<>();
+        copyCards.addAll(cards);
+
+        if(currentCardStruct.getType() == CardStruct.type_三 || currentCardStruct.getType() == CardStruct.type_飞机){
+            copyCards.removeAll(currentCardStruct.getCards());
+            if(copyCards.size()<=0){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
         boolean results = false;
+
         //判断牌型是否合法
         if(getListByIsType(currentCardStruct.cards) == 0){
             return false;
