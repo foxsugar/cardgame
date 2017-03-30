@@ -38,14 +38,17 @@ public class User {
     @Column(nullable = false)
     private String ipConfig;
 
-    @Column(columnDefinition = "double(10,2)")
+    @Column(columnDefinition = "double(18,2)")
     private double money;//虚拟货币
 
-    @Column(columnDefinition = "double(10,2)")
+    @Column(columnDefinition = "double(18,2)")
     private double cash;//货币
 
     @Column(columnDefinition = "varchar(4000)")
     private String image;//头像
+
+    @Column(columnDefinition = "double(18,2)")
+    private double rebate;//返利
 
     private int vip;//vip
 
@@ -78,7 +81,7 @@ public class User {
     private String column5;//text类型
 
     @Lob
-    @Column( length = 16777215)
+    @Column(columnDefinition = "text",length = 16777215)
     private String recordStr;
 
     @Transient
@@ -288,6 +291,15 @@ public class User {
 
     public User setRecord(Record record) {
         this.record = record;
+        return this;
+    }
+
+    public double getRebate() {
+        return rebate;
+    }
+
+    public User setRebate(double rebate) {
+        this.rebate = rebate;
         return this;
     }
 } // class User
