@@ -16,6 +16,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'thrift'
+apply plugin: "idea"
 
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
@@ -29,41 +30,41 @@ repositories {
 dependencies {
 	compile 'org.apache.thrift:libthrift:0.10.0'
 	compile('org.springframework.boot:spring-boot-starter')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+//	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
 
-//generateThriftSource {
-//	//
-//	// The output directory (optional)
-//	//
-//	out file('src/main/resources/response.thrift')
-//
-//	verbose false
-//	debug false
-//	strict true
-//
-//	//
-//	// Modify the include path (optional)
-//	//
-//	// path file('vendor/thrift')
-//
-//	//
-//	// Set the thrift executable (optional)
-//	//
-//	executable 'D:\\thrift\\thrift.exe'
-//
-//	generators {
-//		//
-//		// --gen java:hashcode,beans
-//		//
-//		java {
-//			//
-//			// Options passed to the `java` generator
-//			//
-//			option 'hashcode'
-//			option 'beans'
-//		}
-//
-//	}
-//}
+generateThriftSource {
+	//
+	// The output directory (optional)
+	//
+	out file('src/main/resources/response.thrift')
+
+	verbose false
+	debug false
+	strict true
+
+	//
+	// Modify the include path (optional)
+	//
+	// path file('vendor/thrift')
+
+	//
+	// Set the thrift executable (optional)
+	//
+	executable 'D:\\thrift\\thrift.exe'
+
+	generators {
+		//
+		// --gen java:hashcode,beans
+		//
+		java {
+			//
+			// Options passed to the `java` generator
+			//
+			option 'hashcode'
+			option 'beans'
+		}
+
+	}
+}
