@@ -38,17 +38,20 @@ public class User {
     @Column(nullable = false)
     private String ipConfig;
 
-    @Column(columnDefinition = "double(18,2)")
+    @Column(columnDefinition = "double(18,2) default 0")
     private double money;//虚拟货币
 
-    @Column(columnDefinition = "double(18,2)")
+    @Column(columnDefinition = "double(18,2) default 0")
     private double cash;//货币
 
     @Column(columnDefinition = "varchar(4000)")
     private String image;//头像
 
-    @Column(columnDefinition = "double(18,2)")
+    @Column(columnDefinition = "double(18,2) default 0")
     private double rebate;//返利
+
+    @Column(columnDefinition = "int default 0")
+    private int referee;
 
     private int vip;//vip
 
@@ -81,7 +84,7 @@ public class User {
     private String column5;//text类型
 
     @Lob
-    @Column(columnDefinition = "text",length = 16777215)
+    @Column(columnDefinition = "TEXT",length = 16777215)
     private String recordStr;
 
     @Transient
