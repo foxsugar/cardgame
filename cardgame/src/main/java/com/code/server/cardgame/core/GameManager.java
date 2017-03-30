@@ -11,6 +11,8 @@ import com.code.server.db.model.User;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +66,11 @@ public class GameManager {
         vo.setOpenId(user.getOpenId());
         vo.setMoney(user.getMoney());
         vo.setVip(user.getVip());
-        vo.setUsername(user.getUsername());
+        try {
+            vo.setUsername(URLEncoder.encode(user.getUsername(), "utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         String room = GameManager.getInstance().userRoom.get(user.getUserId());
         if (room!=null && GameManager.getInstance().rooms.containsKey(room)) {
