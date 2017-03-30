@@ -223,10 +223,7 @@ public class MsgDispatch {
                 return game.pass(player);
             case "fold"://弃牌
                 return game.fold(player);
-            case "deal"://发牌
-                return game.deal(player);
             default:
-
                 return ErrorCode.REQUEST_PARAM_ERROR;
         }
     }
