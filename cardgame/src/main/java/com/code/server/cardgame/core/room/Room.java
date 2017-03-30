@@ -491,7 +491,7 @@ public class Room {
 
         boolean isChange = scoreIsChange();
         if (this.isInGame && this.curGameNumber == 1 && !isChange) {
-            drawBack();
+//            drawBack();
         }
 
 

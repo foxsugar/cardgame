@@ -2,12 +2,10 @@ package com.code.server.cardgame.core.game;
 
 import com.code.server.cardgame.core.*;
 import com.code.server.cardgame.core.room.Room;
-import com.code.server.cardgame.response.ErrorCode;
-import com.code.server.cardgame.response.GameResultDouDizhu;
-import com.code.server.cardgame.response.PlayerCardInfoVo;
-import com.code.server.cardgame.response.ResponseVo;
+import com.code.server.cardgame.response.*;
 import com.code.server.db.model.Record;
 import com.code.server.db.model.User;
+import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -139,6 +137,9 @@ public class GameDouDiZhu extends Game{
             genRecord();
 
             room.clearReadyStatus(true);
+
+            sendFinalResult();
+
         }
         player.sendMsg("gameService","play",0);
         return 0;
@@ -262,6 +263,11 @@ public class GameDouDiZhu extends Game{
 
         }
 
+        Map<String, Object> rs = new HashMap<>();
+        rs.put("userId", player.getUserId());
+        rs.put("isJiao", isJiao);
+        Player.sendMsg2Player("gameService","jiaoResponse",rs,users);
+
         player.sendMsg(new ResponseVo("gameService","jiaoDizhu",0));
         return 0;
     }
@@ -307,6 +313,20 @@ public class GameDouDiZhu extends Game{
 
         }
         Player.sendMsg2Player("gameService","gameResult",gameResultDouDizhu,users);
+
+
+
+    }
+
+    private void sendFinalResult() {
+        //所有牌局都结束
+        if (room.getCurGameNumber() > room.getGameNumber()) {
+            GameFinalResult gameFinalResult = new GameFinalResult();
+            room.getUserScores().forEach((k,v)->
+                gameFinalResult.getUserInfos().add(new GameFinalResult.UserInfo(k,v))
+            );
+            Player.sendMsg2Player("gameService","gameFinalResult",gameFinalResult,users);
+        }
     }
 
     private void genRecord(){
@@ -380,6 +400,11 @@ public class GameDouDiZhu extends Game{
         } else if (jiaoIndex == 2) {
             handleQiang2(player.getUserId(), isQiang);
         }
+
+        Map<String, Object> rs = new HashMap<>();
+        rs.put("userId", player.getUserId());
+        rs.put("isQiang", isQiang);
+        Player.sendMsg2Player("gameService","qiangResponse",rs,users);
 
         player.sendMsg(new ResponseVo("gameService","qiangDizhu",0));
         return 0;

@@ -1,7 +1,9 @@
 package com.code.server.cardgame.core.room;
 
+import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.game.Game;
 import com.code.server.cardgame.core.game.GameDouDiZhu;
+import com.code.server.db.model.User;
 import org.apache.log4j.Logger;
 
 /**
@@ -28,5 +30,16 @@ public class RoomDouDiZhu extends Room{
     }
 
 
+    public void spendMoney() {
+        User user = userMap.get(this.createUser);
+        if (user != null) {
+            user.setMoney(user.getMoney() - createNeedMoney);
+            GameManager.getInstance().getSaveUser2DB().add(user);
+        }
+    }
+
+    private void sendRpcRebat(){
+
+    }
 
 }
