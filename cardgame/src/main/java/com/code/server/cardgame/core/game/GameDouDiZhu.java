@@ -351,8 +351,9 @@ public class GameDouDiZhu extends Game{
 
 
         }
-        room.getUserMap().forEach((k,v)->
-                v.getRecord().addRoomRecord(roomRecord));
+        //todo 保存记录
+//        room.getUserMap().forEach((k,v)->
+//                v.getRecord().addRoomRecord(roomRecord));
 
         //加入数据库保存列表
         GameManager.getInstance().getSaveUser2DB().addAll(room.getUserMap().values());

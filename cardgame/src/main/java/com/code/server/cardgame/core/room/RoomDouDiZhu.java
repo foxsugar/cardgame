@@ -45,7 +45,8 @@ public class RoomDouDiZhu extends Room{
             ThreadPool.getInstance().executor.execute(()->{
                 List<Rebate> list = new ArrayList<Rebate>();
                 list.add(getRebate(user, createNeedMoney));
-                RpcManager.getInstance().sendRpcRebat(list);
+                //todo 发送 rpc
+//                RpcManager.getInstance().sendRpcRebat(list);
             });
         }
     }
