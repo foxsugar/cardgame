@@ -32,19 +32,30 @@ public class MsgDispatch {
 
     public void handleMessage(MessageHolder msgHolder) {
         Object message = msgHolder.message;
-        JSONObject jSONObject = (JSONObject) message;
-        System.out.println("handle message== " + jSONObject);
-        String service = jSONObject.getString("service");
-        String method = jSONObject.getString("method");
-        JSONObject params = jSONObject.getJSONObject("params");
+        switch (msgHolder.msgType) {
+            case MessageHolder.MSG_TYPE_RPC:{
 
-        //逻辑
-        int code = dispatchAllMsg(service, method, params, msgHolder.ctx);
-        //客户端要的方法返回
-        if (code != 0) {
-            ResponseVo vo = new ResponseVo(service, method, code);
-            sendMsg(msgHolder.ctx, vo);
+                break;
+            }
+            case MessageHolder.MSG_TYPE_CLIENT_JSON:{
+                JSONObject jSONObject = (JSONObject) message;
+                System.out.println("handle message== " + jSONObject);
+                String service = jSONObject.getString("service");
+                String method = jSONObject.getString("method");
+                JSONObject params = jSONObject.getJSONObject("params");
+
+                //逻辑
+                int code = dispatchAllMsg(service, method, params, msgHolder.ctx);
+                //客户端要的方法返回
+                if (code != 0) {
+                    ResponseVo vo = new ResponseVo(service, method, code);
+                    sendMsg(msgHolder.ctx, vo);
+                }
+                break;
+            }
+
         }
+
 
     }
 

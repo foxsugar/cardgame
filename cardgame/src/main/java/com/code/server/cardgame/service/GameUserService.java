@@ -174,7 +174,7 @@ public class GameUserService {
 
             if(user == null) {
                 user = new User();
-                user.setId(-100);
+                user.setId(0);
                 user.setUserId(GameManager.getInstance().nextId());
                 user.setOpenId(openId);
                 user.setAccount(UUID.randomUUID().toString());

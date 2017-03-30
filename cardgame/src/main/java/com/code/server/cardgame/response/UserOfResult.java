@@ -154,20 +154,4 @@ public class UserOfResult {
 		return this;
 	}
 
-	public JSONObject toJSONObject() throws UnsupportedEncodingException {
-		JSONObject jSONObject = new JSONObject();
-		jSONObject.put("userId", this.userId);
-		jSONObject.put("image", this.image);
-		jSONObject.put("username", URLDecoder.decode(this.username, "utf-8"));
-		jSONObject.put("card", this.card);
-		jSONObject.put("multiple", this.multiple);
-		jSONObject.put("scores", this.scores);
-		jSONObject.put("huNum", this.huNum);
-		jSONObject.put("dianPaoNum", this.dianPaoNum);
-		jSONObject.put("lianZhuangNum", this.lianZhuangNum);
-		jSONObject.put("moBaoNum", this.moBaoNum);
-		jSONObject.put("time", System.currentTimeMillis());
-
-		return jSONObject;
-	}
 }

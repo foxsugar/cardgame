@@ -322,10 +322,19 @@ public class GameDouDiZhu extends Game{
         //所有牌局都结束
         if (room.getCurGameNumber() > room.getGameNumber()) {
             GameFinalResult gameFinalResult = new GameFinalResult();
-            room.getUserScores().forEach((k,v)->
-                gameFinalResult.getUserInfos().add(new GameFinalResult.UserInfo(k,v))
+            room.getUserScores().forEach((userId,score)->{
+
+                        gameFinalResult.getUserInfos().add(new GameFinalResult.UserInfo(userId,score));
+
+                        //删除玩家房间映射关系
+                        GameManager.getInstance().getUserRoom().remove(userId);
+                    }
             );
             Player.sendMsg2Player("gameService","gameFinalResult",gameFinalResult,users);
+
+            //删除room
+            GameManager.getInstance().rooms.remove(room.getRoomId());
+
         }
     }
 

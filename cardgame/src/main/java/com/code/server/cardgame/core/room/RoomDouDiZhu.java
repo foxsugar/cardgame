@@ -3,8 +3,14 @@ package com.code.server.cardgame.core.room;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.game.Game;
 import com.code.server.cardgame.core.game.GameDouDiZhu;
+import com.code.server.cardgame.rpc.RpcManager;
+import com.code.server.cardgame.utils.ThreadPool;
 import com.code.server.db.model.User;
-import org.apache.log4j.Logger;
+import com.code.server.rpc.idl.Rebate;
+import org.apache.thrift.TException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sunxianping on 2017/3/13.
@@ -35,11 +41,25 @@ public class RoomDouDiZhu extends Room{
         if (user != null) {
             user.setMoney(user.getMoney() - createNeedMoney);
             GameManager.getInstance().getSaveUser2DB().add(user);
+
+            ThreadPool.getInstance().executor.execute(()->{
+                List<Rebate> list = new ArrayList<Rebate>();
+                list.add(getRebate(user, createNeedMoney));
+                RpcManager.getInstance().sendRpcRebat(list);
+            });
         }
     }
 
-    private void sendRpcRebat(){
+    private Rebate getRebate(User user,int num){
+        return new Rebate().setId(GameManager.getInstance().nextId())
+                .setUserId(user.getUserId())
+                .setRefereeId(user.getReferee())
+                .setTime(System.currentTimeMillis())
+                .setRebateNum(num)
+                .setIsHasReferee(user.getReferee()!=0);
 
     }
+
+
 
 }

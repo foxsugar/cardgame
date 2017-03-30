@@ -3,7 +3,6 @@ package com.code.server.cardgame.core.room;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.game.Game;
-import com.code.server.cardgame.core.game.GameDouDiZhu;
 import com.code.server.cardgame.encoding.Notice;
 import com.code.server.cardgame.response.*;
 import com.code.server.cardgame.timer.GameTimer;
@@ -59,6 +58,7 @@ public class Room {
 
     protected int personNumber;
     protected String gameType;//麻将项目名称
+    protected boolean isOpen;
 
 
 
@@ -243,7 +243,8 @@ public class Room {
             n.setMessage("roomNum "+this.getRoomId()+" :has destroy success!");
             Player.sendMsg2Player(new ResponseVo("roomService","destroyRoom",n), this.getUsers());
             //删除房间
-            GameManager.getInstance().rooms.remove(roomId);
+//            GameManager.getInstance().rooms.remove(roomId);
+            dissolutionRoom();
 
         }
 
@@ -337,6 +338,7 @@ public class Room {
 
 
     public void startGame() {
+        this.isOpen = true;
         this.isInGame = true;
         Game game = getGameInstance();
 
