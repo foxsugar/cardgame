@@ -1,9 +1,6 @@
 package com.code.server.cardgame.core.game;
 
-import com.code.server.cardgame.core.CardStruct;
-import com.code.server.cardgame.core.CardUtil;
-import com.code.server.cardgame.core.Player;
-import com.code.server.cardgame.core.PlayerCardInfo;
+import com.code.server.cardgame.core.*;
 import com.code.server.cardgame.core.room.Room;
 import com.code.server.cardgame.response.ErrorCode;
 import com.code.server.cardgame.response.GameResultDouDizhu;
@@ -60,7 +57,7 @@ public class GameDouDiZhu extends Game{
 
 
 
-    public void startGame(List<Long> users,long dizhuUser,Room room){
+    public void startGame(List<Long> users,Room room){
         this.room = room;
         init(users,room.getBankerId());
     }
@@ -323,10 +320,13 @@ public class GameDouDiZhu extends Game{
             userRecord.setUserId(userId);
             roomRecord.addRecord(userRecord);
 
+
         }
         room.getUserMap().forEach((k,v)->
-            v.getRecord().addRoomRecord(roomRecord));
+                v.getRecord().addRoomRecord(roomRecord));
 
+        //加入数据库保存列表
+        GameManager.getInstance().getSaveUser2DB().addAll(room.getUserMap().values());
 
 
     }

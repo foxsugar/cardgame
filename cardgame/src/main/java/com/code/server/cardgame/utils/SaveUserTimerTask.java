@@ -36,9 +36,9 @@ public class SaveUserTimerTask extends TimerTask{
 
         //保存玩家
         List<User> users = new ArrayList<>();
-        users.addAll(GameManager.getInstance().getUsersSaveInDB().values());
-        GameManager.getInstance().getUsersSaveInDB().clear();
+        users.addAll(GameManager.getInstance().getSaveUser2DB());
         userService.batchUpdate(users);
+        GameManager.getInstance().getSaveUser2DB().removeAll(users);
 
 
         //从内存中删除玩家
