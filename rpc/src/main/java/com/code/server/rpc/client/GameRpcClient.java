@@ -34,7 +34,7 @@ public class GameRpcClient {
         try {
             TTransport tTransport = TransportManager.getTransport("localhost", 9090);
             GameRPC.Client client = GameRpcClient.getAClient(tTransport);
-            client.charge(1, 1);
+
 
             tTransport.close();
         } catch (TException x) {

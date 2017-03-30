@@ -12,13 +12,13 @@ public class GameRPC {
 
   public interface Iface {
 
-    public int charge(long userId, int money) throws org.apache.thrift.TException;
+    public int charge(Order order) throws org.apache.thrift.TException;
 
   }
 
   public interface AsyncIface {
 
-    public void charge(long userId, int money, org.apache.thrift.async.AsyncMethodCallback<java.lang.Integer> resultHandler) throws org.apache.thrift.TException;
+    public void charge(Order order, org.apache.thrift.async.AsyncMethodCallback<java.lang.Integer> resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -42,17 +42,16 @@ public class GameRPC {
       super(iprot, oprot);
     }
 
-    public int charge(long userId, int money) throws org.apache.thrift.TException
+    public int charge(Order order) throws org.apache.thrift.TException
     {
-      send_charge(userId, money);
+      send_charge(order);
       return recv_charge();
     }
 
-    public void send_charge(long userId, int money) throws org.apache.thrift.TException
+    public void send_charge(Order order) throws org.apache.thrift.TException
     {
       charge_args args = new charge_args();
-      args.setUserId(userId);
-      args.setMoney(money);
+      args.setOrder(order);
       sendBase("charge", args);
     }
 
@@ -84,27 +83,24 @@ public class GameRPC {
       super(protocolFactory, clientManager, transport);
     }
 
-    public void charge(long userId, int money, org.apache.thrift.async.AsyncMethodCallback<java.lang.Integer> resultHandler) throws org.apache.thrift.TException {
+    public void charge(Order order, org.apache.thrift.async.AsyncMethodCallback<java.lang.Integer> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      charge_call method_call = new charge_call(userId, money, resultHandler, this, ___protocolFactory, ___transport);
+      charge_call method_call = new charge_call(order, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class charge_call extends org.apache.thrift.async.TAsyncMethodCall<java.lang.Integer> {
-      private long userId;
-      private int money;
-      public charge_call(long userId, int money, org.apache.thrift.async.AsyncMethodCallback<java.lang.Integer> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      private Order order;
+      public charge_call(Order order, org.apache.thrift.async.AsyncMethodCallback<java.lang.Integer> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
-        this.userId = userId;
-        this.money = money;
+        this.order = order;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("charge", org.apache.thrift.protocol.TMessageType.CALL, 0));
         charge_args args = new charge_args();
-        args.setUserId(userId);
-        args.setMoney(money);
+        args.setOrder(order);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -151,7 +147,7 @@ public class GameRPC {
 
       public charge_result getResult(I iface, charge_args args) throws org.apache.thrift.TException {
         charge_result result = new charge_result();
-        result.success = iface.charge(args.userId, args.money);
+        result.success = iface.charge(args.order);
         result.setSuccessIsSet(true);
         return result;
       }
@@ -232,7 +228,7 @@ public class GameRPC {
       }
 
       public void start(I iface, charge_args args, org.apache.thrift.async.AsyncMethodCallback<java.lang.Integer> resultHandler) throws org.apache.thrift.TException {
-        iface.charge(args.userId, args.money,resultHandler);
+        iface.charge(args.order,resultHandler);
       }
     }
 
@@ -241,19 +237,16 @@ public class GameRPC {
   public static class charge_args implements org.apache.thrift.TBase<charge_args, charge_args._Fields>, java.io.Serializable, Cloneable, Comparable<charge_args>   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("charge_args");
 
-    private static final org.apache.thrift.protocol.TField USER_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("userId", org.apache.thrift.protocol.TType.I64, (short)1);
-    private static final org.apache.thrift.protocol.TField MONEY_FIELD_DESC = new org.apache.thrift.protocol.TField("money", org.apache.thrift.protocol.TType.I32, (short)2);
+    private static final org.apache.thrift.protocol.TField ORDER_FIELD_DESC = new org.apache.thrift.protocol.TField("order", org.apache.thrift.protocol.TType.STRUCT, (short)-1);
 
     private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new charge_argsStandardSchemeFactory();
     private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new charge_argsTupleSchemeFactory();
 
-    private long userId; // required
-    private int money; // required
+    private Order order; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      USER_ID((short)1, "userId"),
-      MONEY((short)2, "money");
+      ORDER((short)-1, "order");
 
       private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
 
@@ -268,10 +261,8 @@ public class GameRPC {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
-          case 1: // USER_ID
-            return USER_ID;
-          case 2: // MONEY
-            return MONEY;
+          case -1: // ORDER
+            return ORDER;
           default:
             return null;
         }
@@ -312,16 +303,11 @@ public class GameRPC {
     }
 
     // isset id assignments
-    private static final int __USERID_ISSET_ID = 0;
-    private static final int __MONEY_ISSET_ID = 1;
-    private byte __isset_bitfield = 0;
     public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.USER_ID, new org.apache.thrift.meta_data.FieldMetaData("userId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
-      tmpMap.put(_Fields.MONEY, new org.apache.thrift.meta_data.FieldMetaData("money", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
+      tmpMap.put(_Fields.ORDER, new org.apache.thrift.meta_data.FieldMetaData("order", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Order.class)));
       metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(charge_args.class, metaDataMap);
     }
@@ -330,23 +316,19 @@ public class GameRPC {
     }
 
     public charge_args(
-      long userId,
-      int money)
+      Order order)
     {
       this();
-      this.userId = userId;
-      setUserIdIsSet(true);
-      this.money = money;
-      setMoneyIsSet(true);
+      this.order = order;
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public charge_args(charge_args other) {
-      __isset_bitfield = other.__isset_bitfield;
-      this.userId = other.userId;
-      this.money = other.money;
+      if (other.isSetOrder()) {
+        this.order = new Order(other.order);
+      }
     }
 
     public charge_args deepCopy() {
@@ -355,73 +337,40 @@ public class GameRPC {
 
     @Override
     public void clear() {
-      setUserIdIsSet(false);
-      this.userId = 0;
-      setMoneyIsSet(false);
-      this.money = 0;
+      this.order = null;
     }
 
-    public long getUserId() {
-      return this.userId;
+    public Order getOrder() {
+      return this.order;
     }
 
-    public charge_args setUserId(long userId) {
-      this.userId = userId;
-      setUserIdIsSet(true);
+    public charge_args setOrder(Order order) {
+      this.order = order;
       return this;
     }
 
-    public void unsetUserId() {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __USERID_ISSET_ID);
+    public void unsetOrder() {
+      this.order = null;
     }
 
-    /** Returns true if field userId is set (has been assigned a value) and false otherwise */
-    public boolean isSetUserId() {
-      return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __USERID_ISSET_ID);
+    /** Returns true if field order is set (has been assigned a value) and false otherwise */
+    public boolean isSetOrder() {
+      return this.order != null;
     }
 
-    public void setUserIdIsSet(boolean value) {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __USERID_ISSET_ID, value);
-    }
-
-    public int getMoney() {
-      return this.money;
-    }
-
-    public charge_args setMoney(int money) {
-      this.money = money;
-      setMoneyIsSet(true);
-      return this;
-    }
-
-    public void unsetMoney() {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __MONEY_ISSET_ID);
-    }
-
-    /** Returns true if field money is set (has been assigned a value) and false otherwise */
-    public boolean isSetMoney() {
-      return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __MONEY_ISSET_ID);
-    }
-
-    public void setMoneyIsSet(boolean value) {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __MONEY_ISSET_ID, value);
+    public void setOrderIsSet(boolean value) {
+      if (!value) {
+        this.order = null;
+      }
     }
 
     public void setFieldValue(_Fields field, java.lang.Object value) {
       switch (field) {
-      case USER_ID:
+      case ORDER:
         if (value == null) {
-          unsetUserId();
+          unsetOrder();
         } else {
-          setUserId((java.lang.Long)value);
-        }
-        break;
-
-      case MONEY:
-        if (value == null) {
-          unsetMoney();
-        } else {
-          setMoney((java.lang.Integer)value);
+          setOrder((Order)value);
         }
         break;
 
@@ -430,11 +379,8 @@ public class GameRPC {
 
     public java.lang.Object getFieldValue(_Fields field) {
       switch (field) {
-      case USER_ID:
-        return getUserId();
-
-      case MONEY:
-        return getMoney();
+      case ORDER:
+        return getOrder();
 
       }
       throw new java.lang.IllegalStateException();
@@ -447,10 +393,8 @@ public class GameRPC {
       }
 
       switch (field) {
-      case USER_ID:
-        return isSetUserId();
-      case MONEY:
-        return isSetMoney();
+      case ORDER:
+        return isSetOrder();
       }
       throw new java.lang.IllegalStateException();
     }
@@ -470,21 +414,12 @@ public class GameRPC {
       if (this == that)
         return true;
 
-      boolean this_present_userId = true;
-      boolean that_present_userId = true;
-      if (this_present_userId || that_present_userId) {
-        if (!(this_present_userId && that_present_userId))
+      boolean this_present_order = true && this.isSetOrder();
+      boolean that_present_order = true && that.isSetOrder();
+      if (this_present_order || that_present_order) {
+        if (!(this_present_order && that_present_order))
           return false;
-        if (this.userId != that.userId)
-          return false;
-      }
-
-      boolean this_present_money = true;
-      boolean that_present_money = true;
-      if (this_present_money || that_present_money) {
-        if (!(this_present_money && that_present_money))
-          return false;
-        if (this.money != that.money)
+        if (!this.order.equals(that.order))
           return false;
       }
 
@@ -495,9 +430,9 @@ public class GameRPC {
     public int hashCode() {
       int hashCode = 1;
 
-      hashCode = hashCode * 8191 + org.apache.thrift.TBaseHelper.hashCode(userId);
-
-      hashCode = hashCode * 8191 + money;
+      hashCode = hashCode * 8191 + ((isSetOrder()) ? 131071 : 524287);
+      if (isSetOrder())
+        hashCode = hashCode * 8191 + order.hashCode();
 
       return hashCode;
     }
@@ -510,22 +445,12 @@ public class GameRPC {
 
       int lastComparison = 0;
 
-      lastComparison = java.lang.Boolean.valueOf(isSetUserId()).compareTo(other.isSetUserId());
+      lastComparison = java.lang.Boolean.valueOf(isSetOrder()).compareTo(other.isSetOrder());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      if (isSetUserId()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.userId, other.userId);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      lastComparison = java.lang.Boolean.valueOf(isSetMoney()).compareTo(other.isSetMoney());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetMoney()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.money, other.money);
+      if (isSetOrder()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.order, other.order);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -550,12 +475,12 @@ public class GameRPC {
       java.lang.StringBuilder sb = new java.lang.StringBuilder("charge_args(");
       boolean first = true;
 
-      sb.append("userId:");
-      sb.append(this.userId);
-      first = false;
-      if (!first) sb.append(", ");
-      sb.append("money:");
-      sb.append(this.money);
+      sb.append("order:");
+      if (this.order == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.order);
+      }
       first = false;
       sb.append(")");
       return sb.toString();
@@ -564,6 +489,9 @@ public class GameRPC {
     public void validate() throws org.apache.thrift.TException {
       // check for required fields
       // check for sub-struct validity
+      if (order != null) {
+        order.validate();
+      }
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
@@ -576,8 +504,6 @@ public class GameRPC {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
       try {
-        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
-        __isset_bitfield = 0;
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (org.apache.thrift.TException te) {
         throw new java.io.IOException(te);
@@ -602,18 +528,11 @@ public class GameRPC {
             break;
           }
           switch (schemeField.id) {
-            case 1: // USER_ID
-              if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
-                struct.userId = iprot.readI64();
-                struct.setUserIdIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            case 2: // MONEY
-              if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-                struct.money = iprot.readI32();
-                struct.setMoneyIsSet(true);
+            case -1: // ORDER
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.order = new Order();
+                struct.order.read(iprot);
+                struct.setOrderIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
@@ -633,12 +552,11 @@ public class GameRPC {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
-        oprot.writeFieldBegin(USER_ID_FIELD_DESC);
-        oprot.writeI64(struct.userId);
-        oprot.writeFieldEnd();
-        oprot.writeFieldBegin(MONEY_FIELD_DESC);
-        oprot.writeI32(struct.money);
-        oprot.writeFieldEnd();
+        if (struct.order != null) {
+          oprot.writeFieldBegin(ORDER_FIELD_DESC);
+          struct.order.write(oprot);
+          oprot.writeFieldEnd();
+        }
         oprot.writeFieldStop();
         oprot.writeStructEnd();
       }
@@ -657,32 +575,23 @@ public class GameRPC {
       public void write(org.apache.thrift.protocol.TProtocol prot, charge_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
         java.util.BitSet optionals = new java.util.BitSet();
-        if (struct.isSetUserId()) {
+        if (struct.isSetOrder()) {
           optionals.set(0);
         }
-        if (struct.isSetMoney()) {
-          optionals.set(1);
-        }
-        oprot.writeBitSet(optionals, 2);
-        if (struct.isSetUserId()) {
-          oprot.writeI64(struct.userId);
-        }
-        if (struct.isSetMoney()) {
-          oprot.writeI32(struct.money);
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetOrder()) {
+          struct.order.write(oprot);
         }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, charge_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet incoming = iprot.readBitSet(2);
+        java.util.BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
-          struct.userId = iprot.readI64();
-          struct.setUserIdIsSet(true);
-        }
-        if (incoming.get(1)) {
-          struct.money = iprot.readI32();
-          struct.setMoneyIsSet(true);
+          struct.order = new Order();
+          struct.order.read(iprot);
+          struct.setOrderIsSet(true);
         }
       }
     }
