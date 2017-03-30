@@ -12,7 +12,11 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Created by sun on 2015/8/26.
@@ -33,10 +37,11 @@ public class GameManager {
     public Map<String, RoomTanDaKeng> roomsOfTanDaKeng = new HashMap<>();
     public ServerInfo serverInfo;
     public Constant constant;
-    public Map<Long, Player> kickUser = new HashMap<>();
+    public Map<Long, Player> kickUser = new HashMap<>();//可以踢出内存的玩家
 
 
-    public Map<Long, User> usersSaveInDB = new HashMap<>();
+//    public Map<Long, User> usersSaveInDB = new HashMap<>();
+    public Set<User> saveUser2DB = new CopyOnWriteArraySet<>();
 
     private IdWorker idWorker;
 
@@ -153,12 +158,13 @@ public class GameManager {
         return players;
     }
 
-    public Map<Long, User> getUsersSaveInDB() {
-        return usersSaveInDB;
+    public Set<User> getSaveUser2DB() {
+        return saveUser2DB;
     }
 
-    public void setUsersSaveInDB(Map<Long, User> usersSaveInDB) {
-        this.usersSaveInDB = usersSaveInDB;
+    public GameManager setSaveUser2DB(Set<User> saveUser2DB) {
+        this.saveUser2DB = saveUser2DB;
+        return this;
     }
 
     public Map<Long, Player> getKickUser() {

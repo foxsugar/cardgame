@@ -237,7 +237,7 @@ public class Room {
             User user = userMap.get(createUser);
             if (user != null) {
                 user.setMoney(user.getMoney() + getNeedMoney(this.gameNumber));
-                GameManager.getInstance().getUsersSaveInDB().put(user.getUserId(),user);
+                GameManager.getInstance().getSaveUser2DB().add(user);
             }
             Notice n = new Notice();
             n.setMessage("roomNum "+this.getRoomId()+" :has destroy success!");
@@ -538,16 +538,16 @@ public class Room {
         User user = userMap.get(this.createUser);
         if (user != null) {
             user.setMoney(user.getMoney() + createNeedMoney);
+            GameManager.getInstance().getSaveUser2DB().add(user);
         }
-        GameManager.getInstance().getUsersSaveInDB().put(user.getUserId(),user);
     }
 
     public void spendMoney() {
         User user = userMap.get(this.createUser);
         if (user != null) {
             user.setMoney(user.getMoney() - createNeedMoney);
+            GameManager.getInstance().getSaveUser2DB().add(user);
         }
-        GameManager.getInstance().getUsersSaveInDB().put(user.getUserId(),user);
     }
 
     public String getRoomId() {
