@@ -141,7 +141,7 @@ public class PlayerCardInfo {
             for(Integer card :cards){
                 cardList.add(CardUtil.getTypeByCard(card));
             }
-            if (getfeijichibang(cards)) {
+            if (getfeijichibang(cardList)) {
                 return CardStruct.type_飞机带翅膀;
             } else {
                 return 0;
@@ -177,8 +177,10 @@ public class PlayerCardInfo {
         }
         Collections.sort(threelist);
 
-        if (onelist.size()!=0 && twolist.size()!=0){
-            b=false;
+        if (onelist.size()!=0 && threelist.size()!=onelist.size()){
+            b = false;
+        }else if(twolist.size()!=0 && threelist.size()!=twolist.size()){
+            b = false;
         }
         for(int i = 0 ;i<threelist.size()-1;i++){
             if(threelist.get(i+1) - threelist.get(i) != 1){
