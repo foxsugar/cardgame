@@ -29,15 +29,27 @@ public class UserService {
 
 
     public User getUserByOpenId(String openId) {
-        return loadFromDb(userDao.getUserByOpenId(openId));
+        User user = userDao.getUserByOpenId(openId);
+        if (user == null) {
+            return null;
+        }
+        return loadFromDb(user);
     }
 
     public User getUserByUserId(long userId) {
-        return loadFromDb(userDao.getUserByUserId(userId));
+        User user = userDao.getUserByUserId(userId);
+        if (user == null) {
+            return null;
+        }
+        return loadFromDb(user);
     }
 
     public User getUserByAccountAndPassword(String account, String password) {
-        return loadFromDb(userDao.getUserByAccountAndPassword(account, password));
+        User user = userDao.getUserByAccountAndPassword(account, password);
+        if (user == null) {
+            return null;
+        }
+        return loadFromDb(user);
     }
 
     public User save(User user) {
