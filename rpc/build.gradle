@@ -34,37 +34,37 @@ dependencies {
 }
 
 
-generateThriftSource {
-	//
-	// The output directory (optional)
-	//
-	out file('src/main/resources/response.thrift')
-
-	verbose false
-	debug false
-	strict true
-
-	//
-	// Modify the include path (optional)
-	//
-	// path file('vendor/thrift')
-
-	//
-	// Set the thrift executable (optional)
-	//
-	executable 'D:\\thrift\\thrift.exe'
-
-	generators {
-		//
-		// --gen java:hashcode,beans
-		//
-		java {
-			//
-			// Options passed to the `java` generator
-			//
-			option 'hashcode'
-			option 'beans'
-		}
-
-	}
-}
+//generateThriftSource {
+//	//
+//	// The output directory (optional)
+//	//
+//	out file('src/main/resources/response.thrift')
+//
+//	verbose false
+//	debug false
+//	strict true
+//
+//	//
+//	// Modify the include path (optional)
+//	//
+//	// path file('vendor/thrift')
+//
+//	//
+//	// Set the thrift executable (optional)
+//	//
+//	executable 'D:\\thrift\\thrift.exe'
+//
+//	generators {
+//		//
+//		// --gen java:hashcode,beans
+//		//
+//		java {
+//			//
+//			// Options passed to the `java` generator
+//			//
+//			option 'hashcode'
+//			option 'beans'
+//		}
+//
+//	}
+//}
