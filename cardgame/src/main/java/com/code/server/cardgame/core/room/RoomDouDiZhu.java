@@ -1,5 +1,7 @@
 package com.code.server.cardgame.core.room;
 
+import com.code.server.cardgame.core.game.Game;
+import com.code.server.cardgame.core.game.GameDouDiZhu;
 import org.apache.log4j.Logger;
 
 /**
@@ -8,7 +10,6 @@ import org.apache.log4j.Logger;
 public class RoomDouDiZhu extends Room{
 
 
-    private static final Logger logger = Logger.getLogger("game");
 
     public static final int STATUS_JOIN = 0;
     public static final int STATUS_READY = 1;
@@ -22,7 +23,9 @@ public class RoomDouDiZhu extends Room{
     protected boolean isCanDissloution = false;
 
 
-
+    protected Game getGameInstance(){
+        return new GameDouDiZhu();
+    }
 
 
 

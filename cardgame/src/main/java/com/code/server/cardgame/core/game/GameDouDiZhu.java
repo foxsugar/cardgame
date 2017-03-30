@@ -62,7 +62,7 @@ public class GameDouDiZhu extends Game{
 
     public void startGame(List<Long> users,long dizhuUser,Room room){
         this.room = room;
-        init(users,dizhuUser);
+        init(users,room.getBankerId());
     }
     public void init(List<Long> users,long dizhuUser){
         //初始化玩家
@@ -77,6 +77,9 @@ public class GameDouDiZhu extends Game{
         shuffle();
         deal();
         chooseDizhu(dizhuUser);
+
+
+
 
     }
 
@@ -106,7 +109,7 @@ public class GameDouDiZhu extends Game{
         //删除牌
         playerCardInfo.cards.removeAll(cardStruct.getCards());
 
-         if(multiple < room.getMultiple()){
+         if(zhaCount < room.getMultiple()){
             if(cardStruct.getType()==CardStruct.type_炸){
                 List<Integer> cards = cardStruct.getCards();
                     if(cards.size()==4 && CardUtil.getTypeByCard(cards.get(0)) == 0 && CardUtil.getTypeByCard(cards.get(cards.size()-1))==0){ //3333
@@ -134,6 +137,9 @@ public class GameDouDiZhu extends Game{
             compute(playerCardInfo.getUserId() == dizhu);
 
             sendResult(false,playerCardInfo.getUserId() == dizhu);
+
+            //生成记录
+            genRecord();
 
             room.clearReadyStatus(true);
         }
@@ -205,6 +211,10 @@ public class GameDouDiZhu extends Game{
 
         //
         noticeCanJiao(canJiaoUser);
+
+
+        //下次叫的人
+        room.setBankerId(nextTurnId(canJiaoUser));
 
     }
 
@@ -330,6 +340,7 @@ public class GameDouDiZhu extends Game{
         this.dizhu = dizhu;
         this.step = STEP_PLAY;
         this.playTurn = dizhu;
+
 
 
         //选定地主
@@ -628,6 +639,15 @@ public class GameDouDiZhu extends Game{
 
     public GameDouDiZhu setStep(int step) {
         this.step = step;
+        return this;
+    }
+
+    public int getMultiple() {
+        return multiple;
+    }
+
+    public GameDouDiZhu setMultiple(int multiple) {
+        this.multiple = multiple;
         return this;
     }
 }

@@ -107,10 +107,19 @@ public class MsgDispatch {
         }
 
         switch (method) {
-            case "createRoom":
+            case "createRoom":{
+
                 int gameNumber = params.getInt("gameNumber");
                 int multiple = params.getInt("maxMultiple");
                 return RoomDouDiZhu.createRoom(player, gameNumber, multiple);
+            }
+            case "createRoomTDK":{
+
+                int gameNumber = params.getInt("gameNumber");
+                int multiple = params.getInt("maxMultiple");
+                int personNumber = params.getInt("personNumber");
+                return RoomTanDaKeng.createRoom(player, gameNumber,multiple,personNumber);
+            }
             case "joinRoom": {
                 String roomId = params.getString("roomId");
                 RoomDouDiZhu room = GameManager.getInstance().rooms.get(roomId);

@@ -47,14 +47,14 @@ public class Room {
     protected int gameNumber;
     protected int curGameNumber = 1;
     protected long createUser;
-    protected int bankerId;//庄家
+    protected long bankerId;//庄家
 
     protected boolean isInGame;
 
     protected boolean isHasDissolutionRequest;
     protected transient TimerNode timerNode;
 
-    private Game game;
+    protected Game game;
 
 
     protected int personNumber;
@@ -182,7 +182,7 @@ public class Room {
     }
 
 
-    private void noticeJoinRoom(Player player){
+    public void noticeJoinRoom(Player player){
         List<UserVo> usersList = new ArrayList<>();
         UserOfRoom userOfRoom = new UserOfRoom();
         int readyNumber = 0;
@@ -330,19 +330,22 @@ public class Room {
 
 
 
+    protected Game getGameInstance(){
+        return new Game();
+    }
 
 
 
     public void startGame() {
         this.isInGame = true;
-        GameDouDiZhu game = new GameDouDiZhu();
+        Game game = getGameInstance();
 
 
         //扣钱
         if (curGameNumber == 1) {
             spendMoney();
         }
-        game.startGame(users,bankerId,this);
+        game.startGame(users,this);
         this.game = game;
 
 
@@ -654,11 +657,11 @@ public class Room {
         return this;
     }
 
-    public int getBankerId() {
+    public long getBankerId() {
         return bankerId;
     }
 
-    public Room setBankerId(int bankerId) {
+    public Room setBankerId(long bankerId) {
         this.bankerId = bankerId;
         return this;
     }

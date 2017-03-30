@@ -3,6 +3,7 @@ buildscript {
 		springBootVersion = '1.5.2.RELEASE'
 	}
 	repositories {
+		maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
 		mavenCentral()
 	}
 	dependencies {
@@ -29,7 +30,7 @@ repositories {
 
 dependencies {
 	compile project(path: ':gamedb')
-//	compile project(path: ':gamedata')
+	compile project(path: ':rpc')
 	compile('org.springframework.boot:spring-boot-starter-aop')
 	compile('org.springframework.boot:spring-boot-starter-data-redis')
 	compile('org.springframework.boot:spring-boot-starter-logging')

@@ -29,6 +29,7 @@ public class GameVo {
     protected CardStruct lastCardStruct;
 
     protected int step;//步骤
+    protected int curMultiple;
 
     public GameVo(){}
 
@@ -47,6 +48,7 @@ public class GameVo {
             vo.lastCardStruct = douDiZhu.getLastCardStruct();
             //该出牌的玩家
             vo.playTurn = douDiZhu.getPlayTurn();
+            vo.curMultiple = douDiZhu.getMultiple();
             if(uid == douDiZhu.getDizhu()){//玩家是地主
                 vo.tableCards.addAll(douDiZhu.getTableCards());
 
