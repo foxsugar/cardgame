@@ -84,7 +84,7 @@ public class User {
     private String column5;//text类型
 
     @Lob
-    @Column(columnDefinition = "TEXT",length = 16777215)
+    @Column(columnDefinition = "LONGTEXT")
     private String recordStr;
 
     @Transient
