@@ -41,7 +41,11 @@ public class User extends BaseEntity{
     private double rebate;//返利
 
     @Column(columnDefinition = "int default 0")
-    private int referee;//返利
+    private int referee;//返利人id
+
+    private double gold;//金币
+
+
 
     private int vip;//vip
 
@@ -251,6 +255,15 @@ public class User extends BaseEntity{
 
     public User setUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
+        return this;
+    }
+
+    public double getGold() {
+        return gold;
+    }
+
+    public User setGold(double gold) {
+        this.gold = gold;
         return this;
     }
 } // class User

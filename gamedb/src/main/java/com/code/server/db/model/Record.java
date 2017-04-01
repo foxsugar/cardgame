@@ -52,6 +52,15 @@ public class Record {
             this.time = time;
             return this;
         }
+
+        public List<UserRecord> getRecords() {
+            return records;
+        }
+
+        public RoomRecord setRecords(List<UserRecord> records) {
+            this.records = records;
+            return this;
+        }
     }
 
     public static class UserRecord {

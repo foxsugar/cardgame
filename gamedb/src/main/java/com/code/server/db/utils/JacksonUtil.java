@@ -41,7 +41,7 @@ public class JacksonUtil {
             OBJECT_MAPPER.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
 
 
-            OBJECT_MAPPER.enableDefaultTyping();
+//            OBJECT_MAPPER.enableDefaultTyping();
         }
 
         public static <T> T fromString(String string, Class<T> clazz) {
