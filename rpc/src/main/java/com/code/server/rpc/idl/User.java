@@ -13,50 +13,23 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
 
   private static final org.apache.thrift.protocol.TField ID_FIELD_DESC = new org.apache.thrift.protocol.TField("id", org.apache.thrift.protocol.TType.I64, (short)1);
   private static final org.apache.thrift.protocol.TField USERNAME_FIELD_DESC = new org.apache.thrift.protocol.TField("username", org.apache.thrift.protocol.TType.STRING, (short)2);
-  private static final org.apache.thrift.protocol.TField IMAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("image", org.apache.thrift.protocol.TType.STRING, (short)3);
-  private static final org.apache.thrift.protocol.TField SEAT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("seatId", org.apache.thrift.protocol.TType.STRING, (short)4);
-  private static final org.apache.thrift.protocol.TField ACCOUNT_FIELD_DESC = new org.apache.thrift.protocol.TField("account", org.apache.thrift.protocol.TType.STRING, (short)5);
-  private static final org.apache.thrift.protocol.TField IP_CONFIG_FIELD_DESC = new org.apache.thrift.protocol.TField("ipConfig", org.apache.thrift.protocol.TType.STRING, (short)6);
   private static final org.apache.thrift.protocol.TField MONEY_FIELD_DESC = new org.apache.thrift.protocol.TField("money", org.apache.thrift.protocol.TType.DOUBLE, (short)7);
-  private static final org.apache.thrift.protocol.TField ROOM_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("roomId", org.apache.thrift.protocol.TType.STRING, (short)8);
-  private static final org.apache.thrift.protocol.TField VIP_FIELD_DESC = new org.apache.thrift.protocol.TField("vip", org.apache.thrift.protocol.TType.I32, (short)9);
-  private static final org.apache.thrift.protocol.TField UUID_FIELD_DESC = new org.apache.thrift.protocol.TField("uuid", org.apache.thrift.protocol.TType.STRING, (short)10);
-  private static final org.apache.thrift.protocol.TField OPEN_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("openId", org.apache.thrift.protocol.TType.STRING, (short)11);
-  private static final org.apache.thrift.protocol.TField SEX_FIELD_DESC = new org.apache.thrift.protocol.TField("sex", org.apache.thrift.protocol.TType.I32, (short)12);
-  private static final org.apache.thrift.protocol.TField MARQUEE_FIELD_DESC = new org.apache.thrift.protocol.TField("marquee", org.apache.thrift.protocol.TType.STRING, (short)13);
+  private static final org.apache.thrift.protocol.TField GOLD_FIELD_DESC = new org.apache.thrift.protocol.TField("gold", org.apache.thrift.protocol.TType.DOUBLE, (short)13);
 
   private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new UserStandardSchemeFactory();
   private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new UserTupleSchemeFactory();
 
   private long id; // required
   private java.lang.String username; // required
-  private java.lang.String image; // required
-  private java.lang.String seatId; // required
-  private java.lang.String account; // required
-  private java.lang.String ipConfig; // required
   private double money; // required
-  private java.lang.String roomId; // required
-  private int vip; // required
-  private java.lang.String uuid; // required
-  private java.lang.String openId; // required
-  private int sex; // required
-  private java.lang.String marquee; // required
+  private double gold; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     ID((short)1, "id"),
     USERNAME((short)2, "username"),
-    IMAGE((short)3, "image"),
-    SEAT_ID((short)4, "seatId"),
-    ACCOUNT((short)5, "account"),
-    IP_CONFIG((short)6, "ipConfig"),
     MONEY((short)7, "money"),
-    ROOM_ID((short)8, "roomId"),
-    VIP((short)9, "vip"),
-    UUID((short)10, "uuid"),
-    OPEN_ID((short)11, "openId"),
-    SEX((short)12, "sex"),
-    MARQUEE((short)13, "marquee");
+    GOLD((short)13, "gold");
 
     private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
 
@@ -75,28 +48,10 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
           return ID;
         case 2: // USERNAME
           return USERNAME;
-        case 3: // IMAGE
-          return IMAGE;
-        case 4: // SEAT_ID
-          return SEAT_ID;
-        case 5: // ACCOUNT
-          return ACCOUNT;
-        case 6: // IP_CONFIG
-          return IP_CONFIG;
         case 7: // MONEY
           return MONEY;
-        case 8: // ROOM_ID
-          return ROOM_ID;
-        case 9: // VIP
-          return VIP;
-        case 10: // UUID
-          return UUID;
-        case 11: // OPEN_ID
-          return OPEN_ID;
-        case 12: // SEX
-          return SEX;
-        case 13: // MARQUEE
-          return MARQUEE;
+        case 13: // GOLD
+          return GOLD;
         default:
           return null;
       }
@@ -139,8 +94,7 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
   // isset id assignments
   private static final int __ID_ISSET_ID = 0;
   private static final int __MONEY_ISSET_ID = 1;
-  private static final int __VIP_ISSET_ID = 2;
-  private static final int __SEX_ISSET_ID = 3;
+  private static final int __GOLD_ISSET_ID = 2;
   private byte __isset_bitfield = 0;
   public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
@@ -149,28 +103,10 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
     tmpMap.put(_Fields.USERNAME, new org.apache.thrift.meta_data.FieldMetaData("username", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.IMAGE, new org.apache.thrift.meta_data.FieldMetaData("image", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.SEAT_ID, new org.apache.thrift.meta_data.FieldMetaData("seatId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.ACCOUNT, new org.apache.thrift.meta_data.FieldMetaData("account", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.IP_CONFIG, new org.apache.thrift.meta_data.FieldMetaData("ipConfig", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.MONEY, new org.apache.thrift.meta_data.FieldMetaData("money", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.DOUBLE)));
-    tmpMap.put(_Fields.ROOM_ID, new org.apache.thrift.meta_data.FieldMetaData("roomId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.VIP, new org.apache.thrift.meta_data.FieldMetaData("vip", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
-    tmpMap.put(_Fields.UUID, new org.apache.thrift.meta_data.FieldMetaData("uuid", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.OPEN_ID, new org.apache.thrift.meta_data.FieldMetaData("openId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.SEX, new org.apache.thrift.meta_data.FieldMetaData("sex", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
-    tmpMap.put(_Fields.MARQUEE, new org.apache.thrift.meta_data.FieldMetaData("marquee", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.GOLD, new org.apache.thrift.meta_data.FieldMetaData("gold", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.DOUBLE)));
     metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(User.class, metaDataMap);
   }
@@ -183,36 +119,17 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
   public User(
     long id,
     java.lang.String username,
-    java.lang.String image,
-    java.lang.String seatId,
-    java.lang.String account,
-    java.lang.String ipConfig,
     double money,
-    java.lang.String roomId,
-    int vip,
-    java.lang.String uuid,
-    java.lang.String openId,
-    int sex,
-    java.lang.String marquee)
+    double gold)
   {
     this();
     this.id = id;
     setIdIsSet(true);
     this.username = username;
-    this.image = image;
-    this.seatId = seatId;
-    this.account = account;
-    this.ipConfig = ipConfig;
     this.money = money;
     setMoneyIsSet(true);
-    this.roomId = roomId;
-    this.vip = vip;
-    setVipIsSet(true);
-    this.uuid = uuid;
-    this.openId = openId;
-    this.sex = sex;
-    setSexIsSet(true);
-    this.marquee = marquee;
+    this.gold = gold;
+    setGoldIsSet(true);
   }
 
   /**
@@ -224,33 +141,8 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
     if (other.isSetUsername()) {
       this.username = other.username;
     }
-    if (other.isSetImage()) {
-      this.image = other.image;
-    }
-    if (other.isSetSeatId()) {
-      this.seatId = other.seatId;
-    }
-    if (other.isSetAccount()) {
-      this.account = other.account;
-    }
-    if (other.isSetIpConfig()) {
-      this.ipConfig = other.ipConfig;
-    }
     this.money = other.money;
-    if (other.isSetRoomId()) {
-      this.roomId = other.roomId;
-    }
-    this.vip = other.vip;
-    if (other.isSetUuid()) {
-      this.uuid = other.uuid;
-    }
-    if (other.isSetOpenId()) {
-      this.openId = other.openId;
-    }
-    this.sex = other.sex;
-    if (other.isSetMarquee()) {
-      this.marquee = other.marquee;
-    }
+    this.gold = other.gold;
   }
 
   public User deepCopy() {
@@ -262,20 +154,10 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
     this.id = 0L;
 
     this.username = null;
-    this.image = null;
-    this.seatId = null;
-    this.account = null;
-    this.ipConfig = null;
     setMoneyIsSet(false);
     this.money = 0.0;
-    this.roomId = null;
-    setVipIsSet(false);
-    this.vip = 0;
-    this.uuid = null;
-    this.openId = null;
-    setSexIsSet(false);
-    this.sex = 0;
-    this.marquee = null;
+    setGoldIsSet(false);
+    this.gold = 0.0;
   }
 
   public long getId() {
@@ -325,102 +207,6 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
     }
   }
 
-  public java.lang.String getImage() {
-    return this.image;
-  }
-
-  public User setImage(java.lang.String image) {
-    this.image = image;
-    return this;
-  }
-
-  public void unsetImage() {
-    this.image = null;
-  }
-
-  /** Returns true if field image is set (has been assigned a value) and false otherwise */
-  public boolean isSetImage() {
-    return this.image != null;
-  }
-
-  public void setImageIsSet(boolean value) {
-    if (!value) {
-      this.image = null;
-    }
-  }
-
-  public java.lang.String getSeatId() {
-    return this.seatId;
-  }
-
-  public User setSeatId(java.lang.String seatId) {
-    this.seatId = seatId;
-    return this;
-  }
-
-  public void unsetSeatId() {
-    this.seatId = null;
-  }
-
-  /** Returns true if field seatId is set (has been assigned a value) and false otherwise */
-  public boolean isSetSeatId() {
-    return this.seatId != null;
-  }
-
-  public void setSeatIdIsSet(boolean value) {
-    if (!value) {
-      this.seatId = null;
-    }
-  }
-
-  public java.lang.String getAccount() {
-    return this.account;
-  }
-
-  public User setAccount(java.lang.String account) {
-    this.account = account;
-    return this;
-  }
-
-  public void unsetAccount() {
-    this.account = null;
-  }
-
-  /** Returns true if field account is set (has been assigned a value) and false otherwise */
-  public boolean isSetAccount() {
-    return this.account != null;
-  }
-
-  public void setAccountIsSet(boolean value) {
-    if (!value) {
-      this.account = null;
-    }
-  }
-
-  public java.lang.String getIpConfig() {
-    return this.ipConfig;
-  }
-
-  public User setIpConfig(java.lang.String ipConfig) {
-    this.ipConfig = ipConfig;
-    return this;
-  }
-
-  public void unsetIpConfig() {
-    this.ipConfig = null;
-  }
-
-  /** Returns true if field ipConfig is set (has been assigned a value) and false otherwise */
-  public boolean isSetIpConfig() {
-    return this.ipConfig != null;
-  }
-
-  public void setIpConfigIsSet(boolean value) {
-    if (!value) {
-      this.ipConfig = null;
-    }
-  }
-
   public double getMoney() {
     return this.money;
   }
@@ -444,146 +230,27 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
     __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __MONEY_ISSET_ID, value);
   }
 
-  public java.lang.String getRoomId() {
-    return this.roomId;
+  public double getGold() {
+    return this.gold;
   }
 
-  public User setRoomId(java.lang.String roomId) {
-    this.roomId = roomId;
+  public User setGold(double gold) {
+    this.gold = gold;
+    setGoldIsSet(true);
     return this;
   }
 
-  public void unsetRoomId() {
-    this.roomId = null;
+  public void unsetGold() {
+    __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __GOLD_ISSET_ID);
   }
 
-  /** Returns true if field roomId is set (has been assigned a value) and false otherwise */
-  public boolean isSetRoomId() {
-    return this.roomId != null;
+  /** Returns true if field gold is set (has been assigned a value) and false otherwise */
+  public boolean isSetGold() {
+    return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __GOLD_ISSET_ID);
   }
 
-  public void setRoomIdIsSet(boolean value) {
-    if (!value) {
-      this.roomId = null;
-    }
-  }
-
-  public int getVip() {
-    return this.vip;
-  }
-
-  public User setVip(int vip) {
-    this.vip = vip;
-    setVipIsSet(true);
-    return this;
-  }
-
-  public void unsetVip() {
-    __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __VIP_ISSET_ID);
-  }
-
-  /** Returns true if field vip is set (has been assigned a value) and false otherwise */
-  public boolean isSetVip() {
-    return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __VIP_ISSET_ID);
-  }
-
-  public void setVipIsSet(boolean value) {
-    __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __VIP_ISSET_ID, value);
-  }
-
-  public java.lang.String getUuid() {
-    return this.uuid;
-  }
-
-  public User setUuid(java.lang.String uuid) {
-    this.uuid = uuid;
-    return this;
-  }
-
-  public void unsetUuid() {
-    this.uuid = null;
-  }
-
-  /** Returns true if field uuid is set (has been assigned a value) and false otherwise */
-  public boolean isSetUuid() {
-    return this.uuid != null;
-  }
-
-  public void setUuidIsSet(boolean value) {
-    if (!value) {
-      this.uuid = null;
-    }
-  }
-
-  public java.lang.String getOpenId() {
-    return this.openId;
-  }
-
-  public User setOpenId(java.lang.String openId) {
-    this.openId = openId;
-    return this;
-  }
-
-  public void unsetOpenId() {
-    this.openId = null;
-  }
-
-  /** Returns true if field openId is set (has been assigned a value) and false otherwise */
-  public boolean isSetOpenId() {
-    return this.openId != null;
-  }
-
-  public void setOpenIdIsSet(boolean value) {
-    if (!value) {
-      this.openId = null;
-    }
-  }
-
-  public int getSex() {
-    return this.sex;
-  }
-
-  public User setSex(int sex) {
-    this.sex = sex;
-    setSexIsSet(true);
-    return this;
-  }
-
-  public void unsetSex() {
-    __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __SEX_ISSET_ID);
-  }
-
-  /** Returns true if field sex is set (has been assigned a value) and false otherwise */
-  public boolean isSetSex() {
-    return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __SEX_ISSET_ID);
-  }
-
-  public void setSexIsSet(boolean value) {
-    __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __SEX_ISSET_ID, value);
-  }
-
-  public java.lang.String getMarquee() {
-    return this.marquee;
-  }
-
-  public User setMarquee(java.lang.String marquee) {
-    this.marquee = marquee;
-    return this;
-  }
-
-  public void unsetMarquee() {
-    this.marquee = null;
-  }
-
-  /** Returns true if field marquee is set (has been assigned a value) and false otherwise */
-  public boolean isSetMarquee() {
-    return this.marquee != null;
-  }
-
-  public void setMarqueeIsSet(boolean value) {
-    if (!value) {
-      this.marquee = null;
-    }
+  public void setGoldIsSet(boolean value) {
+    __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __GOLD_ISSET_ID, value);
   }
 
   public void setFieldValue(_Fields field, java.lang.Object value) {
@@ -604,38 +271,6 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
       }
       break;
 
-    case IMAGE:
-      if (value == null) {
-        unsetImage();
-      } else {
-        setImage((java.lang.String)value);
-      }
-      break;
-
-    case SEAT_ID:
-      if (value == null) {
-        unsetSeatId();
-      } else {
-        setSeatId((java.lang.String)value);
-      }
-      break;
-
-    case ACCOUNT:
-      if (value == null) {
-        unsetAccount();
-      } else {
-        setAccount((java.lang.String)value);
-      }
-      break;
-
-    case IP_CONFIG:
-      if (value == null) {
-        unsetIpConfig();
-      } else {
-        setIpConfig((java.lang.String)value);
-      }
-      break;
-
     case MONEY:
       if (value == null) {
         unsetMoney();
@@ -644,51 +279,11 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
       }
       break;
 
-    case ROOM_ID:
+    case GOLD:
       if (value == null) {
-        unsetRoomId();
+        unsetGold();
       } else {
-        setRoomId((java.lang.String)value);
-      }
-      break;
-
-    case VIP:
-      if (value == null) {
-        unsetVip();
-      } else {
-        setVip((java.lang.Integer)value);
-      }
-      break;
-
-    case UUID:
-      if (value == null) {
-        unsetUuid();
-      } else {
-        setUuid((java.lang.String)value);
-      }
-      break;
-
-    case OPEN_ID:
-      if (value == null) {
-        unsetOpenId();
-      } else {
-        setOpenId((java.lang.String)value);
-      }
-      break;
-
-    case SEX:
-      if (value == null) {
-        unsetSex();
-      } else {
-        setSex((java.lang.Integer)value);
-      }
-      break;
-
-    case MARQUEE:
-      if (value == null) {
-        unsetMarquee();
-      } else {
-        setMarquee((java.lang.String)value);
+        setGold((java.lang.Double)value);
       }
       break;
 
@@ -703,38 +298,11 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
     case USERNAME:
       return getUsername();
 
-    case IMAGE:
-      return getImage();
-
-    case SEAT_ID:
-      return getSeatId();
-
-    case ACCOUNT:
-      return getAccount();
-
-    case IP_CONFIG:
-      return getIpConfig();
-
     case MONEY:
       return getMoney();
 
-    case ROOM_ID:
-      return getRoomId();
-
-    case VIP:
-      return getVip();
-
-    case UUID:
-      return getUuid();
-
-    case OPEN_ID:
-      return getOpenId();
-
-    case SEX:
-      return getSex();
-
-    case MARQUEE:
-      return getMarquee();
+    case GOLD:
+      return getGold();
 
     }
     throw new java.lang.IllegalStateException();
@@ -751,28 +319,10 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
       return isSetId();
     case USERNAME:
       return isSetUsername();
-    case IMAGE:
-      return isSetImage();
-    case SEAT_ID:
-      return isSetSeatId();
-    case ACCOUNT:
-      return isSetAccount();
-    case IP_CONFIG:
-      return isSetIpConfig();
     case MONEY:
       return isSetMoney();
-    case ROOM_ID:
-      return isSetRoomId();
-    case VIP:
-      return isSetVip();
-    case UUID:
-      return isSetUuid();
-    case OPEN_ID:
-      return isSetOpenId();
-    case SEX:
-      return isSetSex();
-    case MARQUEE:
-      return isSetMarquee();
+    case GOLD:
+      return isSetGold();
     }
     throw new java.lang.IllegalStateException();
   }
@@ -810,42 +360,6 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
         return false;
     }
 
-    boolean this_present_image = true && this.isSetImage();
-    boolean that_present_image = true && that.isSetImage();
-    if (this_present_image || that_present_image) {
-      if (!(this_present_image && that_present_image))
-        return false;
-      if (!this.image.equals(that.image))
-        return false;
-    }
-
-    boolean this_present_seatId = true && this.isSetSeatId();
-    boolean that_present_seatId = true && that.isSetSeatId();
-    if (this_present_seatId || that_present_seatId) {
-      if (!(this_present_seatId && that_present_seatId))
-        return false;
-      if (!this.seatId.equals(that.seatId))
-        return false;
-    }
-
-    boolean this_present_account = true && this.isSetAccount();
-    boolean that_present_account = true && that.isSetAccount();
-    if (this_present_account || that_present_account) {
-      if (!(this_present_account && that_present_account))
-        return false;
-      if (!this.account.equals(that.account))
-        return false;
-    }
-
-    boolean this_present_ipConfig = true && this.isSetIpConfig();
-    boolean that_present_ipConfig = true && that.isSetIpConfig();
-    if (this_present_ipConfig || that_present_ipConfig) {
-      if (!(this_present_ipConfig && that_present_ipConfig))
-        return false;
-      if (!this.ipConfig.equals(that.ipConfig))
-        return false;
-    }
-
     boolean this_present_money = true;
     boolean that_present_money = true;
     if (this_present_money || that_present_money) {
@@ -855,57 +369,12 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
         return false;
     }
 
-    boolean this_present_roomId = true && this.isSetRoomId();
-    boolean that_present_roomId = true && that.isSetRoomId();
-    if (this_present_roomId || that_present_roomId) {
-      if (!(this_present_roomId && that_present_roomId))
+    boolean this_present_gold = true;
+    boolean that_present_gold = true;
+    if (this_present_gold || that_present_gold) {
+      if (!(this_present_gold && that_present_gold))
         return false;
-      if (!this.roomId.equals(that.roomId))
-        return false;
-    }
-
-    boolean this_present_vip = true;
-    boolean that_present_vip = true;
-    if (this_present_vip || that_present_vip) {
-      if (!(this_present_vip && that_present_vip))
-        return false;
-      if (this.vip != that.vip)
-        return false;
-    }
-
-    boolean this_present_uuid = true && this.isSetUuid();
-    boolean that_present_uuid = true && that.isSetUuid();
-    if (this_present_uuid || that_present_uuid) {
-      if (!(this_present_uuid && that_present_uuid))
-        return false;
-      if (!this.uuid.equals(that.uuid))
-        return false;
-    }
-
-    boolean this_present_openId = true && this.isSetOpenId();
-    boolean that_present_openId = true && that.isSetOpenId();
-    if (this_present_openId || that_present_openId) {
-      if (!(this_present_openId && that_present_openId))
-        return false;
-      if (!this.openId.equals(that.openId))
-        return false;
-    }
-
-    boolean this_present_sex = true;
-    boolean that_present_sex = true;
-    if (this_present_sex || that_present_sex) {
-      if (!(this_present_sex && that_present_sex))
-        return false;
-      if (this.sex != that.sex)
-        return false;
-    }
-
-    boolean this_present_marquee = true && this.isSetMarquee();
-    boolean that_present_marquee = true && that.isSetMarquee();
-    if (this_present_marquee || that_present_marquee) {
-      if (!(this_present_marquee && that_present_marquee))
-        return false;
-      if (!this.marquee.equals(that.marquee))
+      if (this.gold != that.gold)
         return false;
     }
 
@@ -922,43 +391,9 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
     if (isSetUsername())
       hashCode = hashCode * 8191 + username.hashCode();
 
-    hashCode = hashCode * 8191 + ((isSetImage()) ? 131071 : 524287);
-    if (isSetImage())
-      hashCode = hashCode * 8191 + image.hashCode();
-
-    hashCode = hashCode * 8191 + ((isSetSeatId()) ? 131071 : 524287);
-    if (isSetSeatId())
-      hashCode = hashCode * 8191 + seatId.hashCode();
-
-    hashCode = hashCode * 8191 + ((isSetAccount()) ? 131071 : 524287);
-    if (isSetAccount())
-      hashCode = hashCode * 8191 + account.hashCode();
-
-    hashCode = hashCode * 8191 + ((isSetIpConfig()) ? 131071 : 524287);
-    if (isSetIpConfig())
-      hashCode = hashCode * 8191 + ipConfig.hashCode();
-
     hashCode = hashCode * 8191 + org.apache.thrift.TBaseHelper.hashCode(money);
 
-    hashCode = hashCode * 8191 + ((isSetRoomId()) ? 131071 : 524287);
-    if (isSetRoomId())
-      hashCode = hashCode * 8191 + roomId.hashCode();
-
-    hashCode = hashCode * 8191 + vip;
-
-    hashCode = hashCode * 8191 + ((isSetUuid()) ? 131071 : 524287);
-    if (isSetUuid())
-      hashCode = hashCode * 8191 + uuid.hashCode();
-
-    hashCode = hashCode * 8191 + ((isSetOpenId()) ? 131071 : 524287);
-    if (isSetOpenId())
-      hashCode = hashCode * 8191 + openId.hashCode();
-
-    hashCode = hashCode * 8191 + sex;
-
-    hashCode = hashCode * 8191 + ((isSetMarquee()) ? 131071 : 524287);
-    if (isSetMarquee())
-      hashCode = hashCode * 8191 + marquee.hashCode();
+    hashCode = hashCode * 8191 + org.apache.thrift.TBaseHelper.hashCode(gold);
 
     return hashCode;
   }
@@ -991,46 +426,6 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
         return lastComparison;
       }
     }
-    lastComparison = java.lang.Boolean.valueOf(isSetImage()).compareTo(other.isSetImage());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetImage()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.image, other.image);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = java.lang.Boolean.valueOf(isSetSeatId()).compareTo(other.isSetSeatId());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetSeatId()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.seatId, other.seatId);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = java.lang.Boolean.valueOf(isSetAccount()).compareTo(other.isSetAccount());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetAccount()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.account, other.account);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = java.lang.Boolean.valueOf(isSetIpConfig()).compareTo(other.isSetIpConfig());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetIpConfig()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.ipConfig, other.ipConfig);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
     lastComparison = java.lang.Boolean.valueOf(isSetMoney()).compareTo(other.isSetMoney());
     if (lastComparison != 0) {
       return lastComparison;
@@ -1041,62 +436,12 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
         return lastComparison;
       }
     }
-    lastComparison = java.lang.Boolean.valueOf(isSetRoomId()).compareTo(other.isSetRoomId());
+    lastComparison = java.lang.Boolean.valueOf(isSetGold()).compareTo(other.isSetGold());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetRoomId()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.roomId, other.roomId);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = java.lang.Boolean.valueOf(isSetVip()).compareTo(other.isSetVip());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetVip()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.vip, other.vip);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = java.lang.Boolean.valueOf(isSetUuid()).compareTo(other.isSetUuid());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetUuid()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.uuid, other.uuid);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = java.lang.Boolean.valueOf(isSetOpenId()).compareTo(other.isSetOpenId());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetOpenId()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.openId, other.openId);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = java.lang.Boolean.valueOf(isSetSex()).compareTo(other.isSetSex());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetSex()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.sex, other.sex);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = java.lang.Boolean.valueOf(isSetMarquee()).compareTo(other.isSetMarquee());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetMarquee()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.marquee, other.marquee);
+    if (isSetGold()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.gold, other.gold);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -1133,80 +478,12 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("image:");
-    if (this.image == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.image);
-    }
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("seatId:");
-    if (this.seatId == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.seatId);
-    }
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("account:");
-    if (this.account == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.account);
-    }
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("ipConfig:");
-    if (this.ipConfig == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.ipConfig);
-    }
-    first = false;
-    if (!first) sb.append(", ");
     sb.append("money:");
     sb.append(this.money);
     first = false;
     if (!first) sb.append(", ");
-    sb.append("roomId:");
-    if (this.roomId == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.roomId);
-    }
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("vip:");
-    sb.append(this.vip);
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("uuid:");
-    if (this.uuid == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.uuid);
-    }
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("openId:");
-    if (this.openId == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.openId);
-    }
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("sex:");
-    sb.append(this.sex);
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("marquee:");
-    if (this.marquee == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.marquee);
-    }
+    sb.append("gold:");
+    sb.append(this.gold);
     first = false;
     sb.append(")");
     return sb.toString();
@@ -1269,38 +546,6 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 3: // IMAGE
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.image = iprot.readString();
-              struct.setImageIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 4: // SEAT_ID
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.seatId = iprot.readString();
-              struct.setSeatIdIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 5: // ACCOUNT
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.account = iprot.readString();
-              struct.setAccountIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 6: // IP_CONFIG
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.ipConfig = iprot.readString();
-              struct.setIpConfigIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
           case 7: // MONEY
             if (schemeField.type == org.apache.thrift.protocol.TType.DOUBLE) {
               struct.money = iprot.readDouble();
@@ -1309,50 +554,10 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 8: // ROOM_ID
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.roomId = iprot.readString();
-              struct.setRoomIdIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 9: // VIP
-            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-              struct.vip = iprot.readI32();
-              struct.setVipIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 10: // UUID
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.uuid = iprot.readString();
-              struct.setUuidIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 11: // OPEN_ID
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.openId = iprot.readString();
-              struct.setOpenIdIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 12: // SEX
-            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-              struct.sex = iprot.readI32();
-              struct.setSexIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 13: // MARQUEE
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.marquee = iprot.readString();
-              struct.setMarqueeIsSet(true);
+          case 13: // GOLD
+            if (schemeField.type == org.apache.thrift.protocol.TType.DOUBLE) {
+              struct.gold = iprot.readDouble();
+              struct.setGoldIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
@@ -1380,55 +585,12 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
         oprot.writeString(struct.username);
         oprot.writeFieldEnd();
       }
-      if (struct.image != null) {
-        oprot.writeFieldBegin(IMAGE_FIELD_DESC);
-        oprot.writeString(struct.image);
-        oprot.writeFieldEnd();
-      }
-      if (struct.seatId != null) {
-        oprot.writeFieldBegin(SEAT_ID_FIELD_DESC);
-        oprot.writeString(struct.seatId);
-        oprot.writeFieldEnd();
-      }
-      if (struct.account != null) {
-        oprot.writeFieldBegin(ACCOUNT_FIELD_DESC);
-        oprot.writeString(struct.account);
-        oprot.writeFieldEnd();
-      }
-      if (struct.ipConfig != null) {
-        oprot.writeFieldBegin(IP_CONFIG_FIELD_DESC);
-        oprot.writeString(struct.ipConfig);
-        oprot.writeFieldEnd();
-      }
       oprot.writeFieldBegin(MONEY_FIELD_DESC);
       oprot.writeDouble(struct.money);
       oprot.writeFieldEnd();
-      if (struct.roomId != null) {
-        oprot.writeFieldBegin(ROOM_ID_FIELD_DESC);
-        oprot.writeString(struct.roomId);
-        oprot.writeFieldEnd();
-      }
-      oprot.writeFieldBegin(VIP_FIELD_DESC);
-      oprot.writeI32(struct.vip);
+      oprot.writeFieldBegin(GOLD_FIELD_DESC);
+      oprot.writeDouble(struct.gold);
       oprot.writeFieldEnd();
-      if (struct.uuid != null) {
-        oprot.writeFieldBegin(UUID_FIELD_DESC);
-        oprot.writeString(struct.uuid);
-        oprot.writeFieldEnd();
-      }
-      if (struct.openId != null) {
-        oprot.writeFieldBegin(OPEN_ID_FIELD_DESC);
-        oprot.writeString(struct.openId);
-        oprot.writeFieldEnd();
-      }
-      oprot.writeFieldBegin(SEX_FIELD_DESC);
-      oprot.writeI32(struct.sex);
-      oprot.writeFieldEnd();
-      if (struct.marquee != null) {
-        oprot.writeFieldBegin(MARQUEE_FIELD_DESC);
-        oprot.writeString(struct.marquee);
-        oprot.writeFieldEnd();
-      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -1453,85 +615,31 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
       if (struct.isSetUsername()) {
         optionals.set(1);
       }
-      if (struct.isSetImage()) {
+      if (struct.isSetMoney()) {
         optionals.set(2);
       }
-      if (struct.isSetSeatId()) {
+      if (struct.isSetGold()) {
         optionals.set(3);
       }
-      if (struct.isSetAccount()) {
-        optionals.set(4);
-      }
-      if (struct.isSetIpConfig()) {
-        optionals.set(5);
-      }
-      if (struct.isSetMoney()) {
-        optionals.set(6);
-      }
-      if (struct.isSetRoomId()) {
-        optionals.set(7);
-      }
-      if (struct.isSetVip()) {
-        optionals.set(8);
-      }
-      if (struct.isSetUuid()) {
-        optionals.set(9);
-      }
-      if (struct.isSetOpenId()) {
-        optionals.set(10);
-      }
-      if (struct.isSetSex()) {
-        optionals.set(11);
-      }
-      if (struct.isSetMarquee()) {
-        optionals.set(12);
-      }
-      oprot.writeBitSet(optionals, 13);
+      oprot.writeBitSet(optionals, 4);
       if (struct.isSetId()) {
         oprot.writeI64(struct.id);
       }
       if (struct.isSetUsername()) {
         oprot.writeString(struct.username);
       }
-      if (struct.isSetImage()) {
-        oprot.writeString(struct.image);
-      }
-      if (struct.isSetSeatId()) {
-        oprot.writeString(struct.seatId);
-      }
-      if (struct.isSetAccount()) {
-        oprot.writeString(struct.account);
-      }
-      if (struct.isSetIpConfig()) {
-        oprot.writeString(struct.ipConfig);
-      }
       if (struct.isSetMoney()) {
         oprot.writeDouble(struct.money);
       }
-      if (struct.isSetRoomId()) {
-        oprot.writeString(struct.roomId);
-      }
-      if (struct.isSetVip()) {
-        oprot.writeI32(struct.vip);
-      }
-      if (struct.isSetUuid()) {
-        oprot.writeString(struct.uuid);
-      }
-      if (struct.isSetOpenId()) {
-        oprot.writeString(struct.openId);
-      }
-      if (struct.isSetSex()) {
-        oprot.writeI32(struct.sex);
-      }
-      if (struct.isSetMarquee()) {
-        oprot.writeString(struct.marquee);
+      if (struct.isSetGold()) {
+        oprot.writeDouble(struct.gold);
       }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, User struct) throws org.apache.thrift.TException {
       org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-      java.util.BitSet incoming = iprot.readBitSet(13);
+      java.util.BitSet incoming = iprot.readBitSet(4);
       if (incoming.get(0)) {
         struct.id = iprot.readI64();
         struct.setIdIsSet(true);
@@ -1541,48 +649,12 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
         struct.setUsernameIsSet(true);
       }
       if (incoming.get(2)) {
-        struct.image = iprot.readString();
-        struct.setImageIsSet(true);
-      }
-      if (incoming.get(3)) {
-        struct.seatId = iprot.readString();
-        struct.setSeatIdIsSet(true);
-      }
-      if (incoming.get(4)) {
-        struct.account = iprot.readString();
-        struct.setAccountIsSet(true);
-      }
-      if (incoming.get(5)) {
-        struct.ipConfig = iprot.readString();
-        struct.setIpConfigIsSet(true);
-      }
-      if (incoming.get(6)) {
         struct.money = iprot.readDouble();
         struct.setMoneyIsSet(true);
       }
-      if (incoming.get(7)) {
-        struct.roomId = iprot.readString();
-        struct.setRoomIdIsSet(true);
-      }
-      if (incoming.get(8)) {
-        struct.vip = iprot.readI32();
-        struct.setVipIsSet(true);
-      }
-      if (incoming.get(9)) {
-        struct.uuid = iprot.readString();
-        struct.setUuidIsSet(true);
-      }
-      if (incoming.get(10)) {
-        struct.openId = iprot.readString();
-        struct.setOpenIdIsSet(true);
-      }
-      if (incoming.get(11)) {
-        struct.sex = iprot.readI32();
-        struct.setSexIsSet(true);
-      }
-      if (incoming.get(12)) {
-        struct.marquee = iprot.readString();
-        struct.setMarqueeIsSet(true);
+      if (incoming.get(3)) {
+        struct.gold = iprot.readDouble();
+        struct.setGoldIsSet(true);
       }
     }
   }

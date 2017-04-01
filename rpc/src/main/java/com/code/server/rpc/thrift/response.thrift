@@ -39,4 +39,7 @@ enum Operation {
   DIVIDE = 4
 }
 
-
+enum RPCError{
+    NO_USER = 1,
+    NO_MONEY = 2,
+}

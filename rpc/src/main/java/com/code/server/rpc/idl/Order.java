@@ -12,27 +12,30 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("Order");
 
   private static final org.apache.thrift.protocol.TField USER_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("userId", org.apache.thrift.protocol.TType.I64, (short)1);
-  private static final org.apache.thrift.protocol.TField MONEY_FIELD_DESC = new org.apache.thrift.protocol.TField("money", org.apache.thrift.protocol.TType.DOUBLE, (short)2);
+  private static final org.apache.thrift.protocol.TField NUM_FIELD_DESC = new org.apache.thrift.protocol.TField("num", org.apache.thrift.protocol.TType.DOUBLE, (short)2);
   private static final org.apache.thrift.protocol.TField TYPE_FIELD_DESC = new org.apache.thrift.protocol.TField("type", org.apache.thrift.protocol.TType.I32, (short)3);
   private static final org.apache.thrift.protocol.TField TOKEN_FIELD_DESC = new org.apache.thrift.protocol.TField("token", org.apache.thrift.protocol.TType.STRING, (short)4);
   private static final org.apache.thrift.protocol.TField AGENT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("agentId", org.apache.thrift.protocol.TType.I32, (short)5);
+  private static final org.apache.thrift.protocol.TField ID_FIELD_DESC = new org.apache.thrift.protocol.TField("id", org.apache.thrift.protocol.TType.I64, (short)6);
 
   private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new OrderStandardSchemeFactory();
   private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new OrderTupleSchemeFactory();
 
   private long userId; // required
-  private double money; // required
+  private double num; // required
   private int type; // required
   private java.lang.String token; // required
   private int agentId; // required
+  private long id; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     USER_ID((short)1, "userId"),
-    MONEY((short)2, "money"),
+    NUM((short)2, "num"),
     TYPE((short)3, "type"),
     TOKEN((short)4, "token"),
-    AGENT_ID((short)5, "agentId");
+    AGENT_ID((short)5, "agentId"),
+    ID((short)6, "id");
 
     private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
 
@@ -49,14 +52,16 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
       switch(fieldId) {
         case 1: // USER_ID
           return USER_ID;
-        case 2: // MONEY
-          return MONEY;
+        case 2: // NUM
+          return NUM;
         case 3: // TYPE
           return TYPE;
         case 4: // TOKEN
           return TOKEN;
         case 5: // AGENT_ID
           return AGENT_ID;
+        case 6: // ID
+          return ID;
         default:
           return null;
       }
@@ -98,16 +103,17 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
 
   // isset id assignments
   private static final int __USERID_ISSET_ID = 0;
-  private static final int __MONEY_ISSET_ID = 1;
+  private static final int __NUM_ISSET_ID = 1;
   private static final int __TYPE_ISSET_ID = 2;
   private static final int __AGENTID_ISSET_ID = 3;
+  private static final int __ID_ISSET_ID = 4;
   private byte __isset_bitfield = 0;
   public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.USER_ID, new org.apache.thrift.meta_data.FieldMetaData("userId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
-    tmpMap.put(_Fields.MONEY, new org.apache.thrift.meta_data.FieldMetaData("money", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+    tmpMap.put(_Fields.NUM, new org.apache.thrift.meta_data.FieldMetaData("num", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.DOUBLE)));
     tmpMap.put(_Fields.TYPE, new org.apache.thrift.meta_data.FieldMetaData("type", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
@@ -115,6 +121,8 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.AGENT_ID, new org.apache.thrift.meta_data.FieldMetaData("agentId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
+    tmpMap.put(_Fields.ID, new org.apache.thrift.meta_data.FieldMetaData("id", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
     metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Order.class, metaDataMap);
   }
@@ -124,21 +132,24 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
 
   public Order(
     long userId,
-    double money,
+    double num,
     int type,
     java.lang.String token,
-    int agentId)
+    int agentId,
+    long id)
   {
     this();
     this.userId = userId;
     setUserIdIsSet(true);
-    this.money = money;
-    setMoneyIsSet(true);
+    this.num = num;
+    setNumIsSet(true);
     this.type = type;
     setTypeIsSet(true);
     this.token = token;
     this.agentId = agentId;
     setAgentIdIsSet(true);
+    this.id = id;
+    setIdIsSet(true);
   }
 
   /**
@@ -147,12 +158,13 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
   public Order(Order other) {
     __isset_bitfield = other.__isset_bitfield;
     this.userId = other.userId;
-    this.money = other.money;
+    this.num = other.num;
     this.type = other.type;
     if (other.isSetToken()) {
       this.token = other.token;
     }
     this.agentId = other.agentId;
+    this.id = other.id;
   }
 
   public Order deepCopy() {
@@ -163,13 +175,15 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
   public void clear() {
     setUserIdIsSet(false);
     this.userId = 0;
-    setMoneyIsSet(false);
-    this.money = 0.0;
+    setNumIsSet(false);
+    this.num = 0.0;
     setTypeIsSet(false);
     this.type = 0;
     this.token = null;
     setAgentIdIsSet(false);
     this.agentId = 0;
+    setIdIsSet(false);
+    this.id = 0;
   }
 
   public long getUserId() {
@@ -195,27 +209,27 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
     __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __USERID_ISSET_ID, value);
   }
 
-  public double getMoney() {
-    return this.money;
+  public double getNum() {
+    return this.num;
   }
 
-  public Order setMoney(double money) {
-    this.money = money;
-    setMoneyIsSet(true);
+  public Order setNum(double num) {
+    this.num = num;
+    setNumIsSet(true);
     return this;
   }
 
-  public void unsetMoney() {
-    __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __MONEY_ISSET_ID);
+  public void unsetNum() {
+    __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __NUM_ISSET_ID);
   }
 
-  /** Returns true if field money is set (has been assigned a value) and false otherwise */
-  public boolean isSetMoney() {
-    return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __MONEY_ISSET_ID);
+  /** Returns true if field num is set (has been assigned a value) and false otherwise */
+  public boolean isSetNum() {
+    return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __NUM_ISSET_ID);
   }
 
-  public void setMoneyIsSet(boolean value) {
-    __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __MONEY_ISSET_ID, value);
+  public void setNumIsSet(boolean value) {
+    __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __NUM_ISSET_ID, value);
   }
 
   public int getType() {
@@ -288,6 +302,29 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
     __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __AGENTID_ISSET_ID, value);
   }
 
+  public long getId() {
+    return this.id;
+  }
+
+  public Order setId(long id) {
+    this.id = id;
+    setIdIsSet(true);
+    return this;
+  }
+
+  public void unsetId() {
+    __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __ID_ISSET_ID);
+  }
+
+  /** Returns true if field id is set (has been assigned a value) and false otherwise */
+  public boolean isSetId() {
+    return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __ID_ISSET_ID);
+  }
+
+  public void setIdIsSet(boolean value) {
+    __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __ID_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, java.lang.Object value) {
     switch (field) {
     case USER_ID:
@@ -298,11 +335,11 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
       }
       break;
 
-    case MONEY:
+    case NUM:
       if (value == null) {
-        unsetMoney();
+        unsetNum();
       } else {
-        setMoney((java.lang.Double)value);
+        setNum((java.lang.Double)value);
       }
       break;
 
@@ -330,6 +367,14 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
       }
       break;
 
+    case ID:
+      if (value == null) {
+        unsetId();
+      } else {
+        setId((java.lang.Long)value);
+      }
+      break;
+
     }
   }
 
@@ -338,8 +383,8 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
     case USER_ID:
       return getUserId();
 
-    case MONEY:
-      return getMoney();
+    case NUM:
+      return getNum();
 
     case TYPE:
       return getType();
@@ -349,6 +394,9 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
 
     case AGENT_ID:
       return getAgentId();
+
+    case ID:
+      return getId();
 
     }
     throw new java.lang.IllegalStateException();
@@ -363,14 +411,16 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
     switch (field) {
     case USER_ID:
       return isSetUserId();
-    case MONEY:
-      return isSetMoney();
+    case NUM:
+      return isSetNum();
     case TYPE:
       return isSetType();
     case TOKEN:
       return isSetToken();
     case AGENT_ID:
       return isSetAgentId();
+    case ID:
+      return isSetId();
     }
     throw new java.lang.IllegalStateException();
   }
@@ -399,12 +449,12 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
         return false;
     }
 
-    boolean this_present_money = true;
-    boolean that_present_money = true;
-    if (this_present_money || that_present_money) {
-      if (!(this_present_money && that_present_money))
+    boolean this_present_num = true;
+    boolean that_present_num = true;
+    if (this_present_num || that_present_num) {
+      if (!(this_present_num && that_present_num))
         return false;
-      if (this.money != that.money)
+      if (this.num != that.num)
         return false;
     }
 
@@ -435,6 +485,15 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
         return false;
     }
 
+    boolean this_present_id = true;
+    boolean that_present_id = true;
+    if (this_present_id || that_present_id) {
+      if (!(this_present_id && that_present_id))
+        return false;
+      if (this.id != that.id)
+        return false;
+    }
+
     return true;
   }
 
@@ -444,7 +503,7 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
 
     hashCode = hashCode * 8191 + org.apache.thrift.TBaseHelper.hashCode(userId);
 
-    hashCode = hashCode * 8191 + org.apache.thrift.TBaseHelper.hashCode(money);
+    hashCode = hashCode * 8191 + org.apache.thrift.TBaseHelper.hashCode(num);
 
     hashCode = hashCode * 8191 + type;
 
@@ -453,6 +512,8 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
       hashCode = hashCode * 8191 + token.hashCode();
 
     hashCode = hashCode * 8191 + agentId;
+
+    hashCode = hashCode * 8191 + org.apache.thrift.TBaseHelper.hashCode(id);
 
     return hashCode;
   }
@@ -475,12 +536,12 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
         return lastComparison;
       }
     }
-    lastComparison = java.lang.Boolean.valueOf(isSetMoney()).compareTo(other.isSetMoney());
+    lastComparison = java.lang.Boolean.valueOf(isSetNum()).compareTo(other.isSetNum());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetMoney()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.money, other.money);
+    if (isSetNum()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.num, other.num);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -515,6 +576,16 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
         return lastComparison;
       }
     }
+    lastComparison = java.lang.Boolean.valueOf(isSetId()).compareTo(other.isSetId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetId()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.id, other.id);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -539,8 +610,8 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
     sb.append(this.userId);
     first = false;
     if (!first) sb.append(", ");
-    sb.append("money:");
-    sb.append(this.money);
+    sb.append("num:");
+    sb.append(this.num);
     first = false;
     if (!first) sb.append(", ");
     sb.append("type:");
@@ -557,6 +628,10 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
     if (!first) sb.append(", ");
     sb.append("agentId:");
     sb.append(this.agentId);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("id:");
+    sb.append(this.id);
     first = false;
     sb.append(")");
     return sb.toString();
@@ -611,10 +686,10 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 2: // MONEY
+          case 2: // NUM
             if (schemeField.type == org.apache.thrift.protocol.TType.DOUBLE) {
-              struct.money = iprot.readDouble();
-              struct.setMoneyIsSet(true);
+              struct.num = iprot.readDouble();
+              struct.setNumIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
@@ -643,6 +718,14 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
+          case 6: // ID
+            if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
+              struct.id = iprot.readI64();
+              struct.setIdIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -661,8 +744,8 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
       oprot.writeFieldBegin(USER_ID_FIELD_DESC);
       oprot.writeI64(struct.userId);
       oprot.writeFieldEnd();
-      oprot.writeFieldBegin(MONEY_FIELD_DESC);
-      oprot.writeDouble(struct.money);
+      oprot.writeFieldBegin(NUM_FIELD_DESC);
+      oprot.writeDouble(struct.num);
       oprot.writeFieldEnd();
       oprot.writeFieldBegin(TYPE_FIELD_DESC);
       oprot.writeI32(struct.type);
@@ -674,6 +757,9 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
       }
       oprot.writeFieldBegin(AGENT_ID_FIELD_DESC);
       oprot.writeI32(struct.agentId);
+      oprot.writeFieldEnd();
+      oprot.writeFieldBegin(ID_FIELD_DESC);
+      oprot.writeI64(struct.id);
       oprot.writeFieldEnd();
       oprot.writeFieldStop();
       oprot.writeStructEnd();
@@ -696,7 +782,7 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
       if (struct.isSetUserId()) {
         optionals.set(0);
       }
-      if (struct.isSetMoney()) {
+      if (struct.isSetNum()) {
         optionals.set(1);
       }
       if (struct.isSetType()) {
@@ -708,12 +794,15 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
       if (struct.isSetAgentId()) {
         optionals.set(4);
       }
-      oprot.writeBitSet(optionals, 5);
+      if (struct.isSetId()) {
+        optionals.set(5);
+      }
+      oprot.writeBitSet(optionals, 6);
       if (struct.isSetUserId()) {
         oprot.writeI64(struct.userId);
       }
-      if (struct.isSetMoney()) {
-        oprot.writeDouble(struct.money);
+      if (struct.isSetNum()) {
+        oprot.writeDouble(struct.num);
       }
       if (struct.isSetType()) {
         oprot.writeI32(struct.type);
@@ -724,19 +813,22 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
       if (struct.isSetAgentId()) {
         oprot.writeI32(struct.agentId);
       }
+      if (struct.isSetId()) {
+        oprot.writeI64(struct.id);
+      }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, Order struct) throws org.apache.thrift.TException {
       org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-      java.util.BitSet incoming = iprot.readBitSet(5);
+      java.util.BitSet incoming = iprot.readBitSet(6);
       if (incoming.get(0)) {
         struct.userId = iprot.readI64();
         struct.setUserIdIsSet(true);
       }
       if (incoming.get(1)) {
-        struct.money = iprot.readDouble();
-        struct.setMoneyIsSet(true);
+        struct.num = iprot.readDouble();
+        struct.setNumIsSet(true);
       }
       if (incoming.get(2)) {
         struct.type = iprot.readI32();
@@ -749,6 +841,10 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
       if (incoming.get(4)) {
         struct.agentId = iprot.readI32();
         struct.setAgentIdIsSet(true);
+      }
+      if (incoming.get(5)) {
+        struct.id = iprot.readI64();
+        struct.setIdIsSet(true);
       }
     }
   }
