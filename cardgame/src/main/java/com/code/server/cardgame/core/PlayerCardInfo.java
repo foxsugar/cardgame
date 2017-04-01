@@ -159,7 +159,7 @@ public class PlayerCardInfo {
     }
     //顺除 2 大王小王
     public boolean getShunDel2DaXiao(List<Integer> cards){
-        if(cards.contains(5) || cards.contains(6) || cards.contains(53) || cards.contains(54)){
+        if(cards.contains(8) || cards.contains(6) || cards.contains(53) || cards.contains(54)){
             return false;
         }else{
             return true;
