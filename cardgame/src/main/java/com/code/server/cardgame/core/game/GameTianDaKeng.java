@@ -1,9 +1,6 @@
 package com.code.server.cardgame.core.game;
 
-import com.code.server.cardgame.core.CardStruct;
-import com.code.server.cardgame.core.CardUtilOfTangDaKeng;
-import com.code.server.cardgame.core.Player;
-import com.code.server.cardgame.core.PlayerCardInfoTianDaKeng;
+import com.code.server.cardgame.core.*;
 import com.code.server.cardgame.response.ResponseVo;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
@@ -11,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import com.code.server.cardgame.response.ErrorCodeTDK;
 
 import java.util.*;
+
+import static com.code.server.cardgame.core.CardUtil.getCardType;
 
 /**
  * Created by sunxianping on 2017/3/13.
@@ -89,8 +88,10 @@ public class GameTianDaKeng extends Game{
             for(int i=0;i<INIT_CARD_NUM;i++){
                 if(playerCardInfo.myselfCards.size()<2){
                     playerCardInfo.myselfCards.add(cards.remove(0));
+                    playerCardInfo.allCards.addAll(playerCardInfo.myselfCards);
                 }else if(playerCardInfo.myselfCards.size()==2){
                     playerCardInfo.everyknowCards.add(cards.remove(0));
+                    playerCardInfo.allCards.addAll(playerCardInfo.everyknowCards);
                 }else{
                     break;
                 }
@@ -183,7 +184,11 @@ public class GameTianDaKeng extends Game{
             if(aliveUser.size()>2){
                 canRaiseUser.remove(nextCanRaiseId(currentTurn));//删掉这轮反踢的人，转了一圈，所以下一个人就是当时踢的人
                 if(canRaiseUser.isEmpty()){//没有可以踢的了
-                    dealACard();//发牌
+                    if(tableCards.size()==0 || playerCardInfos.get(aliveUser.get(0)).allCards.size()==5){
+                        noticeWhoWin(getWhoWin());
+                    }else{
+                        dealACard();//发牌
+                    }
                 }else{
                     noticeCanRaise(nextCanRaiseId(currentTurn));//通知第一个可以踢
                 }
@@ -241,7 +246,11 @@ public class GameTianDaKeng extends Game{
             if(aliveUser.size()>2){
                 canRaiseUser.remove(nextCanRaiseId(currentTurn));//删掉这轮反踢的人
                 if(canRaiseUser.isEmpty()){//没有可以踢的了
-                    dealACard();//发牌
+                    if(tableCards.size()==0 || playerCardInfos.get(aliveUser.get(0)).allCards.size()==5){
+                        noticeWhoWin(getWhoWin());
+                    }else{
+                        dealACard();//发牌
+                    }
                 }else{
                     noticeCanRaise(nextCanRaiseId(currentTurn));//通知第一个可以踢
                 }
@@ -277,7 +286,11 @@ public class GameTianDaKeng extends Game{
             if(aliveUser.size()>2){
                 canRaiseUser.remove(nextCanRaiseId(currentTurn));//删掉这轮反踢的人
                 if(canRaiseUser.isEmpty()){//没有可以踢的了
-                    dealACard();//发牌
+                    if(tableCards.size()==0 || playerCardInfos.get(aliveUser.get(0)).allCards.size()==5){
+                        noticeWhoWin(getWhoWin());//
+                    }else{
+                        dealACard();//发牌
+                    }
                 }else{
                     noticeCanRaise(nextCanRaiseId(currentTurn));//通知第一个可以踢
                 }
@@ -306,9 +319,11 @@ public class GameTianDaKeng extends Game{
            if(aliveUser.contains(playerCardInfo.userId)){//存活的人发牌
                if(tableCards.size() > 1){
                    playerCardInfo.everyknowCards.add(tableCards.remove(0));
+                   playerCardInfo.allCards.add(playerCardInfo.everyknowCards.get(playerCardInfo.everyknowCards.size()-1));
                }else if(tableCards.size() == 1){
                    temp = tableCards.get(0);
                    playerCardInfo.everyknowCards.add(tableCards.remove(0));
+                   playerCardInfo.allCards.add(playerCardInfo.everyknowCards.get(playerCardInfo.everyknowCards.size()-1));
                }else{
                    playerCardInfo.everyknowCards.add(temp);
                }
@@ -329,6 +344,17 @@ public class GameTianDaKeng extends Game{
         curChip.put(userId,curChip.get(userId)+chip);
     }
 
+
+    /**
+     * 通知其他人这轮谁赢了
+     * @param userId
+     */
+    private void noticeWhoWin(long userId){
+        Map<String, Long> result = new HashMap<>();
+        result.put("userId",userId);
+        ResponseVo vo = new ResponseVo("gameTDKService","otherFold",result);
+        Player.sendMsg2Player(vo,users);
+    }
 
     /**
      * 通知可以踢，加注
@@ -469,4 +495,94 @@ public class GameTianDaKeng extends Game{
     public void setTrunNumber(int trunNumber) {
         this.trunNumber = trunNumber;
     }
+
+
+
+    //==========================获取谁赢=================================
+    public long getWhoWin(){
+
+        long userId = 0;
+        Map<Long,Integer> scoresFour = new HashedMap();
+        Map<Long,Integer> scoresThree = new HashedMap();
+        Map<Long,Integer> scoresOther = new HashedMap();
+
+
+        for (PlayerCardInfoTianDaKeng p: playerCardInfos.values()) {
+            if(aliveUser.contains(p)){
+                if(isFour(p.allCards)!=0){
+                    scoresFour.put(p.userId,isFour(p.allCards));
+                }else if(isThree(p.allCards)!=0){
+                    scoresThree.put(p.userId,isThree(p.allCards));
+                }else{
+                    scoresOther.put(p.userId,0);
+                }
+            }
+
+        }
+
+        if(scoresFour.keySet().size()>=1){//第四张
+            return CardUtilOfTangDaKeng.getHaveMaxValueOnKeys(scoresFour).get(0);
+        }else if(scoresThree.keySet().size()>1){//第三张
+            int temp = 0;
+            for (Long l:scoresThree.keySet()) {
+                if(CardUtilOfTangDaKeng.getAllScores(playerCardInfos.get(l).allCards)>temp){
+                    temp = CardUtilOfTangDaKeng.getAllScores(playerCardInfos.get(l).allCards);
+                    userId = l;
+                }
+            }
+            return userId;
+        }else if(scoresThree.keySet().size()==1){
+            return CardUtilOfTangDaKeng.getHaveMaxValueOnKeys(scoresThree).get(0);
+        }else{
+            int temp = 0;
+            for (Long l:aliveUser) {
+                if(CardUtilOfTangDaKeng.getAllScores(playerCardInfos.get(l).allCards)>temp){
+                    temp = CardUtilOfTangDaKeng.getAllScores(playerCardInfos.get(l).allCards);
+                    userId = l;
+                }
+            }
+            return userId;
+        }
+    }
+
+
+
+
+
+    private int isFour(List<Integer> cards) {
+        Map<Integer,Integer> map = new HashMap<>();
+        for (Integer integer:cards) {
+            if(!map.keySet().contains(getCardType(integer))){
+                map.put(getCardType(integer),1);
+            }else{
+                map.put(getCardType(integer),map.get(getCardType(integer))+1);
+                if(map.get(getCardType(integer))==4){
+                    return  CardUtilOfTangDaKeng.getCardForScore().get(integer);
+                }
+            }
+        }
+        return 0;
+    }
+
+    private int isThree(List<Integer> cards) {
+        Map<Integer,Integer> map = new HashMap<>();
+        int temp = 0;
+        for (Integer integer:cards) {
+            if(!map.keySet().contains(getCardType(integer))){
+                map.put(getCardType(integer),1);
+            }else{
+                map.put(getCardType(integer),map.get(getCardType(integer))+1);
+                if(map.get(getCardType(integer))==3){
+                    temp = integer;
+                }
+            }
+        }
+        if(temp!=0){
+            return  CardUtilOfTangDaKeng.getCardForScore().get(temp);
+        }else{
+            return 0;
+        }
+
+    }
+
 }

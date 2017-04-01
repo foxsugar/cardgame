@@ -1,9 +1,8 @@
 package com.code.server.cardgame.core;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static com.code.server.cardgame.core.CardUtil.getCardType;
 
 /**
  * Created by Administrator on 2017/3/21.
@@ -58,4 +57,76 @@ public class CardUtilOfTangDaKeng {
     public static void setCardForScore(Map<Integer, Integer> cardForScore) {
         CardUtilOfTangDaKeng.cardForScore = cardForScore;
     }
+
+
+    public static int prepareCards(){
+        return 1;
+    }
+
+
+    private int getThreeOrFourCard(List<Integer> cards) {
+        Set<Integer> types = new HashSet<>();
+        for (int card : cards) {
+            int cardType = getCardType(card);
+            types.add(cardType);
+        }
+        return  1;
+    }
+
+
+    /**
+     * 求Map<K,V>中Key(键)的最大值
+     * @param map
+     * @return
+     */
+    public static Object getMaxKey(Map<Integer, Integer> map) {
+        if (map == null) return null;
+        Set<Integer> set = map.keySet();
+        Object[] obj = set.toArray();
+        Arrays.sort(obj);
+        return obj[obj.length-1];
+    }
+
+    /**
+     * 求Map<K,V>中Value(值)的最大值
+     * @param map
+     * @return
+     */
+    public static Object getMaxValue(Map<Integer, Integer> map) {
+        if (map == null) return null;
+        Collection<Integer> c = map.values();
+        Object[] obj = c.toArray();
+        Arrays.sort(obj);
+        return obj[obj.length-1];
+    }
+
+    /**
+     * 求Map<K,V>中Value(值)的最大值所对应的key
+     * @param map
+     * @return
+     */
+    public static List<Long> getHaveMaxValueOnKeys(Map<Long, Integer> map) {
+        List<Long> list = new ArrayList<>();
+        if (map == null) return null;
+        Collection<Integer> c = map.values();
+        Object[] obj = c.toArray();
+        Arrays.sort(obj);
+        int maxValue =  (int)obj[obj.length-1];
+        for (Long l: map.keySet()) {
+            if(map.get(l)==maxValue){
+                list.add(l);
+            }
+        }
+        return list;
+    }
+
+
+    public static int getAllScores(List<Integer> allCards){
+        int allScores = 0;
+        for (Integer i:allCards) {
+            allScores+=CardUtilOfTangDaKeng.getCardForScore().get(i);
+        }
+        return allScores;
+    }
+
 }
