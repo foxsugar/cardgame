@@ -48,7 +48,8 @@ public class SaveUserTimerTask extends TimerTask{
         //从内存中删除玩家
         long now = System.currentTimeMillis();
 
-        for (Player player : GameManager.getInstance().getKickUser().values()) {
+        List<Player> removePlayers = new ArrayList<>();
+        for (Player player : GameManager.getInstance().getKickUser()) {
             //在房间中的玩家 不清理
              if(GameManager.getInstance().getUserRoom().containsKey(player.getUserId())){
                  continue;
@@ -56,8 +57,15 @@ public class SaveUserTimerTask extends TimerTask{
             if (now - player.getLastSendMsgTime() >= serverConfig.getKickTime()) {
                 userService.save(player.getUser());
                 GameManager.getInstance().removePlayer(player);
+                removePlayers.add(player);
             }
         }
+        logger.warn("从内存中删除玩家个数 : "+ removePlayers.size());
+        GameManager.getInstance().getKickUser().removeAll(removePlayers);
+
+
+
+
 
 
     }

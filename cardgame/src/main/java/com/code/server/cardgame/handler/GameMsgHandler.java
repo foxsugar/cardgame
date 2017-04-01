@@ -50,7 +50,7 @@ public class GameMsgHandler extends ChannelDuplexHandler {
         //可从内存中剔除的玩家
         Player player = GameManager.getPlayerByCtx(ctx);
         if (player != null) {
-            GameManager.getInstance().getKickUser().put(player.getUserId(), player);
+            GameManager.getInstance().getKickUser().add(player);
         }
         super.channelInactive(ctx);
     }

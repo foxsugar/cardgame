@@ -14,7 +14,7 @@ public class Player {
     private long userId;
     private User user;
     private ChannelHandlerContext ctx;
-    private long lastSendMsgTime;
+    private long lastSendMsgTime;//上次发消息时间
 
     public void sendMsg(Object msg){
         this.ctx.writeAndFlush(msg);

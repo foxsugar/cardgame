@@ -54,9 +54,11 @@ public class GameRpcHandler implements GameRPC.AsyncIface {
         }
 
         com.code.server.rpc.idl.User userRep = new com.code.server.rpc.idl.User();
-        if (user == null) {
-        } else {
-//            userRep.setId()
+        if (user != null) {
+            userRep.setId(user.getUserId());
+            userRep.setGold(user.getGold());
+            userRep.setMoney(user.getMoney());
+            userRep.setUsername(user.getUsername());
         }
         resultHandler.onComplete(userRep);
     }

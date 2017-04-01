@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -39,7 +40,7 @@ public class GameManager {
     public Map<String, RoomTanDaKeng> roomsOfTanDaKeng = new HashMap<>();
     public ServerInfo serverInfo;
     public Constant constant;
-    public Map<Long, Player> kickUser = new HashMap<>();//可以踢出内存的玩家
+    public Set<Player> kickUser = new CopyOnWriteArraySet<>();//可以踢出内存的玩家
 
 
 //    public Map<Long, User> usersSaveInDB = new HashMap<>();
@@ -140,7 +141,7 @@ public class GameManager {
             Player player = GameManager.getInstance().players.get(uid);
             if (player != null) {
                 player.setLastSendMsgTime(System.currentTimeMillis());
-                GameManager.getInstance().getKickUser().remove(player.getUserId());
+                GameManager.getInstance().getKickUser().remove(player);
             }
             return player;
         }
@@ -169,11 +170,11 @@ public class GameManager {
         return this;
     }
 
-    public Map<Long, Player> getKickUser() {
+    public Set<Player> getKickUser() {
         return kickUser;
     }
 
-    public GameManager setKickUser(Map<Long, Player> kickUser) {
+    public GameManager setKickUser(Set<Player> kickUser) {
         this.kickUser = kickUser;
         return this;
     }
