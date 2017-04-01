@@ -19,7 +19,6 @@ import java.util.List;
 
 @Service("userService")
 public class UserService {
-    private Gson gson = new Gson();
 
     @PersistenceContext
     public EntityManager em;
@@ -33,7 +32,7 @@ public class UserService {
         if (user == null) {
             return null;
         }
-        return loadFromDb(user);
+        return user;
     }
 
     public User getUserByUserId(long userId) {
@@ -41,7 +40,7 @@ public class UserService {
         if (user == null) {
             return null;
         }
-        return loadFromDb(user);
+        return user;
     }
 
     public User getUserByAccountAndPassword(String account, String password) {
@@ -49,36 +48,22 @@ public class UserService {
         if (user == null) {
             return null;
         }
-        return loadFromDb(user);
+        return user;
     }
 
     public User save(User user) {
-        User newUser = userDao.save(save2Db(user));
-        user.setId(newUser.getUserId());
+        User newUser = userDao.save(user);
+        user.setUserId(newUser.getUserId());
         return user;
     }
 
-    public User loadFromDb(User user){
-        String str = user.getRecordStr();
-        if (str == null || "".equals(str)) {
-            user.setRecord(new Record());
-        } else {
-            Record record = gson.fromJson(user.getRecordStr(), Record.class);
-            user.setRecord(record);
-        }
-        return user;
-    }
 
-    private User save2Db(User user){
-        user.setRecordStr(gson.toJson(user.getRecord()));
-        return user;
-    }
 
     @Transactional
     public void batchUpdate(List<User> list) {
         for (int i = 0; i < list.size(); i++) {
             User user = list.get(i);
-            save2Db(user);
+
             em.merge(user);
             if (i % 30 == 0) {
                 em.flush();

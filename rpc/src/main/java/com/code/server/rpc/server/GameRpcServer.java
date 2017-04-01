@@ -33,10 +33,6 @@ public class GameRpcServer {
 
 
     public static void main(String[] args) {
-        try {
-            StartServer(9090, new ServerHandler());
-        } catch (TTransportException e) {
-            e.printStackTrace();
-        }
+
     }
 }

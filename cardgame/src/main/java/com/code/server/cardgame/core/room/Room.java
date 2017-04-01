@@ -31,6 +31,7 @@ public class Room {
 
 
     protected String roomId;
+    protected int createType;//房卡或金币
 
     protected int createNeedMoney;
     protected static Random random = new Random();
@@ -701,6 +702,15 @@ public class Room {
 
     public Room setGame(Game game) {
         this.game = game;
+        return this;
+    }
+
+    public int getCreateType() {
+        return createType;
+    }
+
+    public Room setCreateType(int createType) {
+        this.createType = createType;
         return this;
     }
 }

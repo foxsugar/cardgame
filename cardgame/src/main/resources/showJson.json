@@ -1,21 +1,6 @@
 {
-  status
-  =
-  DOWN,
-  diskSpace
-  ={
-  status
-  =
-  UP,
-  total
-  =
-  333934751744,
-  free
-  =
-  305864101888,
-  threshold
-  =
-  10485760
-}, redis={status=DOWN, error=org.springframework.data.redis.RedisConnectionFailureException: Cannot get Jedis connection; nested exception is redis.clients.jedis.exceptions.JedisConnectionException: Could not get a resource from the pool}, db={status=UP, database=MySQL, hello=1
-}
+  "roomRecords": [
+    "java.util.HashMap",
+    {}
+  ]
 }

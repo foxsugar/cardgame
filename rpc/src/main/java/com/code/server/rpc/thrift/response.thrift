@@ -40,24 +40,3 @@ enum Operation {
 }
 
 
-struct User {
-  1: i64 id = 0,
-  2: string username,
-  3: string image,
-  4: string seatId,
-  5: string account,
-  6: string ipConfig,
-  7: double money,
-  8: string roomId,
-  9: i32 vip,
-  10: string uuid,
-  11: string openId,
-  12: i32 sex,
-  13: string marquee
-}
-
-
-service Charge{
-    i32 calculate(1:i64 userId, 2:i32 money)
-
-}

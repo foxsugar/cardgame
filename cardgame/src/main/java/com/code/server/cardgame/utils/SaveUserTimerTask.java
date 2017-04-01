@@ -8,6 +8,8 @@ import com.code.server.db.Service.UserService;
 import com.code.server.db.model.Constant;
 import com.code.server.db.model.ServerInfo;
 import com.code.server.db.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.GenericArrayType;
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ import java.util.TimerTask;
  * @version 1.0
  */
 public class SaveUserTimerTask extends TimerTask{
+    private final Logger logger = LoggerFactory.getLogger(SaveUserTimerTask.class);
     private ServerConfig serverConfig = SpringUtil.getBean(ServerConfig.class);
     private UserService userService = SpringUtil.getBean(UserService.class);
 
@@ -37,6 +40,7 @@ public class SaveUserTimerTask extends TimerTask{
         //保存玩家
         List<User> users = new ArrayList<>();
         users.addAll(GameManager.getInstance().getSaveUser2DB());
+        logger.warn("定时保存玩家个数 : "+ users.size());
         userService.batchUpdate(users);
         GameManager.getInstance().getSaveUser2DB().removeAll(users);
 

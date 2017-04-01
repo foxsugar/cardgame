@@ -1,7 +1,9 @@
 package com.code.server.db.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by sunxianping on 2017/3/24.
@@ -9,36 +11,58 @@ import java.util.List;
 public class Record {
     private static final int MAX_SIZE = 20;
 
-    private List<RoomRecord> roomRecords = new ArrayList<>();
+    private Map<Integer, List<RoomRecord>> roomRecords = new HashMap<>();
 
-    public void addRoomRecord(RoomRecord roomRecord){
-        this.roomRecords.add(roomRecord);
-        if(roomRecords.size()>MAX_SIZE){
-            this.roomRecords.remove(0);
+
+    public void addRoomRecord(RoomRecord roomRecord) {
+        List<RoomRecord> list = roomRecords.get(roomRecord.type);
+        if (list == null) {
+            list = new ArrayList<>();
         }
+        list.add(roomRecord);
+        if (list.size() > MAX_SIZE) {
+            list.remove(0);
+        }
+        roomRecords.put(roomRecord.type, list);
     }
 
-    public static class RoomRecord{
+    public static class RoomRecord {
+        int type;
+        long time;
         List<UserRecord> records = new ArrayList<>();
 
-        public void addRecord(UserRecord userRecord){
+        public void addRecord(UserRecord userRecord) {
             records.add(userRecord);
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public RoomRecord setType(int type) {
+            this.type = type;
+            return this;
+        }
+
+        public long getTime() {
+            return time;
+        }
+
+        public RoomRecord setTime(long time) {
+            this.time = time;
+            return this;
         }
     }
 
-    public static class UserRecord{
-        public UserRecord(){
-        }
-
-        public UserRecord(long userId, String name, double score) {
-            this.userId = userId;
-            this.name = name;
-            this.score = score;
+    public static class UserRecord {
+        public UserRecord() {
         }
 
         private long userId;
         private String name;
         private double score;
+        private String roomId;
+
 
         public long getUserId() {
             return userId;
@@ -66,13 +90,24 @@ public class Record {
             this.score = score;
             return this;
         }
+
+        public String getRoomId() {
+            return roomId;
+        }
+
+        public UserRecord setRoomId(String roomId) {
+            this.roomId = roomId;
+            return this;
+        }
+
+
     }
 
-    public List<RoomRecord> getRoomRecords() {
+    public Map<Integer, List<RoomRecord>> getRoomRecords() {
         return roomRecords;
     }
 
-    public Record setRoomRecords(List<RoomRecord> roomRecords) {
+    public Record setRoomRecords(Map<Integer, List<RoomRecord>> roomRecords) {
         this.roomRecords = roomRecords;
         return this;
     }

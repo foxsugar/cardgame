@@ -12,5 +12,11 @@ public class MessageHolder<T> {
     public int msgType;
     public Object message;
     public ChannelHandlerContext ctx;
-    public AsyncMethodCallback<T> rpcCallback;
+    public RpcHolder<T> rpcHolder;
+
+    public static class RpcHolder<T>{
+        public String rpcMethod;
+        public AsyncMethodCallback<T> rpcCallback;
+    }
 }
+

@@ -1,6 +1,10 @@
 package com.code.server.cardgame.utils;
 
+import com.code.server.db.model.Record;
+import com.code.server.db.model.User;
+import com.code.server.db.model.UserInfo;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -38,6 +42,19 @@ public final class JsonUtil {
         mapper.enableDefaultTyping();
 
 
+    }
+
+    public static void main(String[] args) {
+        User user = new User();
+        UserInfo userInfo = new UserInfo();
+        
+        try {
+            String s = mapper.writeValueAsString(user);
+
+            System.out.println(s);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
 

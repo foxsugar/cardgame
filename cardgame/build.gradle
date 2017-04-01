@@ -47,9 +47,9 @@ dependencies {
 	compile 'mysql:mysql-connector-java:5.1.36'
 
 	//jackson
-	compile 'com.fasterxml.jackson.core:jackson-core:2.6.0'
-	compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.0'
-	compile 'com.fasterxml.jackson.core:jackson-databind:2.6.0'
+	compile 'com.fasterxml.jackson.core:jackson-core:2.8.7'
+	compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.7'
+	compile 'com.fasterxml.jackson.core:jackson-databind:2.8.7'
 
 //    compile group: 'net.sf.json-lib', name: 'json-lib', version: '2.4'
 	compile "net.sf.json-lib:json-lib:2.4:jdk15"

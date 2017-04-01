@@ -2,6 +2,7 @@ package com.code.server.db.Service;
 
 
 import com.code.server.db.dao.IServerInfoDao;
+import com.code.server.db.dao.ITestDao;
 import com.code.server.db.model.ServerInfo;
 import com.code.server.db.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class ServerService {
     @Autowired
     public IServerInfoDao serverInfoDao;
 
+
+    @Autowired
+    public ITestDao testDao;
 
     public List<ServerInfo> getAllServerInfo(){
         return serverInfoDao.findAll();

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.UUID;
 
@@ -28,6 +29,7 @@ import static com.code.server.cardgame.core.GameManager.getUserVo;
 
 @Service
 public class GameUserService {
+
 
 
     private void doLogin(User user ,ChannelHandlerContext ctx){
@@ -98,8 +100,6 @@ public class GameUserService {
 
 
     public int appleCheck(ChannelHandlerContext ctx){
-
-
         ServerInfo serverInfo = GameManager.getInstance().serverInfo;
         JSONObject jSONObject = new JSONObject();
         jSONObject.put("isInAppleCheck", serverInfo.getAppleCheck());
@@ -114,9 +114,6 @@ public class GameUserService {
 
 
     public int getUserMessage(Player player){
-        if (player == null || player.getUser() == null) {
-            return ErrorCode.USERID_ERROR;
-        }
         User user = player.getUser();
         UserVo userVo = getUserVo(user);
         ResponseVo vo = new ResponseVo("userService", "getUserMessage", userVo);
@@ -125,14 +122,6 @@ public class GameUserService {
     }
 
     public int reconnection(Player player){
-        JSONObject result = new JSONObject();
-
-
-        if(player == null ||player.getUser() == null) {
-            return ErrorCode.USERID_ERROR;
-        }
-        User user = player.getUser();
-
         ReconnectResp reconnectResp = new ReconnectResp();
         reconnectResp.setExist(false);
         Room room = GameManager.getInstance().getRoomByUser(player.getUserId());
@@ -142,6 +131,14 @@ public class GameUserService {
         }
         ResponseVo vo = new ResponseVo("userService", "reconnection", reconnectResp);
         player.sendMsg(vo);
+        return 0;
+    }
+
+    public int getRecord(Player player,int type) {
+        User user = player.getUser();
+        user.getRecord().getRoomRecords().get(type);
+
+
         return 0;
     }
 
@@ -174,13 +171,13 @@ public class GameUserService {
 
             if(user == null) {
                 user = new User();
-                user.setId(0);
-                user.setUserId(GameManager.getInstance().nextId());
+//                user.setId(0);
+//                user.setUserId(GameManager.getInstance().nextId());
                 user.setOpenId(openId);
                 user.setAccount(UUID.randomUUID().toString());
                 user.setPassword("111111");
                 try {
-                    user.setUsername(URLEncoder.encode(username, "utf-8"));
+                    user.setUsername(URLDecoder.decode(username, "utf-8"));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -197,7 +194,7 @@ public class GameUserService {
 
             }else{
                 try {
-                    user.setUsername(URLEncoder.encode(username, "utf-8"));
+                    user.setUsername(URLDecoder.decode(username, "utf-8"));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -215,15 +212,25 @@ public class GameUserService {
         return 0;
     }
 
+    public static void main(String[] args) {
+        String s = "家用饮水机";
+        try {
+            String ss = URLDecoder.decode(s,"utf-8");
+            System.out.println(ss);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
     private User createUser(String account,String password){
         User newUser = new User();
-        newUser.setId(-100);
-        newUser.setUserId(GameManager.getInstance().nextId());
+//        newUser.setId(-100);
+//        newUser.setUserId(GameManager.getInstance().nextId());
         newUser.setAccount(account);
         newUser.setPassword(password);
-        newUser.setOpenId(""+newUser.getUserId());
+        newUser.setOpenId(""+GameManager.getInstance().nextId());
         try {
-            newUser.setUsername(URLEncoder.encode(account, "utf-8"));
+            newUser.setUsername(URLDecoder.decode(account, "utf-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -231,7 +238,7 @@ public class GameUserService {
         newUser.setSex(1);
         newUser.setVip(0);
         newUser.setUuid("0");
-        newUser.setMoney(100);
+        newUser.setMoney(GameManager.getInstance().constant.getInitMoney());
 
         return newUser;
     }
