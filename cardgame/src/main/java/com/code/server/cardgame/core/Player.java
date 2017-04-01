@@ -29,7 +29,7 @@ public class Player {
     }
     public static void sendMsg2Player(Object msg, long userId) {
         Player other = GameManager.getInstance().players.get(userId);
-        if (other != null) {
+        if (other != null && other.ctx != null) {
             other.ctx.writeAndFlush(msg);
         }
     }
