@@ -236,7 +236,7 @@ public class GameDouDiZhu extends Game{
             bujiaoSet.add(player.getUserId());
             if (bujiaoSet.size() >= users.size()) {
                 sendResult(true,false);
-                room.clearReadyStatus(false);
+                room.clearReadyStatus(true);
             } else {
                 long nextJiao = nextTurnId(player.getUserId());
                 canJiaoUser = nextJiao;
@@ -410,7 +410,7 @@ public class GameDouDiZhu extends Game{
         int jiaoIndex = chooseJiaoSet.size();
 
         PlayerCardInfo playerCardInfo = playerCardInfos.get(player.getUserId());
-        playerCardInfo.setQiang(true);
+        playerCardInfo.setQiang(isQiang);
         if (jiaoIndex == 1) {
             handleQiang1(player.getUserId(),isQiang);
         } else if (jiaoIndex == 2) {

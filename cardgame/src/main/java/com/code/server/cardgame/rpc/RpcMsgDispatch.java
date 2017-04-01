@@ -13,7 +13,9 @@ public class RpcMsgDispatch {
             case "charge":
                 GameRpcHandler.doCharge(messageHolder);
                 break;
-
+            case "exchange":
+                GameRpcHandler.doExchange(messageHolder);
+                break;
         }
     }
 

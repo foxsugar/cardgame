@@ -29,7 +29,7 @@ public final class JsonUtil {
 //        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         //反序列化时，属性不存在的兼容处理
         mapper.getDeserializationConfig().withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-      
+
         //序列化时，日期的统一格式
         mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
 
@@ -39,7 +39,8 @@ public final class JsonUtil {
         mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
 
 
-        mapper.enableDefaultTyping();
+        //显示类型用的
+//        mapper.enableDefaultTyping();
 
 
     }

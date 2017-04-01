@@ -5,6 +5,7 @@ import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.MsgDispatch;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.room.Room;
+import com.code.server.cardgame.encoding.Notice;
 import com.code.server.cardgame.response.*;
 import com.code.server.cardgame.utils.SpringUtil;
 import com.code.server.cardgame.utils.ThreadPool;
@@ -48,6 +49,11 @@ public class GameUserService {
 
     }
 
+    private void sendExit(Player player){
+        Notice notice = new Notice();
+        notice.setMessage("notice exit");
+        player.sendMsg("userService","noticeExit",notice);
+    }
     public int login(String account, String password, ChannelHandlerContext ctx) {
 
         Player player = GameManager.getInstance().getPlayerByAccount(account);
@@ -59,7 +65,7 @@ public class GameUserService {
             }
             //todo 踢人
             if (ctx != player.getCtx()) {
-                player.getCtx().close();
+                sendExit(player);
             }
             doLogin(player.getUser(),ctx);
             ResponseVo vo = new ResponseVo("userService", "login", getUserVo(player.getUser()));
@@ -159,6 +165,10 @@ public class GameUserService {
             User user = null;
             if (player != null) {
                 user = player.getUser();
+                //todo 踢人
+                if (ctx != player.getCtx()) {
+                    sendExit(player);
+                }
             } else {
                 user = userService.getUserByOpenId(openId);
             }
