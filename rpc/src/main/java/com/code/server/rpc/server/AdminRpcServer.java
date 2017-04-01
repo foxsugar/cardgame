@@ -17,18 +17,14 @@ public class AdminRpcServer {
 
     public static TServer StartServer(int port, AdminRPC.AsyncIface iface) throws TTransportException {
         TProcessor tprocessor = new AdminRPC.AsyncProcessor<>(iface);
-        // 传输通道 - 非阻塞方式
         TNonblockingServerSocket serverTransport = null;
         serverTransport = new TNonblockingServerSocket(port);
-        //多线程半同步半异步
         TThreadedSelectorServer.Args tArgs = new TThreadedSelectorServer.Args(serverTransport);
         tArgs.processor(tprocessor);
         tArgs.transportFactory(new TFramedTransport.Factory());
-        //二进制协议
         tArgs.protocolFactory(new TBinaryProtocol.Factory());
-        // 多线程半同步半异步的服务模型
         TServer server = new TThreadedSelectorServer(tArgs);
-        server.serve(); // 启动服务
+        server.serve();
         return server;
     }
 }
