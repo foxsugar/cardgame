@@ -2,13 +2,16 @@ package com.code.server.cardgame.rpc;
 
 import com.code.server.cardgame.config.ServerConfig;
 import com.code.server.cardgame.core.GameManager;
+import com.code.server.cardgame.utils.SpringUtil;
 import com.code.server.db.model.User;
 import com.code.server.rpc.client.AdminRpcClient;
 import com.code.server.rpc.client.TransportManager;
 import com.code.server.rpc.idl.AdminRPC;
 import com.code.server.rpc.idl.GameRPC;
 import com.code.server.rpc.idl.Rebate;
+import com.code.server.rpc.server.GameRpcServer;
 import org.apache.thrift.TException;
+import org.apache.thrift.server.TServer;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.slf4j.Logger;
@@ -24,12 +27,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class RpcManager {
     private final Logger logger = LoggerFactory.getLogger(RpcManager.class);
     private static RpcManager instance;
-    private ServerConfig serverConfig;
+    private ServerConfig serverConfig = SpringUtil.getBean(ServerConfig.class);
 
     private TTransport adminTransport;
     private AdminRPC.Client adminRpcClient;
 
     private GameRPC.Client gameRpcClient;
+
+    public TServer gameRpcServer;
 
     private List<Rebate> failedRebate = new CopyOnWriteArrayList<>();
 
@@ -68,6 +73,10 @@ public class RpcManager {
         }
     }
 
+
+    public void startGameRpcServer() throws TTransportException {
+        gameRpcServer = GameRpcServer.StartServer(serverConfig.getGameRpcServerPort(),new GameRpcHandler());
+    }
 
 
 }

@@ -89,7 +89,7 @@ public class GameDouDiZhu extends Game{
             return ErrorCode.CAN_NOT_PLAY;
         }
 
-//        userPlayCount.add(player.getUserId());
+        userPlayCount.add(player.getUserId());
         playerCardInfo.setPlayCount(playerCardInfo.getPlayCount() + 1);
 
         long nextUserCard = nextTurnId(cardStruct.getUserId()); //下一个出牌的人
@@ -169,7 +169,7 @@ public class GameDouDiZhu extends Game{
         }
         //去掉两张2
         cards.remove((Integer)7);
-        cards.remove((Integer)8);
+        cards.remove((Integer)5);
         Collections.shuffle(cards);
     }
 
@@ -235,16 +235,10 @@ public class GameDouDiZhu extends Game{
         if (!isJiao) {
             bujiaoSet.add(player.getUserId());
             if (bujiaoSet.size() >= users.size()) {
-
-                //todo 重新洗牌
                 sendResult(true,false);
                 room.clearReadyStatus(false);
-
             } else {
-                //todo
                 long nextJiao = nextTurnId(player.getUserId());
-//                long nextJiao = users.get(2);
-
                 canJiaoUser = nextJiao;
                 noticeCanJiao(nextJiao);
             }
@@ -340,6 +334,8 @@ public class GameDouDiZhu extends Game{
 
     private void genRecord(){
         Record.RoomRecord roomRecord = new Record.RoomRecord();
+        roomRecord.setTime(System.currentTimeMillis());
+        roomRecord.setType(room.getCreateType());
         for (long userId : users) {
             PlayerCardInfo playerCardInfo = playerCardInfos.get(userId);
             User user = room.getUserMap().get(userId);
@@ -347,18 +343,28 @@ public class GameDouDiZhu extends Game{
             userRecord.setName(user.getUsername());
             userRecord.setScore(playerCardInfo.getScore());
             userRecord.setUserId(userId);
+            userRecord.setRoomId(room.getRoomId());
+
             roomRecord.addRecord(userRecord);
-
-
         }
         //todo 保存记录
-//        room.getUserMap().forEach((k,v)->
-//                v.getRecord().addRoomRecord(roomRecord));
+        room.getUserMap().forEach((k,v)->
+                v.getRecord().addRoomRecord(roomRecord));
 
         //加入数据库保存列表
         GameManager.getInstance().getSaveUser2DB().addAll(room.getUserMap().values());
 
 
+    }
+
+    public static void main(String[] args) {
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(1, 1);
+        map.put(2, 1);
+        map.put(3, 1);
+        map.put(4, 1);
+        map.put(5, 1);
+        map.forEach((key,value)-> System.out.println("key : "+ key +"  value : "+ value));
     }
     /**
      * 开始打牌

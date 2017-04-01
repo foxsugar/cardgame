@@ -7,12 +7,15 @@ import com.code.server.cardgame.core.room.RoomDouDiZhu;
 import com.code.server.cardgame.core.room.RoomTanDaKeng;
 import com.code.server.cardgame.response.ErrorCode;
 import com.code.server.cardgame.response.ResponseVo;
+import com.code.server.cardgame.rpc.RpcMsgDispatch;
 import com.code.server.cardgame.service.GameChatService;
 import com.code.server.cardgame.service.GameUserService;
 import com.code.server.cardgame.utils.SpringUtil;
 import com.google.gson.Gson;
 import io.netty.channel.ChannelHandlerContext;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,6 +25,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MsgDispatch {
 
+    private final Logger logger = LoggerFactory.getLogger(MsgDispatch.class);
 
     private Gson gson = new Gson();
 
@@ -34,12 +38,13 @@ public class MsgDispatch {
         Object message = msgHolder.message;
         switch (msgHolder.msgType) {
             case MessageHolder.MSG_TYPE_RPC:{
-
+                RpcMsgDispatch.dispatch(msgHolder);
                 break;
             }
             case MessageHolder.MSG_TYPE_CLIENT_JSON:{
                 JSONObject jSONObject = (JSONObject) message;
                 System.out.println("handle message== " + jSONObject);
+//                logger.info("handle message== " + jSONObject);
                 String service = jSONObject.getString("service");
                 String method = jSONObject.getString("method");
                 JSONObject params = jSONObject.getJSONObject("params");
@@ -56,6 +61,10 @@ public class MsgDispatch {
 
         }
 
+
+    }
+
+    private void handleRpcMessage(){
 
     }
 
@@ -93,11 +102,28 @@ public class MsgDispatch {
                 String image = params.getString("image");
                 int sex = Integer.parseInt(params.getString("sex"));
                 return gameUserService.checkOpenId(openId, username, image, sex, ctx);
-            case "getUserMessage":
-                return gameUserService.getUserMessage(GameManager.getPlayerByCtx(ctx));
-            case "reconnection":
-                return gameUserService.reconnection(GameManager.getPlayerByCtx(ctx));
+            case "getUserMessage":{
+                Player player = GameManager.getPlayerByCtx(ctx);
+                if (player == null) {
+                    return ErrorCode.YOU_HAVE_NOT_LOGIN;
+                }
+                return gameUserService.getUserMessage(player);
+            }
+            case "reconnection":{
+                Player player = GameManager.getPlayerByCtx(ctx);
+                if (player == null) {
+                    return ErrorCode.YOU_HAVE_NOT_LOGIN;
+                }
+                return gameUserService.reconnection(player);
+            }
+            case "getUserRecodeByUserId":{
 
+                Player player = GameManager.getPlayerByCtx(ctx);
+                if (player == null) {
+                    return ErrorCode.YOU_HAVE_NOT_LOGIN;
+                }
+
+            }
             case "getUserImage":
 //                return gameUserService.getUserImage(userId,ctx);
 
@@ -114,7 +140,7 @@ public class MsgDispatch {
     private int dispatchRoomService(String method, JSONObject params, ChannelHandlerContext ctx) {
         Player player = GameManager.getPlayerByCtx(ctx);
         if (player == null) {
-            return -1;
+            return ErrorCode.YOU_HAVE_NOT_LOGIN;
         }
 
         switch (method) {

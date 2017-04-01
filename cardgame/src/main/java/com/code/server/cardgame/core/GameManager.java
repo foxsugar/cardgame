@@ -66,11 +66,7 @@ public class GameManager {
         vo.setOpenId(user.getOpenId());
         vo.setMoney(user.getMoney());
         vo.setVip(user.getVip());
-        try {
-            vo.setUsername(URLEncoder.encode(user.getUsername(), "utf-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        vo.setUsername(user.getUsername());
 
         String room = GameManager.getInstance().userRoom.get(user.getUserId());
         if (room!=null && GameManager.getInstance().rooms.containsKey(room)) {

@@ -4,6 +4,7 @@ import com.code.server.cardgame.bootstarp.SocketServer;
 import com.code.server.cardgame.config.ServerConfig;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.handler.GameProcessor;
+import com.code.server.cardgame.rpc.RpcManager;
 import com.code.server.cardgame.utils.SaveUserTimerTask;
 import com.code.server.cardgame.utils.SpringUtil;
 import com.code.server.cardgame.utils.ThreadPool;
@@ -11,6 +12,7 @@ import com.code.server.db.Service.ConstantService;
 import com.code.server.db.Service.ServerService;
 import com.code.server.db.model.Constant;
 import com.code.server.db.model.ServerInfo;
+import org.apache.thrift.transport.TTransportException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -23,7 +25,7 @@ import java.util.Timer;
 public class CardgameApplication {
 
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws TTransportException {
 
 
 
@@ -38,6 +40,9 @@ public class CardgameApplication {
 				timer.schedule(new SaveUserTimerTask() , new Date(), serverConfig.getDbSaveTime());
 
 		});
+
+		//rpc服务
+		RpcManager.getInstance().startGameRpcServer();
 	}
 
 	public static void init(){
