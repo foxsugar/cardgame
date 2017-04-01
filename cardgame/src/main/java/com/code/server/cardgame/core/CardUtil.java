@@ -27,8 +27,8 @@ public class CardUtil {
         cardA.add(3);
         cardA.add(4);
         List<Integer> card2 = new ArrayList<>();
-        card2.add(5);
         card2.add(6);
+        card2.add(8);
         List<Integer> cardxiao = new ArrayList<>();
         cardxiao.add(53);
         List<Integer> cardda = new ArrayList<>();
