@@ -3,6 +3,8 @@ package com.code.server.cardgame.core;
 import com.code.server.cardgame.Message.MessageHolder;
 import com.code.server.cardgame.core.game.GameDouDiZhu;
 import com.code.server.cardgame.core.game.GameTianDaKeng;
+import com.code.server.cardgame.core.room.GoldRoomPool;
+import com.code.server.cardgame.core.room.Room;
 import com.code.server.cardgame.core.room.RoomDouDiZhu;
 import com.code.server.cardgame.core.room.RoomTanDaKeng;
 import com.code.server.cardgame.response.ErrorCode;
@@ -11,6 +13,7 @@ import com.code.server.cardgame.rpc.RpcMsgDispatch;
 import com.code.server.cardgame.service.GameChatService;
 import com.code.server.cardgame.service.GameUserService;
 import com.code.server.cardgame.utils.SpringUtil;
+import com.code.server.db.model.User;
 import com.google.gson.Gson;
 import io.netty.channel.ChannelHandlerContext;
 import net.sf.json.JSONObject;
@@ -122,8 +125,19 @@ public class MsgDispatch {
                 if (player == null) {
                     return ErrorCode.YOU_HAVE_NOT_LOGIN;
                 }
+                int type = params.getInt("type");
+                return gameUserService.getUserRecodeByUserId(player, type);
 
             }
+            case "bindReferrer":{
+                Player player = GameManager.getPlayerByCtx(ctx);
+                if (player == null) {
+                    return ErrorCode.YOU_HAVE_NOT_LOGIN;
+                }
+                int referrerId = params.getInt("referrerId");
+                return gameUserService.bindReferrer(player,referrerId);
+            }
+
             case "getUserImage":
 //                return gameUserService.getUserImage(userId,ctx);
 
@@ -159,35 +173,40 @@ public class MsgDispatch {
             }
             case "joinRoom": {
                 String roomId = params.getString("roomId");
-                RoomDouDiZhu room = GameManager.getInstance().rooms.get(roomId);
+                Room room = GameManager.getInstance().rooms.get(roomId);
                 if (room == null) {
                     return ErrorCode.CANNOT_JOIN_ROOM_NOT_EXIST;
                 }
                 return room.joinRoom(player);
             }
+            case "joinRoomQuick":{
+                double type = params.getInt("type");
+                return GoldRoomPool.getInstance().addRoom(player, type);
+
+            }
             case "quitRoom": {
-                RoomDouDiZhu room = getRoomByPlayer(player);
+                Room room = getRoomByPlayer(player);
                 if (room == null) {
                     return ErrorCode.CAN_NOT_NO_ROOM;
                 }
                 return room.quitRoom(player);
             }
             case "getReady": {
-                RoomDouDiZhu room = getRoomByPlayer(player);
+                Room room = getRoomByPlayer(player);
                 if (room == null) {
                     return ErrorCode.CAN_NOT_NO_ROOM;
                 }
                 return room.getReady(player);
             }
             case "dissolveRoom": {
-                RoomDouDiZhu room = getRoomByPlayer(player);
+                Room room = getRoomByPlayer(player);
                 if (room == null) {
                     return ErrorCode.CAN_NOT_NO_ROOM;
                 }
                 return room.dissolution(player, true, method);
             }
             case "answerIfDissolveRoom":
-                RoomDouDiZhu room = getRoomByPlayer(player);
+                Room room = getRoomByPlayer(player);
                 if (room == null) {
                     return ErrorCode.CAN_NOT_NO_ROOM;
                 }
@@ -205,7 +224,7 @@ public class MsgDispatch {
             return -1;
         }
 
-        RoomDouDiZhu room = getRoomByPlayer(player);
+        Room room = getRoomByPlayer(player);
         if (room == null) {
             return ErrorCode.CAN_NOT_NO_ROOM;
         }
@@ -293,7 +312,7 @@ public class MsgDispatch {
 
     }
 
-    private RoomDouDiZhu getRoomByPlayer(Player player) {
+    private Room getRoomByPlayer(Player player) {
         String roomId = GameManager.getInstance().getUserRoom().get(player.getUserId());
         if (roomId == null) {
             return null;

@@ -1,5 +1,6 @@
 package com.code.server.cardgame.core;
 
+import com.code.server.cardgame.core.room.GoldRoomPool;
 import com.code.server.cardgame.core.room.Room;
 import com.code.server.cardgame.core.room.RoomDouDiZhu;
 import com.code.server.cardgame.core.room.RoomTanDaKeng;
@@ -36,7 +37,7 @@ public class GameManager {
     public Map<String, Long> openId_uid = new HashMap<>();
     public Map<Long, String> uid_openId = new HashMap<>();
     public Map<Long, String> userRoom = new HashMap<>();
-    public Map<String, RoomDouDiZhu> rooms = new HashMap<>();
+    public Map<String, Room> rooms = new HashMap<>();
     public Map<String, RoomTanDaKeng> roomsOfTanDaKeng = new HashMap<>();
     public ServerInfo serverInfo;
     public Constant constant;
@@ -68,6 +69,7 @@ public class GameManager {
         vo.setMoney(user.getMoney());
         vo.setVip(user.getVip());
         vo.setUsername(user.getUsername());
+        vo.setReferee(user.getReferee());
 
         String room = GameManager.getInstance().userRoom.get(user.getUserId());
         if (room!=null && GameManager.getInstance().rooms.containsKey(room)) {
@@ -146,6 +148,13 @@ public class GameManager {
             return player;
         }
         return null;
+    }
+
+    public void removeRoom(Room room){
+        this.rooms.remove(room.getRoomId());
+        if (room.getCreateType() == 1) {
+            GoldRoomPool.removeRoomFromMap(GoldRoomPool.getInstance().getFullRoom(),room);
+        }
     }
 
     public Map<Long, String> getUserRoom() {

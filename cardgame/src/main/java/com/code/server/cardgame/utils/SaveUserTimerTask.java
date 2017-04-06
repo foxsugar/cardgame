@@ -37,34 +37,35 @@ public class SaveUserTimerTask extends TimerTask{
     @Override
     public void run() {
 
-        //保存玩家
-        List<User> users = new ArrayList<>();
-        users.addAll(GameManager.getInstance().getSaveUser2DB());
-        logger.warn("定时保存玩家个数 : "+ users.size());
-        userService.batchUpdate(users);
-        GameManager.getInstance().getSaveUser2DB().removeAll(users);
+        try {
+            //保存玩家
+            List<User> users = new ArrayList<>();
+            users.addAll(GameManager.getInstance().getSaveUser2DB());
+            logger.warn("定时保存玩家个数 : "+ users.size());
+            userService.batchUpdate(users);
+            GameManager.getInstance().getSaveUser2DB().removeAll(users);
 
 
-        //从内存中删除玩家
-        long now = System.currentTimeMillis();
+            //从内存中删除玩家
+            long now = System.currentTimeMillis();
 
-        List<Player> removePlayers = new ArrayList<>();
-        for (Player player : GameManager.getInstance().getKickUser()) {
-            //在房间中的玩家 不清理
-             if(GameManager.getInstance().getUserRoom().containsKey(player.getUserId())){
-                 continue;
+            List<Player> removePlayers = new ArrayList<>();
+            for (Player player : GameManager.getInstance().getKickUser()) {
+                //在房间中的玩家 不清理
+                if(GameManager.getInstance().getUserRoom().containsKey(player.getUserId())){
+                    continue;
+                }
+                if (now - player.getLastSendMsgTime() >= serverConfig.getKickTime()) {
+                    userService.save(player.getUser());
+                    GameManager.getInstance().removePlayer(player);
+                    removePlayers.add(player);
+                }
             }
-            if (now - player.getLastSendMsgTime() >= serverConfig.getKickTime()) {
-                userService.save(player.getUser());
-                GameManager.getInstance().removePlayer(player);
-                removePlayers.add(player);
-            }
+            logger.warn("从内存中删除玩家个数 : "+ removePlayers.size());
+            GameManager.getInstance().getKickUser().removeAll(removePlayers);
+        } catch (Exception e) {
+            logger.error("定时保存数据错误",e);
         }
-        logger.warn("从内存中删除玩家个数 : "+ removePlayers.size());
-        GameManager.getInstance().getKickUser().removeAll(removePlayers);
-
-
-
 
 
 

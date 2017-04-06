@@ -5,10 +5,12 @@ import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.room.Room;
 import com.code.server.cardgame.encoding.Notice;
 import com.code.server.cardgame.response.ErrorCode;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by sunxianping on 2017/3/28.
  */
+@Service
 public class GameChatService {
 
 

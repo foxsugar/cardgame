@@ -17,6 +17,7 @@ public class UserVo {
     public String openId; // required
     public int sex; // required
     public String marquee; // required
+    public int referee;
 
     public long getId() {
         return id;
@@ -132,6 +133,15 @@ public class UserVo {
 
     public UserVo setMarquee(String marquee) {
         this.marquee = marquee;
+        return this;
+    }
+
+    public int getReferee() {
+        return referee;
+    }
+
+    public UserVo setReferee(int referee) {
+        this.referee = referee;
         return this;
     }
 }
