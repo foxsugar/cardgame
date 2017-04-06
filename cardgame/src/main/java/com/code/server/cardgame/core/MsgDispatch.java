@@ -180,8 +180,9 @@ public class MsgDispatch {
                 return room.joinRoom(player);
             }
             case "joinRoomQuick":{
-                double type = params.getInt("type");
+                double type = params.getDouble("type");
                 return GoldRoomPool.getInstance().addRoom(player, type);
+
 
             }
             case "quitRoom": {

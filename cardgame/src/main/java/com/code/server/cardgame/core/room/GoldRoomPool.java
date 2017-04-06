@@ -68,6 +68,7 @@ public class GoldRoomPool {
             room.createNeedMoney = 0;
             room.init(1, -1);
             room.setCreateType(ROOM_CREATE_TYPE_GOLD);
+            room.setGoldRoomType(type);
             list.add(room);
         }
 
@@ -89,6 +90,7 @@ public class GoldRoomPool {
             addRoom2Map(fullRoom, room);
         }
 
+        player.sendMsg("roomService","joinRoomQuick",0);
         return 0;
     }
 
