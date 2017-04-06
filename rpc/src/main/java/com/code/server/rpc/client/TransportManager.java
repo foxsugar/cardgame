@@ -11,9 +11,10 @@ import org.apache.thrift.transport.TTransportException;
 public class TransportManager {
 
     public static TTransport getTransport(String host, int port) throws TTransportException {
-        TTransport transport = new TFramedTransport(new TSocket(host, port));
+        TTransport transport = new TFramedTransport(new TSocket(host.trim(), port));
         transport.open();
         return transport;
 
     }
+
 }
