@@ -88,7 +88,6 @@ public class PlayerCardInfo {
         return types.size() == 1;
     }
     public Integer getListByIsType(List<Integer> cards) {
-
         int len = cards.size();
         if (len <= 4) {
             if (cards.size() > 0 &&isSameType(cards)) {
@@ -124,12 +123,6 @@ public class PlayerCardInfo {
         }
 
         if (len >= 5) {
-            if (getShunDel2DaXiao(cards) && CardUtil.getTypeByCard(cards.get(len - 1)) - CardUtil.getTypeByCard(cards.get(0)) == len - 1) {
-                return CardStruct.type_顺;
-            }
-            if (getShunDel2DaXiao(cards) && len % 2 == 0 && (len / 2 == 3 || len / 2 > 3) && CardUtil.getTypeByCard(cards.get(len - 1)) - CardUtil.getTypeByCard(cards.get(0)) == len / 2 - 1) {
-                return CardStruct.type_连对;
-            }
             if (len == 6 && CardUtil.getTypeByCard(cards.get(0)).intValue() == CardUtil.getTypeByCard(cards.get(len - 3)).intValue()
                     && CardUtil.getTypeByCard(cards.get(1)).intValue() == CardUtil.getTypeByCard(cards.get(len - 3)).intValue()
                     && CardUtil.getTypeByCard(cards.get(2)).intValue() == CardUtil.getTypeByCard(cards.get(len - 3)).intValue()
@@ -140,11 +133,19 @@ public class PlayerCardInfo {
             for(Integer card :cards){
                 cardList.add(CardUtil.getTypeByCard(card));
             }
+
+            if ( getShunZi(cardList) && getShunDel2DaXiao(cards) && CardUtil.getTypeByCard(cards.get(len - 1)) - CardUtil.getTypeByCard(cards.get(0)) == len - 1) {
+                return CardStruct.type_顺;
+            }
+            if ( getLianDui(cardList) && getShunDel2DaXiao(cards) && len % 2 == 0 && (len / 2 == 3 || len / 2 > 3) && CardUtil.getTypeByCard(cards.get(len - 1)) - CardUtil.getTypeByCard(cards.get(0)) == len / 2 - 1) {
+                return CardStruct.type_连对;
+            }
+
             if (len % 3 == 0 && (len / 3 == 2 || len / 3 > 2)
-                    && getfeiji(cardList)) {
+                    && getFeiJi(cardList)) {
                 return CardStruct.type_飞机;
             }
-            if (getfeijichibang(cardList)) {
+            if (getFeiJiChiBang(cardList)) {
                 return CardStruct.type_飞机带翅膀;
             } else {
                 return 0;
@@ -153,8 +154,6 @@ public class PlayerCardInfo {
         }else{
             return 0;
         }
-
-
 
     }
     //顺除 2 大王小王
@@ -165,8 +164,56 @@ public class PlayerCardInfo {
             return true;
         }
     }
-        //是否是飞机
-    public boolean getfeiji(List<Integer> cards){
+
+
+    public boolean getShunZi(List<Integer> cards){
+        boolean b = true;
+
+        Collections.sort(cards);
+
+        if(cards.size()<5){
+            b = false;
+        }
+        for(int i = 0 ;i<cards.size()-1;i++){
+            if(cards.get(i+1) - cards.get(i) != 1){
+                b =false;
+            }
+        }
+        return b;
+    }
+
+    public boolean getLianDui(List<Integer> cards){
+        boolean b = true;
+        Map<Integer,Integer> map = new HashMap<>();
+        List<Integer> list = new ArrayList<>();
+
+        for (Integer i:cards) {
+            if(map.containsKey(i)){
+                map.put(i,map.get(i)+1);
+            }else{
+                map.put(i,1);
+            }
+        }
+        for (Integer i:map.keySet()) {
+            if(map.get(i)==2){
+                list.add(i);
+            }
+        }
+
+        Collections.sort(list);
+
+        if(list.size()<3){
+            b = false;
+        }
+        for(int i = 0 ;i<list.size()-1;i++){
+            if(list.get(i+1) - list.get(i) != 1){
+                b =false;
+            }
+        }
+        return b;
+    }
+
+    public boolean getFeiJi(List<Integer> cards){
         boolean b = true;
         Map<Integer,Integer> map = new HashMap<>();
         List<Integer> threelist = new ArrayList<>();
@@ -197,8 +244,8 @@ public class PlayerCardInfo {
 
         return b;
     }
-    //是否是飞机带翅膀
-    public boolean getfeijichibang(List<Integer> cards){
+
+    public boolean getFeiJiChiBang(List<Integer> cards){
         boolean b = true;
         Map<Integer,Integer> map = new HashMap<>();
         List<Integer> threelist = new ArrayList<>();
@@ -237,6 +284,7 @@ public class PlayerCardInfo {
         }
         return b;
     }
+
 
 
     public long getUserId() {
