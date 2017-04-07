@@ -13,6 +13,7 @@ public class Constant {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String marquee;
+    private String download;
 
     private int initMoney;
 
@@ -35,6 +36,15 @@ public class Constant {
         return this;
     }
 
+    public String getDownload() {
+        return download;
+    }
+
+    public Constant setDownload(String download) {
+        this.download = download;
+        return this;
+    }
+
     public int getInitMoney() {
         return initMoney;
     }
@@ -43,4 +53,5 @@ public class Constant {
         this.initMoney = initMoney;
         return this;
     }
+
 }
