@@ -161,7 +161,10 @@ public class GameUserService {
             return ErrorCode.CAN_NOT_BING_REFERRER;
         }
         user.setReferee(referrerId);
+        user.setMoney(user.getMoney() + 10);
+        GameManager.getInstance().getSaveUser2DB().add(user);
         player.sendMsg("userService","bindReferrer",0);
+
         return 0;
     }
 

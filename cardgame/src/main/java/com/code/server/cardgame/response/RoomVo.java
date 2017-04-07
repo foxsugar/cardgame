@@ -21,6 +21,7 @@ public class RoomVo {
     protected long createUser;
     private GameVo game;
     private int curGameNumber;
+    protected int createType;
 
     protected Map<Long, Integer> userStatus = new HashMap<>();//用户状态
     protected List<UserVo> userList = new ArrayList<>();//用户列表
@@ -29,19 +30,20 @@ public class RoomVo {
 
     public RoomVo(){}
 
-    public RoomVo(Room roomDouDiZhu, Player player){
-        this.roomId = roomDouDiZhu.getRoomId();
-        this.multiple = roomDouDiZhu.getMultiple();
-        this.gameNumber = roomDouDiZhu.getGameNumber();
-        this.createUser = roomDouDiZhu.getCreateUser();
-        this.userStatus.putAll(roomDouDiZhu.getUserStatus());
-        this.userScores.putAll(roomDouDiZhu.getUserScores());
-        this.curGameNumber = roomDouDiZhu.getCurGameNumber();
-        for(long uid : roomDouDiZhu.getUsers()){
-            userList.add(GameManager.getUserVo(roomDouDiZhu.getUserMap().get(uid)));
+    public RoomVo(Room room, Player player){
+        this.createType = room.getCreateType();
+        this.roomId = room.getRoomId();
+        this.multiple = room.getMultiple();
+        this.gameNumber = room.getGameNumber();
+        this.createUser = room.getCreateUser();
+        this.userStatus.putAll(room.getUserStatus());
+        this.userScores.putAll(room.getUserScores());
+        this.curGameNumber = room.getCurGameNumber();
+        for(long uid : room.getUsers()){
+            userList.add(GameManager.getUserVo(room.getUserMap().get(uid)));
         }
 
-        this.game = GameVo.getGameVo(roomDouDiZhu.getGame(),player.getUserId());
+        this.game = GameVo.getGameVo(room.getGame(),player.getUserId());
 
     }
 

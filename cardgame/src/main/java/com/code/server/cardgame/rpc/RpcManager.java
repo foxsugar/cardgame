@@ -1,9 +1,7 @@
 package com.code.server.cardgame.rpc;
 
 import com.code.server.cardgame.config.ServerConfig;
-import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.utils.SpringUtil;
-import com.code.server.db.model.User;
 import com.code.server.rpc.client.AdminRpcClient;
 import com.code.server.rpc.client.TransportManager;
 import com.code.server.rpc.idl.AdminRPC;
