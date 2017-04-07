@@ -5,7 +5,6 @@ import com.code.server.cardgame.core.room.Room;
 import com.code.server.cardgame.response.*;
 import com.code.server.db.model.Record;
 import com.code.server.db.model.User;
-import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,22 +35,22 @@ public class GameDouDiZhu extends Game{
 //    protected CardStruct currentCardStruct = new CardStruct();// 当前这个人出的牌
     protected int lasttype = 0;//上一个人出牌的类型
 
-    private long canJiaoUser;//可以叫地主的人
-    private long canQiangUser;//可以抢地主的人
-    private long jiaoUser;//叫的人
-    private long qiangUser;//抢的人
+    protected long canJiaoUser;//可以叫地主的人
+    protected long canQiangUser;//可以抢地主的人
+    protected long jiaoUser;//叫的人
+    protected long qiangUser;//抢的人
 
-    private long playTurn;//该出牌的人
+    protected long playTurn;//该出牌的人
 
     protected CardStruct lastCardStruct;//上一个人出的牌
 
-    private int step;//步骤
+    protected int step;//步骤
 
-    private int zhaCount;
-    private int multiple = 1;
-    private Room room;
-    private boolean isSpring;
-    private Set<Long> userPlayCount = new HashSet<>();
+    protected int zhaCount;
+    protected int multiple = 1;
+    protected Room room;
+    protected boolean isSpring;
+    protected Set<Long> userPlayCount = new HashSet<>();
 
 
 
@@ -72,10 +71,6 @@ public class GameDouDiZhu extends Game{
         shuffle();
         deal();
         chooseDizhu(dizhuUser);
-
-
-
-
     }
 
     /**
@@ -104,7 +99,7 @@ public class GameDouDiZhu extends Game{
         //删除牌
         playerCardInfo.cards.removeAll(cardStruct.getCards());
 
-         if(zhaCount < room.getMultiple()){
+         if(zhaCount < room.getMultiple() || room.getMultiple() == -1){
             if(cardStruct.getType()==CardStruct.type_炸){
                 List<Integer> cards = cardStruct.getCards();
                     if(cards.size()==4 && CardUtil.getTypeByCard(cards.get(0)) == 0 && CardUtil.getTypeByCard(cards.get(cards.size()-1))==0){ //3333
@@ -237,6 +232,7 @@ public class GameDouDiZhu extends Game{
             if (bujiaoSet.size() >= users.size()) {
                 sendResult(true,false);
                 room.clearReadyStatus(true);
+                sendFinalResult();
             } else {
                 long nextJiao = nextTurnId(player.getUserId());
                 canJiaoUser = nextJiao;
@@ -266,7 +262,7 @@ public class GameDouDiZhu extends Game{
         return 0;
     }
 
-    private void compute(boolean isDizhuWin){
+    protected void compute(boolean isDizhuWin){
 
         double subScore = 0;
         int s = isDizhuWin?-1:1;
@@ -285,9 +281,6 @@ public class GameDouDiZhu extends Game{
                 subScore += score;
                 playerCardInfo.setScore(score);
                 room.addUserSocre(playerCardInfo.getUserId(),score);
-
-
-
             }
         }
 
@@ -314,7 +307,7 @@ public class GameDouDiZhu extends Game{
 
     private void sendFinalResult() {
         //所有牌局都结束
-        if (room.getCurGameNumber() > room.getGameNumber()) {
+        if (room.getCurGameNumber() >= room.getGameNumber()) {
             GameFinalResult gameFinalResult = new GameFinalResult();
             room.getUserScores().forEach((userId,score)->{
 
@@ -327,7 +320,7 @@ public class GameDouDiZhu extends Game{
             Player.sendMsg2Player("gameService","gameFinalResult",gameFinalResult,users);
 
             //删除room
-            GameManager.getInstance().rooms.remove(room.getRoomId());
+            GameManager.getInstance().removeRoom(room);
 
         }
     }

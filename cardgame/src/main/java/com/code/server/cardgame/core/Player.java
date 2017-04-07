@@ -14,7 +14,7 @@ public class Player {
     private long userId;
     private User user;
     private ChannelHandlerContext ctx;
-    private long lastSendMsgTime;
+    private long lastSendMsgTime;//上次发消息时间
 
     public void sendMsg(Object msg){
         this.ctx.writeAndFlush(msg);
@@ -29,7 +29,7 @@ public class Player {
     }
     public static void sendMsg2Player(Object msg, long userId) {
         Player other = GameManager.getInstance().players.get(userId);
-        if (other != null) {
+        if (other != null && other.ctx != null) {
             other.ctx.writeAndFlush(msg);
         }
     }

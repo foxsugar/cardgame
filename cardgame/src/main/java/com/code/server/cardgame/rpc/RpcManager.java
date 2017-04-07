@@ -57,10 +57,42 @@ public class RpcManager {
     }
 
     private void getTransport() throws TTransportException {
-        adminTransport = TransportManager.getTransport(serverConfig.getAdminRpcHost(),serverConfig.getPort());
+        adminTransport = TransportManager.getTransport(serverConfig.getAdminRpcHost().trim(),serverConfig.getAdminRpcPort());
     }
 
 
+    public static void main(String[] args) {
+        try {
+            TTransport adminTransport = TransportManager.getTransport("192.168.1.150",10000);
+//            TTransport adminTransport = TransportManager.getTransport("127.0.0.1",8090);
+            AdminRPC.Client adminRpcClient = AdminRpcClient.getAClient(adminTransport);
+//            AdminRPC.Client adminRpcClient = getAdminClient();
+//            adminRpcClient.test();
+            List<Rebate> list = new ArrayList<>();
+            Rebate rebate = new Rebate();
+            rebate.setId(1L);
+            rebate.setUserId(1L);
+            rebate.setTime(2L);
+            rebate.setIsHasReferee(true);
+            rebate.setRefereeId(1);
+
+
+
+//            1: i64 id,
+//            2:i64 userId,
+//            3:i32 refereeId,
+//            4:double rebateNum,
+//            5:i64 time,
+//            6:bool isHasReferee,
+            list.add(rebate);
+            adminRpcClient.rebate(list);
+
+        } catch (TTransportException e) {
+            e.printStackTrace();
+        } catch (TException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
@@ -68,8 +100,9 @@ public class RpcManager {
         try {
             RpcManager.getInstance().getAdminClient().rebate(rebates);
         } catch (TException e) {
-            logger.error("send rpc rebat error ");
-            failedRebate.addAll(rebates);
+            logger.error("send rpc rebat error ",e);
+            //todo 发送不成功处理
+//            failedRebate.addAll(rebates);
         }
     }
 

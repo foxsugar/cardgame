@@ -19,6 +19,9 @@ import java.util.*;
  * Created by sunxianping on 2017/3/14.
  */
 public class Room {
+    public static final int ROOM_CREATE_TYPE_CONMMON = 0;
+    public static final int ROOM_CREATE_TYPE_GOLD = 1;
+
     public static final int STATUS_JOIN = 0;
     public static final int STATUS_READY = 1;
     public static final int STATUS_IN_GAME = 2;
@@ -32,6 +35,7 @@ public class Room {
 
     protected String roomId;
     protected int createType;//房卡或金币
+    protected double goldRoomType;
 
     protected int createNeedMoney;
     protected static Random random = new Random();
@@ -89,6 +93,11 @@ public class Room {
 
 
         player.sendMsg(new ResponseVo("roomService","createRoom",new RoomVo(room,player)));
+
+        return 0;
+    }
+
+    public static int joinRoomQuick(Player player,int type){
 
         return 0;
     }
@@ -156,7 +165,7 @@ public class Room {
 
         roomAddUser(player);
         //加进玩家-房间映射表
-        GameManager.getInstance().getUserRoom().put(userId, roomId);
+//        GameManager.getInstance().getUserRoom().put(userId, roomId);
         noticeJoinRoom(player);
 
         return 0;
@@ -230,7 +239,7 @@ public class Room {
 
         roomRemoveUser(player);
         //删除玩家房间映射关系
-        GameManager.getInstance().getUserRoom().remove(userId);
+//        GameManager.getInstance().getUserRoom().remove(userId);
 
         if (this.createUser == player.getUserId()) {//房主解散
 
@@ -462,11 +471,10 @@ public class Room {
         return 0;
     }
 
-    private void dissolutionRoom(){
+    protected void dissolutionRoom(){
 
+        GameManager.getInstance().removeRoom(this);
 
-
-        GameManager.getInstance().rooms.remove(this.roomId);
 
         // 结果类
         ArrayList<UserOfResult> userOfResultList = new ArrayList<>();
@@ -711,6 +719,15 @@ public class Room {
 
     public Room setCreateType(int createType) {
         this.createType = createType;
+        return this;
+    }
+
+    public double getGoldRoomType() {
+        return goldRoomType;
+    }
+
+    public Room setGoldRoomType(double goldRoomType) {
+        this.goldRoomType = goldRoomType;
         return this;
     }
 }

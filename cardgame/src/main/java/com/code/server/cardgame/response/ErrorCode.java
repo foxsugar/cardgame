@@ -57,6 +57,11 @@ public class ErrorCode {
 	public static final int CAN_NOT_NO_GAME = 200003;
 	public static final int CAN_NOT_PLAY = 200004;
 
+	public static final int CAN_NOT_BING_REFERRER = 200010;
+
+
+	public static final int CAN_NOT_JOIN_PARAM_ERROR = 200020;
+
 	
 	
 	static class ErrorCodeRepeatChecker {

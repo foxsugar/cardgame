@@ -27,4 +27,7 @@ public class AdminRpcServer {
         server.serve();
         return server;
     }
+
+    public static void main(String[] args) {
+    }
 }

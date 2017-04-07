@@ -91,6 +91,14 @@ bootRun {
 }
 
 
+// project runtimes JVM options
+applicationDefaultJvmArgs = ["-server",
+//							 "-Dproject.home=${projectpath}",
+//							 "-Dlog4j.configurationFile=${projectpath}/conf/log4j2.xml",
+							 "-Xms3g",
+							 "-Xmx3g",
+							 //略
+]
 
 
 //task hello {

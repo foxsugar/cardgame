@@ -104,6 +104,12 @@ public class GameUserService {
     }
 
 
+    public int getUserRecodeByUserId(Player player, int type){
+        User user = player.getUser();
+        user.getRecord().getRoomRecords().get(type);
+        player.sendMsg("userService","getUserRecodeByUserId",user.getRecord().getRoomRecords().get(type));
+        return 0;
+    }
 
     public int appleCheck(ChannelHandlerContext ctx){
         ServerInfo serverInfo = GameManager.getInstance().serverInfo;
@@ -148,6 +154,16 @@ public class GameUserService {
         return 0;
     }
 
+
+    public int bindReferrer(Player player, int referrerId){
+        User user = player.getUser();
+        if(referrerId<=0 || user.getReferee()!=0){
+            return ErrorCode.CAN_NOT_BING_REFERRER;
+        }
+        user.setReferee(referrerId);
+        player.sendMsg("userService","bindReferrer",0);
+        return 0;
+    }
 
     public int checkOpenId(final String openId,String username, final String image,int sex,ChannelHandlerContext ctx){
 
