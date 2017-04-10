@@ -1,6 +1,6 @@
 package com.code.server.cardgame.rpc;
 
-import com.code.server.cardgame.Message.MessageHolder;
+import com.code.server.cardgame.message.MessageHolder;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.handler.GameProcessor;

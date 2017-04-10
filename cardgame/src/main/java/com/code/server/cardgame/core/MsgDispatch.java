@@ -1,6 +1,6 @@
 package com.code.server.cardgame.core;
 
-import com.code.server.cardgame.Message.MessageHolder;
+import com.code.server.cardgame.message.MessageHolder;
 import com.code.server.cardgame.core.game.GameDouDiZhu;
 import com.code.server.cardgame.core.game.GameTianDaKeng;
 import com.code.server.cardgame.core.room.GoldRoomPool;
@@ -13,7 +13,6 @@ import com.code.server.cardgame.rpc.RpcMsgDispatch;
 import com.code.server.cardgame.service.GameChatService;
 import com.code.server.cardgame.service.GameUserService;
 import com.code.server.cardgame.utils.SpringUtil;
-import com.code.server.db.model.User;
 import com.google.gson.Gson;
 import io.netty.channel.ChannelHandlerContext;
 import net.sf.json.JSONObject;
@@ -38,6 +37,7 @@ public class MsgDispatch {
 
 
     public void handleMessage(MessageHolder msgHolder) {
+
         Object message = msgHolder.message;
         switch (msgHolder.msgType) {
             case MessageHolder.MSG_TYPE_RPC:{
@@ -46,12 +46,10 @@ public class MsgDispatch {
             }
             case MessageHolder.MSG_TYPE_CLIENT_JSON:{
                 JSONObject jSONObject = (JSONObject) message;
-                System.out.println("handle message== " + jSONObject);
-//                logger.info("handle message== " + jSONObject);
+                logger.info("handle message== " + jSONObject);
                 String service = jSONObject.getString("service");
                 String method = jSONObject.getString("method");
                 JSONObject params = jSONObject.getJSONObject("params");
-
                 //逻辑
                 int code = dispatchAllMsg(service, method, params, msgHolder.ctx);
                 //客户端要的方法返回

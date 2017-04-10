@@ -9,7 +9,9 @@ import com.code.server.cardgame.encoding.Notice;
 import com.code.server.cardgame.response.*;
 import com.code.server.cardgame.utils.SpringUtil;
 import com.code.server.cardgame.utils.ThreadPool;
+import com.code.server.db.Service.ConstantService;
 import com.code.server.db.Service.UserService;
+import com.code.server.db.model.Constant;
 import com.code.server.db.model.ServerInfo;
 import com.code.server.db.model.User;
 import io.netty.channel.ChannelHandlerContext;
@@ -44,7 +46,7 @@ public class GameUserService {
         ctx.channel().attr(GameManager.attributeKey).set(user.getUserId());
         GameManager.getInstance().addPlayer(player);
         player.setLastSendMsgTime(System.currentTimeMillis());
-        GameManager.getInstance().getKickUser().remove(player.getUserId());
+        GameManager.getInstance().getKickUser().remove(player);
 
 
     }
@@ -113,9 +115,10 @@ public class GameUserService {
 
     public int appleCheck(ChannelHandlerContext ctx){
         ServerInfo serverInfo = GameManager.getInstance().serverInfo;
+        Constant constant = GameManager.getInstance().constant;
         JSONObject jSONObject = new JSONObject();
         jSONObject.put("isInAppleCheck", serverInfo.getAppleCheck());
-        jSONObject.put("address", serverInfo.getAddress());
+        jSONObject.put("address", constant.getDownload());
         jSONObject.put("appleVersion", serverInfo.getVersionOfIos());
         jSONObject.put("androidVersion", serverInfo.getVersionOfAndroid());
 

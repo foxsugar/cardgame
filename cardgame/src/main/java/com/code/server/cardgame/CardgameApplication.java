@@ -44,6 +44,8 @@ public class CardgameApplication {
 
 		//rpc服务
 		RpcManager.getInstance().startGameRpcServer();
+		RpcManager.getInstance().checkGameRpcServerWork();
+
 		ServerState.isWork = true;
 	}
 

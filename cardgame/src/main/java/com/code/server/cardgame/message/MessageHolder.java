@@ -1,4 +1,4 @@
-package com.code.server.cardgame.Message;
+package com.code.server.cardgame.message;
 
 import io.netty.channel.ChannelHandlerContext;
 import org.apache.thrift.async.AsyncMethodCallback;

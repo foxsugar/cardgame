@@ -17,10 +17,4 @@ class ReloadData {
     }
 
 
-    @Usage("re")
-    @Command
-    def re(InvocationContext context) {
-        CardgameApplication.init()
-        return "reload success!"
-    }
 }

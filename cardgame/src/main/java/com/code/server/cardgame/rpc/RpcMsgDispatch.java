@@ -1,7 +1,6 @@
 package com.code.server.cardgame.rpc;
 
-import com.code.server.cardgame.Message.MessageHolder;
-import com.code.server.cardgame.core.MsgDispatch;
+import com.code.server.cardgame.message.MessageHolder;
 
 /**
  * Created by sunxianping on 2017/3/31.

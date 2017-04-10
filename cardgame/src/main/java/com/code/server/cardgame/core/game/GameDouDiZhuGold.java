@@ -53,7 +53,7 @@ public class GameDouDiZhuGold extends GameDouDiZhu {
         } else {//地主输
             int part = 0;
             for(PlayerCardInfo playerCardInfo : playerCardInfos.values()){
-                //不是地主 扣分
+
                 if(dizhu != playerCardInfo.getUserId()){
                     part += 1;
                     double score = multiple * room.getGoldRoomType() ;
@@ -86,7 +86,7 @@ public class GameDouDiZhuGold extends GameDouDiZhu {
 
                     //抽成
                     double rebateNum = getRebateNum(score);
-                    user_dizhu.setMoney(user_nm.getMoney() - rebateNum);
+                    user_nm.setMoney(user_nm.getMoney() - rebateNum);
                     rebateSum += rebateNum;
 
                 }

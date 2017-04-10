@@ -75,10 +75,6 @@ public class GoldRoomPool {
         notFullRoom.put(type, list);
 
         int rtn = room.joinRoom(player);
-        if (rtn != 0) {
-            return rtn;
-        }
-
         //加入房间列表
         GameManager.getInstance().rooms.put(room.getRoomId(), room);
 
@@ -89,6 +85,10 @@ public class GoldRoomPool {
             //加入已满的
             addRoom2Map(fullRoom, room);
         }
+        if (rtn != 0) {
+            return rtn;
+        }
+
 
         player.sendMsg("roomService","joinRoomQuick",0);
         return 0;

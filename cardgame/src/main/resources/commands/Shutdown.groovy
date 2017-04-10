@@ -11,12 +11,8 @@ class Shutdown {
     @Usage("shutdown")
     @Command
     def main(InvocationContext context) {
-
-        Shutdown.
-        return "shutdown"
+        com.code.server.cardgame.bootstarp.Shutdown.shutdown()
     }
 
-    public def test(){
-        println "================================================"
-    }
+
 }
