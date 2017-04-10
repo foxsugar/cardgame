@@ -60,8 +60,8 @@ public class PlayerCardInfo {
         if(0!=lasttype){
              Integer currenttype =  currentCardStruct.type;//获取当前出牌类型
              if(currenttype==lasttype){
-                List<Integer> lastList = lastcardStruct.getByTypeList(lasttype);//获取上次出牌的牌型
-                List<Integer> list = currentCardStruct.getByTypeList(currenttype);//获取当前出牌类型
+                List<Integer> lastList = lastcardStruct.getCards();//获取上次出牌的牌型
+                List<Integer> list = currentCardStruct.getCards();//获取当前出牌类型
 
                  if(list.size()>lastList.size()){     //3333 > 22
                     results = true;
