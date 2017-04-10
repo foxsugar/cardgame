@@ -1,6 +1,5 @@
 namespace java com.code.server.rpc.idl
 
-include "response.thrift"
 
 struct User {
   1: i64 id = 0,

@@ -163,8 +163,4 @@ public class GameRpcHandler implements GameRPC.AsyncIface {
         messageHolder.rpcHolder.rpcCallback.onComplete(RPCError.NO_USER.getValue());
     }
 
-
-
-
-
 }

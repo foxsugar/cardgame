@@ -1,7 +1,6 @@
 package com.code.server.rpc.server;
 
 import com.code.server.rpc.idl.AdminRPC;
-import com.code.server.rpc.idl.GameRPC;
 import org.apache.thrift.TProcessor;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.server.TServer;

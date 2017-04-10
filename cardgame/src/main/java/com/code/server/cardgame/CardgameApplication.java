@@ -2,6 +2,7 @@ package com.code.server.cardgame;
 
 import com.code.server.cardgame.bootstarp.SocketServer;
 import com.code.server.cardgame.config.ServerConfig;
+import com.code.server.cardgame.config.ServerState;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.handler.GameProcessor;
 import com.code.server.cardgame.rpc.RpcManager;
@@ -43,6 +44,7 @@ public class CardgameApplication {
 
 		//rpc服务
 		RpcManager.getInstance().startGameRpcServer();
+		ServerState.isWork = true;
 	}
 
 	public static void init(){

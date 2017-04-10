@@ -4,18 +4,11 @@ import com.code.server.cardgame.config.ServerConfig;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.game.Game;
 import com.code.server.cardgame.core.game.GameDouDiZhu;
-import com.code.server.cardgame.core.game.GameDouDiZhuGold;
 import com.code.server.cardgame.rpc.RpcManager;
 import com.code.server.cardgame.utils.SpringUtil;
 import com.code.server.cardgame.utils.ThreadPool;
 import com.code.server.db.model.User;
-import com.code.server.rpc.client.AdminRpcClient;
-import com.code.server.rpc.client.TransportManager;
-import com.code.server.rpc.idl.AdminRPC;
 import com.code.server.rpc.idl.Rebate;
-import org.apache.thrift.TException;
-import org.apache.thrift.transport.TTransport;
-import org.apache.thrift.transport.TTransportException;
 
 import java.util.ArrayList;
 import java.util.List;

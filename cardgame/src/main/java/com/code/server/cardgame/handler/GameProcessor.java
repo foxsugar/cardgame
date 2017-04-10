@@ -2,6 +2,7 @@ package com.code.server.cardgame.handler;
 
 
 
+import com.code.server.cardgame.config.ServerState;
 import com.code.server.cardgame.core.MsgDispatch;
 import com.code.server.cardgame.Message.MessageHolder;
 import com.code.server.cardgame.timer.GameTimer;
@@ -56,7 +57,7 @@ public class GameProcessor implements Runnable{
 
     @Override
     public void run() {
-       while(true){
+       while(true && ServerState.isWork){
            try {
                MessageHolder messHolder = messageQueue.poll(10, TimeUnit.MILLISECONDS);
                if(messHolder != null&&messHolder.message !=null){
