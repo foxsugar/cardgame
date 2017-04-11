@@ -24,12 +24,10 @@ public class Shutdown {
         GameProcessor.getInstance().handle();
 
         //保存玩家
-        List<User> users = new ArrayList<>();
-        for (Player player : GameManager.getInstance().players.values()) {
-            users.add(player.getUser());
-        }
         UserService userService = SpringUtil.getBean(UserService.class);
-        userService.batchUpdate(users);
-        userService.em.flush();
+        for (Player player : GameManager.getInstance().players.values()) {
+            userService.save(player.getUser());
+        }
+
     }
 }
