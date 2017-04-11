@@ -28,6 +28,7 @@ public class GameRpcServer {
             tArgs.protocolFactory(new TBinaryProtocol.Factory());
 
 
+
             server = new TThreadedSelectorServer(tArgs);
             server.serve();
 
