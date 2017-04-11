@@ -58,6 +58,9 @@ public class UserService {
     }
 
 
+    public void flush(){
+        em.flush();
+    }
 
     @Transactional
     public void batchUpdate(List<User> list) {
