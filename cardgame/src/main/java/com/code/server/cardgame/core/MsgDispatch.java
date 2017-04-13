@@ -1,5 +1,6 @@
 package com.code.server.cardgame.core;
 
+import com.code.server.cardgame.core.game.Game;
 import com.code.server.cardgame.message.MessageHolder;
 import com.code.server.cardgame.core.game.GameDouDiZhu;
 import com.code.server.cardgame.core.game.GameTianDaKeng;
@@ -227,11 +228,20 @@ public class MsgDispatch {
         if (room == null) {
             return ErrorCode.CAN_NOT_NO_ROOM;
         }
-        GameDouDiZhu game = (GameDouDiZhu) room.getGame();
+        Game game = room.getGame();
         if (game == null) {
             return ErrorCode.CAN_NOT_NO_GAME;
         }
 
+        if(game instanceof GameDouDiZhu){
+            return dispatchGameDDZService(method,(GameDouDiZhu) game,params,player);
+        }else if(game instanceof GameTianDaKeng){
+           return dispatchGameTDKService(method,(GameTianDaKeng) game,params,player);
+        }
+        return -1;
+    }
+
+    private int dispatchGameDDZService(String method,GameDouDiZhu game,JSONObject params,Player player){
         switch (method) {
             case "jiaoDizhu":
                 boolean isJiao = params.getBoolean("isJiao");
@@ -250,21 +260,7 @@ public class MsgDispatch {
         }
     }
 
-
-    private int dispatchGameTDKService(String method, JSONObject params, ChannelHandlerContext ctx) {
-        Player player = GameManager.getPlayerByCtx(ctx);
-        if (player == null) {
-            return -1;
-        }
-
-        RoomTanDaKeng room = getRoomTDKByPlayer(player);
-        if (room == null) {
-            return ErrorCode.CAN_NOT_NO_ROOM;
-        }
-        GameTianDaKeng game = (GameTianDaKeng) room.getGame();
-        if (game == null) {
-            return ErrorCode.CAN_NOT_NO_GAME;
-        }
+    private int dispatchGameTDKService(String method,GameTianDaKeng game,JSONObject params,Player player) {
 
         switch (method) {
             case "bet"://下注
@@ -319,12 +315,4 @@ public class MsgDispatch {
         return GameManager.getInstance().rooms.get(roomId);
     }
 
-
-    private RoomTanDaKeng getRoomTDKByPlayer(Player player) {
-        String roomId = GameManager.getInstance().getUserRoom().get(player.getUserId());
-        if (roomId == null) {
-            return null;
-        }
-        return GameManager.getInstance().roomsOfTanDaKeng.get(roomId);
-    }
 }

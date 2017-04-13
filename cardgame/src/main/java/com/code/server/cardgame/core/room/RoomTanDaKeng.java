@@ -26,10 +26,6 @@ public class RoomTanDaKeng extends Room{
 
     private static final Logger logger = Logger.getLogger(RoomTanDaKeng.class);
 
-
-
-
-
     protected Game getGameInstance(){
         return new GameTianDaKeng();
     }
@@ -53,7 +49,7 @@ public class RoomTanDaKeng extends Room{
         room.init(gameNumber,roomType);
         //房间加入列表
         room.roomAddUser(player);
-        GameManager.getInstance().roomsOfTanDaKeng.put(room.roomId, room);
+        GameManager.getInstance().rooms.put(room.roomId, room);
 
         player.sendMsg(new ResponseVo("roomService","createRoom",new RoomTianDaKengVo(room,player)));
 
