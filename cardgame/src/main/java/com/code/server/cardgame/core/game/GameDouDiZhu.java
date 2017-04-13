@@ -307,7 +307,7 @@ public class GameDouDiZhu extends Game{
 
     private void sendFinalResult() {
         //所有牌局都结束
-        if (room.getCurGameNumber() >= room.getGameNumber()) {
+        if (room.getCurGameNumber() > room.getGameNumber()) {
             GameFinalResult gameFinalResult = new GameFinalResult();
             room.getUserScores().forEach((userId,score)->{
 
