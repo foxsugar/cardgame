@@ -26,6 +26,10 @@ public class RoomTanDaKeng extends Room{
 
     private static final Logger logger = Logger.getLogger(RoomTanDaKeng.class);
 
+    private boolean isLastDraw = false;//是否平局
+
+    private int drawForLeaveChip = 0;//平局留下筹码
+
     protected Game getGameInstance(){
         return new GameTianDaKeng();
     }
@@ -74,5 +78,19 @@ public class RoomTanDaKeng extends Room{
         this.isInGame = false;
     }
 
+    public boolean isLastDraw() {
+        return isLastDraw;
+    }
 
+    public void setLastDraw(boolean lastDraw) {
+        isLastDraw = lastDraw;
+    }
+
+    public int getDrawForLeaveChip() {
+        return drawForLeaveChip;
+    }
+
+    public void setDrawForLeaveChip(int drawForLeaveChip) {
+        this.drawForLeaveChip = drawForLeaveChip;
+    }
 }
