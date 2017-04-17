@@ -45,12 +45,18 @@ public class RoomTanDaKeng extends Room{
         if (player.getUser().getMoney() < needMoney) {
             return ErrorCode.CANNOT_CREATE_ROOM_MONEY;
         }
+
         RoomTanDaKeng room = new RoomTanDaKeng();
         room.personNumber = personNumber;
 
         room.roomId = getRoomIdStr(genRoomId());
         room.createUser = player.getUserId();
         room.init(gameNumber,roomType);
+
+        if(room.getMultiple()==25||room.getMultiple()==50||room.getMultiple()==100||room.getMultiple()==200){
+            return ErrorCodeTDK.CREATE_ROOM_MULTIPLE;
+        }
+
         //房间加入列表
         room.roomAddUser(player);
         GameManager.getInstance().rooms.put(room.roomId, room);

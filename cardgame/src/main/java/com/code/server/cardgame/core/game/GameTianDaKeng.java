@@ -22,10 +22,10 @@ import static com.code.server.cardgame.core.CardUtil.getCardType;
 public class GameTianDaKeng extends Game{
     private static final Logger logger = LoggerFactory.getLogger(GameTianDaKeng.class);
 
-    private static final int INIT_BOTTOM_CHIP = 1;//底注
+    private static final Double INIT_BOTTOM_CHIP = 1.0;//底注
     private static final int INIT_CARD_NUM = 3;
-    private static final int MAX_BET_NUM = 5;
-    private static final int DOUBLE_MAX_BET_NUM = 10;//烂锅下一局的最大注上限
+    private static final Double MAX_BET_NUM = 5.0;
+    private static final Double DOUBLE_MAX_BET_NUM = 10.0;//烂锅下一局的最大注上限
 
     protected List<Integer> cards = new ArrayList<>();//牌
 
@@ -34,8 +34,8 @@ public class GameTianDaKeng extends Game{
     protected List<Long> users = new ArrayList<>();
     private Random rand = new Random();
 
-    protected Map<Long,Integer> allChip = new HashedMap();//总下注数
-    protected Map<Long,Integer> curChip = new HashedMap();//当前下注数
+    protected Map<Long,Double> allChip = new HashedMap();//总下注数
+    protected Map<Long,Double> curChip = new HashedMap();//当前下注数
 
 
     private long currentTurn;//当前操作人
@@ -308,8 +308,8 @@ public class GameTianDaKeng extends Game{
     /**
      * 通知其他人这轮积分的最终归属
      */
-    private void noticeFinishScores(Map<Long,Integer> allChip){
-        Map<String, Map<Long,Integer>> result = new HashMap<>();
+    private void noticeFinishScores(Map<Long,Double> allChip){
+        Map<String, Map<Long,Double>> result = new HashMap<>();
         result.put("allChip",allChip);
         ResponseVo vo = new ResponseVo("gameService","finishScores",result);
         Player.sendMsg2Player(vo,users);
@@ -319,7 +319,7 @@ public class GameTianDaKeng extends Game{
      * 通知其他人分数
      */
     private void noticeOtherScores(){
-        Map<String, Map<Long,Integer>> result = new HashMap<>();
+        Map<String, Map<Long,Double>> result = new HashMap<>();
         result.put("allChip",allChip);
         ResponseVo vo = new ResponseVo("gameService","otherScores",result);
         Player.sendMsg2Player(vo,users);
@@ -442,9 +442,9 @@ public class GameTianDaKeng extends Game{
                             for (Long l:allChip.keySet()) {//结算积分
                                 if(!l.equals(winner)){
                                     allChip.put(winner,allChip.get(winner)+allChip.get(l));
-                                    allChip.put(l,0);
-                                    this.room.getUserScores().put(l,this.room.getUserScores().get(l)-allChip.get(l));
-                                    this.room.getUserScores().put(winner,this.room.getUserScores().get(winner)+allChip.get(l));
+                                    allChip.put(l,0.0);
+                                    this.room.getUserScores().put(l,(this.room.getUserScores().get(l)-allChip.get(l))*this.room.getMultiple()/100);
+                                    this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner)+allChip.get(l))*this.room.getMultiple()/100);
                                 }
                             }
                             if(this.room.getDrawForLeaveChip()!=0){
@@ -468,7 +468,9 @@ public class GameTianDaKeng extends Game{
                 for (Long l:allChip.keySet()) {//结算积分
                     if(!l.equals(winner)){
                         allChip.put(winner,allChip.get(winner)+allChip.get(l));
-                        allChip.put(l,0);
+                        allChip.put(l,0.0);
+                        this.room.getUserScores().put(l,(this.room.getUserScores().get(l)-allChip.get(l))*this.room.getMultiple()/100);
+                        this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner)+allChip.get(l))*this.room.getMultiple()/100);
                     }
                 }
                 noticeFinishScores(allChip);
@@ -614,23 +616,23 @@ public class GameTianDaKeng extends Game{
         this.room = room;
     }
 
-    public static int getInitBottomChip() {
+    public static Double getInitBottomChip() {
         return INIT_BOTTOM_CHIP;
     }
 
-    public Map<Long, Integer> getAllChip() {
+    public Map<Long, Double> getAllChip() {
         return allChip;
     }
 
-    public void setAllChip(Map<Long, Integer> allChip) {
+    public void setAllChip(Map<Long, Double> allChip) {
         this.allChip = allChip;
     }
 
-    public Map<Long, Integer> getCurChip() {
+    public Map<Long, Double> getCurChip() {
         return curChip;
     }
 
-    public void setCurChip(Map<Long, Integer> curChip) {
+    public void setCurChip(Map<Long, Double> curChip) {
         this.curChip = curChip;
     }
 
