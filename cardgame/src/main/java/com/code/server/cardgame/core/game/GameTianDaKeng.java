@@ -69,7 +69,9 @@ public class GameTianDaKeng extends Game{
 
         shuffle();
         deal();
-        mustBet();
+        if(!this.room.isLastDraw()){
+            mustBet();
+        }
         currentTurn = getMaxCardUser(trunNumber);
         noticeCanBet(getMaxCardUser(trunNumber));
     }
@@ -158,7 +160,7 @@ public class GameTianDaKeng extends Game{
         }
 
         //TODO 烂锅之后需要重新判断
-        if(chip > MAX_BET_NUM){//下注错误
+        if(chip > MAX_BET_NUM  || (this.room.isLastDraw() && chip>DOUBLE_MAX_BET_NUM)){//下注错误
             return ErrorCodeTDK.MORE_BET;
         }
         this.chip = chip;
@@ -183,7 +185,7 @@ public class GameTianDaKeng extends Game{
         }
 
         //TODO 烂锅之后需要重新判断
-        if(chip > MAX_BET_NUM){//下注错误
+        if(chip > MAX_BET_NUM || (this.room.isLastDraw() && chip>DOUBLE_MAX_BET_NUM)){//下注错误
             return ErrorCodeTDK.MORE_BET;
         }
         addToChip(player.getUserId(),chip);//添加积分
@@ -207,7 +209,7 @@ public class GameTianDaKeng extends Game{
         }
 
         //TODO 烂锅之后需要重新判断
-        if(chip > MAX_BET_NUM){//下注错误
+        if(chip > MAX_BET_NUM || (this.room.isLastDraw() && chip>DOUBLE_MAX_BET_NUM)){//下注错误
             return ErrorCodeTDK.MORE_BET;
         }
         this.chip = chip;
@@ -433,6 +435,7 @@ public class GameTianDaKeng extends Game{
                                 temp +=  allChip.get(l);
                             }
                             this.room.setDrawForLeaveChip(temp);
+                            endSth();
                         }else{
                             noticeWhoWin(getWhoWin());
                             Long winner = getWhoWin();
@@ -440,6 +443,8 @@ public class GameTianDaKeng extends Game{
                                 if(!l.equals(winner)){
                                     allChip.put(winner,allChip.get(winner)+allChip.get(l));
                                     allChip.put(l,0);
+                                    this.room.getUserScores().put(l,this.room.getUserScores().get(l)-allChip.get(l));
+                                    this.room.getUserScores().put(winner,this.room.getUserScores().get(winner)+allChip.get(l));
                                 }
                             }
                             if(this.room.getDrawForLeaveChip()!=0){
@@ -607,6 +612,59 @@ public class GameTianDaKeng extends Game{
 
     public void setRoom(RoomTanDaKeng room) {
         this.room = room;
+    }
+
+    public static int getInitBottomChip() {
+        return INIT_BOTTOM_CHIP;
+    }
+
+    public Map<Long, Integer> getAllChip() {
+        return allChip;
+    }
+
+    public void setAllChip(Map<Long, Integer> allChip) {
+        this.allChip = allChip;
+    }
+
+    public Map<Long, Integer> getCurChip() {
+        return curChip;
+    }
+
+    public void setCurChip(Map<Long, Integer> curChip) {
+        this.curChip = curChip;
+    }
+
+    public List<Long> getAliveUser() {
+        return aliveUser;
+    }
+
+    public void setAliveUser(List<Long> aliveUser) {
+        this.aliveUser = aliveUser;
+    }
+
+    public List<Long> getCurUser() {
+        return curUser;
+    }
+
+    public void setCurUser(List<Long> curUser) {
+        this.curUser = curUser;
+    }
+
+    public List<Long> getCanRaiseUser() {
+        return canRaiseUser;
+    }
+
+    public void setCanRaiseUser(List<Long> canRaiseUser) {
+        this.canRaiseUser = canRaiseUser;
+    }
+
+
+    public int getChip() {
+        return chip;
+    }
+
+    public void setChip(int chip) {
+        this.chip = chip;
     }
 
     //==========================获取谁赢=================================

@@ -5,6 +5,7 @@ import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.MsgDispatch;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.room.Room;
+import com.code.server.cardgame.core.room.RoomTanDaKeng;
 import com.code.server.cardgame.encoding.Notice;
 import com.code.server.cardgame.response.*;
 import com.code.server.cardgame.utils.SpringUtil;
@@ -142,7 +143,11 @@ public class GameUserService {
         Room room = GameManager.getInstance().getRoomByUser(player.getUserId());
         if(room != null) {
             reconnectResp.setExist(true);
-            reconnectResp.setRoom(new RoomVo(room,player));
+            if(room instanceof RoomTanDaKeng){
+                reconnectResp.setRoom(new RoomVo((RoomTanDaKeng) room,player));
+            }else{
+                reconnectResp.setRoom(new RoomVo(room,player));
+            }
         }
         ResponseVo vo = new ResponseVo("userService", "reconnection", reconnectResp);
         player.sendMsg(vo);
