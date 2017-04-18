@@ -3,6 +3,7 @@ package com.code.server.cardgame.response;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.room.Room;
+import com.code.server.cardgame.core.room.RoomTanDaKeng;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +24,10 @@ public class RoomVo {
     private int curGameNumber;
     protected int createType;
     protected double goldRoomType;
+
+    //填大坑专用
+    protected boolean isLastDraw;//是否平局
+    protected int drawForLeaveChip;//平局留下筹码
 
     protected Map<Long, Integer> userStatus = new HashMap<>();//用户状态
     protected List<UserVo> userList = new ArrayList<>();//用户列表
@@ -49,5 +54,22 @@ public class RoomVo {
 
     }
 
+    public RoomVo(RoomTanDaKeng room, Player player){
+        this.roomId = room.getRoomId();
+        this.multiple = room.getMultiple();
+        this.gameNumber = room.getGameNumber();
+        this.createUser = room.getCreateUser();
+        this.userStatus.putAll(room.getUserStatus());
+        this.userScores.putAll(room.getUserScores());
+        this.curGameNumber = room.getCurGameNumber();
+        this.isLastDraw = room.isLastDraw();
+        this.drawForLeaveChip = room.getDrawForLeaveChip();
 
+        for(long uid : room.getUsers()){
+            userList.add(GameManager.getUserVo(room.getUserMap().get(uid)));
+        }
+
+        this.game = GameVo.getGameVo(room.getGame(),player.getUserId());
+
+    }
 }

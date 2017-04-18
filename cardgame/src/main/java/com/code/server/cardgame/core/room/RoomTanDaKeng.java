@@ -26,9 +26,9 @@ public class RoomTanDaKeng extends Room{
 
     private static final Logger logger = Logger.getLogger(RoomTanDaKeng.class);
 
+    private boolean isLastDraw = false;//是否平局
 
-
-
+    private int drawForLeaveChip = 0;//平局留下筹码
 
     protected Game getGameInstance(){
         return new GameTianDaKeng();
@@ -45,15 +45,21 @@ public class RoomTanDaKeng extends Room{
         if (player.getUser().getMoney() < needMoney) {
             return ErrorCode.CANNOT_CREATE_ROOM_MONEY;
         }
+
         RoomTanDaKeng room = new RoomTanDaKeng();
         room.personNumber = personNumber;
 
         room.roomId = getRoomIdStr(genRoomId());
         room.createUser = player.getUserId();
         room.init(gameNumber,roomType);
+
+        if(room.getMultiple()==25||room.getMultiple()==50||room.getMultiple()==100||room.getMultiple()==200){
+            return ErrorCodeTDK.CREATE_ROOM_MULTIPLE;
+        }
+
         //房间加入列表
         room.roomAddUser(player);
-        GameManager.getInstance().roomsOfTanDaKeng.put(room.roomId, room);
+        GameManager.getInstance().rooms.put(room.roomId, room);
 
         player.sendMsg(new ResponseVo("roomService","createRoom",new RoomTianDaKengVo(room,player)));
 
@@ -78,5 +84,19 @@ public class RoomTanDaKeng extends Room{
         this.isInGame = false;
     }
 
+    public boolean isLastDraw() {
+        return isLastDraw;
+    }
 
+    public void setLastDraw(boolean lastDraw) {
+        isLastDraw = lastDraw;
+    }
+
+    public int getDrawForLeaveChip() {
+        return drawForLeaveChip;
+    }
+
+    public void setDrawForLeaveChip(int drawForLeaveChip) {
+        this.drawForLeaveChip = drawForLeaveChip;
+    }
 }

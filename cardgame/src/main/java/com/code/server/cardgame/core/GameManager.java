@@ -38,7 +38,6 @@ public class GameManager {
     public Map<Long, String> uid_openId = new HashMap<>();
     public Map<Long, String> userRoom = new HashMap<>();
     public Map<String, Room> rooms = new HashMap<>();
-    public Map<String, RoomTanDaKeng> roomsOfTanDaKeng = new HashMap<>();
     public ServerInfo serverInfo;
     public Constant constant;
     public Set<Player> kickUser = new CopyOnWriteArraySet<>();//可以踢出内存的玩家
