@@ -5,5 +5,15 @@ package com.code.server.db.model;
  */
 public class UserInfo {
 
+    private int totalPlayGameNumber;
+
     public UserInfo(){}
+
+    public int getTotalPlayGameNumber() {
+        return totalPlayGameNumber;
+    }
+
+    public void setTotalPlayGameNumber(int totalPlayGameNumber) {
+        this.totalPlayGameNumber = totalPlayGameNumber;
+    }
 }

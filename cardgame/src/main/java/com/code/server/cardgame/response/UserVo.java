@@ -1,5 +1,6 @@
 package com.code.server.cardgame.response;
 
+import com.code.server.db.model.UserInfo;
 /**
  * Created by sunxianping on 2017/3/27.
  */
@@ -18,6 +19,7 @@ public class UserVo {
     public int sex; // required
     public String marquee; // required
     public int referee;
+    public UserInfo UserInfo;
 
     public long getId() {
         return id;
@@ -143,5 +145,13 @@ public class UserVo {
     public UserVo setReferee(int referee) {
         this.referee = referee;
         return this;
+    }
+
+    public com.code.server.db.model.UserInfo getUserInfo() {
+        return UserInfo;
+    }
+
+    public void setUserInfo(com.code.server.db.model.UserInfo userInfo) {
+        UserInfo = userInfo;
     }
 }

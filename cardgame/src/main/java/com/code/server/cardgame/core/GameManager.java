@@ -69,6 +69,7 @@ public class GameManager {
         vo.setVip(user.getVip());
         vo.setUsername(user.getUsername());
         vo.setReferee(user.getReferee());
+        vo.setUserInfo(user.getUserInfo());
 
         String room = GameManager.getInstance().userRoom.get(user.getUserId());
         if (room!=null && GameManager.getInstance().rooms.containsKey(room)) {
