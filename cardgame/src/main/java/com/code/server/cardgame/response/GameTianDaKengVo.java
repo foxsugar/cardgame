@@ -24,8 +24,8 @@ public class GameTianDaKengVo extends GameVo{
     protected List<Long> users = new ArrayList<>();
     private Random rand = new Random();
 
-    protected Map<Long,Integer> allChip = new HashedMap();//总下注数
-    protected Map<Long,Integer> curChip = new HashedMap();//当前下注数
+    protected Map<Long,Double> allChip = new HashedMap();//总下注数
+    protected Map<Long,Double> curChip = new HashedMap();//当前下注数
 
 
     private long currentTurn;//当前操作人
