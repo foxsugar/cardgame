@@ -186,4 +186,20 @@ public class GameManager {
         this.kickUser = kickUser;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "GameManager{" +
+                "serverId=" + serverId +
+                ", players=" + players.size() +
+                ", id_nameMap=" + id_nameMap.size() +
+                ", name_idMap=" + name_idMap.size() +
+                ", openId_uid=" + openId_uid.size() +
+                ", uid_openId=" + uid_openId.size() +
+                ", userRoom=" + userRoom.size() +
+                ", rooms=" + rooms.size() +
+                ", kickUser=" + kickUser.size() +
+                ", saveUser2DB=" + saveUser2DB.size() +
+                '}';
+    }
 }

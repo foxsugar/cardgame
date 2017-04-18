@@ -32,7 +32,7 @@ dependencies {
 	compile project(path: ':gamedb')
 	compile project(path: ':rpc')
 	compile('org.springframework.boot:spring-boot-starter-aop')
-	compile('org.springframework.boot:spring-boot-starter-data-redis')
+//	compile('org.springframework.boot:spring-boot-starter-data-redis')
 	compile('org.springframework.boot:spring-boot-starter-logging')
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-starter-remote-shell')
