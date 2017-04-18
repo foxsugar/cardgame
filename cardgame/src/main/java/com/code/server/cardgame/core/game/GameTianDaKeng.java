@@ -201,7 +201,7 @@ public class GameTianDaKeng extends Game{
      * @param player
      * @return
      */
-    public int raise(Player player){
+    public int raise(Player player,int chip){
         logger.info(player.getUser().getAccount() +"  踢: "+ chip);
         if (currentTurn != player.getUserId()) {
             return ErrorCodeTDK.CANNOT_BET;
