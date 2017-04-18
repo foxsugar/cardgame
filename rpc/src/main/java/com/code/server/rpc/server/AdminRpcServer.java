@@ -20,6 +20,7 @@ public class AdminRpcServer {
         serverTransport = new TNonblockingServerSocket(port);
         TThreadedSelectorServer.Args tArgs = new TThreadedSelectorServer.Args(serverTransport);
         tArgs.processor(tprocessor);
+        tArgs.maxReadBufferBytes = 1024 * 1024L;
         tArgs.transportFactory(new TFramedTransport.Factory());
         tArgs.protocolFactory(new TBinaryProtocol.Factory());
         TServer server = new TThreadedSelectorServer(tArgs);

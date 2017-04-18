@@ -7,7 +7,7 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath group: 'co.tomlee.gradle.plugins', name: 'gradle-thrift-plugin', version: '0.0.6'
+//		classpath group: 'co.tomlee.gradle.plugins', name: 'gradle-thrift-plugin', version: '0.0.6'
 //		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 	}
 }
@@ -15,11 +15,12 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 //apply plugin: 'org.springframework.boot'
-apply plugin: 'thrift'
+//apply plugin: 'thrift'
 apply plugin: "idea"
 
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
 	maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
