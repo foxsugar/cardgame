@@ -5,8 +5,11 @@ import com.code.server.cardgame.core.room.Room;
 import com.code.server.cardgame.core.room.RoomTanDaKeng;
 import com.code.server.cardgame.response.GameFinalResult;
 import com.code.server.cardgame.response.ResponseVo;
+import com.code.server.cardgame.utils.SpringUtil;
+import com.code.server.db.Service.UserService;
 import com.code.server.db.model.Record;
 import com.code.server.db.model.User;
+import com.code.server.db.model.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.code.server.cardgame.response.ErrorCodeTDK;
@@ -497,6 +500,7 @@ public class GameTianDaKeng extends Game{
      * 存入数据库
      */
     private void genRecord(){
+        UserService userService = SpringUtil.getBean(UserService.class);
         Record.RoomRecord roomRecord = new Record.RoomRecord();
         roomRecord.setTime(System.currentTimeMillis());
         roomRecord.setType(room.getCreateType());
@@ -509,6 +513,11 @@ public class GameTianDaKeng extends Game{
             userRecord.setUserId(userId);
             userRecord.setRoomId(room.getRoomId());
 
+            UserInfo userInfo = user.getUserInfo();
+            userInfo.setTotalPlayGameNumber(userInfo.getTotalPlayGameNumber()+1);
+            user.setUserInfo(userInfo);
+
+            userService.save(user);
             roomRecord.addRecord(userRecord);
         }
         //todo 保存记录
