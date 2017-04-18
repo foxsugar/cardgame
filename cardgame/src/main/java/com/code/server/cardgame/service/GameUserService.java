@@ -251,6 +251,7 @@ public class GameUserService {
 
     public static void main(String[] args) {
         String s = "家用饮水机";
+        String s2 = "";
         try {
             String ss = URLDecoder.decode(s,"utf-8");
             System.out.println(ss);
