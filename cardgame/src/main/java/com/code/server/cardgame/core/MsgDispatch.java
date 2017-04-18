@@ -262,14 +262,14 @@ public class MsgDispatch {
 
     private int dispatchGameTDKService(String method,GameTianDaKeng game,JSONObject params,Player player) {
 
+        int chip = params.getInt("chip");
         switch (method) {
             case "bet"://下注
-                int chip = params.getInt("chip");
                 return game.bet(player, chip);
             case "call"://跟注
                 return game.call(player);
             case "raise"://加注，踢
-                return game.raise(player);
+                return game.raise(player,chip);
             case "pass"://不跟
                 return game.pass(player);
             case "fold"://弃牌
