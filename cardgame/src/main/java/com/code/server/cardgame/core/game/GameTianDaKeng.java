@@ -7,7 +7,6 @@ import com.code.server.cardgame.response.GameFinalResult;
 import com.code.server.cardgame.response.ResponseVo;
 import com.code.server.db.model.Record;
 import com.code.server.db.model.User;
-import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.code.server.cardgame.response.ErrorCodeTDK;
@@ -34,8 +33,8 @@ public class GameTianDaKeng extends Game{
     protected List<Long> users = new ArrayList<>();
     private Random rand = new Random();
 
-    protected Map<Long,Double> allChip = new HashedMap();//总下注数
-    protected Map<Long,Double> curChip = new HashedMap();//当前下注数
+    protected Map<Long,Double> allChip = new HashMap();//总下注数
+    protected Map<Long,Double> curChip = new HashMap();//当前下注数
 
 
     private long currentTurn;//当前操作人
@@ -673,9 +672,9 @@ public class GameTianDaKeng extends Game{
     public long getWhoWin(){
 
         long userId = 0;
-        Map<Long,Integer> scoresFour = new HashedMap();
-        Map<Long,Integer> scoresThree = new HashedMap();
-        Map<Long,Integer> scoresOther = new HashedMap();
+        Map<Long,Integer> scoresFour = new HashMap();
+        Map<Long,Integer> scoresThree = new HashMap();
+        Map<Long,Integer> scoresOther = new HashMap();
 
 
         for (PlayerCardInfoTianDaKeng p: playerCardInfos.values()) {
