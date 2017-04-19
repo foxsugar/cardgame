@@ -32,7 +32,7 @@ public class GameRpcClient {
 
     public static void main(String [] args) {
         try {
-            TTransport tTransport = TransportManager.getTransport("localhost", 9090);
+            TTransport tTransport = TransportManager.getTransport("127.0.0.1", 9090);
             GameRPC.Client client = GameRpcClient.getAClient(tTransport);
 
 

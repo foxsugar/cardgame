@@ -23,6 +23,7 @@ public class GameRpcServer {
             TNonblockingServerSocket serverTransport = null;
             serverTransport = new TNonblockingServerSocket(port);
             TThreadedSelectorServer.Args tArgs = new TThreadedSelectorServer.Args(serverTransport);
+            tArgs.maxReadBufferBytes = 1024 * 1024L;
             tArgs.processor(tprocessor);
             tArgs.transportFactory(new TFramedTransport.Factory());
             tArgs.protocolFactory(new TBinaryProtocol.Factory());

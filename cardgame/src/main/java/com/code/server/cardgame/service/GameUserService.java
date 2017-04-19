@@ -143,11 +143,7 @@ public class GameUserService {
         Room room = GameManager.getInstance().getRoomByUser(player.getUserId());
         if(room != null) {
             reconnectResp.setExist(true);
-            if(room instanceof RoomTanDaKeng){
-                reconnectResp.setRoom(new RoomVo((RoomTanDaKeng) room,player));
-            }else{
-                reconnectResp.setRoom(new RoomVo(room,player));
-            }
+            reconnectResp.setRoom(new RoomVo(room,player));
         }
         ResponseVo vo = new ResponseVo("userService", "reconnection", reconnectResp);
         player.sendMsg(vo);

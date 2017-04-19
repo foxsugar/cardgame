@@ -16,6 +16,7 @@ public class ServerConfig {
     private int gameRpcServerPort;
     private String adminRpcHost;
     private int adminRpcPort;
+    private int isStartRPC;
 
 
 
@@ -79,6 +80,15 @@ public class ServerConfig {
 
     public ServerConfig setAdminRpcPort(int adminRpcPort) {
         this.adminRpcPort = adminRpcPort;
+        return this;
+    }
+
+    public int getIsStartRPC() {
+        return isStartRPC;
+    }
+
+    public ServerConfig setIsStartRPC(int isStartRPC) {
+        this.isStartRPC = isStartRPC;
         return this;
     }
 }

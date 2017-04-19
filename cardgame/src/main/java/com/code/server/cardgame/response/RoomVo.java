@@ -2,8 +2,10 @@ package com.code.server.cardgame.response;
 
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
+import com.code.server.cardgame.core.game.GameDouDiZhu;
 import com.code.server.cardgame.core.game.GameTianDaKeng;
 import com.code.server.cardgame.core.room.Room;
+import com.code.server.cardgame.core.room.RoomDouDiZhu;
 import com.code.server.cardgame.core.room.RoomTanDaKeng;
 
 import java.util.ArrayList;
@@ -51,26 +53,17 @@ public class RoomVo {
             userList.add(GameManager.getUserVo(room.getUserMap().get(uid)));
         }
 
-        this.game = GameVo.getGameVo(room.getGame(),player.getUserId());
-
-    }
-
-    public RoomVo(RoomTanDaKeng room, Player player){
-        this.roomId = room.getRoomId();
-        this.multiple = room.getMultiple();
-        this.gameNumber = room.getGameNumber();
-        this.createUser = room.getCreateUser();
-        this.userStatus.putAll(room.getUserStatus());
-        this.userScores.putAll(room.getUserScores());
-        this.curGameNumber = room.getCurGameNumber();
-        this.isLastDraw = room.isLastDraw();
-        this.drawForLeaveChip = room.getDrawForLeaveChip();
-
-        for(long uid : room.getUsers()){
-            userList.add(GameManager.getUserVo(room.getUserMap().get(uid)));
+        if(room instanceof RoomDouDiZhu){
+            this.game= GameDoudizhuVo.getGameVo(room.getGame(),player.getUserId());
+        }else if(room instanceof RoomTanDaKeng) {
+            this.game = GameTianDaKengVo.getGameTianDaKengVo(room.getGame(), player.getUserId());
         }
 
-        this.game = GameTianDaKengVo.getGameVo(room.getGame(),player.getUserId());
-
     }
+
+
+
+
+
+
 }
