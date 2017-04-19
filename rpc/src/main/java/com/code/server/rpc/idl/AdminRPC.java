@@ -14,7 +14,7 @@ public class AdminRPC {
 
     public int rebate(java.util.List<Rebate> rebates) throws org.apache.thrift.TException;
 
-    public boolean isExist(long regerreeId) throws org.apache.thrift.TException;
+    public boolean isExist(long refereeId) throws org.apache.thrift.TException;
 
   }
 
@@ -22,7 +22,7 @@ public class AdminRPC {
 
     public void rebate(java.util.List<Rebate> rebates, org.apache.thrift.async.AsyncMethodCallback<java.lang.Integer> resultHandler) throws org.apache.thrift.TException;
 
-    public void isExist(long regerreeId, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException;
+    public void isExist(long refereeId, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -69,16 +69,16 @@ public class AdminRPC {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "rebate failed: unknown result");
     }
 
-    public boolean isExist(long regerreeId) throws org.apache.thrift.TException
+    public boolean isExist(long refereeId) throws org.apache.thrift.TException
     {
-      send_isExist(regerreeId);
+      send_isExist(refereeId);
       return recv_isExist();
     }
 
-    public void send_isExist(long regerreeId) throws org.apache.thrift.TException
+    public void send_isExist(long refereeId) throws org.apache.thrift.TException
     {
       isExist_args args = new isExist_args();
-      args.setRegerreeId(regerreeId);
+      args.setRefereeId(refereeId);
       sendBase("isExist", args);
     }
 
@@ -142,24 +142,24 @@ public class AdminRPC {
       }
     }
 
-    public void isExist(long regerreeId, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
+    public void isExist(long refereeId, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      isExist_call method_call = new isExist_call(regerreeId, resultHandler, this, ___protocolFactory, ___transport);
+      isExist_call method_call = new isExist_call(refereeId, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class isExist_call extends org.apache.thrift.async.TAsyncMethodCall<java.lang.Boolean> {
-      private long regerreeId;
-      public isExist_call(long regerreeId, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      private long refereeId;
+      public isExist_call(long refereeId, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
-        this.regerreeId = regerreeId;
+        this.refereeId = refereeId;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("isExist", org.apache.thrift.protocol.TMessageType.CALL, 0));
         isExist_args args = new isExist_args();
-        args.setRegerreeId(regerreeId);
+        args.setRefereeId(refereeId);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -228,7 +228,7 @@ public class AdminRPC {
 
       public isExist_result getResult(I iface, isExist_args args) throws org.apache.thrift.TException {
         isExist_result result = new isExist_result();
-        result.success = iface.isExist(args.regerreeId);
+        result.success = iface.isExist(args.refereeId);
         result.setSuccessIsSet(true);
         return result;
       }
@@ -372,7 +372,7 @@ public class AdminRPC {
       }
 
       public void start(I iface, isExist_args args, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
-        iface.isExist(args.regerreeId,resultHandler);
+        iface.isExist(args.refereeId,resultHandler);
       }
     }
 
@@ -1157,16 +1157,16 @@ public class AdminRPC {
   public static class isExist_args implements org.apache.thrift.TBase<isExist_args, isExist_args._Fields>, java.io.Serializable, Cloneable, Comparable<isExist_args>   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("isExist_args");
 
-    private static final org.apache.thrift.protocol.TField REGERREE_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("regerreeId", org.apache.thrift.protocol.TType.I64, (short)1);
+    private static final org.apache.thrift.protocol.TField REFEREE_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("refereeId", org.apache.thrift.protocol.TType.I64, (short)1);
 
     private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new isExist_argsStandardSchemeFactory();
     private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new isExist_argsTupleSchemeFactory();
 
-    private long regerreeId; // required
+    private long refereeId; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      REGERREE_ID((short)1, "regerreeId");
+      REFEREE_ID((short)1, "refereeId");
 
       private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
 
@@ -1181,8 +1181,8 @@ public class AdminRPC {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
-          case 1: // REGERREE_ID
-            return REGERREE_ID;
+          case 1: // REFEREE_ID
+            return REFEREE_ID;
           default:
             return null;
         }
@@ -1223,12 +1223,12 @@ public class AdminRPC {
     }
 
     // isset id assignments
-    private static final int __REGERREEID_ISSET_ID = 0;
+    private static final int __REFEREEID_ISSET_ID = 0;
     private byte __isset_bitfield = 0;
     public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.REGERREE_ID, new org.apache.thrift.meta_data.FieldMetaData("regerreeId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+      tmpMap.put(_Fields.REFEREE_ID, new org.apache.thrift.meta_data.FieldMetaData("refereeId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
       metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(isExist_args.class, metaDataMap);
@@ -1238,11 +1238,11 @@ public class AdminRPC {
     }
 
     public isExist_args(
-      long regerreeId)
+      long refereeId)
     {
       this();
-      this.regerreeId = regerreeId;
-      setRegerreeIdIsSet(true);
+      this.refereeId = refereeId;
+      setRefereeIdIsSet(true);
     }
 
     /**
@@ -1250,7 +1250,7 @@ public class AdminRPC {
      */
     public isExist_args(isExist_args other) {
       __isset_bitfield = other.__isset_bitfield;
-      this.regerreeId = other.regerreeId;
+      this.refereeId = other.refereeId;
     }
 
     public isExist_args deepCopy() {
@@ -1259,40 +1259,40 @@ public class AdminRPC {
 
     @Override
     public void clear() {
-      setRegerreeIdIsSet(false);
-      this.regerreeId = 0;
+      setRefereeIdIsSet(false);
+      this.refereeId = 0;
     }
 
-    public long getRegerreeId() {
-      return this.regerreeId;
+    public long getRefereeId() {
+      return this.refereeId;
     }
 
-    public isExist_args setRegerreeId(long regerreeId) {
-      this.regerreeId = regerreeId;
-      setRegerreeIdIsSet(true);
+    public isExist_args setRefereeId(long refereeId) {
+      this.refereeId = refereeId;
+      setRefereeIdIsSet(true);
       return this;
     }
 
-    public void unsetRegerreeId() {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __REGERREEID_ISSET_ID);
+    public void unsetRefereeId() {
+      __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __REFEREEID_ISSET_ID);
     }
 
-    /** Returns true if field regerreeId is set (has been assigned a value) and false otherwise */
-    public boolean isSetRegerreeId() {
-      return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __REGERREEID_ISSET_ID);
+    /** Returns true if field refereeId is set (has been assigned a value) and false otherwise */
+    public boolean isSetRefereeId() {
+      return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __REFEREEID_ISSET_ID);
     }
 
-    public void setRegerreeIdIsSet(boolean value) {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __REGERREEID_ISSET_ID, value);
+    public void setRefereeIdIsSet(boolean value) {
+      __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __REFEREEID_ISSET_ID, value);
     }
 
     public void setFieldValue(_Fields field, java.lang.Object value) {
       switch (field) {
-      case REGERREE_ID:
+      case REFEREE_ID:
         if (value == null) {
-          unsetRegerreeId();
+          unsetRefereeId();
         } else {
-          setRegerreeId((java.lang.Long)value);
+          setRefereeId((java.lang.Long)value);
         }
         break;
 
@@ -1301,8 +1301,8 @@ public class AdminRPC {
 
     public java.lang.Object getFieldValue(_Fields field) {
       switch (field) {
-      case REGERREE_ID:
-        return getRegerreeId();
+      case REFEREE_ID:
+        return getRefereeId();
 
       }
       throw new java.lang.IllegalStateException();
@@ -1315,8 +1315,8 @@ public class AdminRPC {
       }
 
       switch (field) {
-      case REGERREE_ID:
-        return isSetRegerreeId();
+      case REFEREE_ID:
+        return isSetRefereeId();
       }
       throw new java.lang.IllegalStateException();
     }
@@ -1336,12 +1336,12 @@ public class AdminRPC {
       if (this == that)
         return true;
 
-      boolean this_present_regerreeId = true;
-      boolean that_present_regerreeId = true;
-      if (this_present_regerreeId || that_present_regerreeId) {
-        if (!(this_present_regerreeId && that_present_regerreeId))
+      boolean this_present_refereeId = true;
+      boolean that_present_refereeId = true;
+      if (this_present_refereeId || that_present_refereeId) {
+        if (!(this_present_refereeId && that_present_refereeId))
           return false;
-        if (this.regerreeId != that.regerreeId)
+        if (this.refereeId != that.refereeId)
           return false;
       }
 
@@ -1352,7 +1352,7 @@ public class AdminRPC {
     public int hashCode() {
       int hashCode = 1;
 
-      hashCode = hashCode * 8191 + org.apache.thrift.TBaseHelper.hashCode(regerreeId);
+      hashCode = hashCode * 8191 + org.apache.thrift.TBaseHelper.hashCode(refereeId);
 
       return hashCode;
     }
@@ -1365,12 +1365,12 @@ public class AdminRPC {
 
       int lastComparison = 0;
 
-      lastComparison = java.lang.Boolean.valueOf(isSetRegerreeId()).compareTo(other.isSetRegerreeId());
+      lastComparison = java.lang.Boolean.valueOf(isSetRefereeId()).compareTo(other.isSetRefereeId());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      if (isSetRegerreeId()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.regerreeId, other.regerreeId);
+      if (isSetRefereeId()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.refereeId, other.refereeId);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -1395,8 +1395,8 @@ public class AdminRPC {
       java.lang.StringBuilder sb = new java.lang.StringBuilder("isExist_args(");
       boolean first = true;
 
-      sb.append("regerreeId:");
-      sb.append(this.regerreeId);
+      sb.append("refereeId:");
+      sb.append(this.refereeId);
       first = false;
       sb.append(")");
       return sb.toString();
@@ -1443,10 +1443,10 @@ public class AdminRPC {
             break;
           }
           switch (schemeField.id) {
-            case 1: // REGERREE_ID
+            case 1: // REFEREE_ID
               if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
-                struct.regerreeId = iprot.readI64();
-                struct.setRegerreeIdIsSet(true);
+                struct.refereeId = iprot.readI64();
+                struct.setRefereeIdIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
@@ -1466,8 +1466,8 @@ public class AdminRPC {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
-        oprot.writeFieldBegin(REGERREE_ID_FIELD_DESC);
-        oprot.writeI64(struct.regerreeId);
+        oprot.writeFieldBegin(REFEREE_ID_FIELD_DESC);
+        oprot.writeI64(struct.refereeId);
         oprot.writeFieldEnd();
         oprot.writeFieldStop();
         oprot.writeStructEnd();
@@ -1487,12 +1487,12 @@ public class AdminRPC {
       public void write(org.apache.thrift.protocol.TProtocol prot, isExist_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
         java.util.BitSet optionals = new java.util.BitSet();
-        if (struct.isSetRegerreeId()) {
+        if (struct.isSetRefereeId()) {
           optionals.set(0);
         }
         oprot.writeBitSet(optionals, 1);
-        if (struct.isSetRegerreeId()) {
-          oprot.writeI64(struct.regerreeId);
+        if (struct.isSetRefereeId()) {
+          oprot.writeI64(struct.refereeId);
         }
       }
 
@@ -1501,8 +1501,8 @@ public class AdminRPC {
         org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
         java.util.BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
-          struct.regerreeId = iprot.readI64();
-          struct.setRegerreeIdIsSet(true);
+          struct.refereeId = iprot.readI64();
+          struct.setRefereeIdIsSet(true);
         }
       }
     }
