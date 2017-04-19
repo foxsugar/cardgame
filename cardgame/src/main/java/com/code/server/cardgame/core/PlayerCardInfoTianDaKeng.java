@@ -44,6 +44,7 @@ public class PlayerCardInfoTianDaKeng {
     public void setAllCards(List<Integer> allCards) {
         this.allCards = allCards;
     }
+
 }
 
 

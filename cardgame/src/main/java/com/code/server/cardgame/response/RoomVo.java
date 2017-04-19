@@ -2,6 +2,7 @@ package com.code.server.cardgame.response;
 
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
+import com.code.server.cardgame.core.game.GameTianDaKeng;
 import com.code.server.cardgame.core.room.Room;
 import com.code.server.cardgame.core.room.RoomTanDaKeng;
 
@@ -69,7 +70,7 @@ public class RoomVo {
             userList.add(GameManager.getUserVo(room.getUserMap().get(uid)));
         }
 
-        this.game = GameVo.getGameVo(room.getGame(),player.getUserId());
+        this.game = GameTianDaKengVo.getGameVo(room.getGame(),player.getUserId());
 
     }
 }

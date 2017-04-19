@@ -66,7 +66,9 @@ public class Room {
     protected boolean isOpen;
 
 
+    private boolean isLastDraw = false;//是否平局
 
+    private int drawForLeaveChip = 0;//平局留下筹码
 
 
     protected boolean isCanDissloution = false;
@@ -345,14 +347,13 @@ public class Room {
         this.isOpen = true;
         this.isInGame = true;
         Game game = getGameInstance();
-
-
+        this.game = game;
         //扣钱
         if (curGameNumber == 1) {
             spendMoney();
         }
         game.startGame(users,this);
-        this.game = game;
+
 
 
 
@@ -723,5 +724,25 @@ public class Room {
     public Room setGoldRoomType(double goldRoomType) {
         this.goldRoomType = goldRoomType;
         return this;
+    }
+
+    public static int getRoomCreateTypeConmmon() {
+        return ROOM_CREATE_TYPE_CONMMON;
+    }
+
+    public boolean isLastDraw() {
+        return isLastDraw;
+    }
+
+    public void setLastDraw(boolean lastDraw) {
+        isLastDraw = lastDraw;
+    }
+
+    public int getDrawForLeaveChip() {
+        return drawForLeaveChip;
+    }
+
+    public void setDrawForLeaveChip(int drawForLeaveChip) {
+        this.drawForLeaveChip = drawForLeaveChip;
     }
 }

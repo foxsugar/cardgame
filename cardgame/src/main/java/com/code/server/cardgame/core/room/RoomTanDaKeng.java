@@ -30,11 +30,10 @@ public class RoomTanDaKeng extends Room{
 
     private int drawForLeaveChip = 0;//平局留下筹码
 
+
     protected Game getGameInstance(){
         return new GameTianDaKeng();
     }
-
-
 
 
     public static int createRoom(Player player,int gameNumber,double roomType,int personNumber){
@@ -61,12 +60,10 @@ public class RoomTanDaKeng extends Room{
         room.roomAddUser(player);
         GameManager.getInstance().rooms.put(room.roomId, room);
 
-        player.sendMsg(new ResponseVo("roomService","createRoom",new RoomTianDaKengVo(room,player)));
+        player.sendMsg(new ResponseVo("roomService","createRoomTDK",new RoomTianDaKengVo(room,player)));
 
         return 0;
     }
-
-
 
 
     public static int getNeedMoney(int gameNumber) {
