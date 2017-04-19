@@ -48,7 +48,7 @@ public class RoomTianDaKengVo {
             userList.add(GameManager.getUserVo(roomTianDaKeng.getUserMap().get(uid)));
         }
 
-        this.game = GameVo.getGameVo(roomTianDaKeng.getGame(),player.getUserId());
+        this.game = GameTianDaKengVo.getGameTianDaKengVo(roomTianDaKeng.getGame(),player.getUserId());
 
     }
 
