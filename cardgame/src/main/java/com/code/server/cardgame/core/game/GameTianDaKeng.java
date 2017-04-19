@@ -38,8 +38,8 @@ public class GameTianDaKeng extends Game{
     protected List<Long> users = new ArrayList<>();
     private Random rand = new Random();
 
-    protected Map<Long,Double> allChip = new HashMap();//总下注数
-    protected Map<Long,Double> curChip = new HashMap();//当前下注数
+    protected Map<Long,Double> allChip = new HashMap<>();//总下注数
+    protected Map<Long,Double> curChip = new HashMap<>();//当前下注数
 
     /*玩家状态 ：等待操作 0
     等待下注 10 可以下注 11 已经下注 12

@@ -82,7 +82,7 @@ public class Room {
         if (player.getUser().getMoney() < needMoney) {
             return ErrorCode.CANNOT_CREATE_ROOM_MONEY;
         }
-        RoomDouDiZhu room = new RoomDouDiZhu();
+        RoomTanDaKeng room = new RoomTanDaKeng();
         room.personNumber = PERSONNUM;
 
         room.roomId = getRoomIdStr(genRoomId());
@@ -92,9 +92,7 @@ public class Room {
         room.roomAddUser(player);
         GameManager.getInstance().rooms.put(room.roomId, room);
 
-
-
-        player.sendMsg(new ResponseVo("roomService","createRoom",new RoomVo(room,player)));
+        player.sendMsg(new ResponseVo("roomService","createRoom",new RoomTianDaKengVo(room,player)));
 
         return 0;
     }

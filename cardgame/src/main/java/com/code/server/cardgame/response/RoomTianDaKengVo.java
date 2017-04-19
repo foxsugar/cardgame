@@ -48,9 +48,97 @@ public class RoomTianDaKengVo {
             userList.add(GameManager.getUserVo(roomTianDaKeng.getUserMap().get(uid)));
         }
 
-        this.game = GameTianDaKengVo.getGameTianDaKengVo(roomTianDaKeng.getGame(),player.getUserId());
+        if(roomTianDaKeng.getGame()!=null){
+            this.game = GameTianDaKengVo.getGameTianDaKengVo(roomTianDaKeng.getGame(),player.getUserId());
+        }
 
     }
 
+    public String getRoomId() {
+        return roomId;
+    }
 
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
+    public double getMultiple() {
+        return multiple;
+    }
+
+    public void setMultiple(double multiple) {
+        this.multiple = multiple;
+    }
+
+    public int getGameNumber() {
+        return gameNumber;
+    }
+
+    public void setGameNumber(int gameNumber) {
+        this.gameNumber = gameNumber;
+    }
+
+    public long getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(long createUser) {
+        this.createUser = createUser;
+    }
+
+    public GameVo getGame() {
+        return game;
+    }
+
+    public void setGame(GameVo game) {
+        this.game = game;
+    }
+
+    public int getCurGameNumber() {
+        return curGameNumber;
+    }
+
+    public void setCurGameNumber(int curGameNumber) {
+        this.curGameNumber = curGameNumber;
+    }
+
+    public boolean isLastDraw() {
+        return isLastDraw;
+    }
+
+    public void setLastDraw(boolean lastDraw) {
+        isLastDraw = lastDraw;
+    }
+
+    public int getDrawForLeaveChip() {
+        return drawForLeaveChip;
+    }
+
+    public void setDrawForLeaveChip(int drawForLeaveChip) {
+        this.drawForLeaveChip = drawForLeaveChip;
+    }
+
+    public Map<Long, Integer> getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(Map<Long, Integer> userStatus) {
+        this.userStatus = userStatus;
+    }
+
+    public List<UserVo> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<UserVo> userList) {
+        this.userList = userList;
+    }
+
+    public Map<Long, Double> getUserScores() {
+        return userScores;
+    }
+
+    public void setUserScores(Map<Long, Double> userScores) {
+        this.userScores = userScores;
+    }
 }

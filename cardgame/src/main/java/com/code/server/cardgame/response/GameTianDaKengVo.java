@@ -1,13 +1,9 @@
 package com.code.server.cardgame.response;
 
-import com.code.server.cardgame.core.CardStruct;
-import com.code.server.cardgame.core.PlayerCardInfo;
 import com.code.server.cardgame.core.PlayerCardInfoTianDaKeng;
 import com.code.server.cardgame.core.game.Game;
-import com.code.server.cardgame.core.game.GameDouDiZhu;
 import com.code.server.cardgame.core.game.GameTianDaKeng;
 import com.code.server.cardgame.core.room.RoomTanDaKeng;
-import org.apache.commons.collections.map.HashedMap;
 
 import java.util.*;
 
@@ -22,15 +18,15 @@ public class GameTianDaKengVo extends GameVo{
     protected List<Integer> tableCards = new ArrayList<>();//剩余牌
     protected Map<Long,PlayerCardInfoTianDaKengVo> playerCardInfos = new HashMap<>();
     protected List<Long> users = new ArrayList<>();
-    private Random rand = new Random();
+    protected Random rand = new Random();
 
-    protected Map<Long,Double> allChip = new HashedMap();//总下注数
-    protected Map<Long,Double> curChip = new HashedMap();//当前下注数
+    protected Map<Long,Double> allChip = new HashMap<>();//总下注数
+    protected Map<Long,Double> curChip = new HashMap<>();//当前下注数
 
 
-    private long currentTurn;//当前操作人
-    private int chip;//下注
-    private int trunNumber;//第几张牌了
+    protected long currentTurn;//当前操作人
+    protected int chip;//下注
+    protected int trunNumber;//第几张牌了
 
 
     protected List<Long> aliveUser = new ArrayList<>();//存活的人
@@ -39,11 +35,9 @@ public class GameTianDaKengVo extends GameVo{
 
     protected RoomTanDaKeng room;//房间
 
-    public GameTianDaKengVo(){}
-
     public static GameTianDaKengVo getGameTianDaKengVo(Game game, long uid){
         GameTianDaKengVo vo = new GameTianDaKengVo();
-        if (game instanceof GameTianDaKeng) {
+        if(game!=null){
             GameTianDaKeng tianDaKeng = (GameTianDaKeng) game;
 
             vo.cards = tianDaKeng.getCards();
@@ -57,13 +51,12 @@ public class GameTianDaKengVo extends GameVo{
             vo.aliveUser = tianDaKeng.getAliveUser();
             vo.curUser = tianDaKeng.getCurUser();
             vo.canRaiseUser = tianDaKeng.getCanRaiseUser();
-
+            vo.room = (RoomTanDaKeng) tianDaKeng.getRoom();
 
             //玩家牌信息
             for (PlayerCardInfoTianDaKeng playerCardInfo : tianDaKeng.getPlayerCardInfos().values()) {
                 vo.playerCardInfos.put(playerCardInfo.userId, new PlayerCardInfoTianDaKengVo(playerCardInfo, uid));
             }
-
         }
         return vo;
 

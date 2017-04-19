@@ -49,6 +49,9 @@ public class RoomVo {
         this.userScores.putAll(room.getUserScores());
         this.curGameNumber = room.getCurGameNumber();
         this.goldRoomType = room.getGoldRoomType();
+        this.isLastDraw = room.isLastDraw();
+        this.drawForLeaveChip = room.getDrawForLeaveChip();
+
         for(long uid : room.getUsers()){
             userList.add(GameManager.getUserVo(room.getUserMap().get(uid)));
         }
@@ -56,7 +59,9 @@ public class RoomVo {
         if(room instanceof RoomDouDiZhu){
             this.game= GameDoudizhuVo.getGameVo(room.getGame(),player.getUserId());
         }else if(room instanceof RoomTanDaKeng) {
-            this.game = GameTianDaKengVo.getGameTianDaKengVo(room.getGame(), player.getUserId());
+           if(room.getGame()!=null){
+               this.game = GameTianDaKengVo.getGameTianDaKengVo(room.getGame(), player.getUserId());
+           }
         }
 
     }
