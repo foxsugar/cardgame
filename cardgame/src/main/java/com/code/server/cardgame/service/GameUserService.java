@@ -8,6 +8,7 @@ import com.code.server.cardgame.core.room.Room;
 import com.code.server.cardgame.core.room.RoomTanDaKeng;
 import com.code.server.cardgame.encoding.Notice;
 import com.code.server.cardgame.response.*;
+import com.code.server.cardgame.rpc.RpcManager;
 import com.code.server.cardgame.utils.SpringUtil;
 import com.code.server.cardgame.utils.ThreadPool;
 import com.code.server.db.Service.ConstantService;
@@ -164,10 +165,18 @@ public class GameUserService {
         if(referrerId<=0 || user.getReferee()!=0){
             return ErrorCode.CAN_NOT_BING_REFERRER;
         }
-        user.setReferee(referrerId);
-        user.setMoney(user.getMoney() + 10);
-        GameManager.getInstance().getSaveUser2DB().add(user);
-        player.sendMsg("userService","bindReferrer",0);
+        ThreadPool.getInstance().executor.execute(()->{
+
+            boolean isExist = RpcManager.getInstance().referrerIsExist(referrerId);
+            if(!isExist){
+                player.sendMsg("userService","bindReferrer",ErrorCode.REFERRER_NOT_EXIST);
+                return;
+            }
+            user.setReferee(referrerId);
+            user.setMoney(user.getMoney() + 10);
+            GameManager.getInstance().getSaveUser2DB().add(user);
+            player.sendMsg("userService","bindReferrer",0);
+        });
 
         return 0;
     }
