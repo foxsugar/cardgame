@@ -112,6 +112,19 @@ public class RpcManager {
         }
     }
 
+    public boolean referrerIsExist(long referrer){
+        boolean result = false;
+        try {
+            TTransport tTransport = getTransport();
+            AdminRPC.Client adminRpcClient = AdminRpcClient.getAClient(tTransport);
+            result = adminRpcClient.isExist(referrer);
+            tTransport.close();
+        } catch (TException e) {
+            logger.error("send rpc rebat error ",e);
+        }
+        return result;
+    }
+
 
     public void startGameRpcServer() throws TTransportException {
         gameRpcServer = GameRpcServer.StartServer(serverConfig.getGameRpcServerPort(),new GameRpcHandler());
