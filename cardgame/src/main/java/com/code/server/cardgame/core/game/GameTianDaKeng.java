@@ -44,7 +44,7 @@ public class GameTianDaKeng extends Game{
     /*玩家状态 ：等待操作 0
     等待下注 10 可以下注 11 已经下注 12
     等待加注 20 可以加注 21 已经加注 22
-    可以踢 31 已经踢 32
+    可以正踢 311  可以反踢312   已经踢 32
     已经过 40
     已经弃牌 50
      */
@@ -95,7 +95,7 @@ public class GameTianDaKeng extends Game{
      * 洗牌
      */
     protected void shuffle(){
-        for (int i = 37; i < 53; i+=4) {
+        for (int i = 37; i < 53; i++) {
             cards.add(i);
         }
         cards.add(1);
@@ -219,8 +219,8 @@ public class GameTianDaKeng extends Game{
         addToChip(player.getUserId(),chip);//添加积分
         curUser.remove(currentTurn);//本轮操作完删除
 
-        branch();
         noticeCallFinish(player.getUserId(),chip);
+        branch();
         player.sendMsg(new ResponseVo("gameService","call",0));
         return 0;
     }
@@ -232,7 +232,7 @@ public class GameTianDaKeng extends Game{
      */
     public int raise(Player player,int chip){
 
-        gameuserStatus.put(player.getUserId(),22);
+        gameuserStatus.put(player.getUserId(),32);
         gameuserStatus.put(nextTurnId(currentTurn),21);
 
         logger.info(player.getUser().getAccount() +"  踢: "+ chip);
@@ -247,7 +247,6 @@ public class GameTianDaKeng extends Game{
         this.chip = chip;
         addToChip(player.getUserId(),chip);//添加积分
         curUser.remove(currentTurn);//本轮操作完删除
-        //canRaiseUser.remove(currentTurn);//每个人可以反踢一次，踢完删除
         currentTurn = nextTurnId(currentTurn);//下一个人
         noticeCanCall(currentTurn);//通知下一个人可以下注
         noticeRaiseFinish(player.getUserId(),chip);
@@ -263,7 +262,11 @@ public class GameTianDaKeng extends Game{
     public int pass(Player player){
 
         gameuserStatus.put(player.getUserId(),40);
-        gameuserStatus.put(nextTurnId(currentTurn),31);
+        if(canRaiseUser.containsAll(aliveUser)){
+            gameuserStatus.put(nextTurnId(currentTurn),311);
+        }else{
+            gameuserStatus.put(nextTurnId(currentTurn),312);
+        }
 
         logger.info(player.getUser().getAccount() +"  不踢 ");
 
@@ -323,13 +326,15 @@ public class GameTianDaKeng extends Game{
                }
            }
             //通知其他人发的明牌
-            Player.sendMsg2Player(new ResponseVo("gameService","dealevery",playerCardInfo.everyknowCards),users);
+            //Player.sendMsg2Player(new ResponseVo("gameService","dealevery",playerCardInfo.everyknowCards),users);
+            //noticeDealevery(playerCardInfo.userId,playerCardInfo.allCards,everyknowCardsAndUserId);
             noticeCanBet(getMaxCardUser(trunNumber));//通知牌点数最大的人可以下注
 
             gameuserStatus.put(getMaxCardUser(trunNumber),12);
 
             curUser.add(playerCardInfo.userId);//添加到
         }
+        noticeEveryCards(playerCardInfos);
         this.trunNumber += 1;//公开的牌+1
     }
 
@@ -353,6 +358,20 @@ public class GameTianDaKeng extends Game{
         result.put("everyknowCards",everyknowCards);
         ResponseVo vo = new ResponseVo("gameService","dealevery",result);
         Player.sendMsg2Player(vo,userId);
+    }
+
+    /**
+     * 通知其他人人牌
+     */
+    private void noticeEveryCards(Map<Long,PlayerCardInfoTianDaKeng> playerCardInfos){
+        Map<String, Object> result = new HashMap<>();
+        Map<Long,List<Integer>> cardsMap = new HashMap<>();
+        for (PlayerCardInfoTianDaKeng playerCardInfoTianDaKeng :playerCardInfos.values()) {
+            cardsMap.put(playerCardInfoTianDaKeng.getUserId(),playerCardInfoTianDaKeng.everyknowCards);
+        }
+        result.put("cardsMap",cardsMap);
+        ResponseVo vo = new ResponseVo("gameService","everyCards",result);
+        Player.sendMsg2Player(vo,users);
     }
 
     /**
@@ -396,7 +415,11 @@ public class GameTianDaKeng extends Game{
         for (Long l:users) {//清空当前下注
             curChip.put(l,0.0);
         }
-        gameuserStatus.put(userId,31);
+        if(canRaiseUser.containsAll(aliveUser)){
+            gameuserStatus.put(nextTurnId(currentTurn),311);
+        }else{
+            gameuserStatus.put(nextTurnId(currentTurn),312);
+        }
 
         Map<String, Long> result = new HashMap<>();
         result.put("userId",userId);
@@ -517,11 +540,16 @@ public class GameTianDaKeng extends Game{
     public void branch(){
         if(curUser.isEmpty()){
             if(aliveUser.size()>2){
-                canRaiseUser.remove(nextCanRaiseId(currentTurn));//删掉这轮反踢的人，转了一圈，所以下一个人就是当时踢的人
                 if(!canRaiseUser.isEmpty()){
-                    noticeCanRaise(nextCanRaiseId(currentTurn));//通知下一个可以加注（踢）
-                    curUser = aliveUser;
-                    curUser.remove(currentTurn);//加注(踢)的人不需要再操作
+                    long tempCanRaiseId = nextCanRaiseId(currentTurn);
+                    currentTurn = tempCanRaiseId;//下一个人
+                    canRaiseUser.remove(tempCanRaiseId);//删掉这轮反踢的人，转了一圈，所以下一个人就是当时踢的人
+                    noticeCanRaise(tempCanRaiseId);//通知下一个可以加注（踢）
+                    List<Long> list = new ArrayList();
+                    list.addAll(aliveUser);
+                    curUser = list;
+                    //curUser.remove(tempCanRaiseId);//加注(踢)的人不需要再操作
+
                 }else{//没有可以踢的了
                     if(tableCards.size()==0 || playerCardInfos.get(aliveUser.get(0)).allCards.size()==5){
                         if(getWhoWin()==-1){
@@ -551,8 +579,10 @@ public class GameTianDaKeng extends Game{
                         }
                     }else{
                         dealACard();//发牌
-                        canRaiseUser = aliveUser;//重置可操作人的列表
-                        curUser = aliveUser;
+                        List<Long> list = new ArrayList();
+                        list.addAll(aliveUser);
+                        canRaiseUser = list;//重置可操作人的列表
+                        curUser = list;
                     }
                 }
             }
@@ -572,7 +602,9 @@ public class GameTianDaKeng extends Game{
                 }
                 noticeFinishScores(allChip);
             }
-            curUser = aliveUser;
+            List<Long> list = new ArrayList<>();
+            list.addAll(aliveUser);
+            curUser = list;
         }else{
             currentTurn = nextTurnId(currentTurn);//下一个人
             noticeCanCall(currentTurn);//通知下一个人可以下注
