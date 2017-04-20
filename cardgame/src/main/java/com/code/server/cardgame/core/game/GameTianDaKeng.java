@@ -48,7 +48,7 @@ public class GameTianDaKeng extends Game{
     已经过 40
     已经弃牌 50
      */
-    protected Map<Long,Integer> userStatus = new HashMap<>();
+    protected Map<Long,Integer> gameuserStatus = new HashMap<>();
 
     private long currentTurn;//当前操作人
     private int chip;//下注
@@ -72,7 +72,7 @@ public class GameTianDaKeng extends Game{
             PlayerCardInfoTianDaKeng playerCardInfo = new PlayerCardInfoTianDaKeng();
             playerCardInfo.userId = uid;
             playerCardInfos.put(uid,playerCardInfo);
-            userStatus.put(uid,0);
+            gameuserStatus.put(uid,0);
         }
         this.users.addAll(users);
         this.aliveUser.addAll(users);
@@ -140,6 +140,7 @@ public class GameTianDaKeng extends Game{
     private void mustBet(){
         for (Long user : users) {
             allChip.put(user,INIT_BOTTOM_CHIP);
+            curChip.put(user,1.0);
         }
         //通知下底注
         Player.sendMsg2Player(new ResponseVo("gameService","mustBet",allChip),users);
@@ -170,8 +171,12 @@ public class GameTianDaKeng extends Game{
      */
     public int bet(Player player,int chip){
 
-        userStatus.put(player.getUserId(),12);
-        userStatus.put(nextTurnId(currentTurn),11);
+        for (Long l:users) {//去掉底注
+            curChip.put(l,0.0);
+        }
+
+        gameuserStatus.put(player.getUserId(),12);
+        gameuserStatus.put(nextTurnId(currentTurn),11);
 
         logger.info(player.getUser().getAccount() +"  下注: "+ chip);
         if (currentTurn != player.getUserId()) {
@@ -187,7 +192,7 @@ public class GameTianDaKeng extends Game{
         curUser.remove(currentTurn);//本轮操作完删除
         currentTurn = nextTurnId(currentTurn);//下一个人
         noticeCanCall(currentTurn);//通知下一个人可以下注
-
+        noticeBetFinish(player.getUserId(),chip);
         player.sendMsg(new ResponseVo("gameService","bet",0));
         return 0;
     }
@@ -199,8 +204,8 @@ public class GameTianDaKeng extends Game{
      */
     public int call(Player player){
 
-        userStatus.put(player.getUserId(),12);
-        userStatus.put(nextTurnId(currentTurn),11);
+        gameuserStatus.put(player.getUserId(),12);
+        gameuserStatus.put(nextTurnId(currentTurn),11);
 
         logger.info(player.getUser().getAccount() +"  跟注: "+ chip);
         if (currentTurn != player.getUserId()) {
@@ -215,7 +220,7 @@ public class GameTianDaKeng extends Game{
         curUser.remove(currentTurn);//本轮操作完删除
 
         branch();
-
+        noticeCallFinish(player.getUserId(),chip);
         player.sendMsg(new ResponseVo("gameService","call",0));
         return 0;
     }
@@ -227,8 +232,8 @@ public class GameTianDaKeng extends Game{
      */
     public int raise(Player player,int chip){
 
-        userStatus.put(player.getUserId(),22);
-        userStatus.put(nextTurnId(currentTurn),21);
+        gameuserStatus.put(player.getUserId(),22);
+        gameuserStatus.put(nextTurnId(currentTurn),21);
 
         logger.info(player.getUser().getAccount() +"  踢: "+ chip);
         if (currentTurn != player.getUserId()) {
@@ -245,7 +250,7 @@ public class GameTianDaKeng extends Game{
         //canRaiseUser.remove(currentTurn);//每个人可以反踢一次，踢完删除
         currentTurn = nextTurnId(currentTurn);//下一个人
         noticeCanCall(currentTurn);//通知下一个人可以下注
-
+        noticeRaiseFinish(player.getUserId(),chip);
         player.sendMsg(new ResponseVo("gameService","raise",0));
         return 0;
     }
@@ -257,8 +262,8 @@ public class GameTianDaKeng extends Game{
      */
     public int pass(Player player){
 
-        userStatus.put(player.getUserId(),40);
-        userStatus.put(nextTurnId(currentTurn),31);
+        gameuserStatus.put(player.getUserId(),40);
+        gameuserStatus.put(nextTurnId(currentTurn),31);
 
         logger.info(player.getUser().getAccount() +"  不踢 ");
 
@@ -277,8 +282,8 @@ public class GameTianDaKeng extends Game{
      */
     public int fold(Player player){
 
-        userStatus.put(player.getUserId(),50);
-        userStatus.put(nextTurnId(currentTurn),11);
+        gameuserStatus.put(player.getUserId(),50);
+        gameuserStatus.put(nextTurnId(currentTurn),11);
 
         logger.info(player.getUser().getAccount() +"  弃牌 ");
 
@@ -321,7 +326,7 @@ public class GameTianDaKeng extends Game{
             Player.sendMsg2Player(new ResponseVo("gameService","dealevery",playerCardInfo.everyknowCards),users);
             noticeCanBet(getMaxCardUser(trunNumber));//通知牌点数最大的人可以下注
 
-            userStatus.put(getMaxCardUser(trunNumber),12);
+            gameuserStatus.put(getMaxCardUser(trunNumber),12);
 
             curUser.add(playerCardInfo.userId);//添加到
         }
@@ -387,7 +392,11 @@ public class GameTianDaKeng extends Game{
      */
     private void noticeCanRaise(long userId){
 
-        userStatus.put(userId,31);
+
+        for (Long l:users) {//清空当前下注
+            curChip.put(l,0.0);
+        }
+        gameuserStatus.put(userId,31);
 
         Map<String, Long> result = new HashMap<>();
         result.put("userId",userId);
@@ -413,7 +422,7 @@ public class GameTianDaKeng extends Game{
      * @param userId
      */
     private void noticeCanBet(long userId){
-        userStatus.put(userId,11);
+        gameuserStatus.put(userId,11);
         Map<String, Long> result = new HashMap<>();
         result.put("userId",userId);
         ResponseVo vo = new ResponseVo("gameService","canBet",result);
@@ -433,12 +442,24 @@ public class GameTianDaKeng extends Game{
     }
 
     /**
+     * 通知可以其他人已经下注
+     * @param userId
+     */
+    private void noticeCallFinish(long userId,int chip){
+        Map<String, Long> result = new HashMap<>();
+        result.put("userId",userId);
+        result.put("chip",Long.parseLong(chip+""));
+        ResponseVo vo = new ResponseVo("gameService","callFinish",result);
+        Player.sendMsg2Player(vo,users);
+    }
+
+    /**
      * 通知可以跟注
      * @param userId
      */
     private void noticeCanCall(long userId){
 
-        userStatus.put(userId,11);
+        gameuserStatus.put(userId,11);
 
         Map<String, Long> result = new HashMap<>();
         result.put("userId",userId);
@@ -452,7 +473,7 @@ public class GameTianDaKeng extends Game{
      */
     private void noticeOtherFold(long userId){
 
-        userStatus.put(userId,50);
+        gameuserStatus.put(userId,50);
 
         Map<String, Long> result = new HashMap<>();
         result.put("userId",userId);
@@ -751,12 +772,12 @@ public class GameTianDaKeng extends Game{
         this.chip = chip;
     }
 
-    public Map<Long, Integer> getUserStatus() {
-        return userStatus;
+    public Map<Long, Integer> getGameuserStatus() {
+        return gameuserStatus;
     }
 
-    public void setUserStatus(Map<Long, Integer> userStatus) {
-        this.userStatus = userStatus;
+    public void setGameuserStatus(Map<Long, Integer> gameuserStatus) {
+        this.gameuserStatus = gameuserStatus;
     }
 
     //==========================获取谁赢=================================

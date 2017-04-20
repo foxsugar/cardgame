@@ -33,7 +33,8 @@ public class GameTianDaKengVo extends GameVo{
     protected List<Long> curUser = new ArrayList<>();//本轮的人
     protected List<Long> canRaiseUser = new ArrayList<>();//可以反踢的人
 
-    protected RoomTanDaKeng room;//房间
+    protected Map<Long,Integer> gameuserStatus = new HashMap<>();//玩家游戏中的状态
+
 
     public static GameTianDaKengVo getGameTianDaKengVo(Game game, long uid){
         GameTianDaKengVo vo = new GameTianDaKengVo();
@@ -51,10 +52,15 @@ public class GameTianDaKengVo extends GameVo{
             vo.aliveUser = tianDaKeng.getAliveUser();
             vo.curUser = tianDaKeng.getCurUser();
             vo.canRaiseUser = tianDaKeng.getCanRaiseUser();
-            vo.room = (RoomTanDaKeng) tianDaKeng.getRoom();
+            vo.gameuserStatus = tianDaKeng.getGameuserStatus();
 
             //玩家牌信息
             for (PlayerCardInfoTianDaKeng playerCardInfo : tianDaKeng.getPlayerCardInfos().values()) {
+                /*PlayerCardInfoTianDaKeng temp = playerCardInfo;
+                if(temp.getUserId()!=uid){
+                    temp.setMyselfCards(null);
+                    temp.setAllCards(null);
+                }*/
                 vo.playerCardInfos.put(playerCardInfo.userId, new PlayerCardInfoTianDaKengVo(playerCardInfo, uid));
             }
         }

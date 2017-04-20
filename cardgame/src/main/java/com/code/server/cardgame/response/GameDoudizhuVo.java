@@ -49,7 +49,6 @@ public class GameDoudizhuVo extends GameVo {
             vo.curMultiple = douDiZhu.getMultiple();
             if(uid == douDiZhu.getDizhu()){//玩家是地主
                 vo.tableCards.addAll(douDiZhu.getTableCards());
-
             }
 
             //玩家牌信息
