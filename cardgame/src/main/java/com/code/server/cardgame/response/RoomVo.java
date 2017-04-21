@@ -35,7 +35,7 @@ public class RoomVo {
     protected Map<Long, Integer> userStatus = new HashMap<>();//用户状态
     protected List<UserVo> userList = new ArrayList<>();//用户列表
     protected Map<Long, Double> userScores = new HashMap<>();
-
+    protected int personNumber;
 
     public RoomVo(){}
 
@@ -51,6 +51,7 @@ public class RoomVo {
         this.goldRoomType = room.getGoldRoomType();
         this.isLastDraw = room.isLastDraw();
         this.drawForLeaveChip = room.getDrawForLeaveChip();
+        this.personNumber = room.getPersonNumber();
 
         for(long uid : room.getUsers()){
             userList.add(GameManager.getUserVo(room.getUserMap().get(uid)));

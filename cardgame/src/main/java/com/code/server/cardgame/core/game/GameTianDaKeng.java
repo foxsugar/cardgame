@@ -158,9 +158,11 @@ public class GameTianDaKeng extends Game{
         Long userId = null;
         int temp = 0;
         for (PlayerCardInfoTianDaKeng playerCardInfoTianDaKeng :playerCardInfos.values()) {
-            if(temp < CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1))){
-                temp = CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1));
-                userId = playerCardInfoTianDaKeng.userId;
+            if(aliveUser.contains(playerCardInfoTianDaKeng.userId)){
+                if(temp < CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1))){
+                    temp = CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1));
+                    userId = playerCardInfoTianDaKeng.userId;
+                }
             }
         }
         return userId;
@@ -222,6 +224,9 @@ public class GameTianDaKeng extends Game{
         curUser.remove(currentTurn);//本轮操作完删除
 
         noticeCallFinish(player.getUserId(),chip);
+        if(canRaiseUser.size()==0){
+            fristBet = true;
+        }
         branch();
         player.sendMsg(new ResponseVo("gameService","call",0));
         return 0;
@@ -448,8 +453,36 @@ public class GameTianDaKeng extends Game{
                         curUser = list;
                     }
                 }else if(canRaiseUser.size()==2){
-                    noticeCanRaise(nextCanRaiseId(currentTurn));//通知第一个可以踢
-                    currentTurn = nextCanRaiseId(currentTurn);//下一个人
+                    if(tableCards.size()==0 || playerCardInfos.get(aliveUser.get(0)).allCards.size()==5){
+                        if(getWhoWin()==-1){
+                            this.room.setLastDraw(true);
+                            int temp = 0;
+                            for (Long l:allChip.keySet()) {//结算积分
+                                temp +=  allChip.get(l);
+                            }
+                            this.room.setDrawForLeaveChip(temp);
+                            noticeFinishScores(allChip);
+                            endSth();
+                        }else{
+                            Long winner = getWhoWin();
+                            for (Long l:allChip.keySet()) {//结算积分
+                                if(!l.equals(winner)){
+                                    allChip.put(winner,allChip.get(winner)+allChip.get(l));
+                                    allChip.put(l,-allChip.get(l));
+                                    this.room.getUserScores().put(l,(this.room.getUserScores().get(l)-allChip.get(l))*this.room.getMultiple()/100);
+                                    this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner)+allChip.get(l))*this.room.getMultiple()/100);
+                                }
+                            }
+                            if(this.room.getDrawForLeaveChip()!=0){
+                                allChip.put(winner,allChip.get(winner)+this.room.getDrawForLeaveChip());
+                            }
+                            noticeFinishScores(allChip);
+                            endSth();
+                        }
+                    }else{
+                        noticeCanRaise(nextCanRaiseId(currentTurn));//通知第一个可以踢
+                        currentTurn = nextCanRaiseId(currentTurn);//下一个人
+                    }
                 }
 
                 /*if(twoPersonList.size()==2){
