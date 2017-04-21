@@ -156,8 +156,8 @@ public class GameTianDaKeng extends Game{
         Long userId = null;
         int temp = 0;
         for (PlayerCardInfoTianDaKeng playerCardInfoTianDaKeng :playerCardInfos.values()) {
-            if(temp < CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(number-1))){
-                temp = CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(number-1));
+            if(temp < CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1))){
+                temp = CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1));
                 userId = playerCardInfoTianDaKeng.userId;
             }
         }
@@ -247,6 +247,9 @@ public class GameTianDaKeng extends Game{
         this.chip = chip;
         addToChip(player.getUserId(),chip);//添加积分
         curUser.remove(currentTurn);//本轮操作完删除
+        if(canRaiseUser.size()!=2){//2人无限踢不删
+            canRaiseUser.remove(currentTurn);
+        }
         currentTurn = nextTurnId(currentTurn);//下一个人
         noticeCanCall(currentTurn);//通知下一个人可以下注
         noticeRaiseFinish(player.getUserId(),chip);
@@ -270,8 +273,9 @@ public class GameTianDaKeng extends Game{
 
         logger.info(player.getUser().getAccount() +"  不踢 ");
 
-        curUser.remove(currentTurn);//本轮操作完删除
-
+        //curUser.remove(currentTurn);//本轮操作完删除
+        curUser.removeAll(curUser);
+        canRaiseUser.remove(currentTurn);
         branch();
 
         player.sendMsg(new ResponseVo("gameService","pass",0));
@@ -291,6 +295,7 @@ public class GameTianDaKeng extends Game{
         logger.info(player.getUser().getAccount() +"  弃牌 ");
 
         noticeOtherFold(currentTurn);//通知其他人弃牌
+
         curUser.remove(currentTurn);//本轮操作完删除
         aliveUser.remove(currentTurn);//在玩的人中删除弃牌的
         canRaiseUser.remove(currentTurn);//在玩的人中删除弃牌的
@@ -328,12 +333,12 @@ public class GameTianDaKeng extends Game{
             //通知其他人发的明牌
             //Player.sendMsg2Player(new ResponseVo("gameService","dealevery",playerCardInfo.everyknowCards),users);
             //noticeDealevery(playerCardInfo.userId,playerCardInfo.allCards,everyknowCardsAndUserId);
-            noticeCanBet(getMaxCardUser(trunNumber));//通知牌点数最大的人可以下注
 
-            gameuserStatus.put(getMaxCardUser(trunNumber),12);
-
-            curUser.add(playerCardInfo.userId);//添加到
         }
+        gameuserStatus.put(getMaxCardUser(trunNumber),12);
+        long tempMax = getMaxCardUser(trunNumber);
+        noticeCanBet(tempMax);//通知牌点数最大的人可以下注
+        currentTurn = tempMax;
         noticeEveryCards(playerCardInfos);
         this.trunNumber += 1;//公开的牌+1
     }
@@ -389,7 +394,8 @@ public class GameTianDaKeng extends Game{
      * 通知其他人这轮积分的最终归属
      */
     private void noticeFinishScores(Map<Long,Double> allChip){
-        Map<String, Map<Long,Double>> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
+        result.put("winUserId",getWhoWin());
         result.put("allChip",allChip);
         ResponseVo vo = new ResponseVo("gameService","finishScores",result);
         Player.sendMsg2Player(vo,users);
@@ -540,34 +546,54 @@ public class GameTianDaKeng extends Game{
     public void branch(){
         if(curUser.isEmpty()){
             if(aliveUser.size()>2){
-                if(!canRaiseUser.isEmpty()){
-                    long tempCanRaiseId = nextCanRaiseId(currentTurn);
-                    currentTurn = tempCanRaiseId;//下一个人
-                    canRaiseUser.remove(tempCanRaiseId);//删掉这轮反踢的人，转了一圈，所以下一个人就是当时踢的人
-                    noticeCanRaise(tempCanRaiseId);//通知下一个可以加注（踢）
-                    List<Long> list = new ArrayList();
-                    list.addAll(aliveUser);
-                    curUser = list;
-                    //curUser.remove(tempCanRaiseId);//加注(踢)的人不需要再操作
+                if(!canRaiseUser.isEmpty()) {
+                    if(canRaiseUser.size()!=aliveUser.size()){
 
+                        List<Long> list1 = new ArrayList();
+                        List<Long> list2 = new ArrayList<>();
+                        list1.addAll(aliveUser);
+                        list2.addAll(canRaiseUser);
+                        list2.add(currentTurn);
+                        list1.retainAll(list2);
+
+                        int index = list1.indexOf(currentTurn);
+                        int nextId = index + 1;
+                        if (nextId >= list1.size()) {
+                            nextId = 0;
+                        }
+                        Long temp = list1.get(nextId);
+
+                        //Long temp = nextCanRaiseId(currentTurn);
+                        noticeCanRaise(temp);//通知下一个可以加注（踢）
+                        canRaiseUser.remove(temp);
+                        currentTurn = temp;//下一个人
+
+                        List<Long> list = new ArrayList();
+                        list.addAll(aliveUser);
+                        curUser = list;
+                    }else if(canRaiseUser.size()==aliveUser.size()){
+                        long tempCanRaiseId = nextCanRaiseId(currentTurn);
+                        noticeCanRaise(tempCanRaiseId);
+                        currentTurn = tempCanRaiseId;//下一个人
+
+                    }
                 }else{//没有可以踢的了
                     if(tableCards.size()==0 || playerCardInfos.get(aliveUser.get(0)).allCards.size()==5){
                         if(getWhoWin()==-1){
                             this.room.setLastDraw(true);
-                            noticeWhoWin(getWhoWin());
                             int temp = 0;
                             for (Long l:allChip.keySet()) {//结算积分
                                 temp +=  allChip.get(l);
                             }
                             this.room.setDrawForLeaveChip(temp);
+                            noticeFinishScores(allChip);
                             endSth();
                         }else{
-                            noticeWhoWin(getWhoWin());
                             Long winner = getWhoWin();
                             for (Long l:allChip.keySet()) {//结算积分
                                 if(!l.equals(winner)){
                                     allChip.put(winner,allChip.get(winner)+allChip.get(l));
-                                    allChip.put(l,0.0);
+                                    allChip.put(l,-allChip.get(l));
                                     this.room.getUserScores().put(l,(this.room.getUserScores().get(l)-allChip.get(l))*this.room.getMultiple()/100);
                                     this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner)+allChip.get(l))*this.room.getMultiple()/100);
                                 }
@@ -576,6 +602,7 @@ public class GameTianDaKeng extends Game{
                                 allChip.put(winner,allChip.get(winner)+this.room.getDrawForLeaveChip());
                             }
                             noticeFinishScores(allChip);
+                            endSth();
                         }
                     }else{
                         dealACard();//发牌
@@ -590,7 +617,6 @@ public class GameTianDaKeng extends Game{
                 noticeCanRaise(nextCanRaiseId(currentTurn));//通知第一个可以踢
                 currentTurn = nextTurnId(currentTurn);//下一个人
             }else if(aliveUser.size()<2){//是一个人了，直接获胜
-                noticeWhoWin(getWhoWin());
                 Long winner = getWhoWin();
                 for (Long l:allChip.keySet()) {//结算积分
                     if(!l.equals(winner)){
@@ -601,13 +627,46 @@ public class GameTianDaKeng extends Game{
                     }
                 }
                 noticeFinishScores(allChip);
+                endSth();
             }
             List<Long> list = new ArrayList<>();
             list.addAll(aliveUser);
             curUser = list;
         }else{
-            currentTurn = nextTurnId(currentTurn);//下一个人
-            noticeCanCall(currentTurn);//通知下一个人可以下注
+            if(aliveUser.size()==canRaiseUser.size() && curUser.size()==canRaiseUser.size()){//第一个人扣牌
+                if(aliveUser.size()!=1){
+                    List<Long> list1 = new ArrayList<>();
+                    List<Long> list2 = new ArrayList<>();
+                    list1.addAll(users);
+                    list2.addAll(aliveUser);
+                    list2.add(currentTurn);
+                    list1.retainAll(list2);
+
+                    int index = list1.indexOf(currentTurn);
+                    int nextId = index + 1;
+                    if (nextId >= list1.size()) {
+                        nextId = 0;
+                    }
+                    Long temp = list1.get(nextId);
+                    currentTurn = temp;//下一个人
+                    noticeCanBet(temp);//通知下一个人可以下注
+                }else{
+                    Long winner = getWhoWin();
+                    for (Long l:allChip.keySet()) {//结算积分
+                        if(!l.equals(winner)){
+                            allChip.put(winner,allChip.get(winner)+allChip.get(l));
+                            allChip.put(l,0.0);
+                            this.room.getUserScores().put(l,(this.room.getUserScores().get(l)-allChip.get(l))*this.room.getMultiple()/100);
+                            this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner)+allChip.get(l))*this.room.getMultiple()/100);
+                        }
+                    }
+                    noticeFinishScores(allChip);
+                    endSth();
+                }
+            }else{//第一个人不扣
+                currentTurn = nextTurnId(currentTurn);//下一个人
+                noticeCanCall(currentTurn);//通知下一个人可以下注
+            }
         }
     }
 
