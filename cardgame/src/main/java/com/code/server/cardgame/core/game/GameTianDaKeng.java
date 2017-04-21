@@ -58,6 +58,8 @@ public class GameTianDaKeng extends Game{
     protected List<Long> aliveUser = new ArrayList<>();//存活的人
     protected List<Long> curUser = new ArrayList<>();//本轮的人
     protected List<Long> canRaiseUser = new ArrayList<>();//可以反踢的人
+    protected List<Long> twoPersonList = new ArrayList<>();//2人无限踢专用
+    protected boolean fristBet = true;
 
     protected Room room;//房间
 
@@ -250,6 +252,9 @@ public class GameTianDaKeng extends Game{
         if(canRaiseUser.size()!=2){//2人无限踢不删
             canRaiseUser.remove(currentTurn);
         }
+        if(aliveUser.size()==2 && twoPersonList.size()==0){
+            twoPersonList.addAll(aliveUser);
+        }
         currentTurn = nextTurnId(currentTurn);//下一个人
         noticeCanCall(currentTurn);//通知下一个人可以下注
         noticeRaiseFinish(player.getUserId(),chip);
@@ -273,11 +278,15 @@ public class GameTianDaKeng extends Game{
 
         logger.info(player.getUser().getAccount() +"  不踢 ");
 
+        noticeOtherPass(currentTurn);
         //curUser.remove(currentTurn);//本轮操作完删除
         curUser.removeAll(curUser);
-        canRaiseUser.remove(currentTurn);
+        if(canRaiseUser.size()!=2){
+            canRaiseUser.remove(currentTurn);
+        }else{
+            twoPersonList.remove(currentTurn);
+        }
         branch();
-
         player.sendMsg(new ResponseVo("gameService","pass",0));
         return 0;
     }
@@ -299,6 +308,9 @@ public class GameTianDaKeng extends Game{
         curUser.remove(currentTurn);//本轮操作完删除
         aliveUser.remove(currentTurn);//在玩的人中删除弃牌的
         canRaiseUser.remove(currentTurn);//在玩的人中删除弃牌的
+        if(aliveUser.size()==2 && twoPersonList.size()==0){
+            twoPersonList.addAll(aliveUser);
+        }
 
         branch();
 
@@ -394,9 +406,14 @@ public class GameTianDaKeng extends Game{
      * 通知其他人这轮积分的最终归属
      */
     private void noticeFinishScores(Map<Long,Double> allChip){
+        Map<Long,List<Integer>> usersCards = new HashMap();
+        for (PlayerCardInfoTianDaKeng p :playerCardInfos.values()) {
+            usersCards.put(p.userId,p.allCards);
+        }
         Map<String, Object> result = new HashMap<>();
         result.put("winUserId",getWhoWin());
         result.put("allChip",allChip);
+        result.put("usersCards",usersCards);
         ResponseVo vo = new ResponseVo("gameService","finishScores",result);
         Player.sendMsg2Player(vo,users);
     }
@@ -493,6 +510,21 @@ public class GameTianDaKeng extends Game{
         Map<String, Long> result = new HashMap<>();
         result.put("userId",userId);
         ResponseVo vo = new ResponseVo("gameService","canCall",result);
+        Player.sendMsg2Player(vo,users);
+    }
+
+
+    /**
+     * 通知其他人弃牌
+     * @param userId
+     */
+    private void noticeOtherPass(long userId){
+
+        gameuserStatus.put(userId,40);
+
+        Map<String, Long> result = new HashMap<>();
+        result.put("userId",userId);
+        ResponseVo vo = new ResponseVo("gameService","otherPass",result);
         Player.sendMsg2Player(vo,users);
     }
 
@@ -614,17 +646,55 @@ public class GameTianDaKeng extends Game{
                 }
             }
             else if(aliveUser.size()==2){//少于3个人，无限踢
-                noticeCanRaise(nextCanRaiseId(currentTurn));//通知第一个可以踢
-                currentTurn = nextTurnId(currentTurn);//下一个人
+                /*if(twoPersonList.size()==0){
+                    Long winner = getWhoWin();
+                    for (Long l:allChip.keySet()) {//结算积分
+                        if(!l.equals(winner)){
+                            allChip.put(winner,allChip.get(winner)+allChip.get(l));
+                            allChip.put(l,0.0);
+                            this.room.getUserScores().put(l,(this.room.getUserScores().get(l)-allChip.get(l))*this.room.getMultiple()/100);
+                            this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner)+allChip.get(l))*this.room.getMultiple()/100);
+                        }
+                    }
+                    noticeFinishScores(allChip);
+                    endSth();
+                }else if(twoPersonList.size()==1){
+                    noticeCanRaise(twoPersonList.get(0));//通知第一个可以踢
+                    currentTurn = twoPersonList.get(0);//下一个人
+                }else if(twoPersonList.size()==2){
+                    if(fristBet){
+                        fristBet = false;
+                        if(currentTurn!=twoPersonList.get(0)){
+                            noticeCanRaise(twoPersonList.get(0));//通知第一个可以踢
+                            currentTurn = twoPersonList.get(0);//下一个人
+                        }else{
+                            noticeCanRaise(twoPersonList.get(1));//通知第一个可以踢
+                            currentTurn = twoPersonList.get(1);//下一个人
+                        }
+                    }else{
+                        if(currentTurn!=twoPersonList.get(0)){
+                            twoPersonList.remove(currentTurn);
+                            noticeCanRaise(twoPersonList.get(0));//通知第一个可以踢
+                            currentTurn = twoPersonList.get(0);//下一个人
+                        }else{
+                            twoPersonList.remove(currentTurn);
+                            noticeCanRaise(twoPersonList.get(0));//通知第一个可以踢
+                            currentTurn = twoPersonList.get(0);//下一个人
+                        }
+                    }
+                }*/
             }else if(aliveUser.size()<2){//是一个人了，直接获胜
                 Long winner = getWhoWin();
                 for (Long l:allChip.keySet()) {//结算积分
                     if(!l.equals(winner)){
                         allChip.put(winner,allChip.get(winner)+allChip.get(l));
-                        allChip.put(l,0.0);
+                        allChip.put(l,-allChip.get(l));
                         this.room.getUserScores().put(l,(this.room.getUserScores().get(l)-allChip.get(l))*this.room.getMultiple()/100);
                         this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner)+allChip.get(l))*this.room.getMultiple()/100);
                     }
+                }
+                if(this.room.getDrawForLeaveChip()!=0){
+                    allChip.put(winner,allChip.get(winner)+this.room.getDrawForLeaveChip());
                 }
                 noticeFinishScores(allChip);
                 endSth();
@@ -632,6 +702,9 @@ public class GameTianDaKeng extends Game{
             List<Long> list = new ArrayList<>();
             list.addAll(aliveUser);
             curUser = list;
+
+
+
         }else{
             if(aliveUser.size()==canRaiseUser.size() && curUser.size()==canRaiseUser.size()){//第一个人扣牌
                 if(aliveUser.size()!=1){
@@ -655,10 +728,13 @@ public class GameTianDaKeng extends Game{
                     for (Long l:allChip.keySet()) {//结算积分
                         if(!l.equals(winner)){
                             allChip.put(winner,allChip.get(winner)+allChip.get(l));
-                            allChip.put(l,0.0);
+                            allChip.put(l,-allChip.get(l));
                             this.room.getUserScores().put(l,(this.room.getUserScores().get(l)-allChip.get(l))*this.room.getMultiple()/100);
                             this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner)+allChip.get(l))*this.room.getMultiple()/100);
                         }
+                    }
+                    if(this.room.getDrawForLeaveChip()!=0){
+                        allChip.put(winner,allChip.get(winner)+this.room.getDrawForLeaveChip());
                     }
                     noticeFinishScores(allChip);
                     endSth();
@@ -869,6 +945,14 @@ public class GameTianDaKeng extends Game{
 
     public void setGameuserStatus(Map<Long, Integer> gameuserStatus) {
         this.gameuserStatus = gameuserStatus;
+    }
+
+    public List<Long> getTwoPersonList() {
+        return twoPersonList;
+    }
+
+    public void setTwoPersonList(List<Long> twoPersonList) {
+        this.twoPersonList = twoPersonList;
     }
 
     //==========================获取谁赢=================================
