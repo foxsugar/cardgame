@@ -490,7 +490,7 @@ public class GameTianDaKeng extends Game{
         }else{
             if(aliveUser.size()==canRaiseUser.size() && curUser.size()==canRaiseUser.size()){//第一个人扣牌
                 if(aliveUser.size()!=1){
-                    List<Long> list1 = new ArrayList<>();
+                    /*List<Long> list1 = new ArrayList<>();//取最大的下一个人
                     List<Long> list2 = new ArrayList<>();
                     list1.addAll(users);
                     list2.addAll(aliveUser);
@@ -503,8 +503,9 @@ public class GameTianDaKeng extends Game{
                         nextId = 0;
                     }
                     Long temp = list1.get(nextId);
-                    currentTurn = temp;//下一个人
-                    noticeCanBet(temp);//通知下一个人可以下注
+                    currentTurn = temp;//下一个人*/
+                    noticeCanBet(getMaxCardUser(trunNumber));//通知下一个人可以下注
+                    currentTurn = getMaxCardUser(trunNumber);
                 }else{
                     dealScores();
                     noticeFinishScores(allChip);
