@@ -75,6 +75,8 @@ public class GameTianDaKeng extends Game{
             playerCardInfo.userId = uid;
             playerCardInfos.put(uid,playerCardInfo);
             gameuserStatus.put(uid,0);
+            allChip.put(uid,0.0);
+            curChip.put(uid,0.0);
         }
         this.users.addAll(users);
         this.aliveUser.addAll(users);
@@ -281,6 +283,7 @@ public class GameTianDaKeng extends Game{
         noticeOtherPass(currentTurn);
         //curUser.remove(currentTurn);//本轮操作完删除
         curUser.removeAll(curUser);
+        canRaiseUser.remove(currentTurn);
         if(canRaiseUser.size()!=2){
             canRaiseUser.remove(currentTurn);
         }else{
@@ -370,18 +373,7 @@ public class GameTianDaKeng extends Game{
                             noticeFinishScores(allChip);
                             endSth();
                         }else{
-                            Long winner = getWhoWin();
-                            for (Long l:allChip.keySet()) {//结算积分
-                                if(!l.equals(winner)){
-                                    allChip.put(winner,allChip.get(winner)+allChip.get(l));
-                                    allChip.put(l,-allChip.get(l));
-                                    this.room.getUserScores().put(l,(this.room.getUserScores().get(l)-allChip.get(l))*this.room.getMultiple()/100);
-                                    this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner)+allChip.get(l))*this.room.getMultiple()/100);
-                                }
-                            }
-                            if(this.room.getDrawForLeaveChip()!=0){
-                                allChip.put(winner,allChip.get(winner)+this.room.getDrawForLeaveChip());
-                            }
+                            dealScores();
                             noticeFinishScores(allChip);
                             endSth();
                         }
@@ -446,43 +438,32 @@ public class GameTianDaKeng extends Game{
                             currentTurn = twoPersonList.get(1);//下一个人
                         }
                     }else{
-                        dealACard();//发牌
-                        List<Long> list = new ArrayList();
-                        list.addAll(aliveUser);
-                        canRaiseUser = list;//重置可操作人的列表
-                        curUser = list;
+                        if(tableCards.size()==0 || playerCardInfos.get(aliveUser.get(0)).allCards.size()==5){
+                            if(getWhoWin()==-1){
+                                this.room.setLastDraw(true);
+                                int temp = 0;
+                                for (Long l:allChip.keySet()) {//结算积分
+                                    temp +=  allChip.get(l);
+                                }
+                                this.room.setDrawForLeaveChip(temp);
+                                noticeFinishScores(allChip);
+                                endSth();
+                            }else{
+                                dealScores();
+                                noticeFinishScores(allChip);
+                                endSth();
+                            }
+                        }else{
+                            dealACard();//发牌
+                            List<Long> list = new ArrayList();
+                            list.addAll(aliveUser);
+                            canRaiseUser = list;//重置可操作人的列表
+                            curUser = list;
+                        }
                     }
                 }else if(canRaiseUser.size()==2){
-                    if(tableCards.size()==0 || playerCardInfos.get(aliveUser.get(0)).allCards.size()==5){
-                        if(getWhoWin()==-1){
-                            this.room.setLastDraw(true);
-                            int temp = 0;
-                            for (Long l:allChip.keySet()) {//结算积分
-                                temp +=  allChip.get(l);
-                            }
-                            this.room.setDrawForLeaveChip(temp);
-                            noticeFinishScores(allChip);
-                            endSth();
-                        }else{
-                            Long winner = getWhoWin();
-                            for (Long l:allChip.keySet()) {//结算积分
-                                if(!l.equals(winner)){
-                                    allChip.put(winner,allChip.get(winner)+allChip.get(l));
-                                    allChip.put(l,-allChip.get(l));
-                                    this.room.getUserScores().put(l,(this.room.getUserScores().get(l)-allChip.get(l))*this.room.getMultiple()/100);
-                                    this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner)+allChip.get(l))*this.room.getMultiple()/100);
-                                }
-                            }
-                            if(this.room.getDrawForLeaveChip()!=0){
-                                allChip.put(winner,allChip.get(winner)+this.room.getDrawForLeaveChip());
-                            }
-                            noticeFinishScores(allChip);
-                            endSth();
-                        }
-                    }else{
-                        noticeCanRaise(nextCanRaiseId(currentTurn));//通知第一个可以踢
-                        currentTurn = nextCanRaiseId(currentTurn);//下一个人
-                    }
+                    noticeCanRaise(nextCanRaiseId(currentTurn));//通知第一个可以踢
+                    currentTurn = nextCanRaiseId(currentTurn);//下一个人
                 }
 
                 /*if(twoPersonList.size()==2){
@@ -496,18 +477,7 @@ public class GameTianDaKeng extends Game{
                 }*/
 
             }else if(aliveUser.size()<2){//是一个人了，直接获胜
-                Long winner = getWhoWin();
-                for (Long l:allChip.keySet()) {//结算积分
-                    if(!l.equals(winner)){
-                        allChip.put(winner,allChip.get(winner)+allChip.get(l));
-                        allChip.put(l,-allChip.get(l));
-                        this.room.getUserScores().put(l,(this.room.getUserScores().get(l)-allChip.get(l))*this.room.getMultiple()/100);
-                        this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner)+allChip.get(l))*this.room.getMultiple()/100);
-                    }
-                }
-                if(this.room.getDrawForLeaveChip()!=0){
-                    allChip.put(winner,allChip.get(winner)+this.room.getDrawForLeaveChip());
-                }
+                dealScores();
                 noticeFinishScores(allChip);
                 endSth();
             }
@@ -536,28 +506,56 @@ public class GameTianDaKeng extends Game{
                     currentTurn = temp;//下一个人
                     noticeCanBet(temp);//通知下一个人可以下注
                 }else{
-                    Long winner = getWhoWin();
-                    for (Long l:allChip.keySet()) {//结算积分
-                        if(!l.equals(winner)){
-                            allChip.put(winner,allChip.get(winner)+allChip.get(l));
-                            allChip.put(l,-allChip.get(l));
-                            this.room.getUserScores().put(l,(this.room.getUserScores().get(l)-allChip.get(l))*this.room.getMultiple()/100);
-                            this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner)+allChip.get(l))*this.room.getMultiple()/100);
-                        }
-                    }
-                    if(this.room.getDrawForLeaveChip()!=0){
-                        allChip.put(winner,allChip.get(winner)+this.room.getDrawForLeaveChip());
-                    }
+                    dealScores();
                     noticeFinishScores(allChip);
                     endSth();
                 }
             }else{//第一个人不扣
-                currentTurn = nextTurnId(currentTurn);//下一个人
+                //currentTurn = nextTurnId(currentTurn);//下一个人
+
+                List<Long> users = new ArrayList();
+                List<Long> alive = new ArrayList();
+
+                users.addAll(this.users);
+                alive.addAll(this.aliveUser);
+                if(!alive.contains(currentTurn)){
+                    alive.add(currentTurn);
+                }
+                users.retainAll(alive);
+
+                int index = users.indexOf(currentTurn);
+
+                int nextId = index + 1;
+                if (nextId >= users.size()) {
+                    nextId = 0;
+                }
+                currentTurn =  users.get(nextId);
                 noticeCanCall(currentTurn);//通知下一个人可以下注
             }
         }
     }
 
+
+    /**
+     * 结算的时候分数的处理
+     */
+    public void dealScores(){
+        Long winner = getWhoWin();
+        double temp = 0;
+        for (Long l:allChip.keySet()) {//结算积分
+            if(!l.equals(winner)){
+                temp+=allChip.get(l);
+                allChip.put(l,-allChip.get(l));
+                this.room.getUserScores().put(l,(this.room.getUserScores().get(l)+allChip.get(l))*this.room.getMultiple()/100);
+            }
+        }
+        allChip.put(winner,temp);
+        this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner)+allChip.get(winner))*this.room.getMultiple()/100);
+
+        if(this.room.getDrawForLeaveChip()!=0){
+            allChip.put(winner,allChip.get(winner)+this.room.getDrawForLeaveChip());
+        }
+    }
 
     /**
      * 发牌

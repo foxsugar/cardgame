@@ -1,32 +1,36 @@
 {
-  "roomRecords": [
-    "java.util.HashMap",
-    {
-      "0": [
-        "java.util.ArrayList",
-        [
+  "roomRecords": {
+    "0": [
+      {
+        "type": 0,
+        "time": 1493000973213,
+        "records": [
           {
-            "type": 0,
-            "time": 1491032696493
+            "userId": 1000,
+            "name": "123456",
+            "score": -6.0,
+            "roomId": "799614"
           },
           {
-            "type": 0,
-            "time": 1491033315336
+            "userId": 999,
+            "name": "999999",
+            "score": -6.0,
+            "roomId": "799614"
           },
           {
-            "type": 0,
-            "time": 1491033386518
+            "userId": 888,
+            "name": "888888",
+            "score": -1.0,
+            "roomId": "799614"
           },
           {
-            "type": 0,
-            "time": 1491033490012
-          },
-          {
-            "type": 0,
-            "time": 1491033582939
+            "userId": 777,
+            "name": "777777",
+            "score": 14.0,
+            "roomId": "799614"
           }
         ]
-      ]
-    }
-  ]
+      }
+    ]
+  }
 }
