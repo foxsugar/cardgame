@@ -42,6 +42,7 @@ public class CardgameApplication {
 
 		});
 
+
 		if (serverConfig.getIsStartRPC() == 1) {
 			//rpc服务
 			RpcManager.getInstance().startGameRpcServer();

@@ -33,7 +33,7 @@ public class GameTianDaKengVo extends GameVo{
     protected List<Long> curUser = new ArrayList<>();//本轮的人
     protected List<Long> canRaiseUser = new ArrayList<>();//可以反踢的人
 
-    protected RoomTanDaKeng room;//房间
+
 
     public static GameTianDaKengVo getGameTianDaKengVo(Game game, long uid){
         GameTianDaKengVo vo = new GameTianDaKengVo();
@@ -51,7 +51,6 @@ public class GameTianDaKengVo extends GameVo{
             vo.aliveUser = tianDaKeng.getAliveUser();
             vo.curUser = tianDaKeng.getCurUser();
             vo.canRaiseUser = tianDaKeng.getCanRaiseUser();
-            vo.room = (RoomTanDaKeng) tianDaKeng.getRoom();
 
             //玩家牌信息
             for (PlayerCardInfoTianDaKeng playerCardInfo : tianDaKeng.getPlayerCardInfos().values()) {

@@ -20,7 +20,6 @@ public class PlayerCardInfo {
 
 
     public boolean isCanPlay(CardStruct cardStruct){
-
         return false;
     }
 

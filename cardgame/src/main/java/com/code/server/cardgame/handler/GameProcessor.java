@@ -40,6 +40,7 @@ public class GameProcessor implements Runnable{
     public void handle(){
         while(true){
             try {
+
                 MessageHolder messHolder = messageQueue.poll(10, TimeUnit.MILLISECONDS);
                 if(messHolder != null&&messHolder.message !=null){
                     handler.handleMessage(messHolder);
@@ -57,6 +58,7 @@ public class GameProcessor implements Runnable{
     @Override
     public void run() {
        while(ServerState.isWork){
+
            try {
                MessageHolder messHolder = messageQueue.poll(10, TimeUnit.MILLISECONDS);
                if(messHolder != null&&messHolder.message !=null){
@@ -64,11 +66,14 @@ public class GameProcessor implements Runnable{
                }
                //定时任务
                GameTimer.getInstance().handle();
+//               System.out.println("i1111112ii");
 
            } catch (Exception e) {
                logger.error("handle message error ",e);
            }
        }
     }
+
+
 
 }
