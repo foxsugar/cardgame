@@ -1,36 +1,35 @@
 {
-  "roomRecords": {
-    "0": [
+  "params": {
+    "roomId": "546609",
+    "modeTotal": "2",
+    "mode": "2",
+    "multiple": 1,
+    "gameNumber": 8,
+    "personNumber": 4,
+    "createUser": 14,
+    "userList": [
       {
-        "type": 0,
-        "time": 1493000973213,
-        "records": [
-          {
-            "userId": 1000,
-            "name": "123456",
-            "score": -6.0,
-            "roomId": "799614"
-          },
-          {
-            "userId": 999,
-            "name": "999999",
-            "score": -6.0,
-            "roomId": "799614"
-          },
-          {
-            "userId": 888,
-            "name": "888888",
-            "score": -1.0,
-            "roomId": "799614"
-          },
-          {
-            "userId": 777,
-            "name": "777777",
-            "score": 14.0,
-            "roomId": "799614"
-          }
-        ]
+        "account": "hlf",
+        "id": 14,
+        "image": "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/96",
+        "inRoom": false,
+        "ipConfig": "192.168.1.108",
+        "kickuser": -1425271456,
+        "marquee": "30",
+        "money": 970,
+        "openId": "0",
+        "password": "111",
+        "roomId": "0",
+        "seatId": "0",
+        "sex": "1",
+        "username": "%E7%99%BD%E8%83%96",
+        "uuid": "0",
+        "vip": "0"
       }
-    ]
-  }
+    ],
+    "each": "0"
+  },
+  "code": "0",
+  "service": "roomService",
+  "method": "createRoomByUser"
 }

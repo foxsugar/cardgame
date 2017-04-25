@@ -114,11 +114,11 @@ public class GameTianDaKeng extends Game{
      */
     protected void shuffleTest(){
         /**
-         * 1,2,3,4          A
-         * 37,38,39,40      10
-         * 41,42,43,44      J
-         * 45,46,47,48      Q
-         * 49,50,51,52      K
+         * 1,2,3,4          A       15
+         * 37,38,39,40      10      10
+         * 41,42,43,44      J       11
+         * 45,46,47,48      Q       12
+         * 49,50,51,52      K       13
 
         cards.add();cards.add();cards.add();cards.add();
         cards.add();cards.add();cards.add();cards.add();
@@ -126,8 +126,8 @@ public class GameTianDaKeng extends Game{
         cards.add();cards.add();cards.add();cards.add();
         cards.add();cards.add();cards.add();cards.add();
          */
-        cards.add(1);cards.add(37);cards.add(41);cards.add(2);
-        cards.add(38);cards.add(42);cards.add(3);cards.add(39);
+        cards.add(37);cards.add(38);cards.add(39);cards.add(1);
+        cards.add(2);cards.add(42);cards.add(41);cards.add(3);
         cards.add(43);cards.add(4);cards.add(40);cards.add(44);
         cards.add(45);cards.add(46);cards.add(47);cards.add(48);
         cards.add(49);//cards.add(50);cards.add(51);cards.add(52);
@@ -622,7 +622,7 @@ public class GameTianDaKeng extends Game{
                    everyknowCardsAndUserId.put(playerCardInfo.userId,list);
                }else if(tableCards.size() == 1){
                    temp = tableCards.get(0);
-                   playerCardInfo.everyknowCards.add(tableCards.remove(0));
+                   playerCardInfo.everyknowCards.add(temp);
                    playerCardInfo.allCards.add(playerCardInfo.everyknowCards.get(playerCardInfo.everyknowCards.size()-1));
                }else{
                    playerCardInfo.everyknowCards.add(temp);
@@ -1078,7 +1078,7 @@ public class GameTianDaKeng extends Game{
 
 
         for (PlayerCardInfoTianDaKeng p: playerCardInfos.values()) {
-            if(aliveUser.contains(p)){
+            if(aliveUser.contains(p.getUserId())){
                 if(isFour(p.allCards)!=0){
                     scoresFour.put(p.userId,isFour(p.allCards));
                 }else if(isThree(p.allCards)!=0){
@@ -1125,7 +1125,11 @@ public class GameTianDaKeng extends Game{
             if(!map.keySet().contains(getCardType(integer))){
                 map.put(getCardType(integer),1);
             }else{
-                map.put(getCardType(integer),map.get(getCardType(integer))+1);
+                if(map.get(getCardType(integer))==null){
+                    map.put(getCardType(integer),1);
+                }else{
+                    map.put(getCardType(integer),map.get(getCardType(integer))+1);
+                }
                 if(map.get(getCardType(integer))==4){
                     return  CardUtilOfTangDaKeng.getCardForScore().get(integer);
                 }
@@ -1141,7 +1145,12 @@ public class GameTianDaKeng extends Game{
             if(!map.keySet().contains(getCardType(integer))){
                 map.put(getCardType(integer),1);
             }else{
-                map.put(getCardType(integer),map.get(getCardType(integer))+1);
+                if(map.get(getCardType(integer))==null){
+                    map.put(getCardType(integer),1);
+                }else{
+                    map.put(getCardType(integer),map.get(getCardType(integer))+1);
+                }
+
                 if(map.get(getCardType(integer))==3){
                     temp = integer;
                 }
