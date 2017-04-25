@@ -84,7 +84,7 @@ public class GameTianDaKeng extends Game{
         this.canRaiseUser.addAll(users);
         this.trunNumber = 1;
 
-        shuffle();
+        shuffleTest();
         deal();
         if(!this.room.isLastDraw()){
             mustBet();
@@ -108,6 +108,31 @@ public class GameTianDaKeng extends Game{
         cards.add(4);
         Collections.shuffle(cards);
     }
+
+    /**
+     * 按顺序洗牌
+     */
+    protected void shuffleTest(){
+        /**
+         * 1,2,3,4          A
+         * 37,38,39,40      10
+         * 41,42,43,44      J
+         * 45,46,47,48      Q
+         * 49,50,51,52      K
+
+        cards.add();cards.add();cards.add();cards.add();
+        cards.add();cards.add();cards.add();cards.add();
+        cards.add();cards.add();cards.add();cards.add();
+        cards.add();cards.add();cards.add();cards.add();
+        cards.add();cards.add();cards.add();cards.add();
+         */
+        cards.add(1);cards.add(37);cards.add(41);cards.add(2);
+        cards.add(38);cards.add(42);cards.add(3);cards.add(39);
+        cards.add(43);cards.add(4);cards.add(40);cards.add(44);
+        cards.add(45);cards.add(46);cards.add(47);cards.add(48);
+        cards.add(49);//cards.add(50);cards.add(51);cards.add(52);
+    }
+
 
     /**
      * 发牌
@@ -370,10 +395,13 @@ public class GameTianDaKeng extends Game{
                                 temp +=  allChip.get(l);
                             }
                             this.room.setDrawForLeaveChip(temp);
+                            dealDrawScores();
                             noticeFinishScores(allChip);
                             endSth();
                         }else{
                             dealScores();
+                            this.room.setLastDraw(false);
+                            this.room.setDrawForLeaveChip(0);
                             noticeFinishScores(allChip);
                             endSth();
                         }
@@ -446,10 +474,13 @@ public class GameTianDaKeng extends Game{
                                     temp +=  allChip.get(l);
                                 }
                                 this.room.setDrawForLeaveChip(temp);
+                                dealDrawScores();
                                 noticeFinishScores(allChip);
                                 endSth();
                             }else{
                                 dealScores();
+                                this.room.setLastDraw(false);
+                                this.room.setDrawForLeaveChip(0);
                                 noticeFinishScores(allChip);
                                 endSth();
                             }
@@ -478,6 +509,8 @@ public class GameTianDaKeng extends Game{
 
             }else if(aliveUser.size()<2){//是一个人了，直接获胜
                 dealScores();
+                this.room.setLastDraw(false);
+                this.room.setDrawForLeaveChip(0);
                 noticeFinishScores(allChip);
                 endSth();
             }
@@ -508,6 +541,8 @@ public class GameTianDaKeng extends Game{
                     currentTurn = getMaxCardUser(trunNumber);
                 }else{
                     dealScores();
+                    this.room.setLastDraw(false);
+                    this.room.setDrawForLeaveChip(0);
                     noticeFinishScores(allChip);
                     endSth();
                 }
@@ -555,6 +590,17 @@ public class GameTianDaKeng extends Game{
 
         if(this.room.getDrawForLeaveChip()!=0){
             allChip.put(winner,allChip.get(winner)+this.room.getDrawForLeaveChip());
+            this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner) + this.room.getDrawForLeaveChip()*this.room.getMultiple()/100));
+        }
+    }
+
+    /**
+     * 结算的时候分数的处理
+     */
+    public void dealDrawScores(){
+        for (Long l:allChip.keySet()) {//结算积分
+            allChip.put(l,-allChip.get(l));
+            this.room.getUserScores().put(l,(this.room.getUserScores().get(l)+allChip.get(l))*this.room.getMultiple()/100);
         }
     }
 
