@@ -74,28 +74,7 @@ public class Room {
     protected boolean isCanDissloution = false;
 
 
-    public static int createRoom(Player player, int gameNumber, int multiple){
-        if(GameManager.getInstance().userRoom.containsKey(player.getUserId())){
-            return ErrorCode.CANNOT_CREATE_ROOM_ROLE_HAS_IN_ROOM;
-        }
-        int needMoney = getNeedMoney(gameNumber);
-        if (player.getUser().getMoney() < needMoney) {
-            return ErrorCode.CANNOT_CREATE_ROOM_MONEY;
-        }
-        RoomTanDaKeng room = new RoomTanDaKeng();
-        room.personNumber = PERSONNUM;
 
-        room.roomId = getRoomIdStr(genRoomId());
-        room.createUser = player.getUserId();
-        room.init(gameNumber,multiple);
-        //房间加入列表
-        room.roomAddUser(player);
-        GameManager.getInstance().rooms.put(room.roomId, room);
-
-        player.sendMsg(new ResponseVo("roomService","createRoom",new RoomTianDaKengVo(room,player)));
-
-        return 0;
-    }
 
     public static int joinRoomQuick(Player player,int type){
 
