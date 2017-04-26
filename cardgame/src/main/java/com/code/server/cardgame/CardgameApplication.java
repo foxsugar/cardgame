@@ -21,51 +21,50 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import java.util.Date;
 import java.util.Timer;
 
-@SpringBootApplication(scanBasePackages={"com.code.server.*"})
+@SpringBootApplication(scanBasePackages = {"com.code.server.*"})
 @EnableConfigurationProperties({ServerConfig.class})
 public class CardgameApplication {
 
 
-	public static void main(String[] args) throws TTransportException {
+    public static void main(String[] args) throws TTransportException {
 
 
-
-		SpringApplication.run(CardgameApplication.class, args);
-		init();
-		ThreadPool.getInstance().executor.execute(new SocketServer());
-		ThreadPool.getInstance().executor.execute(GameProcessor.getInstance());
-		//定时保存User数据
+        SpringApplication.run(CardgameApplication.class, args);
+        init();
+        ThreadPool.getInstance().executor.execute(new SocketServer());
+        ThreadPool.getInstance().executor.execute(GameProcessor.getInstance());
+        //定时保存User数据
         ServerConfig serverConfig = SpringUtil.getBean(ServerConfig.class);
-		ThreadPool.getInstance().executor.execute(()->{
-				Timer timer = new Timer();
-				timer.schedule(new SaveUserTimerTask() , new Date(), serverConfig.getDbSaveTime());
+        ThreadPool.getInstance().executor.execute(() -> {
+            Timer timer = new Timer();
+            timer.schedule(new SaveUserTimerTask(), new Date(), serverConfig.getDbSaveTime());
 
-		});
+        });
 
 
-		if (serverConfig.getIsStartRPC() == 1) {
-			//rpc服务
-			RpcManager.getInstance().startGameRpcServer();
-			RpcManager.getInstance().checkGameRpcServerWork();
-		}
+        if (serverConfig.getIsStartRPC() == 1) {
+            //rpc服务
+            RpcManager.getInstance().startGameRpcServer();
+            RpcManager.getInstance().checkGameRpcServerWork();
+        }
 
-		ServerState.isWork = true;
-	}
+        ServerState.isWork = true;
+    }
 
-	public static void init(){
+    public static void init() {
 
-		ServerConfig serverConfig = SpringUtil.getBean(ServerConfig.class);
-		GameManager.getInstance().serverId = serverConfig.getServerId();
+        ServerConfig serverConfig = SpringUtil.getBean(ServerConfig.class);
+        GameManager.getInstance().serverId = serverConfig.getServerId();
 
-		//初始化服务器信息
-		ServerService serverService = SpringUtil.getBean(ServerService.class);
-		ServerInfo serverInfo = serverService.getAllServerInfo().get(0);
-		GameManager.getInstance().serverInfo = serverInfo;
+        //初始化服务器信息
+        ServerService serverService = SpringUtil.getBean(ServerService.class);
+        ServerInfo serverInfo = serverService.getAllServerInfo().get(0);
+        GameManager.getInstance().serverInfo = serverInfo;
 
-		//常量数据
-		ConstantService constantService = SpringUtil.getBean(ConstantService.class);
-		Constant constant = constantService.constantDao.findOne(1L);
-		GameManager.getInstance().constant = constant;
+        //常量数据
+        ConstantService constantService = SpringUtil.getBean(ConstantService.class);
+        Constant constant = constantService.constantDao.findOne(1L);
+        GameManager.getInstance().constant = constant;
 
-	}
+    }
 }
