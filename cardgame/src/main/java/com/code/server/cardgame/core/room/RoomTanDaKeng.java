@@ -23,7 +23,6 @@ import java.util.*;
  */
 public class RoomTanDaKeng extends Room{
 
-
     private static final Logger logger = Logger.getLogger(RoomTanDaKeng.class);
 
     private boolean isLastDraw = false;//是否平局
