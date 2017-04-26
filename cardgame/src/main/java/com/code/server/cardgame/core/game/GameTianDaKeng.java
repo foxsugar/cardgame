@@ -84,7 +84,7 @@ public class GameTianDaKeng extends Game{
         this.canRaiseUser.addAll(users);
         this.trunNumber = 1;
 
-        shuffleTest();
+        shuffle();
         deal();
         if(!this.room.isLastDraw()){
             mustBet();
