@@ -143,6 +143,11 @@ public class MsgDispatch {
             case "register":
 //                return gameUserService.register(userId,ctx);
 
+            case "giveOtherMoney":
+                Player player = GameManager.getPlayerByCtx(ctx);
+                Long accepterId = Long.parseLong(params.getString("accepterId"));
+                int money = Integer.parseInt(params.getString("money"));
+                return gameUserService.giveOtherMoney(player,accepterId, money);
 
             default:
 

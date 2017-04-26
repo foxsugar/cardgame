@@ -67,6 +67,11 @@ public class ErrorCode {
 	public static final int REFERRER_ALERADY_BIND = 250001;
 	public static final int CHARGE_NO_BIND = 250002;
 
+
+	public static final int NOT_HAVE_THIS_GIVER = 300001;
+	public static final int NOT_HAVE_THIS_ACCEPTER = 300002;
+	public static final int NOT_HAVE_MORE_MONEY = 300003;
+
 	
 	static class ErrorCodeRepeatChecker {
     	public void check() {

@@ -127,9 +127,9 @@ public class GameTianDaKeng extends Game{
         cards.add();cards.add();cards.add();cards.add();
          */
         cards.add(37);cards.add(38);cards.add(39);cards.add(1);
-        cards.add(2);cards.add(42);cards.add(41);cards.add(3);
-        cards.add(43);cards.add(4);cards.add(40);cards.add(44);
-        cards.add(45);cards.add(46);cards.add(47);cards.add(48);
+        cards.add(2);cards.add(3);cards.add(41);cards.add(42);
+        cards.add(43);cards.add(48);cards.add(45);cards.add(44);
+        cards.add(4);cards.add(46);cards.add(47);cards.add(40);
         cards.add(49);//cards.add(50);cards.add(51);cards.add(52);
     }
 
@@ -633,7 +633,7 @@ public class GameTianDaKeng extends Game{
             //noticeDealevery(playerCardInfo.userId,playerCardInfo.allCards,everyknowCardsAndUserId);
 
         }
-        gameuserStatus.put(getMaxCardUser(trunNumber),12);
+        gameuserStatus.put(getMaxCardUser(trunNumber),11);
         long tempMax = getMaxCardUser(trunNumber);
         noticeCanBet(tempMax);//通知牌点数最大的人可以下注
         currentTurn = tempMax;
@@ -727,9 +727,9 @@ public class GameTianDaKeng extends Game{
             curChip.put(l,0.0);
         }
         if(canRaiseUser.containsAll(aliveUser)){
-            gameuserStatus.put(nextTurnId(currentTurn),311);
+            gameuserStatus.put(userId,311);
         }else{
-            gameuserStatus.put(nextTurnId(currentTurn),312);
+            gameuserStatus.put(userId,312);
         }
 
         Map<String, Long> result = new HashMap<>();
@@ -906,6 +906,17 @@ public class GameTianDaKeng extends Game{
      *所有牌局都结束
      */
     private void sendFinalResult() {
+
+        UserService userService = SpringUtil.getBean(UserService.class);
+        User user = room.getUserMap().get(room.getCreateUser());
+        UserInfo userInfo = user.getUserInfo();
+        userInfo.setPlayGameTime(userInfo.getPlayGameTime()+1);
+        if(userInfo.getPlayGameTime()==7){
+            user.setMoney(user.getMoney()+1);
+            userInfo.setPlayGameTime(0);
+        }
+        user.setUserInfo(userInfo);
+        userService.save(user);
 
         if (room.getCurGameNumber() > room.getGameNumber() && room.getDrawForLeaveChip()==0) {
             GameFinalResult gameFinalResult = new GameFinalResult();

@@ -102,8 +102,32 @@ public class GameUserService {
             });
         }
 
+        return 0;
+    }
 
+    /**
+     * 给人充钱
+     * @param player
+     * @param accepterId
+     * @param money
+     * @return
+     */
+    public int giveOtherMoney(Player player, Long accepterId,int money){
+        UserService userService = SpringUtil.getBean(UserService.class);
+        User user = player.getUser();
+        User accepter = userService.getUserByUserId(accepterId);
+        if(accepter==null){
+            return ErrorCode.NOT_HAVE_THIS_ACCEPTER;
+        }
+        if(user.getMoney() < money){
+            return ErrorCode.NOT_HAVE_MORE_MONEY;
+        }
+        user.setMoney(user.getMoney()-money);
+        accepter.setMoney(accepter.getMoney()+money);
+        userService.save(user);
+        userService.save(accepter);
 
+        player.sendMsg("userService","giveOtherMoney",0);
         return 0;
     }
 

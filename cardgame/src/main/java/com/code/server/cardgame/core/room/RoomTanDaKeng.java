@@ -23,6 +23,8 @@ import java.util.*;
  */
 public class RoomTanDaKeng extends Room{
 
+    public static final int NEEDMOENY = 1;
+
     private static final Logger logger = Logger.getLogger(RoomTanDaKeng.class);
 
     private boolean isLastDraw = false;//是否平局
@@ -94,5 +96,14 @@ public class RoomTanDaKeng extends Room{
 
     public void setDrawForLeaveChip(int drawForLeaveChip) {
         this.drawForLeaveChip = drawForLeaveChip;
+    }
+
+
+    public void spendMoney() {
+        User user = userMap.get(this.createUser);
+        if (user != null) {
+            user.setMoney(user.getMoney() - NEEDMOENY);
+            GameManager.getInstance().getSaveUser2DB().add(user);
+        }
     }
 }
