@@ -47,12 +47,12 @@ public class RoomTanDaKeng extends Room{
 
         RoomTanDaKeng room = new RoomTanDaKeng();
         room.personNumber = personNumber;
-
+        room.multiple = (int)roomType;
         room.roomId = getRoomIdStr(genRoomId());
         room.createUser = player.getUserId();
         room.init(gameNumber,roomType);
 
-        if(room.getMultiple()==25||room.getMultiple()==50||room.getMultiple()==100||room.getMultiple()==200){
+        if(room.getMultiple()!=25 && room.getMultiple()!=50 && room.getMultiple()!=100 && room.getMultiple()!=200){
             return ErrorCodeTDK.CREATE_ROOM_MULTIPLE;
         }
 
