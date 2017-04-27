@@ -128,9 +128,11 @@ public class Room {
 
     public int joinRoom(Player player) {
         long userId = player.getUserId();
+        if(GameManager.getInstance().getRoomByUser(player.getUserId())!=null){
+            return ErrorCode.CANNOT_CREATE_ROOM_USER_HAS_IN_ROOM;
+        }
         if (this.users.contains(userId)) {
             return ErrorCode.CANNOT_CREATE_ROOM_USER_HAS_IN_ROOM;
-
         }
         if (this.users.size() >= this.personNumber) {
             return ErrorCode.CANNOT_JOIN_ROOM_IS_FULL;
@@ -144,7 +146,6 @@ public class Room {
 
         roomAddUser(player);
         //加进玩家-房间映射表
-//        GameManager.getInstance().getUserRoom().put(userId, roomId);
         noticeJoinRoom(player);
 
         return 0;
@@ -215,9 +216,9 @@ public class Room {
         if (isInGame) {
             return ErrorCode.CANNOT_QUIT_ROOM_IS_IN_GAME;
         }
-
-        roomRemoveUser(player);
         //删除玩家房间映射关系
+        roomRemoveUser(player);
+
 //        GameManager.getInstance().getUserRoom().remove(userId);
 
         if (this.createUser == player.getUserId()) {//房主解散
@@ -435,14 +436,12 @@ public class Room {
         send.setNote("ok");
         player.sendMsg("roomService",methodName,send);
 
-
-
-
-
-
         return 0;
     }
 
+    /**
+     * 解散房间
+     */
     protected void dissolutionRoom(){
 
         GameManager.getInstance().removeRoom(this);

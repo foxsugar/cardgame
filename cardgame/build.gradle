@@ -9,7 +9,7 @@ buildscript {
 	configurations { springLoaded }
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath 'org.springframework:springloaded:1.2.7.RELEASE'
+//		classpath 'org.springframework:springloaded:1.2.7.RELEASE'
 	}
 }
 
@@ -43,7 +43,7 @@ dependencies {
 	compile group: 'org.springframework', name: 'springloaded', version: '1.2.7.RELEASE'
 
 
-	compile group: 'io.netty', name: 'netty-all', version: '4.1.6.Final'
+	compile group: 'io.netty', name: 'netty-all', version: '4.1.8.Final'
 
 	//protobuf-json-format
 	compile 'com.googlecode.protobuf-java-format:protobuf-java-format:1.2'

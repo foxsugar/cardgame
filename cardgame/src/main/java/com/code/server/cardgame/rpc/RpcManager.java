@@ -41,6 +41,8 @@ public class RpcManager {
 
     private List<Rebate> failedRebate = new CopyOnWriteArrayList<>();
 
+    private static Object rpcLock = new Object();
+
     private RpcManager() {
     }
 
@@ -58,14 +60,14 @@ public class RpcManager {
 
 
     public static void main(String[] args) {
-
+//        testGame(1);
         for (int j = 0; j < 10; j++) {
 
             new Thread(new Runnable() {
                 @Override
                 public void run() {
 //                    testAdmin();
-                    testGame();
+                    testGame(1000);
                 }
             }).start();
 
@@ -74,9 +76,9 @@ public class RpcManager {
 
     }
 
-    private static void testAdmin() {
+    private static void testAdmin(int count) {
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < count; i++) {
 
 //                System.out.println(i);
 
@@ -110,16 +112,23 @@ public class RpcManager {
         }
     }
 
-    private static void testGame() {
-        for (int i = 0; i < 1000; i++) {
+    private static void testGame(int count) {
+        for (int i = 0; i < count; i++) {
             try {
+                synchronized (rpcLock) {
+
+
                 TTransport adminTransport = TransportManager.getTransport("192.168.1.132", 9090);
 
                 GameRPC.Client client = GameRpcClient.getAClient(adminTransport);
+//                    client.getUserInfo(1);
                 Order order = new Order();
                 order.setUserId(1);
                 order.setNum(1);
+                    order.setType(1);
                 client.charge(order);
+                    adminTransport.close();
+                }
 
             } catch (Exception e) {
 

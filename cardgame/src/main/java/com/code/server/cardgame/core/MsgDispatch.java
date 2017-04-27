@@ -1,6 +1,7 @@
 package com.code.server.cardgame.core;
 
 import com.code.server.cardgame.core.game.Game;
+import com.code.server.cardgame.grpc.GRpcMsgDispatch;
 import com.code.server.cardgame.message.MessageHolder;
 import com.code.server.cardgame.core.game.GameDouDiZhu;
 import com.code.server.cardgame.core.game.GameTianDaKeng;
@@ -10,7 +11,7 @@ import com.code.server.cardgame.core.room.RoomDouDiZhu;
 import com.code.server.cardgame.core.room.RoomTanDaKeng;
 import com.code.server.cardgame.response.ErrorCode;
 import com.code.server.cardgame.response.ResponseVo;
-import com.code.server.cardgame.rpc.RpcMsgDispatch;
+import com.code.server.cardgame.rpc.ThriftMsgDispatch;
 import com.code.server.cardgame.service.GameChatService;
 import com.code.server.cardgame.service.GameUserService;
 import com.code.server.cardgame.utils.SpringUtil;
@@ -41,8 +42,12 @@ public class MsgDispatch {
 
         Object message = msgHolder.message;
         switch (msgHolder.msgType) {
-            case MessageHolder.MSG_TYPE_RPC:{
-                RpcMsgDispatch.dispatch(msgHolder);
+            case MessageHolder.MSG_TYPE_THRIFT:{
+                ThriftMsgDispatch.dispatch(msgHolder);
+                break;
+            }
+            case MessageHolder.MSG_TYPE_GRPC:{
+                GRpcMsgDispatch.dispatch(msgHolder);
                 break;
             }
             case MessageHolder.MSG_TYPE_CLIENT_JSON:{
