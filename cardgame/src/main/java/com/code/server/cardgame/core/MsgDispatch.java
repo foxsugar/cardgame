@@ -149,6 +149,11 @@ public class MsgDispatch {
                 int money = Integer.parseInt(params.getString("money"));
                 return gameUserService.giveOtherMoney(player,accepterId, money);
 
+            case "getNickNamePlayer":
+                Player giver = GameManager.getPlayerByCtx(ctx);
+                Long accepterUserId= Long.parseLong(params.getString("accepterId"));
+                return gameUserService.getNickNamePlayer(giver,accepterUserId);
+
             default:
 
                 return ErrorCode.REQUEST_PARAM_ERROR;

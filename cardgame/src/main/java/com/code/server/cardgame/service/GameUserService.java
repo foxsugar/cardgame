@@ -132,6 +132,29 @@ public class GameUserService {
     }
 
 
+    /**
+     * 获取昵称
+     * @param player
+     * @param accepterId
+     * @return
+     */
+    public int getNickNamePlayer(Player player, Long accepterId){
+        UserService userService = SpringUtil.getBean(UserService.class);
+        User accepter = userService.getUserByUserId(accepterId);
+        if(accepter==null){
+            return ErrorCode.NOT_HAVE_THIS_ACCEPTER;
+        }
+        JSONObject jSONObject = new JSONObject();
+        try {
+            jSONObject.put("nickname", (URLDecoder.decode(accepter.getUsername(),"utf-8")));
+        }catch (Exception e){
+            return ErrorCode.NOT_HAVE_THIS_ACCEPTER;
+        }
+        player.sendMsg("userService","getNickNamePlayer",jSONObject);
+        return 0;
+    }
+
+
     public int getUserRecodeByUserId(Player player, int type){
         User user = player.getUser();
         user.getRecord().getRoomRecords().get(type);
