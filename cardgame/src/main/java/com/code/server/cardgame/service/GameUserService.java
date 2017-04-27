@@ -139,18 +139,22 @@ public class GameUserService {
      * @return
      */
     public int getNickNamePlayer(Player player, Long accepterId){
-        UserService userService = SpringUtil.getBean(UserService.class);
-        User accepter = userService.getUserByUserId(accepterId);
-        if(accepter==null){
-            return ErrorCode.NOT_HAVE_THIS_ACCEPTER;
-        }
-        JSONObject jSONObject = new JSONObject();
-        try {
-            jSONObject.put("nickname", (URLDecoder.decode(accepter.getUsername(),"utf-8")));
-        }catch (Exception e){
-            return ErrorCode.NOT_HAVE_THIS_ACCEPTER;
-        }
-        player.sendMsg("userService","getNickNamePlayer",jSONObject);
+        ThreadPool.getInstance().executor.execute(()->{
+            UserService userService = SpringUtil.getBean(UserService.class);
+            User accepter = userService.getUserByUserId(accepterId);
+            if(accepter==null){
+                player.sendMsg("userService","getNickNamePlayer",ErrorCode.NOT_HAVE_THIS_ACCEPTER);
+                return;
+            }
+            JSONObject jSONObject = new JSONObject();
+            try {
+                jSONObject.put("nickname", (URLDecoder.decode(accepter.getUsername(),"utf-8")));
+            }catch (Exception e){
+                player.sendMsg("userService","getNickNamePlayer",ErrorCode.NOT_HAVE_THIS_ACCEPTER);
+                return;
+            }
+            player.sendMsg("userService","getNickNamePlayer",jSONObject);
+        });
         return 0;
     }
 
