@@ -61,6 +61,8 @@ public class GameTianDaKeng extends Game{
     protected List<Long> twoPersonList = new ArrayList<>();//2人无限踢专用
     protected boolean fristBet = true;
 
+    protected Map<Integer,List<Long>> trunRemoveUser = new HashMap<>();//每轮删除的人
+
     protected Room room;//房间
 
     public void startGame(List<Long> users,Room room){
@@ -89,8 +91,8 @@ public class GameTianDaKeng extends Game{
         if(!this.room.isLastDraw()){
             mustBet();
         }
-        currentTurn = getMaxCardUser(trunNumber);
-        noticeCanBet(getMaxCardUser(trunNumber));
+        currentTurn = getMaxCardUser();
+        noticeCanBet(getMaxCardUser());
     }
 
 
@@ -127,9 +129,9 @@ public class GameTianDaKeng extends Game{
         cards.add();cards.add();cards.add();cards.add();
          */
         cards.add(37);cards.add(38);cards.add(39);cards.add(1);
-        cards.add(2);cards.add(42);cards.add(41);cards.add(3);
-        cards.add(43);cards.add(4);cards.add(40);cards.add(44);
-        cards.add(45);cards.add(46);cards.add(47);cards.add(48);
+        cards.add(2);cards.add(3);cards.add(41);cards.add(42);
+        cards.add(43);cards.add(48);cards.add(45);cards.add(44);
+        cards.add(4);cards.add(46);cards.add(47);cards.add(40);
         cards.add(49);//cards.add(50);cards.add(51);cards.add(52);
     }
 
@@ -176,24 +178,7 @@ public class GameTianDaKeng extends Game{
 
     }
 
-    /**
-     * 获取第一个叫牌的人
-     * @param number    比较第几张牌，第一次为第一张
-     * @return
-     */
-    public Long getMaxCardUser(int number){
-        Long userId = null;
-        int temp = 0;
-        for (PlayerCardInfoTianDaKeng playerCardInfoTianDaKeng :playerCardInfos.values()) {
-            if(aliveUser.contains(playerCardInfoTianDaKeng.userId)){
-                if(temp < CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1))){
-                    temp = CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1));
-                    userId = playerCardInfoTianDaKeng.userId;
-                }
-            }
-        }
-        return userId;
-    }
+
 
     /**
      * 下注
@@ -344,6 +329,8 @@ public class GameTianDaKeng extends Game{
         }
 
         branch();
+
+        addRemoveUser(this.trunNumber,player.getUserId());
 
         player.sendMsg(new ResponseVo("gameService","fold",0));
         return 0;
@@ -537,8 +524,8 @@ public class GameTianDaKeng extends Game{
                     }
                     Long temp = list1.get(nextId);
                     currentTurn = temp;//下一个人*/
-                    noticeCanBet(getMaxCardUser(trunNumber));//通知下一个人可以下注
-                    currentTurn = getMaxCardUser(trunNumber);
+                    noticeCanBet(getMaxCardUser());//通知下一个人可以下注
+                    currentTurn = getMaxCardUser();
                 }else{
                     dealScores();
                     this.room.setLastDraw(false);
@@ -633,8 +620,8 @@ public class GameTianDaKeng extends Game{
             //noticeDealevery(playerCardInfo.userId,playerCardInfo.allCards,everyknowCardsAndUserId);
 
         }
-        gameuserStatus.put(getMaxCardUser(trunNumber),12);
-        long tempMax = getMaxCardUser(trunNumber);
+        gameuserStatus.put(getMaxCardUser(),11);
+        long tempMax = getMaxCardUser();
         noticeCanBet(tempMax);//通知牌点数最大的人可以下注
         currentTurn = tempMax;
         noticeEveryCards(playerCardInfos);
@@ -727,9 +714,9 @@ public class GameTianDaKeng extends Game{
             curChip.put(l,0.0);
         }
         if(canRaiseUser.containsAll(aliveUser)){
-            gameuserStatus.put(nextTurnId(currentTurn),311);
+            gameuserStatus.put(userId,311);
         }else{
-            gameuserStatus.put(nextTurnId(currentTurn),312);
+            gameuserStatus.put(userId,312);
         }
 
         Map<String, Long> result = new HashMap<>();
@@ -907,6 +894,17 @@ public class GameTianDaKeng extends Game{
      */
     private void sendFinalResult() {
 
+        UserService userService = SpringUtil.getBean(UserService.class);
+        User user = room.getUserMap().get(room.getCreateUser());
+        UserInfo userInfo = user.getUserInfo();
+        userInfo.setPlayGameTime(userInfo.getPlayGameTime()+1);
+        if(userInfo.getPlayGameTime()==7){
+            user.setMoney(user.getMoney()+1);
+            userInfo.setPlayGameTime(0);
+        }
+        user.setUserInfo(userInfo);
+        userService.save(user);
+
         if (room.getCurGameNumber() > room.getGameNumber() && room.getDrawForLeaveChip()==0) {
             GameFinalResult gameFinalResult = new GameFinalResult();
             room.getUserScores().forEach((userId,score)->{
@@ -1068,6 +1066,14 @@ public class GameTianDaKeng extends Game{
         this.twoPersonList = twoPersonList;
     }
 
+    public Map<Integer, List<Long>> getTrunRemoveUser() {
+        return trunRemoveUser;
+    }
+
+    public void setTrunRemoveUser(Map<Integer, List<Long>> trunRemoveUser) {
+        this.trunRemoveUser = trunRemoveUser;
+    }
+
     //==========================获取谁赢=================================
     public long getWhoWin(){
 
@@ -1163,4 +1169,143 @@ public class GameTianDaKeng extends Game{
         }
     }
 
+    /**
+     * 保存每轮删的人
+     * @param trunNumber
+     * @param userId
+     */
+    private void addRemoveUser(int trunNumber,Long userId){
+        if(this.trunRemoveUser.containsKey(trunNumber)){
+            List<Long> user = new ArrayList<>();
+            user.addAll(this.trunRemoveUser.get(trunNumber));
+            user.add(userId);
+            this.trunRemoveUser.put(trunNumber,user);
+        }
+    }
+
+    /**
+     * 获取第一个叫牌的人
+     * @return
+     */
+    public Long getMaxCardUser(){
+        Long userId = null;
+        int temp = 0;
+        Map<Integer,Integer> cardTimes = new HashMap<>();
+        List<Long> maxList= new ArrayList<>();
+        Long lastWinterId = null;
+
+        if(this.trunNumber==1){
+            for (PlayerCardInfoTianDaKeng playerCardInfoTianDaKeng :playerCardInfos.values()) {
+                if(aliveUser.contains(playerCardInfoTianDaKeng.userId)){
+                    if(temp < CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1))){
+                        temp = CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1));
+                        userId = playerCardInfoTianDaKeng.userId;
+                    }
+                }
+            }
+        }else{
+            for (PlayerCardInfoTianDaKeng playerCardInfoTianDaKeng :playerCardInfos.values()) {
+                if(aliveUser.contains(playerCardInfoTianDaKeng.userId)){
+                    if(temp <= CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1))){
+                        temp = CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1));
+                        maxList.add(playerCardInfoTianDaKeng.userId);
+                        if(cardTimes.keySet().contains(temp)){
+                            cardTimes.put(temp,cardTimes.get(temp)+1);
+                        }else{
+                            cardTimes.put(temp,1);
+                        }
+                    }
+                }
+            }
+            if(cardTimes.get(temp)==1){
+                userId = maxList.get(0);
+            }else{
+                if(this.trunNumber==4){
+                    lastWinterId =  getMaxCardUser2();
+                    if(aliveUser.contains(lastWinterId)){
+                        userId = lastWinterId;
+                    }else{
+                        int compareId = 0;
+                        for (Long l:users) {
+                            if(lastWinterId==l){
+                                compareId = users.indexOf(l);
+                            }
+                        }
+                        for(int i=1;i<users.size();i++){
+                            if(compareId+i<users.size()){
+                                if(maxList.contains(users.get(compareId+i))){
+                                    for (Long l:maxList) {
+                                        if(l==users.get(compareId+i)){
+                                            userId = l;
+                                        }
+                                    }
+                                }
+                            }else{
+                                if(maxList.contains(users.get(users.size()-(compareId+i)))){
+                                    for (Long l:maxList) {
+                                        if(l==users.get(users.size()-(compareId+i))){
+                                            userId = l;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }else if(this.trunNumber==5){
+                    lastWinterId =  getMaxCardUser2();
+                    if(aliveUser.contains(lastWinterId)){
+                        userId = lastWinterId;
+                    }else{
+                        int compareId = 0;
+                        for (Long l:users) {
+                            if(lastWinterId==l){
+                                compareId = users.indexOf(l);
+                            }
+                        }
+                        for(int i=1;i<users.size();i++){
+                            if(compareId+i<users.size()){
+                                if(maxList.contains(users.get(compareId+i))){
+                                    for (Long l:maxList) {
+                                        if(l==users.get(compareId+i)){
+                                            userId = l;
+                                        }
+                                    }
+                                }
+                            }else{
+                                if(maxList.contains(users.get(users.size()-(compareId+i)))){
+                                    for (Long l:maxList) {
+                                        if(l==users.get(users.size()-(compareId+i))){
+                                            userId = l;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return userId;
+    }
+
+
+    /**
+     * 获取第一个叫牌的人
+     * @return
+     */
+    public Long getMaxCardUser2(){
+        Long userId = null;
+        int temp = 0;
+        Map<Integer,Integer> cardTimes = new HashMap<>();
+        List<Long> maxList= new ArrayList<>();
+       for (PlayerCardInfoTianDaKeng playerCardInfoTianDaKeng :playerCardInfos.values()) {
+           if(aliveUser.contains(playerCardInfoTianDaKeng.userId)){
+               if(temp < CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-2))){
+                   temp = CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-2));
+                   userId = playerCardInfoTianDaKeng.userId;
+               }
+           }
+       }
+       return userId;
+    }
 }

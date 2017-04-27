@@ -102,8 +102,55 @@ public class GameUserService {
             });
         }
 
+        return 0;
+    }
+
+    /**
+     * 给人充钱
+     * @param player
+     * @param accepterId
+     * @param money
+     * @return
+     */
+    public int giveOtherMoney(Player player, Long accepterId,int money){
+        UserService userService = SpringUtil.getBean(UserService.class);
+        User user = player.getUser();
+        User accepter = userService.getUserByUserId(accepterId);
+        if(accepter==null){
+            return ErrorCode.NOT_HAVE_THIS_ACCEPTER;
+        }
+        if(user.getMoney() < money){
+            return ErrorCode.NOT_HAVE_MORE_MONEY;
+        }
+        user.setMoney(user.getMoney()-money);
+        accepter.setMoney(accepter.getMoney()+money);
+        userService.save(user);
+        userService.save(accepter);
+
+        player.sendMsg("userService","giveOtherMoney",0);
+        return 0;
+    }
 
 
+    /**
+     * 获取昵称
+     * @param player
+     * @param accepterId
+     * @return
+     */
+    public int getNickNamePlayer(Player player, Long accepterId){
+        UserService userService = SpringUtil.getBean(UserService.class);
+        User accepter = userService.getUserByUserId(accepterId);
+        if(accepter==null){
+            return ErrorCode.NOT_HAVE_THIS_ACCEPTER;
+        }
+        JSONObject jSONObject = new JSONObject();
+        try {
+            jSONObject.put("nickname", (URLDecoder.decode(accepter.getUsername(),"utf-8")));
+        }catch (Exception e){
+            return ErrorCode.NOT_HAVE_THIS_ACCEPTER;
+        }
+        player.sendMsg("userService","getNickNamePlayer",jSONObject);
         return 0;
     }
 
