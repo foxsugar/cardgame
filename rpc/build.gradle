@@ -7,8 +7,9 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
+		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
 //		classpath group: 'co.tomlee.gradle.plugins', name: 'gradle-thrift-plugin', version: '0.0.6'
-//		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 	}
 }
 
@@ -17,6 +18,7 @@ apply plugin: 'eclipse'
 //apply plugin: 'org.springframework.boot'
 //apply plugin: 'thrift'
 apply plugin: "idea"
+apply plugin: 'com.google.protobuf'
 
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
@@ -29,44 +31,50 @@ repositories {
 
 
 dependencies {
+	ext {
+		grpcVersion = '1.2.0'
+	}
 	compile 'org.apache.thrift:libthrift:0.10.0'
 //	compile 'org.apache.thrift:libthrift:0.9.3'
 //	compile('org.springframework.boot:spring-boot-starter')
 //	testCompile('org.springframework.boot:spring-boot-starter-test')
+
+	//grpc
+
+	compile group: 'io.grpc', name: 'grpc-stub', version: '1.2.0'
+	compile group: 'io.grpc', name: 'grpc-protobuf', version: '1.2.0'
+	compile group: 'io.grpc', name: 'grpc-netty', version: '1.2.0'
+	compile group: 'io.grpc', name: 'grpc-core', version: '1.2.0'
+	//netty
+//	compile group: 'io.netty', name: 'netty-all', version: '4.1.8.Final'
 }
 
+sourceSets {
+	main {
+		java{
+			srcDir 'gen/main/java'
+			srcDir 'gen/main/grpc'
+		}
+		proto {
+			srcDir 'src/main/proto'
+		}
+	}
+}
 
-//generateThriftSource {
-//	//
-//	// The output directory (optional)
-//	//
-//	out file('src/main/resources/response.thrift')
-//
-//	verbose false
-//	debug false
-//	strict true
-//
-//	//
-//	// Modify the include path (optional)
-//	//
-//	// path file('vendor/thrift')
-//
-//	//
-//	// Set the thrift executable (optional)
-//	//
-//	executable 'D:\\thrift\\thrift.exe'
-//
-//	generators {
-//		//
-//		// --gen java:hashcode,beans
-//		//
-//		java {
-//			//
-//			// Options passed to the `java` generator
-//			//
-//			option 'hashcode'
-//			option 'beans'
-//		}
-//
-//	}
-//}
+protobuf {
+	protoc {
+		artifact = "com.google.protobuf:protoc:3.0.2"
+	}
+	plugins {
+		grpc {
+			artifact = 'io.grpc:protoc-gen-grpc-java:1.2.0'
+		}
+	}
+	generatedFilesBaseDir = "$projectDir/gen/"
+
+	generateProtoTasks {
+		all()*.plugins {
+			grpc {}
+		}
+	}
+}
