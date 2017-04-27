@@ -194,6 +194,7 @@ public class GameUserService {
             reconnectResp.setRoom(new RoomVo(room,player));
         }
         ResponseVo vo = new ResponseVo("userService", "reconnection", reconnectResp);
+
         player.sendMsg(vo);
         return 0;
     }

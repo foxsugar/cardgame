@@ -2,8 +2,13 @@ package com.code.server.cardgame.core.room;
 
 import com.code.server.cardgame.config.ServerConfig;
 import com.code.server.cardgame.core.GameManager;
+import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.game.Game;
 import com.code.server.cardgame.core.game.GameDouDiZhu;
+import com.code.server.cardgame.response.ErrorCode;
+import com.code.server.cardgame.response.ResponseVo;
+import com.code.server.cardgame.response.RoomTianDaKengVo;
+import com.code.server.cardgame.response.RoomVo;
 import com.code.server.cardgame.rpc.RpcManager;
 import com.code.server.cardgame.utils.SpringUtil;
 import com.code.server.cardgame.utils.ThreadPool;
@@ -36,6 +41,28 @@ public class RoomDouDiZhu extends Room{
         return new GameDouDiZhu();
     }
 
+    public static int createRoom(Player player, int gameNumber, int multiple){
+        if(GameManager.getInstance().userRoom.containsKey(player.getUserId())){
+            return ErrorCode.CANNOT_CREATE_ROOM_ROLE_HAS_IN_ROOM;
+        }
+        int needMoney = getNeedMoney(gameNumber);
+        if (player.getUser().getMoney() < needMoney) {
+            return ErrorCode.CANNOT_CREATE_ROOM_MONEY;
+        }
+        RoomDouDiZhu room = new RoomDouDiZhu();
+        room.personNumber = PERSONNUM;
+
+        room.roomId = getRoomIdStr(genRoomId());
+        room.createUser = player.getUserId();
+        room.init(gameNumber,multiple);
+        //房间加入列表
+        room.roomAddUser(player);
+        GameManager.getInstance().rooms.put(room.roomId, room);
+
+        player.sendMsg(new ResponseVo("roomService","createRoom",new RoomVo(room,player)));
+
+        return 0;
+    }
 
     public void spendMoney() {
         User user = userMap.get(this.createUser);

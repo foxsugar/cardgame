@@ -28,11 +28,11 @@ public class GameRpcHandler implements GameRPC.AsyncIface {
     @Override
     public void charge(Order order, AsyncMethodCallback<Integer> resultHandler) throws TException {
         MessageHolder<Integer> messageHolder = new MessageHolder<>();
-        messageHolder.msgType = MessageHolder.MSG_TYPE_RPC;
+        messageHolder.msgType = MessageHolder.MSG_TYPE_THRIFT;
         messageHolder.message = order;
 
         MessageHolder.RpcHolder<Integer> rpcHolder = new MessageHolder.RpcHolder<>();
-        rpcHolder.rpcCallback = resultHandler;
+        rpcHolder.thriftCallback = resultHandler;
         rpcHolder.rpcMethod = "charge";
         messageHolder.rpcHolder = rpcHolder;
         //加进队列
@@ -66,11 +66,11 @@ public class GameRpcHandler implements GameRPC.AsyncIface {
     @Override
     public void exchange(Order order, AsyncMethodCallback<Integer> resultHandler) throws TException {
         MessageHolder<Integer> messageHolder = new MessageHolder<>();
-        messageHolder.msgType = MessageHolder.MSG_TYPE_RPC;
+        messageHolder.msgType = MessageHolder.MSG_TYPE_THRIFT;
         messageHolder.message = order;
 
         MessageHolder.RpcHolder<Integer> rpcHolder = new MessageHolder.RpcHolder<>();
-        rpcHolder.rpcCallback = resultHandler;
+        rpcHolder.thriftCallback = resultHandler;
         rpcHolder.rpcMethod = "exchange";
         messageHolder.rpcHolder = rpcHolder;
         //加进队列
@@ -106,7 +106,7 @@ public class GameRpcHandler implements GameRPC.AsyncIface {
 
     private static void chargeLogic(User user,Order order,MessageHolder<Integer> messageHolder,boolean isAsyncSave){
         if (user == null) {
-            messageHolder.rpcHolder.rpcCallback.onComplete(RPCError.NO_USER.getValue());
+            messageHolder.rpcHolder.thriftCallback.onComplete(RPCError.NO_USER.getValue());
             return;
         }
         if (order.getType() == ChargeType.money.getValue()) {
@@ -116,7 +116,6 @@ public class GameRpcHandler implements GameRPC.AsyncIface {
             double newGold = user.getGold() + order.getNum();
             user.setGold(newGold);
         }
-        messageHolder.rpcHolder.rpcCallback.onComplete(0);
         if (isAsyncSave) {
             saveUser(user);
         } else {
@@ -124,7 +123,7 @@ public class GameRpcHandler implements GameRPC.AsyncIface {
             userService.save(user);
         }
 
-        messageHolder.rpcHolder.rpcCallback.onComplete(0);
+        messageHolder.rpcHolder.thriftCallback.onComplete(0);
     }
 
 
@@ -148,7 +147,7 @@ public class GameRpcHandler implements GameRPC.AsyncIface {
 
     private static void exchangeLogic(User user,Order order,MessageHolder<Integer> messageHolder,boolean isAsyncSave){
         if (user.getMoney() < order.getNum()) {
-            messageHolder.rpcHolder.rpcCallback.onComplete(RPCError.NO_USER.getValue());
+            messageHolder.rpcHolder.thriftCallback.onComplete(RPCError.NO_USER.getValue());
             return;
         }
         double newMoney = user.getMoney() - order.getNum();
@@ -160,7 +159,7 @@ public class GameRpcHandler implements GameRPC.AsyncIface {
             UserService userService = SpringUtil.getBean(UserService.class);
             userService.save(user);
         }
-        messageHolder.rpcHolder.rpcCallback.onComplete(RPCError.NO_USER.getValue());
+        messageHolder.rpcHolder.thriftCallback.onComplete(RPCError.NO_USER.getValue());
     }
 
 }

@@ -6,8 +6,10 @@ buildscript {
 		maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
 		mavenCentral()
 	}
+	configurations { springLoaded }
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+//		classpath 'org.springframework:springloaded:1.2.7.RELEASE'
 	}
 }
 
@@ -36,9 +38,12 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-logging')
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-starter-remote-shell')
-	compile('org.springframework.boot:spring-boot-loader')
+//	compile('org.springframework.boot:spring-boot-loader')
 
-	compile group: 'io.netty', name: 'netty-all', version: '4.1.6.Final'
+	compile group: 'org.springframework', name: 'springloaded', version: '1.2.7.RELEASE'
+
+
+	compile group: 'io.netty', name: 'netty-all', version: '4.1.8.Final'
 
 	//protobuf-json-format
 	compile 'com.googlecode.protobuf-java-format:protobuf-java-format:1.2'
@@ -63,6 +68,12 @@ tasks.withType(JavaCompile) {
 	options.encoding = "UTF-8"
 }
 
+idea {
+	module {
+		inheritOutputDirs = false
+		outputDir = file("$buildDir/classes/main/")
+	}
+}
 
 jar {
 	baseName = 'cardgame'
@@ -87,9 +98,15 @@ springBoot {
 
 //启动服务
 bootRun {
-	addResources = true
-}
 
+//	def springLoadedFile = configurations.springLoaded.find
+//			{ it.name == "springloaded-1.2.7.RELEASE.jar" }
+//
+//	systemProperty 'server.port', '8084'
+//	systemProperty 'spring.profiles.active', 'mysql'
+//	jvmArgs "-javaagent:$springLoadedFile", "-noverify"
+//	main = 'com.code.server.cardgame.CardgameApplication'
+}
 
 // project runtimes JVM options
 applicationDefaultJvmArgs = ["-server",

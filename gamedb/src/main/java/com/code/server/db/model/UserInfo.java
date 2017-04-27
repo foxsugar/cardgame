@@ -7,6 +7,8 @@ public class UserInfo {
 
     private int totalPlayGameNumber;
 
+    private int playGameTime = 0;
+
     public UserInfo(){}
 
     public int getTotalPlayGameNumber() {
@@ -15,5 +17,13 @@ public class UserInfo {
 
     public void setTotalPlayGameNumber(int totalPlayGameNumber) {
         this.totalPlayGameNumber = totalPlayGameNumber;
+    }
+
+    public int getPlayGameTime() {
+        return playGameTime;
+    }
+
+    public void setPlayGameTime(int playGameTime) {
+        this.playGameTime = playGameTime;
     }
 }
