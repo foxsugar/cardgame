@@ -86,7 +86,7 @@ public class GameTianDaKeng extends Game{
         this.canRaiseUser.addAll(users);
         this.trunNumber = 1;
 
-        shuffle();
+        shuffleTest();
         deal();
         if(!this.room.isLastDraw()){
             mustBet();
@@ -136,14 +136,13 @@ public class GameTianDaKeng extends Game{
         cards.add(42);cards.add(2);cards.add(47);
         cards.add(39); cards.add(40);*/
 
-        cards.add(3);cards.add(4);cards.add(1);
-        cards.add(39);cards.add(40);cards.add(45);
-        cards.add(43);cards.add(44);cards.add(49);
-        cards.add(47);cards.add(48);cards.add(50);
-        cards.add(41);cards.add(42);cards.add(46);
-        cards.add(37);cards.add(38);cards.add(2);
-        cards.add(52); cards.add(51);
-
+        cards.add(1);cards.add(2);cards.add(49);
+        cards.add(3);cards.add(4);cards.add(50);
+        cards.add(37);cards.add(38);cards.add(42);
+        cards.add(40);cards.add(41);cards.add(39);
+        cards.add(43);cards.add(44);cards.add(45);
+        cards.add(51);cards.add(52);cards.add(46);
+        cards.add(47);cards.add(48);
 
         //cards.add(50);cards.add(51);cards.add(52);
     }
@@ -208,14 +207,15 @@ public class GameTianDaKeng extends Game{
         gameuserStatus.put(nextTurnId(currentTurn),11);
 
         logger.info(player.getUser().getAccount() +"  下注: "+ chip);
+
         if (currentTurn != player.getUserId()) {
             return ErrorCodeTDK.CANNOT_BET;
         }
 
-        //TODO 烂锅之后需要重新判断
-        if(chip > MAX_BET_NUM  || (this.room.isLastDraw() && chip>DOUBLE_MAX_BET_NUM)){//下注错误
+        if(!this.room.isLastDraw() && chip > MAX_BET_NUM){//下注错误
             return ErrorCodeTDK.MORE_BET;
         }
+
         this.chip = chip;
         addToChip(player.getUserId(),chip);//添加积分
         curUser.remove(currentTurn);//本轮操作完删除
@@ -237,12 +237,12 @@ public class GameTianDaKeng extends Game{
         gameuserStatus.put(nextTurnId(currentTurn),11);
 
         logger.info(player.getUser().getAccount() +"  跟注: "+ chip);
+
         if (currentTurn != player.getUserId()) {
             return ErrorCodeTDK.CANNOT_BET;
         }
 
-        //TODO 烂锅之后需要重新判断
-        if(chip > MAX_BET_NUM || (this.room.isLastDraw() && chip>DOUBLE_MAX_BET_NUM)){//下注错误
+        if(!this.room.isLastDraw() && chip > MAX_BET_NUM){//下注错误
             return ErrorCodeTDK.MORE_BET;
         }
         addToChip(player.getUserId(),chip);//添加积分
@@ -268,14 +268,15 @@ public class GameTianDaKeng extends Game{
         gameuserStatus.put(nextTurnId(currentTurn),21);
 
         logger.info(player.getUser().getAccount() +"  踢: "+ chip);
+
         if (currentTurn != player.getUserId()) {
             return ErrorCodeTDK.CANNOT_BET;
         }
 
-        //TODO 烂锅之后需要重新判断
-        if(chip > MAX_BET_NUM || (this.room.isLastDraw() && chip>DOUBLE_MAX_BET_NUM)){//下注错误
+        if(!this.room.isLastDraw() && chip > MAX_BET_NUM){//下注错误
             return ErrorCodeTDK.MORE_BET;
         }
+
         this.chip = chip;
         addToChip(player.getUserId(),chip);//添加积分
         curUser.remove(currentTurn);//本轮操作完删除
@@ -622,6 +623,7 @@ public class GameTianDaKeng extends Game{
                    everyknowCardsAndUserId.put(playerCardInfo.userId,list);
                }else if(tableCards.size() == 1){
                    temp = tableCards.get(0);
+                   tableCards.remove(0);
                    playerCardInfo.everyknowCards.add(temp);
                    playerCardInfo.allCards.add(playerCardInfo.everyknowCards.get(playerCardInfo.everyknowCards.size()-1));
                }else{
