@@ -115,17 +115,34 @@ public class GameUserService {
     public int giveOtherMoney(Player player, Long accepterId,int money){
         UserService userService = SpringUtil.getBean(UserService.class);
         User user = player.getUser();
-        User accepter = userService.getUserByUserId(accepterId);
-        if(accepter==null){
-            return ErrorCode.NOT_HAVE_THIS_ACCEPTER;
-        }
-        if(user.getMoney() < money){
+
+        if(money<=0 || user.getMoney() < money){
             return ErrorCode.NOT_HAVE_MORE_MONEY;
         }
-        user.setMoney(user.getMoney()-money);
-        accepter.setMoney(accepter.getMoney()+money);
-        userService.save(user);
-        userService.save(accepter);
+
+        Player accepterPlayer = GameManager.getInstance().getPlayers().get(accepterId);
+
+        if (accepterPlayer != null) {
+            User userAccepter = accepterPlayer.getUser();
+            user.setMoney(user.getMoney()-money);
+            accepterPlayer.getUser().setMoney(userAccepter.getMoney() + money);
+            GameManager.getInstance().getSaveUser2DB().add(userAccepter);
+
+        } else {
+            ThreadPool.getInstance().executor.execute(()->{
+
+                User accepter = userService.getUserByUserId(accepterId);
+                if(accepter==null){
+                    player.sendMsg("userService","giveOtherMoney",ErrorCode.NOT_HAVE_THIS_ACCEPTER);
+                    return;
+                }
+                user.setMoney(user.getMoney()-money);
+                accepter.setMoney(accepter.getMoney()+money);
+                userService.save(accepter);
+
+            });
+        }
+        GameManager.getInstance().getSaveUser2DB().add(user);
 
         player.sendMsg("userService","giveOtherMoney",0);
         return 0;

@@ -128,11 +128,24 @@ public class GameTianDaKeng extends Game{
         cards.add();cards.add();cards.add();cards.add();
         cards.add();cards.add();cards.add();cards.add();
          */
-        cards.add(37);cards.add(38);cards.add(39);cards.add(1);
-        cards.add(2);cards.add(3);cards.add(41);cards.add(42);
-        cards.add(43);cards.add(48);cards.add(45);cards.add(44);
-        cards.add(4);cards.add(46);cards.add(47);cards.add(40);
-        cards.add(49);//cards.add(50);cards.add(51);cards.add(52);
+        /*cards.add(3);cards.add(4);cards.add(45);
+        cards.add(38);cards.add(43);cards.add(1);
+        cards.add(44);cards.add(48);cards.add(37);
+        cards.add(49);cards.add(50);cards.add(46);
+        cards.add(51);cards.add(52);cards.add(41);
+        cards.add(42);cards.add(2);cards.add(47);
+        cards.add(39); cards.add(40);*/
+
+        cards.add(3);cards.add(4);cards.add(1);
+        cards.add(39);cards.add(40);cards.add(45);
+        cards.add(43);cards.add(44);cards.add(49);
+        cards.add(47);cards.add(48);cards.add(50);
+        cards.add(41);cards.add(42);cards.add(46);
+        cards.add(37);cards.add(38);cards.add(2);
+        cards.add(52); cards.add(51);
+
+
+        //cards.add(50);cards.add(51);cards.add(52);
     }
 
 
@@ -1175,12 +1188,14 @@ public class GameTianDaKeng extends Game{
      * @param userId
      */
     private void addRemoveUser(int trunNumber,Long userId){
+        List<Long> user = new ArrayList<>();
         if(this.trunRemoveUser.containsKey(trunNumber)){
-            List<Long> user = new ArrayList<>();
             user.addAll(this.trunRemoveUser.get(trunNumber));
             user.add(userId);
-            this.trunRemoveUser.put(trunNumber,user);
+        }else{
+            user.add(userId);
         }
+        this.trunRemoveUser.put(trunNumber,user);
     }
 
     /**
@@ -1208,7 +1223,6 @@ public class GameTianDaKeng extends Game{
                 if(aliveUser.contains(playerCardInfoTianDaKeng.userId)){
                     if(temp <= CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1))){
                         temp = CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1));
-                        maxList.add(playerCardInfoTianDaKeng.userId);
                         if(cardTimes.keySet().contains(temp)){
                             cardTimes.put(temp,cardTimes.get(temp)+1);
                         }else{
@@ -1217,10 +1231,17 @@ public class GameTianDaKeng extends Game{
                     }
                 }
             }
+            for (PlayerCardInfoTianDaKeng playerCardInfoTianDaKeng :playerCardInfos.values()) {
+                if(aliveUser.contains(playerCardInfoTianDaKeng.userId)){
+                    if(temp == CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1))){
+                        maxList.add(playerCardInfoTianDaKeng.userId);
+                    }
+                }
+            }
             if(cardTimes.get(temp)==1){
                 userId = maxList.get(0);
             }else{
-                if(this.trunNumber==4){
+                if(this.trunNumber==2){
                     lastWinterId =  getMaxCardUser2();
                     if(aliveUser.contains(lastWinterId)){
                         userId = lastWinterId;
@@ -1231,7 +1252,7 @@ public class GameTianDaKeng extends Game{
                                 compareId = users.indexOf(l);
                             }
                         }
-                        for(int i=1;i<users.size();i++){
+                        for(int i=1;i<=users.size();i++){
                             if(compareId+i<users.size()){
                                 if(maxList.contains(users.get(compareId+i))){
                                     for (Long l:maxList) {
@@ -1241,9 +1262,9 @@ public class GameTianDaKeng extends Game{
                                     }
                                 }
                             }else{
-                                if(maxList.contains(users.get(users.size()-(compareId+i)))){
+                                if(maxList.contains(users.get(users.size()-(compareId+i-4)-1))){
                                     for (Long l:maxList) {
-                                        if(l==users.get(users.size()-(compareId+i))){
+                                        if(l==users.get(users.size()-(compareId+i-4)-1)){
                                             userId = l;
                                         }
                                     }
@@ -1251,7 +1272,7 @@ public class GameTianDaKeng extends Game{
                             }
                         }
                     }
-                }else if(this.trunNumber==5){
+                }else if(this.trunNumber==3){
                     lastWinterId =  getMaxCardUser2();
                     if(aliveUser.contains(lastWinterId)){
                         userId = lastWinterId;
@@ -1262,7 +1283,7 @@ public class GameTianDaKeng extends Game{
                                 compareId = users.indexOf(l);
                             }
                         }
-                        for(int i=1;i<users.size();i++){
+                        for(int i=1;i<=users.size();i++){
                             if(compareId+i<users.size()){
                                 if(maxList.contains(users.get(compareId+i))){
                                     for (Long l:maxList) {
@@ -1272,9 +1293,9 @@ public class GameTianDaKeng extends Game{
                                     }
                                 }
                             }else{
-                                if(maxList.contains(users.get(users.size()-(compareId+i)))){
+                                if(maxList.contains(users.get(users.size()-(compareId+i-4)-1))){
                                     for (Long l:maxList) {
-                                        if(l==users.get(users.size()-(compareId+i))){
+                                        if(l==users.get(users.size()-(compareId+i-4)-1)){
                                             userId = l;
                                         }
                                     }
@@ -1296,10 +1317,14 @@ public class GameTianDaKeng extends Game{
     public Long getMaxCardUser2(){
         Long userId = null;
         int temp = 0;
-        Map<Integer,Integer> cardTimes = new HashMap<>();
-        List<Long> maxList= new ArrayList<>();
+        List<Long> templist = new ArrayList<>();
+        templist.addAll(users);
+        if(this.trunNumber==3){
+            templist.removeAll(this.trunRemoveUser.get(1));
+        }
+
        for (PlayerCardInfoTianDaKeng playerCardInfoTianDaKeng :playerCardInfos.values()) {
-           if(aliveUser.contains(playerCardInfoTianDaKeng.userId)){
+           if(templist.contains(playerCardInfoTianDaKeng.userId)){
                if(temp < CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-2))){
                    temp = CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-2));
                    userId = playerCardInfoTianDaKeng.userId;
@@ -1307,5 +1332,21 @@ public class GameTianDaKeng extends Game{
            }
        }
        return userId;
+    }
+
+
+    /**
+     * 下个人
+     * @param curId
+     * @return
+     */
+    public long nextOne(List<Long> list,long curId) {
+        int index = list.indexOf(curId);
+
+        int nextId = index + 1;
+        if (nextId >= list.size()) {
+            nextId = 0;
+        }
+        return list.get(nextId);
     }
 }
