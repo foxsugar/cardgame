@@ -35,8 +35,6 @@ import static com.code.server.cardgame.core.GameManager.getUserVo;
 @Service
 public class GameUserService {
 
-
-
     private void doLogin(User user ,ChannelHandlerContext ctx){
         InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
         String clientIP = insocket.getAddress().getHostAddress();

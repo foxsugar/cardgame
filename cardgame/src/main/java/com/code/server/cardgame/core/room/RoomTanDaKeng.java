@@ -31,13 +31,12 @@ public class RoomTanDaKeng extends Room{
 
     private int drawForLeaveChip = 0;//平局留下筹码
 
-
     protected Game getGameInstance(){
         return new GameTianDaKeng();
     }
 
 
-    public static int createRoom(Player player,int gameNumber,double roomType,int personNumber){
+    public static int createRoom(Player player,int gameNumber,double roomType,int personNumber,int hasNine){
         if(GameManager.getInstance().userRoom.containsKey(player.getUserId())){
             return ErrorCode.CANNOT_CREATE_ROOM_ROLE_HAS_IN_ROOM;
         }
@@ -51,7 +50,8 @@ public class RoomTanDaKeng extends Room{
         room.multiple = (int)roomType;
         room.roomId = getRoomIdStr(genRoomId());
         room.createUser = player.getUserId();
-        room.init(gameNumber,roomType);
+        room.hasNine = hasNine;
+        room.init(gameNumber,roomType,hasNine);
 
         if(room.getMultiple()!=25 && room.getMultiple()!=50 && room.getMultiple()!=100 && room.getMultiple()!=200){
             return ErrorCodeTDK.CREATE_ROOM_MULTIPLE;
@@ -76,9 +76,10 @@ public class RoomTanDaKeng extends Room{
 
     }
 
-    public void init(int gameNumber, double roomType) {
+    public void init(int gameNumber, double roomType,int hasNine) {
         this.gameNumber = gameNumber;
         this.roomType = roomType;
+        this.hasNine = hasNine;
         this.isInGame = false;
     }
 
@@ -97,7 +98,6 @@ public class RoomTanDaKeng extends Room{
     public void setDrawForLeaveChip(int drawForLeaveChip) {
         this.drawForLeaveChip = drawForLeaveChip;
     }
-
 
     public void spendMoney() {
         User user = userMap.get(this.createUser);

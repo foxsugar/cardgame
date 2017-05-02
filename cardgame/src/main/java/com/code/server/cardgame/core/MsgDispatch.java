@@ -183,7 +183,8 @@ public class MsgDispatch {
                 int gameNumber = params.getInt("gameNumber");
                 int multiple = params.getInt("maxMultiple");
                 int personNumber = params.getInt("personNumber");
-                return RoomTanDaKeng.createRoom(player, gameNumber,multiple,personNumber);
+                int hasNine = params.getInt("hasNine");
+                return RoomTanDaKeng.createRoom(player, gameNumber,multiple,personNumber,hasNine);
             }
             case "joinRoom": {
                 String roomId = params.getString("roomId");

@@ -60,6 +60,7 @@ public class GameTianDaKeng extends Game{
     protected List<Long> canRaiseUser = new ArrayList<>();//可以反踢的人
     protected List<Long> twoPersonList = new ArrayList<>();//2人无限踢专用
     protected boolean fristBet = true;
+    protected Long dealFirst;//第一个发牌的人
 
     protected Map<Integer,List<Long>> trunRemoveUser = new HashMap<>();//每轮删除的人
 
@@ -85,8 +86,13 @@ public class GameTianDaKeng extends Game{
         this.curUser.addAll(users);
         this.canRaiseUser.addAll(users);
         this.trunNumber = 1;
+        this.dealFirst = users.get(0);
 
-        shuffle();
+        if(this.room.getHasNine()==1){
+            shuffleHasNine();
+        }else{
+            shuffle();
+        }
         deal();
         if(!this.room.isLastDraw()){
             mustBet();
@@ -102,6 +108,21 @@ public class GameTianDaKeng extends Game{
      */
     protected void shuffle(){
         for (int i = 37; i < 53; i++) {
+            cards.add(i);
+        }
+        cards.add(1);
+        cards.add(2);
+        cards.add(3);
+        cards.add(4);
+        Collections.shuffle(cards);
+    }
+
+
+    /**
+     * 洗牌
+     */
+    protected void shuffleHasNine(){
+        for (int i = 33; i < 43; i++) {
             cards.add(i);
         }
         cards.add(1);
@@ -171,7 +192,7 @@ public class GameTianDaKeng extends Game{
             playerCardInfo.allCards.addAll(playerCardInfo.everyknowCards);
         }
         for(PlayerCardInfoTianDaKeng playerCardInfo : playerCardInfos.values()){
-            noticeDealevery(playerCardInfo.userId,playerCardInfo.allCards,everyknowCardsAndUserId);
+            noticeDealevery(playerCardInfo.userId,playerCardInfo.allCards,everyknowCardsAndUserId,dealFirst);
         }
         //底牌
         tableCards.addAll(cards);
@@ -375,6 +396,7 @@ public class GameTianDaKeng extends Game{
 
                         //Long temp = nextCanRaiseId(currentTurn);
                         noticeCanRaise(temp);//通知下一个可以加注（踢）
+                        gameuserStatus.put(temp,21);
                         canRaiseUser.remove(temp);
                         currentTurn = temp;//下一个人
 
@@ -456,15 +478,18 @@ public class GameTianDaKeng extends Game{
                 if(canRaiseUser.size()==1){
                     noticeCanRaise(canRaiseUser.get(0));//通知第一个可以踢
                     currentTurn = canRaiseUser.get(0);//下一个人
+                    gameuserStatus.put(canRaiseUser.get(0),312);
                 }else if(canRaiseUser.size()==0){
                     if(fristBet){
                         twoPersonList.addAll(aliveUser);
                         if(currentTurn==twoPersonList.get(0)){
                             noticeCanRaise(twoPersonList.get(0));//通知第一个可以踢
                             currentTurn = twoPersonList.get(0);//下一个人
+                            gameuserStatus.put(canRaiseUser.get(0),312);
                         }else{
                             noticeCanRaise(twoPersonList.get(1));//通知第一个可以踢
                             currentTurn = twoPersonList.get(1);//下一个人
+                            gameuserStatus.put(canRaiseUser.get(0),312);
                         }
                     }else{
                         if(tableCards.size()==0 || playerCardInfos.get(aliveUser.get(0)).allCards.size()==5){
@@ -496,6 +521,7 @@ public class GameTianDaKeng extends Game{
                 }else if(canRaiseUser.size()==2){
                     noticeCanRaise(nextCanRaiseId(currentTurn));//通知第一个可以踢
                     currentTurn = nextCanRaiseId(currentTurn);//下一个人
+                    gameuserStatus.put(canRaiseUser.get(0),312);
                 }
 
                 /*if(twoPersonList.size()==2){
@@ -540,6 +566,8 @@ public class GameTianDaKeng extends Game{
                     currentTurn = temp;//下一个人*/
                     noticeCanBet(getMaxCardUser());//通知下一个人可以下注
                     currentTurn = getMaxCardUser();
+                    gameuserStatus.put(getMaxCardUser(),11);
+                    dealFirst = currentTurn;
                 }else{
                     dealScores();
                     this.room.setLastDraw(false);
@@ -568,6 +596,7 @@ public class GameTianDaKeng extends Game{
                 }
                 currentTurn =  users.get(nextId);
                 noticeCanCall(currentTurn);//通知下一个人可以下注
+                gameuserStatus.put(currentTurn,11);
             }
         }
     }
@@ -641,6 +670,7 @@ public class GameTianDaKeng extends Game{
         currentTurn = tempMax;
         noticeEveryCards(playerCardInfos);
         this.trunNumber += 1;//公开的牌+1
+        dealFirst = currentTurn;
     }
 
     /**
@@ -656,11 +686,12 @@ public class GameTianDaKeng extends Game{
      * 通知自己人牌
      * @param userId
      */
-    private void noticeDealevery(long userId,List myselfCards,Map everyknowCards){
+    private void noticeDealevery(long userId,List myselfCards,Map everyknowCards,long dealFirst){
         Map<String, Object> result = new HashMap<>();
         result.put("userId",userId);
         result.put("myselfCards",myselfCards);
         result.put("everyknowCards",everyknowCards);
+        result.put("dealFirst",dealFirst);
         ResponseVo vo = new ResponseVo("gameService","dealevery",result);
         Player.sendMsg2Player(vo,userId);
     }
@@ -677,6 +708,7 @@ public class GameTianDaKeng extends Game{
             }
         }
         result.put("cardsMap",cardsMap);
+        result.put("dealFirst",dealFirst);
         ResponseVo vo = new ResponseVo("gameService","everyCards",result);
         Player.sendMsg2Player(vo,users);
     }
@@ -922,6 +954,7 @@ public class GameTianDaKeng extends Game{
 
         if (room.getCurGameNumber() > room.getGameNumber() && room.getDrawForLeaveChip()==0) {
             GameFinalResult gameFinalResult = new GameFinalResult();
+            gameFinalResult.setEndTime(new Date().toLocaleString());
             room.getUserScores().forEach((userId,score)->{
 
                         gameFinalResult.getUserInfos().add(new GameFinalResult.UserInfo(userId,score));
@@ -1087,6 +1120,14 @@ public class GameTianDaKeng extends Game{
 
     public void setTrunRemoveUser(Map<Integer, List<Long>> trunRemoveUser) {
         this.trunRemoveUser = trunRemoveUser;
+    }
+
+    public Long getDealFirst() {
+        return dealFirst;
+    }
+
+    public void setDealFirst(Long dealFirst) {
+        this.dealFirst = dealFirst;
     }
 
     //==========================获取谁赢=================================

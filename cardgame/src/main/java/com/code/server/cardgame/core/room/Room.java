@@ -70,6 +70,7 @@ public class Room {
 
     private int drawForLeaveChip = 0;//平局留下筹码
 
+    protected int hasNine;
 
     protected boolean isCanDissloution = false;
 
@@ -481,7 +482,9 @@ public class Room {
         this.isInGame = false;
         // 存储返回
         GameOfResult gameOfResult = new GameOfResult();
+
         gameOfResult.setUserList(userOfResultList);
+        gameOfResult.setEndTime(new Date().toLocaleString());
 
         JSONObject noticeEndResult = new JSONObject();
         noticeEndResult.put("service", "gameService");
@@ -720,5 +723,13 @@ public class Room {
 
     public void setDrawForLeaveChip(int drawForLeaveChip) {
         this.drawForLeaveChip = drawForLeaveChip;
+    }
+
+    public int getHasNine() {
+        return hasNine;
+    }
+
+    public void setHasNine(int hasNine) {
+        this.hasNine = hasNine;
     }
 }

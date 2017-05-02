@@ -6,6 +6,8 @@ public class GameOfResult {
 	
 	private ArrayList<UserOfResult> userList;
 
+	private String endTime;
+
 	public ArrayList<UserOfResult> getUserList() {
 		return userList;
 	}
@@ -14,4 +16,11 @@ public class GameOfResult {
 		this.userList = userList;
 	}
 
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
 }
