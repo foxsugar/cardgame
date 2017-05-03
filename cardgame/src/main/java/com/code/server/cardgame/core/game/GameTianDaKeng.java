@@ -630,7 +630,7 @@ public class GameTianDaKeng extends Game{
     public void dealDrawScores(){
         for (Long l:allChip.keySet()) {//结算积分
             allChip.put(l,-allChip.get(l));
-            this.room.getUserScores().put(l,(this.room.getUserScores().get(l)+allChip.get(l))*this.room.getMultiple()/100);
+            this.room.getUserScores().put(l,(this.room.getUserScores().get(l)+allChip.get(l)));
         }
     }
 
@@ -942,10 +942,6 @@ public class GameTianDaKeng extends Game{
      */
     private void sendFinalResult() {
 
-        for (Long l:this.room.getUserScores().keySet()) {
-            this.room.getUserScores().put(l,this.room.getUserScores().get(l)*this.room.getMultiple()/100);
-        }
-
         UserService userService = SpringUtil.getBean(UserService.class);
         User user = room.getUserMap().get(room.getCreateUser());
         UserInfo userInfo = user.getUserInfo();
@@ -958,6 +954,9 @@ public class GameTianDaKeng extends Game{
         userService.save(user);
 
         if (room.getCurGameNumber() > room.getGameNumber() && room.getDrawForLeaveChip()==0) {
+            for (Long l:this.room.getUserScores().keySet()) {
+                this.room.getUserScores().put(l,this.room.getUserScores().get(l)*this.room.getMultiple()/100);
+            }
             GameFinalResult gameFinalResult = new GameFinalResult();
             gameFinalResult.setEndTime(new Date().toLocaleString());
             room.getUserScores().forEach((userId,score)->{
