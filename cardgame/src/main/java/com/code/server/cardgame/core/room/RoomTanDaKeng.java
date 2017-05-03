@@ -79,6 +79,7 @@ public class RoomTanDaKeng extends Room{
     public void init(int gameNumber, double roomType,int hasNine) {
         this.gameNumber = gameNumber;
         this.roomType = roomType;
+        this.multiple = (int)roomType;
         this.hasNine = hasNine;
         this.isInGame = false;
     }

@@ -485,11 +485,11 @@ public class GameTianDaKeng extends Game{
                         if(currentTurn==twoPersonList.get(0)){
                             noticeCanRaise(twoPersonList.get(0));//通知第一个可以踢
                             currentTurn = twoPersonList.get(0);//下一个人
-                            gameuserStatus.put(canRaiseUser.get(0),312);
+                            gameuserStatus.put(twoPersonList.get(0),312);
                         }else{
                             noticeCanRaise(twoPersonList.get(1));//通知第一个可以踢
                             currentTurn = twoPersonList.get(1);//下一个人
-                            gameuserStatus.put(canRaiseUser.get(0),312);
+                            gameuserStatus.put(twoPersonList.get(0),312);
                         }
                     }else{
                         if(tableCards.size()==0 || playerCardInfos.get(aliveUser.get(0)).allCards.size()==5){
@@ -612,15 +612,15 @@ public class GameTianDaKeng extends Game{
             if(!l.equals(winner)){
                 temp+=allChip.get(l);
                 allChip.put(l,-allChip.get(l));
-                this.room.getUserScores().put(l,(this.room.getUserScores().get(l)+allChip.get(l))*this.room.getMultiple()/100);
+                this.room.getUserScores().put(l,(this.room.getUserScores().get(l)+allChip.get(l)));
             }
         }
         allChip.put(winner,temp);
-        this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner)+allChip.get(winner))*this.room.getMultiple()/100);
+        this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner)+allChip.get(winner)));
 
         if(this.room.getDrawForLeaveChip()!=0){
             allChip.put(winner,allChip.get(winner)+this.room.getDrawForLeaveChip());
-            this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner) + this.room.getDrawForLeaveChip()*this.room.getMultiple()/100));
+            this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner) + this.room.getDrawForLeaveChip()));
         }
     }
 
@@ -664,8 +664,9 @@ public class GameTianDaKeng extends Game{
             //noticeDealevery(playerCardInfo.userId,playerCardInfo.allCards,everyknowCardsAndUserId);
 
         }
-        gameuserStatus.put(getMaxCardUser(),11);
+
         long tempMax = getMaxCardUser();
+        gameuserStatus.put(tempMax,11);
         noticeCanBet(tempMax);//通知牌点数最大的人可以下注
         currentTurn = tempMax;
         noticeEveryCards(playerCardInfos);
@@ -940,6 +941,10 @@ public class GameTianDaKeng extends Game{
      *所有牌局都结束
      */
     private void sendFinalResult() {
+
+        for (Long l:this.room.getUserScores().keySet()) {
+            this.room.getUserScores().put(l,this.room.getUserScores().get(l)*this.room.getMultiple()/100);
+        }
 
         UserService userService = SpringUtil.getBean(UserService.class);
         User user = room.getUserMap().get(room.getCreateUser());
