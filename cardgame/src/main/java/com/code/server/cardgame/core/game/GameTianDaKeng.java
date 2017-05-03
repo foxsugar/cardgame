@@ -122,7 +122,7 @@ public class GameTianDaKeng extends Game{
      * 洗牌
      */
     protected void shuffleHasNine(){
-        for (int i = 33; i < 43; i++) {
+        for (int i = 33; i < 53; i++) {
             cards.add(i);
         }
         cards.add(1);
@@ -969,9 +969,32 @@ public class GameTianDaKeng extends Game{
             );
             Player.sendMsg2Player("gameService","gameFinalResult",gameFinalResult,users);
 
+            Record.RoomRecord roomRecord = new Record.RoomRecord();
+            roomRecord.setTime(System.currentTimeMillis());
+            roomRecord.setType(room.getCreateType());
+            for (long userId : users) {
+                PlayerCardInfoTianDaKeng playerCardInfo = playerCardInfos.get(userId);
+                User user1 = room.getUserMap().get(userId);
+                Record.UserRecord userRecord = new Record.UserRecord();
+                userRecord.setName(user1.getUsername());
+                userRecord.setScore(room.getUserScores().get(userId));
+                userRecord.setUserId(userId);
+                userRecord.setRoomId(room.getRoomId());
+
+                UserInfo userInfo1 = user.getUserInfo();
+                user.setUserInfo(userInfo1);
+
+                userService.save(user);
+                roomRecord.addRecord(userRecord);
+            }
+            //todo 保存记录
+            room.getUserMap().forEach((k,v)->v.getRecord().addRoomRecord(roomRecord));
+
+            //加入数据库保存列表
+            GameManager.getInstance().getSaveUser2DB().addAll(room.getUserMap().values());
+
             //删除room
             GameManager.getInstance().removeRoom(room);
-
         }
     }
 
