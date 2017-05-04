@@ -3,10 +3,22 @@ package com.code.server.cardgame.core.room;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.game.Game;
+import com.code.server.cardgame.core.game.GameDouDiZhu;
 import com.code.server.cardgame.core.game.GameTianDaKeng;
+import com.code.server.cardgame.encoding.Notice;
 import com.code.server.cardgame.response.*;
+import com.code.server.cardgame.timer.GameTimer;
+import com.code.server.cardgame.timer.TimerNode;
+import com.code.server.db.model.Record;
 import com.code.server.db.model.User;
+import com.code.server.db.model.UserInfo;
+import com.google.gson.Gson;
+import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.*;
 
 /**
  * Created by sunxianping on 2017/3/13.
@@ -69,6 +81,7 @@ public class RoomTanDaKeng extends Room{
     public void init(int gameNumber, double roomType,int hasNine) {
         this.gameNumber = gameNumber;
         this.roomType = roomType;
+        this.multiple = (int)roomType;
         this.hasNine = hasNine;
         this.isInGame = false;
     }
@@ -95,5 +108,74 @@ public class RoomTanDaKeng extends Room{
             user.setMoney(user.getMoney() - NEEDMOENY);
             GameManager.getInstance().getSaveUser2DB().add(user);
         }
+    }
+
+    /**
+     * 解散房间
+     */
+    protected void dissolutionRoom(){
+
+        GameManager.getInstance().removeRoom(this);
+
+
+        // 结果类
+        ArrayList<UserOfResult> userOfResultList = new ArrayList<>();
+
+        long time = System.currentTimeMillis();
+
+        Record.RoomRecord roomRecord = new Record.RoomRecord();
+        roomRecord.setTime(System.currentTimeMillis());
+        roomRecord.setType(this.getCreateType());
+
+        for(User user : this.userMap.values()){
+            UserOfResult resultObj = new UserOfResult();
+            try {
+                resultObj.setUsername(URLDecoder.decode(user.getUsername(), "utf-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            resultObj.setImage(user.getImage());
+            resultObj.setScores(""+this.userScores.get(user.getUserId())*this.multiple/100);
+            resultObj.setUserId(user.getUserId());
+            resultObj.setTime(time);
+
+            Record.UserRecord userRecord = new Record.UserRecord();
+            userRecord.setName(user.getUsername());
+            userRecord.setScore(this.userScores.get(user.getUserId())*this.multiple/100);
+            userRecord.setUserId(user.getUserId());
+            userRecord.setRoomId(this.roomId);
+
+            roomRecord.addRecord(userRecord);
+
+            userOfResultList.add(resultObj);
+            //删除映射关系
+            GameManager.getInstance().getUserRoom().remove(user.getUserId());
+        }
+
+        this.getUserMap().forEach((k,v)->v.getRecord().addRoomRecord(roomRecord));
+        GameManager.getInstance().getSaveUser2DB().addAll(this.getUserMap().values());
+
+
+        boolean isChange = scoreIsChange();
+        if (this.isInGame && this.curGameNumber == 1 && !isChange) {
+//            drawBack();
+        }
+
+
+
+        this.isInGame = false;
+        // 存储返回
+        GameOfResult gameOfResult = new GameOfResult();
+
+        gameOfResult.setUserList(userOfResultList);
+        gameOfResult.setEndTime(new Date().toLocaleString());
+
+        JSONObject noticeEndResult = new JSONObject();
+        noticeEndResult.put("service", "gameService");
+        noticeEndResult.put("method", "askNoticeDissolutionResult");
+        noticeEndResult.put("params", gameOfResult);
+        noticeEndResult.put("code", "0");
+        Player.sendMsg2Player(noticeEndResult, this.users);
+
     }
 }

@@ -183,7 +183,7 @@ public class MsgDispatch {
             case "createRoomTDK":{
 
                 int gameNumber = params.getInt("gameNumber");
-                int multiple = params.getInt("maxMultiple");
+                double multiple = params.getDouble("maxMultiple");
                 int personNumber = params.getInt("personNumber");
                 int hasNine = params.getInt("hasNine");
                 return RoomTanDaKeng.createRoom(player, gameNumber,multiple,personNumber,hasNine);

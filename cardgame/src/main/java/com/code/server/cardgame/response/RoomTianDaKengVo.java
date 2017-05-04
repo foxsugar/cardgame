@@ -23,6 +23,8 @@ public class RoomTianDaKengVo {
     private GameVo game;
     private int curGameNumber;
     private int personNumber;
+    protected int hasNine;
+
 
     private boolean isLastDraw = false;//是否平局
     private int drawForLeaveChip = 0;//平局留下筹码
@@ -45,6 +47,7 @@ public class RoomTianDaKengVo {
         this.isLastDraw = roomTianDaKeng.isLastDraw();
         this.drawForLeaveChip = roomTianDaKeng.getDrawForLeaveChip();
         this.personNumber = roomTianDaKeng.getPersonNumber();
+        this.hasNine = roomTianDaKeng.getHasNine();
 
         for(long uid : roomTianDaKeng.getUsers()){
             userList.add(GameManager.getUserVo(roomTianDaKeng.getUserMap().get(uid)));
@@ -150,5 +153,13 @@ public class RoomTianDaKengVo {
 
     public void setPersonNumber(int personNumber) {
         this.personNumber = personNumber;
+    }
+
+    public int getHasNine() {
+        return hasNine;
+    }
+
+    public void setHasNine(int hasNine) {
+        this.hasNine = hasNine;
     }
 }

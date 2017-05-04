@@ -122,7 +122,7 @@ public class GameTianDaKeng extends Game{
      * 洗牌
      */
     protected void shuffleHasNine(){
-        for (int i = 33; i < 43; i++) {
+        for (int i = 33; i < 53; i++) {
             cards.add(i);
         }
         cards.add(1);
@@ -485,11 +485,11 @@ public class GameTianDaKeng extends Game{
                         if(currentTurn==twoPersonList.get(0)){
                             noticeCanRaise(twoPersonList.get(0));//通知第一个可以踢
                             currentTurn = twoPersonList.get(0);//下一个人
-                            gameuserStatus.put(canRaiseUser.get(0),312);
+                            gameuserStatus.put(twoPersonList.get(0),312);
                         }else{
                             noticeCanRaise(twoPersonList.get(1));//通知第一个可以踢
                             currentTurn = twoPersonList.get(1);//下一个人
-                            gameuserStatus.put(canRaiseUser.get(0),312);
+                            gameuserStatus.put(twoPersonList.get(0),312);
                         }
                     }else{
                         if(tableCards.size()==0 || playerCardInfos.get(aliveUser.get(0)).allCards.size()==5){
@@ -612,15 +612,15 @@ public class GameTianDaKeng extends Game{
             if(!l.equals(winner)){
                 temp+=allChip.get(l);
                 allChip.put(l,-allChip.get(l));
-                this.room.getUserScores().put(l,(this.room.getUserScores().get(l)+allChip.get(l))*this.room.getMultiple()/100);
+                this.room.getUserScores().put(l,(this.room.getUserScores().get(l)+allChip.get(l)));
             }
         }
         allChip.put(winner,temp);
-        this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner)+allChip.get(winner))*this.room.getMultiple()/100);
+        this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner)+allChip.get(winner)));
 
         if(this.room.getDrawForLeaveChip()!=0){
             allChip.put(winner,allChip.get(winner)+this.room.getDrawForLeaveChip());
-            this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner) + this.room.getDrawForLeaveChip()*this.room.getMultiple()/100));
+            this.room.getUserScores().put(winner,(this.room.getUserScores().get(winner) + this.room.getDrawForLeaveChip()));
         }
     }
 
@@ -630,7 +630,7 @@ public class GameTianDaKeng extends Game{
     public void dealDrawScores(){
         for (Long l:allChip.keySet()) {//结算积分
             allChip.put(l,-allChip.get(l));
-            this.room.getUserScores().put(l,(this.room.getUserScores().get(l)+allChip.get(l))*this.room.getMultiple()/100);
+            this.room.getUserScores().put(l,(this.room.getUserScores().get(l)+allChip.get(l)));
         }
     }
 
@@ -664,8 +664,9 @@ public class GameTianDaKeng extends Game{
             //noticeDealevery(playerCardInfo.userId,playerCardInfo.allCards,everyknowCardsAndUserId);
 
         }
-        gameuserStatus.put(getMaxCardUser(),11);
+
         long tempMax = getMaxCardUser();
+        gameuserStatus.put(tempMax,11);
         noticeCanBet(tempMax);//通知牌点数最大的人可以下注
         currentTurn = tempMax;
         noticeEveryCards(playerCardInfos);
@@ -953,6 +954,9 @@ public class GameTianDaKeng extends Game{
         userService.save(user);
 
         if (room.getCurGameNumber() > room.getGameNumber() && room.getDrawForLeaveChip()==0) {
+            for (Long l:this.room.getUserScores().keySet()) {
+                this.room.getUserScores().put(l,this.room.getUserScores().get(l)*this.room.getMultiple()/100);
+            }
             GameFinalResult gameFinalResult = new GameFinalResult();
             gameFinalResult.setEndTime(new Date().toLocaleString());
             room.getUserScores().forEach((userId,score)->{
@@ -965,9 +969,32 @@ public class GameTianDaKeng extends Game{
             );
             Player.sendMsg2Player("gameService","gameFinalResult",gameFinalResult,users);
 
+            Record.RoomRecord roomRecord = new Record.RoomRecord();
+            roomRecord.setTime(System.currentTimeMillis());
+            roomRecord.setType(room.getCreateType());
+            for (long userId : users) {
+                PlayerCardInfoTianDaKeng playerCardInfo = playerCardInfos.get(userId);
+                User user1 = room.getUserMap().get(userId);
+                Record.UserRecord userRecord = new Record.UserRecord();
+                userRecord.setName(user1.getUsername());
+                userRecord.setScore(room.getUserScores().get(userId));
+                userRecord.setUserId(userId);
+                userRecord.setRoomId(room.getRoomId());
+
+                UserInfo userInfo1 = user.getUserInfo();
+                user.setUserInfo(userInfo1);
+
+                userService.save(user);
+                roomRecord.addRecord(userRecord);
+            }
+            //todo 保存记录
+            room.getUserMap().forEach((k,v)->v.getRecord().addRoomRecord(roomRecord));
+
+            //加入数据库保存列表
+            GameManager.getInstance().getSaveUser2DB().addAll(room.getUserMap().values());
+
             //删除room
             GameManager.getInstance().removeRoom(room);
-
         }
     }
 
