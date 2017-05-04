@@ -3,7 +3,7 @@ package com.code.server.cardgame.response;
 import com.code.server.cardgame.core.CardStruct;
 import com.code.server.cardgame.core.PlayerCardInfo;
 import com.code.server.cardgame.core.game.Game;
-import com.code.server.cardgame.core.game.GameDouDiZhu;
+import com.code.server.cardgame.core.game.GameDouDiZhuLinFen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,8 +33,8 @@ public class GameDoudizhuVo extends GameVo {
 
     public static GameVo getGameVo(Game game, long uid){
         GameDoudizhuVo vo = new GameDoudizhuVo();
-        if (game instanceof GameDouDiZhu) {
-            GameDouDiZhu douDiZhu = (GameDouDiZhu) game;
+        if (game instanceof GameDouDiZhuLinFen) {
+            GameDouDiZhuLinFen douDiZhu = (GameDouDiZhuLinFen) game;
 
             //设置地主
             vo.dizhu = douDiZhu.getDizhu();

@@ -3,11 +3,8 @@ package com.code.server.cardgame.core.room;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.game.Game;
-import com.code.server.cardgame.core.game.GameDouDiZhu;
-import com.code.server.cardgame.core.game.GameDouDiZhuGold;
-import com.code.server.cardgame.encoding.Notice;
+import com.code.server.cardgame.core.game.GameDouDiZhuLinFenGold;
 import com.code.server.cardgame.response.ErrorCode;
-import com.code.server.cardgame.response.ResponseVo;
 import com.code.server.db.model.User;
 
 import java.util.HashMap;
@@ -43,7 +40,7 @@ public class RoomDouDiZhuGold extends RoomDouDiZhu{
     }
 
     protected Game getGameInstance(){
-        return new GameDouDiZhuGold();
+        return new GameDouDiZhuLinFenGold();
     }
 
 
