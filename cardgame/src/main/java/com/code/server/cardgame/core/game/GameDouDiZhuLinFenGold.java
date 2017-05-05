@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by sunxianping on 2017/4/6.
  */
-public class GameDouDiZhuGold extends GameDouDiZhu {
+public class GameDouDiZhuLinFenGold extends GameDouDiZhuLinFen {
 
 
 

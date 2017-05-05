@@ -1,9 +1,10 @@
 package com.code.server.cardgame.core;
 
 import com.code.server.cardgame.core.game.Game;
+import com.code.server.cardgame.core.game.GameDouDiZhu;
 import com.code.server.cardgame.grpc.GRpcMsgDispatch;
 import com.code.server.cardgame.message.MessageHolder;
-import com.code.server.cardgame.core.game.GameDouDiZhu;
+import com.code.server.cardgame.core.game.GameDouDiZhuLinFen;
 import com.code.server.cardgame.core.game.GameTianDaKeng;
 import com.code.server.cardgame.core.room.GoldRoomPool;
 import com.code.server.cardgame.core.room.Room;
@@ -176,7 +177,8 @@ public class MsgDispatch {
 
                 int gameNumber = params.getInt("gameNumber");
                 int multiple = params.getInt("maxMultiple");
-                return RoomDouDiZhu.createRoom(player, gameNumber, multiple);
+                int gameType = params.optInt("gameType", 0);
+                return RoomDouDiZhu.createRoom(player, gameNumber, multiple,gameType);
             }
             case "createRoomTDK":{
 
@@ -257,11 +259,12 @@ public class MsgDispatch {
         return -1;
     }
 
-    private int dispatchGameDDZService(String method,GameDouDiZhu game,JSONObject params,Player player){
+    private int dispatchGameDDZService(String method, GameDouDiZhu game, JSONObject params, Player player){
         switch (method) {
             case "jiaoDizhu":
                 boolean isJiao = params.getBoolean("isJiao");
-                return game.jiaoDizhu(player, isJiao);
+                int score = params.optInt("score", 0);
+                return game.jiaoDizhu(player, isJiao,score);
             case "qiangDizhu":
                 boolean isQiang = params.getBoolean("isQiang");
                 return game.qiangDizhu(player, isQiang);

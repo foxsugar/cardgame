@@ -56,6 +56,7 @@ public class ErrorCode {
 	public static final int CAN_NOT_NO_ROOM = 200002;
 	public static final int CAN_NOT_NO_GAME = 200003;
 	public static final int CAN_NOT_PLAY = 200004;
+	public static final int CAN_NOT_JIAO_SCORE = 200005;
 
 	public static final int CAN_NOT_BING_REFERRER = 200010;
 
