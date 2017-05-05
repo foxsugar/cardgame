@@ -29,6 +29,27 @@ repositories {
 	mavenCentral()
 }
 
+//这里是关键（把java与scala的源代码目录全映射到scala上,
+// 这样gradle compileScala时就能同时编译java与scala的源代码）
+sourceSets {
+	main {
+		scala {
+			srcDirs = ['src/main/scala', 'src/main/java']
+		}
+		java {
+			srcDirs = []
+		}
+	}
+
+	test {
+		scala {
+			srcDirs = ['src/test/scala', 'src/test/java']
+		}
+		java {
+			srcDirs = []
+		}
+	}
+}
 
 dependencies {
 	compile project(path: ':gamedb')
@@ -41,10 +62,24 @@ dependencies {
 	compile "org.scala-lang:scala-library:2.12.2"
 	compile "org.scala-lang:scala-compiler:2.12.2"
 	compile "org.scala-lang:scala-reflect:2.12.2"
+//	zinc 'com.typesafe.zinc:zinc:0.3.9'
 
 	compile group: 'org.springframework.kafka', name: 'spring-kafka', version: '1.2.0.RELEASE'
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+task run(type: JavaExec, dependsOn: classes) {
+	main = 'Main'
+	classpath sourceSets.main.runtimeClasspath
+	classpath configurations.runtime
+}
+
+tasks.withType(ScalaCompile) {
+	options.encoding = "UTF-8"
+	scalaCompileOptions.with {
+		force = true
+	}
 }
 
 tasks.withType(JavaCompile) {
