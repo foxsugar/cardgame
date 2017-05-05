@@ -20,7 +20,7 @@ public class MsgProducer {
     public void send() {
         kafkaTemplate.send("test","hello world");
 //        kafkaTemplate.send("my-replicated-topic","xiaojf");
-        kafkaTemplate.flush();
+//        kafkaTemplate.flush();
 
         kafkaTemplate.metrics();
 
