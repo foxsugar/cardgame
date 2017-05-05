@@ -99,6 +99,7 @@ public class GameTianDaKeng extends Game{
         }
         currentTurn = getMaxCardUser();
         noticeCanBet(getMaxCardUser());
+        this.dealFirst = currentTurn;
     }
 
 
@@ -1389,7 +1390,7 @@ public class GameTianDaKeng extends Game{
         int temp = 0;
         List<Long> templist = new ArrayList<>();
         templist.addAll(users);
-        if(this.trunNumber==3){
+        if(this.trunNumber==3 && this.trunRemoveUser.get(1)!=null){
             templist.removeAll(this.trunRemoveUser.get(1));
         }
 
