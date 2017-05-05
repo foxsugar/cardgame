@@ -34,10 +34,10 @@ public class LoginAction {
     String home() {
 
 
-        Test test = new Test();
-        test.test();
-        String a;
-        System.out.println("hhhhh");
+//        Test test = new Test();
+//        test.test();
+//        String a;
+//        System.out.println("hhhhh");
 
         producer.send();
 
