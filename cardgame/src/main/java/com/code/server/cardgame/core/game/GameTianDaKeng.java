@@ -1412,7 +1412,6 @@ public class GameTianDaKeng extends Game{
             }
         }
 
-
        return userId;
     }
 
