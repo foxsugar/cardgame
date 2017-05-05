@@ -1382,7 +1382,7 @@ public class GameTianDaKeng extends Game{
 
 
     /**
-     * 获取第一个叫牌的人
+     * 获取上一轮叫牌的人
      * @return
      */
     public Long getMaxCardUser2(){
@@ -1392,16 +1392,27 @@ public class GameTianDaKeng extends Game{
         templist.addAll(users);
         if(this.trunNumber==3 && this.trunRemoveUser.get(1)!=null){
             templist.removeAll(this.trunRemoveUser.get(1));
+            for (PlayerCardInfoTianDaKeng playerCardInfoTianDaKeng :playerCardInfos.values()) {
+                if(templist.contains(playerCardInfoTianDaKeng.userId) && aliveUser.contains(playerCardInfoTianDaKeng.userId)){
+                    if(temp < CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(1))){
+                        temp = CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(1));
+                        userId = playerCardInfoTianDaKeng.userId;
+                    }
+                }
+            }
+        }else if(this.trunNumber==2 && this.trunRemoveUser.get(0)!=null){
+            templist.removeAll(this.trunRemoveUser.get(0));
+            for (PlayerCardInfoTianDaKeng playerCardInfoTianDaKeng :playerCardInfos.values()) {
+                if(templist.contains(playerCardInfoTianDaKeng.userId) && aliveUser.contains(playerCardInfoTianDaKeng.userId)){
+                    if(temp < CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(0))){
+                        temp = CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(0));
+                        userId = playerCardInfoTianDaKeng.userId;
+                    }
+                }
+            }
         }
 
-       for (PlayerCardInfoTianDaKeng playerCardInfoTianDaKeng :playerCardInfos.values()) {
-           if(templist.contains(playerCardInfoTianDaKeng.userId)){
-               if(temp < CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-2))){
-                   temp = CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-2));
-                   userId = playerCardInfoTianDaKeng.userId;
-               }
-           }
-       }
+
        return userId;
     }
 
