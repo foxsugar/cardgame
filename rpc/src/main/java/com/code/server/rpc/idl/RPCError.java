@@ -7,17 +7,15 @@
 package com.code.server.rpc.idl;
 
 
-import java.util.Map;
-import java.util.HashMap;
 import org.apache.thrift.TEnum;
 
-public enum ChargeType implements org.apache.thrift.TEnum {
-  money(1),
-  gold(2);
+public enum RPCError implements TEnum {
+  NO_USER(1),
+  NO_MONEY(2);
 
   private final int value;
 
-  private ChargeType(int value) {
+  private RPCError(int value) {
     this.value = value;
   }
 
@@ -32,12 +30,12 @@ public enum ChargeType implements org.apache.thrift.TEnum {
    * Find a the enum type by its integer value, as defined in the Thrift IDL.
    * @return null if the value is not found.
    */
-  public static ChargeType findByValue(int value) { 
+  public static RPCError findByValue(int value) { 
     switch (value) {
       case 1:
-        return money;
+        return NO_USER;
       case 2:
-        return gold;
+        return NO_MONEY;
       default:
         return null;
     }

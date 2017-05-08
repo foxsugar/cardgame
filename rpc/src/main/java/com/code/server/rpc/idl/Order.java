@@ -24,7 +24,7 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
   public long userId; // required
   public double num; // required
   public int type; // required
-  public java.lang.String token; // required
+  public String token; // required
   public int agentId; // required
   public long id; // required
 
@@ -37,7 +37,7 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
     AGENT_ID((short)5, "agentId"),
     ID((short)6, "id");
 
-    private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
+    private static final java.util.Map<String, _Fields> byName = new java.util.HashMap<String, _Fields>();
 
     static {
       for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
@@ -73,21 +73,21 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
      */
     public static _Fields findByThriftIdOrThrow(int fieldId) {
       _Fields fields = findByThriftId(fieldId);
-      if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
       return fields;
     }
 
     /**
      * Find the _Fields constant that matches name, or null if its not found.
      */
-    public static _Fields findByName(java.lang.String name) {
+    public static _Fields findByName(String name) {
       return byName.get(name);
     }
 
     private final short _thriftId;
-    private final java.lang.String _fieldName;
+    private final String _fieldName;
 
-    _Fields(short thriftId, java.lang.String fieldName) {
+    _Fields(short thriftId, String fieldName) {
       _thriftId = thriftId;
       _fieldName = fieldName;
     }
@@ -96,7 +96,7 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
       return _thriftId;
     }
 
-    public java.lang.String getFieldName() {
+    public String getFieldName() {
       return _fieldName;
     }
   }
@@ -111,17 +111,17 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
   public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.USER_ID, new org.apache.thrift.meta_data.FieldMetaData("userId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+    tmpMap.put(_Fields.USER_ID, new org.apache.thrift.meta_data.FieldMetaData("userId", org.apache.thrift.TFieldRequirementType.DEFAULT,
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
-    tmpMap.put(_Fields.NUM, new org.apache.thrift.meta_data.FieldMetaData("num", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+    tmpMap.put(_Fields.NUM, new org.apache.thrift.meta_data.FieldMetaData("num", org.apache.thrift.TFieldRequirementType.DEFAULT,
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.DOUBLE)));
-    tmpMap.put(_Fields.TYPE, new org.apache.thrift.meta_data.FieldMetaData("type", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+    tmpMap.put(_Fields.TYPE, new org.apache.thrift.meta_data.FieldMetaData("type", org.apache.thrift.TFieldRequirementType.DEFAULT,
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
-    tmpMap.put(_Fields.TOKEN, new org.apache.thrift.meta_data.FieldMetaData("token", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+    tmpMap.put(_Fields.TOKEN, new org.apache.thrift.meta_data.FieldMetaData("token", org.apache.thrift.TFieldRequirementType.DEFAULT,
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.AGENT_ID, new org.apache.thrift.meta_data.FieldMetaData("agentId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+    tmpMap.put(_Fields.AGENT_ID, new org.apache.thrift.meta_data.FieldMetaData("agentId", org.apache.thrift.TFieldRequirementType.DEFAULT,
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
-    tmpMap.put(_Fields.ID, new org.apache.thrift.meta_data.FieldMetaData("id", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+    tmpMap.put(_Fields.ID, new org.apache.thrift.meta_data.FieldMetaData("id", org.apache.thrift.TFieldRequirementType.DEFAULT,
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
     metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Order.class, metaDataMap);
@@ -134,7 +134,7 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
     long userId,
     double num,
     int type,
-    java.lang.String token,
+    String token,
     int agentId,
     long id)
   {
@@ -255,11 +255,11 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
     __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __TYPE_ISSET_ID, value);
   }
 
-  public java.lang.String getToken() {
+  public String getToken() {
     return this.token;
   }
 
-  public Order setToken(java.lang.String token) {
+  public Order setToken(String token) {
     this.token = token;
     return this;
   }
@@ -325,13 +325,13 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
     __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __ID_ISSET_ID, value);
   }
 
-  public void setFieldValue(_Fields field, java.lang.Object value) {
+  public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case USER_ID:
       if (value == null) {
         unsetUserId();
       } else {
-        setUserId((java.lang.Long)value);
+        setUserId((Long)value);
       }
       break;
 
@@ -339,7 +339,7 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
       if (value == null) {
         unsetNum();
       } else {
-        setNum((java.lang.Double)value);
+        setNum((Double)value);
       }
       break;
 
@@ -347,7 +347,7 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
       if (value == null) {
         unsetType();
       } else {
-        setType((java.lang.Integer)value);
+        setType((Integer)value);
       }
       break;
 
@@ -355,7 +355,7 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
       if (value == null) {
         unsetToken();
       } else {
-        setToken((java.lang.String)value);
+        setToken((String)value);
       }
       break;
 
@@ -363,7 +363,7 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
       if (value == null) {
         unsetAgentId();
       } else {
-        setAgentId((java.lang.Integer)value);
+        setAgentId((Integer)value);
       }
       break;
 
@@ -371,14 +371,14 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
       if (value == null) {
         unsetId();
       } else {
-        setId((java.lang.Long)value);
+        setId((Long)value);
       }
       break;
 
     }
   }
 
-  public java.lang.Object getFieldValue(_Fields field) {
+  public Object getFieldValue(_Fields field) {
     switch (field) {
     case USER_ID:
       return getUserId();
@@ -399,13 +399,13 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
       return getId();
 
     }
-    throw new java.lang.IllegalStateException();
+    throw new IllegalStateException();
   }
 
   /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
   public boolean isSet(_Fields field) {
     if (field == null) {
-      throw new java.lang.IllegalArgumentException();
+      throw new IllegalArgumentException();
     }
 
     switch (field) {
@@ -422,11 +422,11 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
     case ID:
       return isSetId();
     }
-    throw new java.lang.IllegalStateException();
+    throw new IllegalStateException();
   }
 
   @Override
-  public boolean equals(java.lang.Object that) {
+  public boolean equals(Object that) {
     if (that == null)
       return false;
     if (that instanceof Order)
@@ -526,7 +526,7 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
 
     int lastComparison = 0;
 
-    lastComparison = java.lang.Boolean.valueOf(isSetUserId()).compareTo(other.isSetUserId());
+    lastComparison = Boolean.valueOf(isSetUserId()).compareTo(other.isSetUserId());
     if (lastComparison != 0) {
       return lastComparison;
     }
@@ -536,7 +536,7 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
         return lastComparison;
       }
     }
-    lastComparison = java.lang.Boolean.valueOf(isSetNum()).compareTo(other.isSetNum());
+    lastComparison = Boolean.valueOf(isSetNum()).compareTo(other.isSetNum());
     if (lastComparison != 0) {
       return lastComparison;
     }
@@ -546,7 +546,7 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
         return lastComparison;
       }
     }
-    lastComparison = java.lang.Boolean.valueOf(isSetType()).compareTo(other.isSetType());
+    lastComparison = Boolean.valueOf(isSetType()).compareTo(other.isSetType());
     if (lastComparison != 0) {
       return lastComparison;
     }
@@ -556,7 +556,7 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
         return lastComparison;
       }
     }
-    lastComparison = java.lang.Boolean.valueOf(isSetToken()).compareTo(other.isSetToken());
+    lastComparison = Boolean.valueOf(isSetToken()).compareTo(other.isSetToken());
     if (lastComparison != 0) {
       return lastComparison;
     }
@@ -566,7 +566,7 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
         return lastComparison;
       }
     }
-    lastComparison = java.lang.Boolean.valueOf(isSetAgentId()).compareTo(other.isSetAgentId());
+    lastComparison = Boolean.valueOf(isSetAgentId()).compareTo(other.isSetAgentId());
     if (lastComparison != 0) {
       return lastComparison;
     }
@@ -576,7 +576,7 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
         return lastComparison;
       }
     }
-    lastComparison = java.lang.Boolean.valueOf(isSetId()).compareTo(other.isSetId());
+    lastComparison = Boolean.valueOf(isSetId()).compareTo(other.isSetId());
     if (lastComparison != 0) {
       return lastComparison;
     }
@@ -602,8 +602,8 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
   }
 
   @Override
-  public java.lang.String toString() {
-    java.lang.StringBuilder sb = new java.lang.StringBuilder("Order(");
+  public String toString() {
+    StringBuilder sb = new StringBuilder("Order(");
     boolean first = true;
 
     sb.append("userId:");
@@ -650,7 +650,7 @@ public class Order implements org.apache.thrift.TBase<Order, Order._Fields>, jav
     }
   }
 
-  private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
+  private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
     try {
       // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
       __isset_bitfield = 0;

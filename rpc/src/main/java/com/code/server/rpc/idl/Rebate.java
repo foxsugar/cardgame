@@ -37,7 +37,7 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
     TIME((short)5, "time"),
     IS_HAS_REFEREE((short)6, "isHasReferee");
 
-    private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
+    private static final java.util.Map<String, _Fields> byName = new java.util.HashMap<String, _Fields>();
 
     static {
       for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
@@ -73,21 +73,21 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
      */
     public static _Fields findByThriftIdOrThrow(int fieldId) {
       _Fields fields = findByThriftId(fieldId);
-      if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+      if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
       return fields;
     }
 
     /**
      * Find the _Fields constant that matches name, or null if its not found.
      */
-    public static _Fields findByName(java.lang.String name) {
+    public static _Fields findByName(String name) {
       return byName.get(name);
     }
 
     private final short _thriftId;
-    private final java.lang.String _fieldName;
+    private final String _fieldName;
 
-    _Fields(short thriftId, java.lang.String fieldName) {
+    _Fields(short thriftId, String fieldName) {
       _thriftId = thriftId;
       _fieldName = fieldName;
     }
@@ -96,7 +96,7 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
       return _thriftId;
     }
 
-    public java.lang.String getFieldName() {
+    public String getFieldName() {
       return _fieldName;
     }
   }
@@ -112,17 +112,17 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
   public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.ID, new org.apache.thrift.meta_data.FieldMetaData("id", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+    tmpMap.put(_Fields.ID, new org.apache.thrift.meta_data.FieldMetaData("id", org.apache.thrift.TFieldRequirementType.DEFAULT,
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
-    tmpMap.put(_Fields.USER_ID, new org.apache.thrift.meta_data.FieldMetaData("userId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+    tmpMap.put(_Fields.USER_ID, new org.apache.thrift.meta_data.FieldMetaData("userId", org.apache.thrift.TFieldRequirementType.DEFAULT,
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
-    tmpMap.put(_Fields.REFEREE_ID, new org.apache.thrift.meta_data.FieldMetaData("refereeId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+    tmpMap.put(_Fields.REFEREE_ID, new org.apache.thrift.meta_data.FieldMetaData("refereeId", org.apache.thrift.TFieldRequirementType.DEFAULT,
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
-    tmpMap.put(_Fields.REBATE_NUM, new org.apache.thrift.meta_data.FieldMetaData("rebateNum", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+    tmpMap.put(_Fields.REBATE_NUM, new org.apache.thrift.meta_data.FieldMetaData("rebateNum", org.apache.thrift.TFieldRequirementType.DEFAULT,
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.DOUBLE)));
-    tmpMap.put(_Fields.TIME, new org.apache.thrift.meta_data.FieldMetaData("time", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+    tmpMap.put(_Fields.TIME, new org.apache.thrift.meta_data.FieldMetaData("time", org.apache.thrift.TFieldRequirementType.DEFAULT,
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
-    tmpMap.put(_Fields.IS_HAS_REFEREE, new org.apache.thrift.meta_data.FieldMetaData("isHasReferee", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+    tmpMap.put(_Fields.IS_HAS_REFEREE, new org.apache.thrift.meta_data.FieldMetaData("isHasReferee", org.apache.thrift.TFieldRequirementType.DEFAULT,
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
     metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Rebate.class, metaDataMap);
@@ -325,13 +325,13 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
     __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __ISHASREFEREE_ISSET_ID, value);
   }
 
-  public void setFieldValue(_Fields field, java.lang.Object value) {
+  public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case ID:
       if (value == null) {
         unsetId();
       } else {
-        setId((java.lang.Long)value);
+        setId((Long)value);
       }
       break;
 
@@ -339,7 +339,7 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
       if (value == null) {
         unsetUserId();
       } else {
-        setUserId((java.lang.Long)value);
+        setUserId((Long)value);
       }
       break;
 
@@ -347,7 +347,7 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
       if (value == null) {
         unsetRefereeId();
       } else {
-        setRefereeId((java.lang.Integer)value);
+        setRefereeId((Integer)value);
       }
       break;
 
@@ -355,7 +355,7 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
       if (value == null) {
         unsetRebateNum();
       } else {
-        setRebateNum((java.lang.Double)value);
+        setRebateNum((Double)value);
       }
       break;
 
@@ -363,7 +363,7 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
       if (value == null) {
         unsetTime();
       } else {
-        setTime((java.lang.Long)value);
+        setTime((Long)value);
       }
       break;
 
@@ -371,14 +371,14 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
       if (value == null) {
         unsetIsHasReferee();
       } else {
-        setIsHasReferee((java.lang.Boolean)value);
+        setIsHasReferee((Boolean)value);
       }
       break;
 
     }
   }
 
-  public java.lang.Object getFieldValue(_Fields field) {
+  public Object getFieldValue(_Fields field) {
     switch (field) {
     case ID:
       return getId();
@@ -399,13 +399,13 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
       return isIsHasReferee();
 
     }
-    throw new java.lang.IllegalStateException();
+    throw new IllegalStateException();
   }
 
   /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
   public boolean isSet(_Fields field) {
     if (field == null) {
-      throw new java.lang.IllegalArgumentException();
+      throw new IllegalArgumentException();
     }
 
     switch (field) {
@@ -422,11 +422,11 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
     case IS_HAS_REFEREE:
       return isSetIsHasReferee();
     }
-    throw new java.lang.IllegalStateException();
+    throw new IllegalStateException();
   }
 
   @Override
-  public boolean equals(java.lang.Object that) {
+  public boolean equals(Object that) {
     if (that == null)
       return false;
     if (that instanceof Rebate)
@@ -524,7 +524,7 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
 
     int lastComparison = 0;
 
-    lastComparison = java.lang.Boolean.valueOf(isSetId()).compareTo(other.isSetId());
+    lastComparison = Boolean.valueOf(isSetId()).compareTo(other.isSetId());
     if (lastComparison != 0) {
       return lastComparison;
     }
@@ -534,7 +534,7 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
         return lastComparison;
       }
     }
-    lastComparison = java.lang.Boolean.valueOf(isSetUserId()).compareTo(other.isSetUserId());
+    lastComparison = Boolean.valueOf(isSetUserId()).compareTo(other.isSetUserId());
     if (lastComparison != 0) {
       return lastComparison;
     }
@@ -544,7 +544,7 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
         return lastComparison;
       }
     }
-    lastComparison = java.lang.Boolean.valueOf(isSetRefereeId()).compareTo(other.isSetRefereeId());
+    lastComparison = Boolean.valueOf(isSetRefereeId()).compareTo(other.isSetRefereeId());
     if (lastComparison != 0) {
       return lastComparison;
     }
@@ -554,7 +554,7 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
         return lastComparison;
       }
     }
-    lastComparison = java.lang.Boolean.valueOf(isSetRebateNum()).compareTo(other.isSetRebateNum());
+    lastComparison = Boolean.valueOf(isSetRebateNum()).compareTo(other.isSetRebateNum());
     if (lastComparison != 0) {
       return lastComparison;
     }
@@ -564,7 +564,7 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
         return lastComparison;
       }
     }
-    lastComparison = java.lang.Boolean.valueOf(isSetTime()).compareTo(other.isSetTime());
+    lastComparison = Boolean.valueOf(isSetTime()).compareTo(other.isSetTime());
     if (lastComparison != 0) {
       return lastComparison;
     }
@@ -574,7 +574,7 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
         return lastComparison;
       }
     }
-    lastComparison = java.lang.Boolean.valueOf(isSetIsHasReferee()).compareTo(other.isSetIsHasReferee());
+    lastComparison = Boolean.valueOf(isSetIsHasReferee()).compareTo(other.isSetIsHasReferee());
     if (lastComparison != 0) {
       return lastComparison;
     }
@@ -600,8 +600,8 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
   }
 
   @Override
-  public java.lang.String toString() {
-    java.lang.StringBuilder sb = new java.lang.StringBuilder("Rebate(");
+  public String toString() {
+    StringBuilder sb = new StringBuilder("Rebate(");
     boolean first = true;
 
     sb.append("id:");
@@ -644,7 +644,7 @@ public class Rebate implements org.apache.thrift.TBase<Rebate, Rebate._Fields>, 
     }
   }
 
-  private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
+  private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
     try {
       // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
       __isset_bitfield = 0;
