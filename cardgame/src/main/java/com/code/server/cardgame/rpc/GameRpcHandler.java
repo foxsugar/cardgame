@@ -1,12 +1,17 @@
 package com.code.server.cardgame.rpc;
 
+import com.code.server.cardgame.bootstarp.Shutdown;
 import com.code.server.cardgame.message.MessageHolder;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.handler.GameProcessor;
 import com.code.server.cardgame.utils.SpringUtil;
 import com.code.server.cardgame.utils.ThreadPool;
+import com.code.server.db.Service.ConstantService;
+import com.code.server.db.Service.ServerService;
 import com.code.server.db.Service.UserService;
+import com.code.server.db.model.Constant;
+import com.code.server.db.model.ServerInfo;
 import com.code.server.db.model.User;
 import com.code.server.rpc.idl.ChargeType;
 import com.code.server.rpc.idl.GameRPC;
@@ -75,6 +80,60 @@ public class GameRpcHandler implements GameRPC.AsyncIface {
         messageHolder.rpcHolder = rpcHolder;
         //加进队列
         GameProcessor.getInstance().messageQueue.add(messageHolder);
+    }
+
+    @Override
+    public void modifyMarquee(String str, AsyncMethodCallback<Integer> resultHandler) throws TException {
+        ConstantService constantService = SpringUtil.getBean(ConstantService.class);
+        GameManager.getInstance().constant.setMarquee(str);
+        constantService.constantDao.save(GameManager.getInstance().constant);
+        resultHandler.onComplete(0);
+    }
+
+    @Override
+    public void modifyDownload(String str, AsyncMethodCallback<Integer> resultHandler) throws TException {
+        ConstantService constantService = SpringUtil.getBean(ConstantService.class);
+        GameManager.getInstance().constant.setDownload(str);
+        constantService.constantDao.save(GameManager.getInstance().constant);
+        resultHandler.onComplete(0);
+    }
+
+    @Override
+    public void modifyAndroidVersion(String str, AsyncMethodCallback<Integer> resultHandler) throws TException {
+        ServerService serverService = SpringUtil.getBean(ServerService.class);
+        GameManager.getInstance().serverInfo.setVersionOfAndroid(str);
+        serverService.serverInfoDao.save( GameManager.getInstance().serverInfo);
+        resultHandler.onComplete(0);
+    }
+
+    @Override
+    public void modifyIOSVersion(String str, AsyncMethodCallback<Integer> resultHandler) throws TException {
+        ServerService serverService = SpringUtil.getBean(ServerService.class);
+        GameManager.getInstance().serverInfo.setVersionOfIos(str);
+        serverService.serverInfoDao.save( GameManager.getInstance().serverInfo);
+        resultHandler.onComplete(0);
+    }
+
+    @Override
+    public void shutdown(AsyncMethodCallback<Integer> resultHandler) throws TException {
+        Shutdown.shutdown();
+        resultHandler.onComplete(0);
+    }
+
+    @Override
+    public void modifyInitMoney(int money, AsyncMethodCallback<Integer> resultHandler) throws TException {
+        ConstantService constantService = SpringUtil.getBean(ConstantService.class);
+        GameManager.getInstance().constant.setInitMoney(money);
+        constantService.constantDao.save(GameManager.getInstance().constant);
+        resultHandler.onComplete(0);
+    }
+
+    @Override
+    public void modifyAppleCheck(int status, AsyncMethodCallback<Integer> resultHandler) throws TException {
+        ServerService serverService = SpringUtil.getBean(ServerService.class);
+        GameManager.getInstance().serverInfo.setAppleCheck(status);
+        serverService.serverInfoDao.save( GameManager.getInstance().serverInfo);
+        resultHandler.onComplete(0);
     }
 
     private static void saveUser(User user){

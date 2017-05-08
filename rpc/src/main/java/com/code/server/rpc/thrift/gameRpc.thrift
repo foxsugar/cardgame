@@ -30,6 +30,19 @@ service GameRPC{
    User getUserInfo(i64 userId),
 
    //交易库存斗
-   i32 exchange(Order order)
+   i32 exchange(Order order),
+
+    //修改公告
+   i32 modifyMarquee(string str),
+    //修改下载地址
+   i32 modifyDownload(string str),
+    //修改安卓版本
+   i32 modifyAndroidVersion(string str),
+    //修改ios版本
+   i32 modifyIOSVersion(string str),
+   //shutdown
+   i32 shutdown(),
+   //修改初始金钱
+   i32 modifyInitMoney(i32 money),
 }
 

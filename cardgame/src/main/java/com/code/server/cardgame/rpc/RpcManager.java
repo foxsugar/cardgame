@@ -61,17 +61,13 @@ public class RpcManager {
 
     public static void main(String[] args) {
 //        testGame(1);
-        for (int j = 0; j < 10; j++) {
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-//                    testAdmin();
-                    testGame(1000);
-                }
-            }).start();
-
-
+        try {
+            charge("123.56.8.137",10001,100);
+            charge("123.56.8.137",10002,100);
+            charge("123.56.8.137",10003,100);
+            charge("123.56.8.137",10004,100);
+        } catch (TException e) {
+            e.printStackTrace();
         }
 
     }
@@ -112,6 +108,19 @@ public class RpcManager {
         }
     }
 
+    private static void charge(String ip,int id,int num) throws TException {
+
+        TTransport adminTransport = TransportManager.getTransport(ip, 9090);
+
+        GameRPC.Client client = GameRpcClient.getAClient(adminTransport);
+//                    client.getUserInfo(1);
+        Order order = new Order();
+        order.setUserId(id);
+        order.setNum(num);
+        order.setType(1);
+        client.charge(order);
+        adminTransport.close();
+    }
     private static void testGame(int count) {
         for (int i = 0; i < count; i++) {
             try {

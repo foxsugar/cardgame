@@ -102,21 +102,8 @@ public class GameDouDiZhu extends Game{
         //删除牌
         playerCardInfo.cards.removeAll(cardStruct.getCards());
 
-         if(zhaCount < room.getMultiple() || room.getMultiple() == -1){
-            if(cardStruct.getType()==CardStruct.type_炸){
-                List<Integer> cards = cardStruct.getCards();
-                    if(cards.size()==4 && CardUtil.getTypeByCard(cards.get(0)) == 0 && CardUtil.getTypeByCard(cards.get(cards.size()-1))==0){ //3333
-                        zhaCount += 1;//记录炸的数量
-                        multiple *= 8;//记录倍数
-                    }else{ //除4个三的炸
-                        zhaCount += 1;//记录炸的数量
-                        multiple *= 2;//记录倍数
-                    }
-            }else if(cardStruct.getType()==CardStruct.type_火箭){
-                zhaCount += 1;//记录炸的数量
-                multiple *= 2;//记录倍数
-            }
-         }
+        //处理炸
+        handleBomb(cardStruct);
 
          //牌打完
         if (playerCardInfo.cards.size() == 0) {
@@ -143,6 +130,23 @@ public class GameDouDiZhu extends Game{
         return 0;
     }
 
+    protected void handleBomb(CardStruct cardStruct){
+        if(zhaCount < room.getMultiple() || room.getMultiple() == -1){
+            if(cardStruct.getType()==CardStruct.type_炸){
+                List<Integer> cards = cardStruct.getCards();
+                if(cards.size()==4 && CardUtil.getTypeByCard(cards.get(0)) == 0 && CardUtil.getTypeByCard(cards.get(cards.size()-1))==0){ //3333
+                    zhaCount += 1;//记录炸的数量
+                    multiple *= 8;//记录倍数
+                }else{ //除4个三的炸
+                    zhaCount += 1;//记录炸的数量
+                    multiple *= 2;//记录倍数
+                }
+            }else if(cardStruct.getType()==CardStruct.type_火箭){
+                zhaCount += 1;//记录炸的数量
+                multiple *= 2;//记录倍数
+            }
+        }
+    }
 
     public int pass(Player player){
         playTurn = nextTurnId(player.getUserId());

@@ -7,16 +7,16 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
-//		classpath group: 'co.tomlee.gradle.plugins', name: 'gradle-thrift-plugin', version: '0.0.6'
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
+		classpath "gradle.plugin.org.jruyi.gradle:thrift-gradle-plugin:0.4.0"
 	}
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 //apply plugin: 'org.springframework.boot'
-//apply plugin: 'thrift'
+apply plugin: "org.jruyi.thrift"
 apply plugin: "idea"
 apply plugin: 'com.google.protobuf'
 
@@ -77,4 +77,15 @@ protobuf {
 			grpc {}
 		}
 	}
+}
+
+
+compileThrift {
+	recurse true
+	thriftExecutable 'thrift-0.10.0.exe'
+	generator 'html'
+	generator 'java', 'private-members'
+}
+tasks.withType(JavaCompile) {
+	options.encoding = "UTF-8"
 }
