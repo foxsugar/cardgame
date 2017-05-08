@@ -80,13 +80,13 @@ protobuf {
 }
 
 
-compileThrift {
-	recurse true
-	thriftExecutable 'thrift-0.10.0.exe'
-//	generator 'html'
-	generator 'java', 'private-members'
-	outputDir "$projectDir/genThrift/"
-}
+//compileThrift {
+//	recurse true
+//	thriftExecutable 'thrift-0.10.0.exe'
+////	generator 'html'
+//	generator 'java', 'private-members'
+//	outputDir "$projectDir/genThrift/"
+//}
 tasks.withType(JavaCompile) {
 	options.encoding = "UTF-8"
 }
