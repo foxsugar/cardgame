@@ -144,11 +144,13 @@ public class GameTianDaKeng extends Game{
          * 45,46,47,48      Q       12
          * 49,50,51,52      K       13
 
-        cards.add();cards.add();cards.add();cards.add();
-        cards.add();cards.add();cards.add();cards.add();
-        cards.add();cards.add();cards.add();cards.add();
-        cards.add();cards.add();cards.add();cards.add();
-        cards.add();cards.add();cards.add();cards.add();
+        cards.add();cards.add();cards.add();
+        cards.add();cards.add();cards.add();
+        cards.add();cards.add();cards.add();
+        cards.add();cards.add();cards.add();
+        cards.add();cards.add();cards.add();
+        cards.add();cards.add();cards.add();
+        cards.add();cards.add();
          */
         /*cards.add(3);cards.add(4);cards.add(45);
         cards.add(38);cards.add(43);cards.add(1);
@@ -158,13 +160,13 @@ public class GameTianDaKeng extends Game{
         cards.add(42);cards.add(2);cards.add(47);
         cards.add(39); cards.add(40);*/
 
-        cards.add(1);cards.add(2);cards.add(49);
-        cards.add(3);cards.add(4);cards.add(50);
-        cards.add(37);cards.add(38);cards.add(42);
-        cards.add(40);cards.add(41);cards.add(39);
-        cards.add(43);cards.add(44);cards.add(45);
-        cards.add(51);cards.add(52);cards.add(46);
-        cards.add(47);cards.add(48);
+        cards.add(37);cards.add(38);cards.add(1);
+        cards.add(39);cards.add(40);cards.add(2);
+        cards.add(41);cards.add(42);cards.add(3);
+        cards.add(43);cards.add(44);cards.add(52);
+        cards.add(45);cards.add(46);cards.add(47);
+        cards.add(48);cards.add(49);cards.add(50);
+        cards.add(51);
 
         //cards.add(50);cards.add(51);cards.add(52);
     }
@@ -641,7 +643,31 @@ public class GameTianDaKeng extends Game{
      */
     public void dealACard(){
         int temp = 0;//存公章
+        List<Long> userIdList = new ArrayList<>();
         for(PlayerCardInfoTianDaKeng playerCardInfo : playerCardInfos.values()){
+            userIdList.add(playerCardInfo.userId);
+        }
+        int position = userIdList.indexOf(dealFirst);
+        ArrayList<PlayerCardInfoTianDaKeng> beforeList = new ArrayList<>();
+        ArrayList<PlayerCardInfoTianDaKeng> afterList = new ArrayList<>();
+        ArrayList<PlayerCardInfoTianDaKeng> lastList = new ArrayList<>();
+        ArrayList<PlayerCardInfoTianDaKeng> tempList = new ArrayList<>();
+        for(PlayerCardInfoTianDaKeng playerCardInfo : playerCardInfos.values()){
+            tempList.add(playerCardInfo);
+        }
+        for (PlayerCardInfoTianDaKeng playerCardInfo:tempList) {
+            if(tempList.indexOf(playerCardInfo)<position){
+                beforeList.add(playerCardInfo);
+            }else if(tempList.indexOf(playerCardInfo)==position){
+                lastList.add(playerCardInfo);
+            }else{
+                afterList.add(playerCardInfo);
+            }
+        }
+        lastList.addAll(afterList);
+        lastList.addAll(beforeList);
+
+        for(PlayerCardInfoTianDaKeng playerCardInfo : lastList){
            if(aliveUser.contains(playerCardInfo.userId)){//存活的人发牌
                if(tableCards.size() > 1){
                    temp = tableCards.get(0);
