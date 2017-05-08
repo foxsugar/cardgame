@@ -44,5 +44,7 @@ service GameRPC{
    i32 shutdown(),
    //修改初始金钱
    i32 modifyInitMoney(i32 money),
+   //是否苹果审查
+   i32 modifyAppleCheck(i32 status),
 }
 
