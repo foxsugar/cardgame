@@ -15,9 +15,9 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: "idea"
 //apply plugin: 'org.springframework.boot'
 apply plugin: "org.jruyi.thrift"
-apply plugin: "idea"
 apply plugin: 'com.google.protobuf'
 
 version = '0.0.1-SNAPSHOT'
@@ -31,9 +31,6 @@ repositories {
 
 
 dependencies {
-	ext {
-		grpcVersion = '1.2.0'
-	}
 	compile 'org.apache.thrift:libthrift:0.10.0'
 //	compile 'org.apache.thrift:libthrift:0.9.3'
 //	compile('org.springframework.boot:spring-boot-starter')
@@ -54,6 +51,7 @@ sourceSets {
 		java{
 			srcDir 'gen/main/java'
 			srcDir 'gen/main/grpc'
+			srcDir 'genThrift/gen-java/grpc'
 		}
 		proto {
 			srcDir 'src/main/proto'
@@ -70,7 +68,9 @@ protobuf {
 			artifact = 'io.grpc:protoc-gen-grpc-java:1.2.0'
 		}
 	}
+
 	generatedFilesBaseDir = "$projectDir/gen/"
+//	generatedFilesBaseDir = "buildDir/gen/"
 
 	generateProtoTasks {
 		all()*.plugins {
@@ -83,8 +83,9 @@ protobuf {
 compileThrift {
 	recurse true
 	thriftExecutable 'thrift-0.10.0.exe'
-	generator 'html'
+//	generator 'html'
 	generator 'java', 'private-members'
+	outputDir "$projectDir/genThrift/"
 }
 tasks.withType(JavaCompile) {
 	options.encoding = "UTF-8"
