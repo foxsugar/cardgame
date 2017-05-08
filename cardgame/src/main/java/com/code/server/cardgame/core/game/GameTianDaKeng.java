@@ -641,7 +641,31 @@ public class GameTianDaKeng extends Game{
      */
     public void dealACard(){
         int temp = 0;//存公章
+        List<Long> userIdList = new ArrayList<>();
         for(PlayerCardInfoTianDaKeng playerCardInfo : playerCardInfos.values()){
+            userIdList.add(playerCardInfo.userId);
+        }
+        int position = userIdList.indexOf(dealFirst);
+        ArrayList<PlayerCardInfoTianDaKeng> beforeList = new ArrayList<>();
+        ArrayList<PlayerCardInfoTianDaKeng> afterList = new ArrayList<>();
+        ArrayList<PlayerCardInfoTianDaKeng> lastList = new ArrayList<>();
+        ArrayList<PlayerCardInfoTianDaKeng> tempList = new ArrayList<>();
+        for(PlayerCardInfoTianDaKeng playerCardInfo : playerCardInfos.values()){
+            tempList.add(playerCardInfo);
+        }
+        for (PlayerCardInfoTianDaKeng playerCardInfo:tempList) {
+            if(tempList.indexOf(playerCardInfo)<position){
+                beforeList.add(playerCardInfo);
+            }else if(tempList.indexOf(playerCardInfo)==position){
+                lastList.add(playerCardInfo);
+            }else{
+                afterList.add(playerCardInfo);
+            }
+        }
+        lastList.addAll(afterList);
+        lastList.addAll(beforeList);
+
+        for(PlayerCardInfoTianDaKeng playerCardInfo : lastList){
            if(aliveUser.contains(playerCardInfo.userId)){//存活的人发牌
                if(tableCards.size() > 1){
                    temp = tableCards.get(0);
