@@ -98,6 +98,9 @@ springBoot {
 	layout='DIR'
 }
 
+gradle.taskGraph.whenReady { graph ->
+	graph.allTasks.findAll { it.name ==~ /compileThrift.*/ }*.enabled = false
+}
 //启动服务
 bootRun {
 

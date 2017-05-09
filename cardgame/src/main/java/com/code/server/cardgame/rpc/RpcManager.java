@@ -62,10 +62,12 @@ public class RpcManager {
     public static void main(String[] args) {
 //        testGame(1);
         try {
-            charge("123.56.8.137",10001,100);
-            charge("123.56.8.137",10002,100);
-            charge("123.56.8.137",10003,100);
-            charge("123.56.8.137",10004,100);
+//            charge("123.56.8.137",10001,100);
+//            charge("123.56.8.137",10002,100);
+//            charge("123.56.8.137",10003,100);
+//            charge("123.56.8.137",10004,100);
+
+            appCheck("192.168.1.132");
         } catch (TException e) {
             e.printStackTrace();
         }
@@ -120,6 +122,15 @@ public class RpcManager {
         order.setType(1);
         client.charge(order);
         adminTransport.close();
+    }
+
+    private static void appCheck(String ip) throws TException {
+
+        TTransport adminTransport = TransportManager.getTransport(ip, 9090);
+
+        GameRPC.Client client = GameRpcClient.getAClient(adminTransport);
+        client.modifyAppleCheck(1);
+
     }
     private static void testGame(int count) {
         for (int i = 0; i < count; i++) {
