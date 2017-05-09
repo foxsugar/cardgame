@@ -7,21 +7,17 @@
 package com.code.server.rpc.idl;
 
 
+import java.util.Map;
+import java.util.HashMap;
 import org.apache.thrift.TEnum;
 
-/**
- * You can define enums, which are just 32 bit integers. Values are optional
- * and start at 1 if not supplied, C style again.
- */
-public enum Operation implements TEnum {
-  ADD(1),
-  SUBTRACT(2),
-  MULTIPLY(3),
-  DIVIDE(4);
+public enum RPCError implements org.apache.thrift.TEnum {
+  NO_USER(1),
+  NO_MONEY(2);
 
   private final int value;
 
-  private Operation(int value) {
+  private RPCError(int value) {
     this.value = value;
   }
 
@@ -36,16 +32,12 @@ public enum Operation implements TEnum {
    * Find a the enum type by its integer value, as defined in the Thrift IDL.
    * @return null if the value is not found.
    */
-  public static Operation findByValue(int value) { 
+  public static RPCError findByValue(int value) { 
     switch (value) {
       case 1:
-        return ADD;
+        return NO_USER;
       case 2:
-        return SUBTRACT;
-      case 3:
-        return MULTIPLY;
-      case 4:
-        return DIVIDE;
+        return NO_MONEY;
       default:
         return null;
     }
