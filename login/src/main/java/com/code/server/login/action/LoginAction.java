@@ -4,6 +4,8 @@ package com.code.server.login.action;
 import com.code.server.db.Service.ServerService;
 import com.code.server.db.Service.UserService;
 import com.google.gson.Gson;
+import org.apache.http.client.ResponseHandler;
+import org.apache.sshd.common.RequestHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -28,7 +30,6 @@ public class LoginAction {
     @ResponseBody
     String home() {
 
-
         String a;
         return "Hello World!";
     }
@@ -40,5 +41,15 @@ public class LoginAction {
         String s = gson.toJson(serverService.getAllServerInfo().get(0));
         return s;
     }
+
+
+    /**
+     *  支付demo
+     * @return
+     */
+    private void httpUrlConnection() {
+
+    }
+
 
 }
