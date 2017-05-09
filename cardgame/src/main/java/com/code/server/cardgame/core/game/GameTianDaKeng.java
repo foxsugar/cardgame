@@ -89,8 +89,8 @@ public class GameTianDaKeng extends Game{
         this.dealFirst = users.get(0);
 
         if(this.room.getHasNine()==1){
-            //shuffleHasNine();
-            shuffleTest();
+            shuffleHasNine();
+            //shuffleTest();
         }else{
             shuffle();
             //shuffleTest();
