@@ -136,6 +136,14 @@ public class GameRpcHandler implements GameRPC.AsyncIface {
         resultHandler.onComplete(0);
     }
 
+    @Override
+    public void modifyDownload2(String str, AsyncMethodCallback<Integer> resultHandler) throws TException {
+        ConstantService constantService = SpringUtil.getBean(ConstantService.class);
+        GameManager.getInstance().constant.setDownload2(str);
+        constantService.constantDao.save(GameManager.getInstance().constant);
+        resultHandler.onComplete(0);
+    }
+
     private static void saveUser(User user){
         if (user == null) {
             return;
