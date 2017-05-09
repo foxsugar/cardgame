@@ -12,7 +12,7 @@ public class CardUtilOfTangDaKeng {
     protected static Map<Integer,Integer> cardForScore = new HashMap<>();//牌的点数
 
     static {
-        for (int i = 37; i < 53; i+=4) {
+        for (int i = 33; i < 53; i+=4) {
             List<Integer> list = new ArrayList<Integer>();
             list.add(i);
             list.add(i+1);
@@ -28,8 +28,8 @@ public class CardUtilOfTangDaKeng {
         cardA.add(4);
         typeCard.add(cardA);
 
-        int temp = 10;
-        for (int i = 37; i < 53; i+=4) {
+        int temp = 9;
+        for (int i = 33; i < 53; i+=4) {
             cardForScore.put(i,temp);
             cardForScore.put(i+1,temp);
             cardForScore.put(i+2,temp);

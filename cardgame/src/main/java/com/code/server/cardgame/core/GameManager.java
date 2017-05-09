@@ -38,7 +38,6 @@ public class GameManager {
     public Map<Long, String> uid_openId = new HashMap<>();
     public Map<Long, String> userRoom = new HashMap<>();
     public Map<String, Room> rooms = new HashMap<>();
-    public Map<String, RoomTanDaKeng> roomsOfTanDaKeng = new HashMap<>();
     public ServerInfo serverInfo;
     public Constant constant;
     public Set<Player> kickUser = new CopyOnWriteArraySet<>();//可以踢出内存的玩家
@@ -70,6 +69,7 @@ public class GameManager {
         vo.setVip(user.getVip());
         vo.setUsername(user.getUsername());
         vo.setReferee(user.getReferee());
+        vo.setUserInfo(user.getUserInfo());
 
         String room = GameManager.getInstance().userRoom.get(user.getUserId());
         if (room!=null && GameManager.getInstance().rooms.containsKey(room)) {
@@ -186,5 +186,21 @@ public class GameManager {
     public GameManager setKickUser(Set<Player> kickUser) {
         this.kickUser = kickUser;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "GameManager{" +
+                "serverId=" + serverId +
+                ", players=" + players.size() +
+                ", id_nameMap=" + id_nameMap.size() +
+                ", name_idMap=" + name_idMap.size() +
+                ", openId_uid=" + openId_uid.size() +
+                ", uid_openId=" + uid_openId.size() +
+                ", userRoom=" + userRoom.size() +
+                ", rooms=" + rooms.size() +
+                ", kickUser=" + kickUser.size() +
+                ", saveUser2DB=" + saveUser2DB.size() +
+                '}';
     }
 }

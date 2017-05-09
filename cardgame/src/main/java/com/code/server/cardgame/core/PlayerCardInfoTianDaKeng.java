@@ -12,6 +12,39 @@ public class PlayerCardInfoTianDaKeng {
     public List<Integer> allCards = new ArrayList<>();//手上的牌
 
 
+    //getter and setter==============================================================================
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public List<Integer> getMyselfCards() {
+        return myselfCards;
+    }
+
+    public void setMyselfCards(List<Integer> myselfCards) {
+        this.myselfCards = myselfCards;
+    }
+
+    public List<Integer> getEveryknowCards() {
+        return everyknowCards;
+    }
+
+    public void setEveryknowCards(List<Integer> everyknowCards) {
+        this.everyknowCards = everyknowCards;
+    }
+
+    public List<Integer> getAllCards() {
+        return allCards;
+    }
+
+    public void setAllCards(List<Integer> allCards) {
+        this.allCards = allCards;
+    }
+
 }
 
 

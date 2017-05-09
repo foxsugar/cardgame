@@ -1,6 +1,7 @@
 package com.code.server.cardgame.response;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -9,6 +10,7 @@ import java.util.List;
 public class GameFinalResult {
     private List<UserInfo> userInfos = new ArrayList<>();
 
+    private String endTime;
 
     public static class UserInfo{
         private long userId;
@@ -30,5 +32,13 @@ public class GameFinalResult {
     public GameFinalResult setUserInfos(List<UserInfo> userInfos) {
         this.userInfos = userInfos;
         return this;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

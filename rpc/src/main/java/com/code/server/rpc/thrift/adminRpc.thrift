@@ -17,5 +17,5 @@ service AdminRPC{
     i32 rebate(1:list<Rebate> rebates),
 
     //获得用户信息
-
+    bool isExist(1:i64 refereeId),
 }

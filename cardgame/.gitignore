@@ -1,6 +1,7 @@
 .gradle
 /build/
 !gradle/wrapper/gradle-wrapper.jar
+/log
 
 ### STS ###
 .apt_generated
@@ -23,3 +24,6 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+/src/main/resources/showJson.json
+

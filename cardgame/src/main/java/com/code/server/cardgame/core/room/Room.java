@@ -66,36 +66,16 @@ public class Room {
     protected boolean isOpen;
 
 
+    private boolean isLastDraw = false;//是否平局
 
+    private int drawForLeaveChip = 0;//平局留下筹码
 
+    protected int hasNine;
 
     protected boolean isCanDissloution = false;
 
 
-    public static int createRoom(Player player, int gameNumber, int multiple){
-        if(GameManager.getInstance().userRoom.containsKey(player.getUserId())){
-            return ErrorCode.CANNOT_CREATE_ROOM_ROLE_HAS_IN_ROOM;
-        }
-        int needMoney = getNeedMoney(gameNumber);
-        if (player.getUser().getMoney() < needMoney) {
-            return ErrorCode.CANNOT_CREATE_ROOM_MONEY;
-        }
-        RoomDouDiZhu room = new RoomDouDiZhu();
-        room.personNumber = PERSONNUM;
 
-        room.roomId = getRoomIdStr(genRoomId());
-        room.createUser = player.getUserId();
-        room.init(gameNumber,multiple);
-        //房间加入列表
-        room.roomAddUser(player);
-        GameManager.getInstance().rooms.put(room.roomId, room);
-
-
-
-        player.sendMsg(new ResponseVo("roomService","createRoom",new RoomVo(room,player)));
-
-        return 0;
-    }
 
     public static int joinRoomQuick(Player player,int type){
 
@@ -149,9 +129,11 @@ public class Room {
 
     public int joinRoom(Player player) {
         long userId = player.getUserId();
+        if(GameManager.getInstance().getRoomByUser(player.getUserId())!=null){
+            return ErrorCode.CANNOT_CREATE_ROOM_USER_HAS_IN_ROOM;
+        }
         if (this.users.contains(userId)) {
             return ErrorCode.CANNOT_CREATE_ROOM_USER_HAS_IN_ROOM;
-
         }
         if (this.users.size() >= this.personNumber) {
             return ErrorCode.CANNOT_JOIN_ROOM_IS_FULL;
@@ -165,7 +147,6 @@ public class Room {
 
         roomAddUser(player);
         //加进玩家-房间映射表
-//        GameManager.getInstance().getUserRoom().put(userId, roomId);
         noticeJoinRoom(player);
 
         return 0;
@@ -236,9 +217,9 @@ public class Room {
         if (isInGame) {
             return ErrorCode.CANNOT_QUIT_ROOM_IS_IN_GAME;
         }
-
-        roomRemoveUser(player);
         //删除玩家房间映射关系
+        roomRemoveUser(player);
+
 //        GameManager.getInstance().getUserRoom().remove(userId);
 
         if (this.createUser == player.getUserId()) {//房主解散
@@ -335,12 +316,6 @@ public class Room {
 
 
 
-
-
-
-
-
-
     protected Game getGameInstance(){
         return new Game();
     }
@@ -351,14 +326,13 @@ public class Room {
         this.isOpen = true;
         this.isInGame = true;
         Game game = getGameInstance();
-
-
+        this.game = game;
         //扣钱
         if (curGameNumber == 1) {
             spendMoney();
         }
         game.startGame(users,this);
-        this.game = game;
+
 
 
 
@@ -463,14 +437,12 @@ public class Room {
         send.setNote("ok");
         player.sendMsg("roomService",methodName,send);
 
-
-
-
-
-
         return 0;
     }
 
+    /**
+     * 解散房间
+     */
     protected void dissolutionRoom(){
 
         GameManager.getInstance().removeRoom(this);
@@ -510,7 +482,9 @@ public class Room {
         this.isInGame = false;
         // 存储返回
         GameOfResult gameOfResult = new GameOfResult();
+
         gameOfResult.setUserList(userOfResultList);
+        gameOfResult.setEndTime(new Date().toLocaleString());
 
         JSONObject noticeEndResult = new JSONObject();
         noticeEndResult.put("service", "gameService");
@@ -729,5 +703,33 @@ public class Room {
     public Room setGoldRoomType(double goldRoomType) {
         this.goldRoomType = goldRoomType;
         return this;
+    }
+
+    public static int getRoomCreateTypeConmmon() {
+        return ROOM_CREATE_TYPE_CONMMON;
+    }
+
+    public boolean isLastDraw() {
+        return isLastDraw;
+    }
+
+    public void setLastDraw(boolean lastDraw) {
+        isLastDraw = lastDraw;
+    }
+
+    public int getDrawForLeaveChip() {
+        return drawForLeaveChip;
+    }
+
+    public void setDrawForLeaveChip(int drawForLeaveChip) {
+        this.drawForLeaveChip = drawForLeaveChip;
+    }
+
+    public int getHasNine() {
+        return hasNine;
+    }
+
+    public void setHasNine(int hasNine) {
+        this.hasNine = hasNine;
     }
 }

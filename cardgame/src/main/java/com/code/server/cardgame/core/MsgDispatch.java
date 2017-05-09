@@ -1,7 +1,10 @@
 package com.code.server.cardgame.core;
 
-import com.code.server.cardgame.message.MessageHolder;
+import com.code.server.cardgame.core.game.Game;
 import com.code.server.cardgame.core.game.GameDouDiZhu;
+import com.code.server.cardgame.grpc.GRpcMsgDispatch;
+import com.code.server.cardgame.message.MessageHolder;
+import com.code.server.cardgame.core.game.GameDouDiZhuLinFen;
 import com.code.server.cardgame.core.game.GameTianDaKeng;
 import com.code.server.cardgame.core.room.GoldRoomPool;
 import com.code.server.cardgame.core.room.Room;
@@ -9,7 +12,7 @@ import com.code.server.cardgame.core.room.RoomDouDiZhu;
 import com.code.server.cardgame.core.room.RoomTanDaKeng;
 import com.code.server.cardgame.response.ErrorCode;
 import com.code.server.cardgame.response.ResponseVo;
-import com.code.server.cardgame.rpc.RpcMsgDispatch;
+import com.code.server.cardgame.rpc.ThriftMsgDispatch;
 import com.code.server.cardgame.service.GameChatService;
 import com.code.server.cardgame.service.GameUserService;
 import com.code.server.cardgame.utils.SpringUtil;
@@ -40,8 +43,12 @@ public class MsgDispatch {
 
         Object message = msgHolder.message;
         switch (msgHolder.msgType) {
-            case MessageHolder.MSG_TYPE_RPC:{
-                RpcMsgDispatch.dispatch(msgHolder);
+            case MessageHolder.MSG_TYPE_THRIFT:{
+                ThriftMsgDispatch.dispatch(msgHolder);
+                break;
+            }
+            case MessageHolder.MSG_TYPE_GRPC:{
+                GRpcMsgDispatch.dispatch(msgHolder);
                 break;
             }
             case MessageHolder.MSG_TYPE_CLIENT_JSON:{
@@ -142,6 +149,16 @@ public class MsgDispatch {
             case "register":
 //                return gameUserService.register(userId,ctx);
 
+            case "giveOtherMoney":
+                Player player = GameManager.getPlayerByCtx(ctx);
+                Long accepterId = Long.parseLong(params.getString("accepterId"));
+                int money = Integer.parseInt(params.getString("money"));
+                return gameUserService.giveOtherMoney(player,accepterId, money);
+
+            case "getNickNamePlayer":
+                Player giver = GameManager.getPlayerByCtx(ctx);
+                Long accepterUserId= Long.parseLong(params.getString("accepterId"));
+                return gameUserService.getNickNamePlayer(giver,accepterUserId);
 
             default:
 
@@ -160,14 +177,16 @@ public class MsgDispatch {
 
                 int gameNumber = params.getInt("gameNumber");
                 int multiple = params.getInt("maxMultiple");
-                return RoomDouDiZhu.createRoom(player, gameNumber, multiple);
+                int gameType = params.optInt("gameType", 0);
+                return RoomDouDiZhu.createRoom(player, gameNumber, multiple,gameType);
             }
             case "createRoomTDK":{
 
                 int gameNumber = params.getInt("gameNumber");
-                int multiple = params.getInt("maxMultiple");
+                double multiple = params.getDouble("maxMultiple");
                 int personNumber = params.getInt("personNumber");
-                return RoomTanDaKeng.createRoom(player, gameNumber,multiple,personNumber);
+                int hasNine = params.getInt("hasNine");
+                return RoomTanDaKeng.createRoom(player, gameNumber,multiple,personNumber,hasNine);
             }
             case "joinRoom": {
                 String roomId = params.getString("roomId");
@@ -227,15 +246,25 @@ public class MsgDispatch {
         if (room == null) {
             return ErrorCode.CAN_NOT_NO_ROOM;
         }
-        GameDouDiZhu game = (GameDouDiZhu) room.getGame();
+        Game game = room.getGame();
         if (game == null) {
             return ErrorCode.CAN_NOT_NO_GAME;
         }
 
+        if(game instanceof GameDouDiZhu){
+            return dispatchGameDDZService(method,(GameDouDiZhu) game,params,player);
+        }else if(game instanceof GameTianDaKeng){
+           return dispatchGameTDKService(method,(GameTianDaKeng) game,params,player);
+        }
+        return -1;
+    }
+
+    private int dispatchGameDDZService(String method, GameDouDiZhu game, JSONObject params, Player player){
         switch (method) {
             case "jiaoDizhu":
                 boolean isJiao = params.getBoolean("isJiao");
-                return game.jiaoDizhu(player, isJiao);
+                int score = params.optInt("score", 0);
+                return game.jiaoDizhu(player, isJiao,score);
             case "qiangDizhu":
                 boolean isQiang = params.getBoolean("isQiang");
                 return game.qiangDizhu(player, isQiang);
@@ -250,30 +279,17 @@ public class MsgDispatch {
         }
     }
 
-
-    private int dispatchGameTDKService(String method, JSONObject params, ChannelHandlerContext ctx) {
-        Player player = GameManager.getPlayerByCtx(ctx);
-        if (player == null) {
-            return -1;
-        }
-
-        RoomTanDaKeng room = getRoomTDKByPlayer(player);
-        if (room == null) {
-            return ErrorCode.CAN_NOT_NO_ROOM;
-        }
-        GameTianDaKeng game = (GameTianDaKeng) room.getGame();
-        if (game == null) {
-            return ErrorCode.CAN_NOT_NO_GAME;
-        }
+    private int dispatchGameTDKService(String method,GameTianDaKeng game,JSONObject params,Player player) {
 
         switch (method) {
             case "bet"://下注
-                int chip = params.getInt("chip");
-                return game.bet(player, chip);
+                int betChip = params.getInt("chip");
+                return game.bet(player, betChip);
             case "call"://跟注
                 return game.call(player);
             case "raise"://加注，踢
-                return game.raise(player);
+                int raiseChip = params.getInt("chip");
+                return game.raise(player,raiseChip);
             case "pass"://不跟
                 return game.pass(player);
             case "fold"://弃牌
@@ -319,12 +335,4 @@ public class MsgDispatch {
         return GameManager.getInstance().rooms.get(roomId);
     }
 
-
-    private RoomTanDaKeng getRoomTDKByPlayer(Player player) {
-        String roomId = GameManager.getInstance().getUserRoom().get(player.getUserId());
-        if (roomId == null) {
-            return null;
-        }
-        return GameManager.getInstance().roomsOfTanDaKeng.get(roomId);
-    }
 }

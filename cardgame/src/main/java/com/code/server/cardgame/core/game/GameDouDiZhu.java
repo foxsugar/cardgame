@@ -16,11 +16,13 @@ import java.util.*;
 public class GameDouDiZhu extends Game{
     private static final Logger logger = LoggerFactory.getLogger(GameDouDiZhu.class);
 
-    private static final int INITCARDNUM = 16;
-    private static final int STEP_JIAO_DIZHU = 1;
-    private static final int STEP_QIANG_DIZHU = 2;
-    private static final int STEP_PLAY = 3;
+    public static final int STEP_JIAO_DIZHU = 1;
 
+    public static final int STEP_QIANG_DIZHU = 2;
+    public static final int STEP_PLAY = 3;
+
+
+    protected int initCardNum = 17;//每人17张
     protected List<Integer> cards = new ArrayList<>();//牌
     protected List<Integer> disCards = new ArrayList<>();//丢弃的牌
     protected List<Integer> tableCards = new ArrayList<>();//底牌
@@ -28,11 +30,10 @@ public class GameDouDiZhu extends Game{
     protected List<Long> users = new ArrayList<>();
     private Random rand = new Random();
     protected long dizhu;//地主
-    protected Set<Long> chooseJiaoSet = new HashSet<>();
-    protected Set<Long> chooseQiangSet = new HashSet<>();
-    protected Set<Long> bujiaoSet = new HashSet<>();
+    protected Set<Long> chooseJiaoSet = new HashSet<>();//叫过地主的人
+    protected Set<Long> chooseQiangSet = new HashSet<>();//抢过地主的人
+    protected Set<Long> bujiaoSet = new HashSet<>();//不叫的集合
 
-//    protected CardStruct currentCardStruct = new CardStruct();// 当前这个人出的牌
     protected int lasttype = 0;//上一个人出牌的类型
 
     protected long canJiaoUser;//可以叫地主的人
@@ -46,11 +47,13 @@ public class GameDouDiZhu extends Game{
 
     protected int step;//步骤
 
-    protected int zhaCount;
+    protected int zhaCount;//炸的个数
     protected int multiple = 1;
     protected Room room;
-    protected boolean isSpring;
+    protected boolean isSpring;//是否春天
     protected Set<Long> userPlayCount = new HashSet<>();
+    protected int tableScore;//底分
+    protected boolean isNMQiang = false;//农民是否抢过
 
 
 
@@ -99,21 +102,8 @@ public class GameDouDiZhu extends Game{
         //删除牌
         playerCardInfo.cards.removeAll(cardStruct.getCards());
 
-         if(zhaCount < room.getMultiple() || room.getMultiple() == -1){
-            if(cardStruct.getType()==CardStruct.type_炸){
-                List<Integer> cards = cardStruct.getCards();
-                    if(cards.size()==4 && CardUtil.getTypeByCard(cards.get(0)) == 0 && CardUtil.getTypeByCard(cards.get(cards.size()-1))==0){ //3333
-                        zhaCount += 1;//记录炸的数量
-                        multiple *= 8;//记录倍数
-                    }else{ //除4个三的炸
-                        zhaCount += 1;//记录炸的数量
-                        multiple *= 2;//记录倍数
-                    }
-            }else if(cardStruct.getType()==CardStruct.type_火箭){
-                zhaCount += 1;//记录炸的数量
-                multiple *= 2;//记录倍数
-            }
-         }
+        //处理炸
+        handleBomb(cardStruct);
 
          //牌打完
         if (playerCardInfo.cards.size() == 0) {
@@ -140,6 +130,23 @@ public class GameDouDiZhu extends Game{
         return 0;
     }
 
+    protected void handleBomb(CardStruct cardStruct){
+        if(zhaCount < room.getMultiple() || room.getMultiple() == -1){
+            if(cardStruct.getType()==CardStruct.type_炸){
+                List<Integer> cards = cardStruct.getCards();
+                if(cards.size()==4 && CardUtil.getTypeByCard(cards.get(0)) == 0 && CardUtil.getTypeByCard(cards.get(cards.size()-1))==0){ //3333
+                    zhaCount += 1;//记录炸的数量
+                    multiple *= 8;//记录倍数
+                }else{ //除4个三的炸
+                    zhaCount += 1;//记录炸的数量
+                    multiple *= 2;//记录倍数
+                }
+            }else if(cardStruct.getType()==CardStruct.type_火箭){
+                zhaCount += 1;//记录炸的数量
+                multiple *= 2;//记录倍数
+            }
+        }
+    }
 
     public int pass(Player player){
         playTurn = nextTurnId(player.getUserId());
@@ -162,9 +169,6 @@ public class GameDouDiZhu extends Game{
         for(int i=1;i<=54;i++){
             cards.add(i);
         }
-        //去掉两张2
-        cards.remove((Integer)7);
-        cards.remove((Integer)5);
         Collections.shuffle(cards);
     }
 
@@ -173,7 +177,7 @@ public class GameDouDiZhu extends Game{
      */
     protected void deal(){
         for(PlayerCardInfo playerCardInfo : playerCardInfos.values()){
-            for(int i=0;i<INITCARDNUM;i++){
+            for(int i = 0; i< initCardNum; i++){
                 playerCardInfo.cards.add(cards.remove(0));
             }
             //通知发牌
@@ -217,11 +221,14 @@ public class GameDouDiZhu extends Game{
      * @param isJiao
      * @return
      */
-    public int jiaoDizhu(Player player,boolean isJiao){
+    public int jiaoDizhu(Player player,boolean isJiao,int score){
 
         logger.info(player.getUser().getAccount() +"  叫地主 "+ isJiao);
         if (canJiaoUser != player.getUserId()) {
             return ErrorCode.CAN_NOT_JIAO_TURN;
+        }
+        if(isJiao && score <= tableScore){
+            return ErrorCode.CAN_NOT_JIAO_SCORE;
         }
         //叫地主列表
         chooseJiaoSet.add(player.getUserId());
@@ -231,7 +238,7 @@ public class GameDouDiZhu extends Game{
             bujiaoSet.add(player.getUserId());
             if (bujiaoSet.size() >= users.size()) {
                 sendResult(true,false);
-                room.clearReadyStatus(true);
+                room.clearReadyStatus(false);
                 sendFinalResult();
             } else {
                 long nextJiao = nextTurnId(player.getUserId());
@@ -240,15 +247,17 @@ public class GameDouDiZhu extends Game{
             }
         } else {//叫了 开始抢
             jiaoUser = player.getUserId();
+            dizhu = player.getUserId();
             //第三个人叫的 直接开始游戏
-            if (chooseJiaoSet.size() >= users.size()) {
-                startPlay(jiaoUser);
-            } else {
-
+            if (chooseJiaoSet.size() >= users.size() || score == 3) {
                 step = STEP_QIANG_DIZHU;
-                long nextId = nextTurnId(player.getUserId());
+                long nextId = nextTurnId(dizhu);
                 this.canQiangUser = nextId;
                 noticeCanQiang(nextId);
+            } else {
+                long nextJiao = nextTurnId(player.getUserId());
+                canJiaoUser = nextJiao;
+                noticeCanJiao(nextJiao);
             }
 
         }
@@ -289,7 +298,7 @@ public class GameDouDiZhu extends Game{
 
     }
 
-    private void sendResult(boolean isReopen,boolean isDizhuWin){
+    protected void sendResult(boolean isReopen,boolean isDizhuWin){
         GameResultDouDizhu gameResultDouDizhu = new GameResultDouDizhu();
         gameResultDouDizhu.setMultiple(multiple);
         gameResultDouDizhu.setSpring(isSpring);
@@ -305,9 +314,9 @@ public class GameDouDiZhu extends Game{
 
     }
 
-    private void sendFinalResult() {
+    protected void sendFinalResult() {
         //所有牌局都结束
-        if (room.getCurGameNumber() >= room.getGameNumber()) {
+        if (room.getCurGameNumber() > room.getGameNumber()) {
             GameFinalResult gameFinalResult = new GameFinalResult();
             room.getUserScores().forEach((userId,score)->{
 
@@ -325,7 +334,7 @@ public class GameDouDiZhu extends Game{
         }
     }
 
-    private void genRecord(){
+    protected void genRecord(){
         Record.RoomRecord roomRecord = new Record.RoomRecord();
         roomRecord.setTime(System.currentTimeMillis());
         roomRecord.setType(room.getCreateType());
@@ -340,7 +349,6 @@ public class GameDouDiZhu extends Game{
 
             roomRecord.addRecord(userRecord);
         }
-        //todo 保存记录
         room.getUserMap().forEach((k,v)->
                 v.getRecord().addRoomRecord(roomRecord));
 
@@ -350,20 +358,11 @@ public class GameDouDiZhu extends Game{
 
     }
 
-    public static void main(String[] args) {
-        Map<Integer, Integer> map = new HashMap<>();
-        map.put(1, 1);
-        map.put(2, 1);
-        map.put(3, 1);
-        map.put(4, 1);
-        map.put(5, 1);
-        map.forEach((key,value)-> System.out.println("key : "+ key +"  value : "+ value));
-    }
     /**
      * 开始打牌
      * @param dizhu
      */
-    private void startPlay(long dizhu){
+    protected void startPlay(long dizhu){
         this.canQiangUser = -1;
         this.canJiaoUser = -1;
         this.dizhu = dizhu;
@@ -400,15 +399,20 @@ public class GameDouDiZhu extends Game{
             return ErrorCode.CAN_NOT_QIANG_TURN;
         }
         this.chooseQiangSet.add(player.getUserId());
-        int jiaoIndex = chooseJiaoSet.size();
 
         PlayerCardInfo playerCardInfo = playerCardInfos.get(player.getUserId());
         playerCardInfo.setQiang(isQiang);
-        if (jiaoIndex == 1) {
-            handleQiang1(player.getUserId(),isQiang);
-        } else if (jiaoIndex == 2) {
-            handleQiang2(player.getUserId(), isQiang);
+
+        //两个农民都没抢
+        boolean allNoQiang = chooseQiangSet.size() == 2 && !isQiang;
+        //开始游戏
+        if (chooseQiangSet.size() == 3 || allNoQiang) {
+            startPlay(dizhu);
+        } else {
+            canQiangUser = nextTurnId(qiangUser);
+            noticeCanQiang(canQiangUser);
         }
+
 
         Map<String, Object> rs = new HashMap<>();
         rs.put("userId", player.getUserId());
@@ -416,68 +420,18 @@ public class GameDouDiZhu extends Game{
         Player.sendMsg2Player("gameService","qiangResponse",rs,users);
 
         player.sendMsg(new ResponseVo("gameService","qiangDizhu",0));
+
+
         return 0;
     }
 
 
-    /**
-     * 处理第一个人叫的情况
-     * @param qiangUser
-     * @param isQiang
-     */
-    private void handleQiang1(long qiangUser,boolean isQiang){
-        logger.info("第一个人叫");
-        if (isQiang) {
-            this.qiangUser = qiangUser;
-            if (chooseQiangSet.size() == 1) {
-                canQiangUser = nextTurnId(qiangUser);
-                noticeCanQiang(canQiangUser);
-            } else if(chooseQiangSet.size() ==2) {
-                startPlay(jiaoUser);
-            }
-
-
-        } else {//不抢
-            if (chooseQiangSet.size() == 1) {
-                canQiangUser = nextTurnId(qiangUser);
-                noticeCanQiang(canQiangUser);
-            } else if(chooseQiangSet.size() ==2) {
-//                long dizhu = this.qiangUser == 0?jiaoUser:qiangUser;
-                startPlay(jiaoUser);
-            }
-
-        }
-    }
-
-    /**
-     * 处理第二个人叫的情况
-     * @param qiangUser
-     * @param isQiang
-     */
-    private void handleQiang2(long qiangUser,boolean isQiang){
-        logger.info("第二个人叫");
-        if (isQiang) {
-            this.qiangUser = qiangUser;
-            if (chooseQiangSet.size() == 1) {
-                canQiangUser = nextTurnId(qiangUser);
-                noticeCanQiang(canQiangUser);
-            } else if(chooseQiangSet.size() ==2) {
-                startPlay(jiaoUser);
-            }
-
-
-        } else {//不抢
-
-//            long dizhu = this.qiangUser == 0?jiaoUser:qiangUser;
-            startPlay(jiaoUser);
-        }
-    }
 
     /**
      * 通知可以叫地主
      * @param userId
      */
-    private void noticeCanJiao(long userId){
+    protected void noticeCanJiao(long userId){
         Map<String, Long> result = new HashMap<>();
         result.put("userId",userId);
         ResponseVo vo = new ResponseVo("gameService","canjiao",result);
@@ -488,7 +442,7 @@ public class GameDouDiZhu extends Game{
      * 通知可以抢地主
      * @param userId
      */
-    private void noticeCanQiang(long userId) {
+    protected void noticeCanQiang(long userId) {
         Map<String, Long> result = new HashMap<>();
         result.put("userId",userId);
         ResponseVo vo = new ResponseVo("gameService","canqiang",result);

@@ -7,19 +7,21 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath group: 'co.tomlee.gradle.plugins', name: 'gradle-thrift-plugin', version: '0.0.6'
-//		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
+		classpath "gradle.plugin.org.jruyi.gradle:thrift-gradle-plugin:0.4.0"
 	}
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-//apply plugin: 'org.springframework.boot'
-apply plugin: 'thrift'
 apply plugin: "idea"
+apply plugin: "org.jruyi.thrift"
+apply plugin: 'com.google.protobuf'
 
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 1.8
+//sourceCompatibility = 1.8
+//targetCompatibility = 1.8
 
 repositories {
 	maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
@@ -29,43 +31,63 @@ repositories {
 
 dependencies {
 	compile 'org.apache.thrift:libthrift:0.10.0'
-//	compile 'org.apache.thrift:libthrift:0.9.3'
-//	compile('org.springframework.boot:spring-boot-starter')
-//	testCompile('org.springframework.boot:spring-boot-starter-test')
+
+
+	//grpc
+
+	compile group: 'io.grpc', name: 'grpc-stub', version: '1.2.0'
+	compile group: 'io.grpc', name: 'grpc-protobuf', version: '1.2.0'
+	compile group: 'io.grpc', name: 'grpc-netty', version: '1.2.0'
+	compile group: 'io.grpc', name: 'grpc-core', version: '1.2.0'
+	//netty
+//	compile group: 'io.netty', name: 'netty-all', version: '4.1.8.Final'
+}
+
+sourceSets {
+	main {
+		java{
+			srcDir 'gen/main/java'
+			srcDir 'gen/main/grpc'
+			srcDir 'genThrift/gen-java/grpc'
+		}
+		proto {
+			srcDir 'src/main/proto'
+		}
+	}
+}
+
+protobuf {
+	protoc {
+		artifact = "com.google.protobuf:protoc:3.0.2"
+	}
+	plugins {
+		grpc {
+			artifact = 'io.grpc:protoc-gen-grpc-java:1.2.0'
+		}
+	}
+
+	generatedFilesBaseDir = "$projectDir/gen/"
+//	generatedFilesBaseDir = "buildDir/gen/"
+
+	generateProtoTasks {
+		all()*.plugins {
+			grpc {}
+		}
+	}
+}
+
+//
+compileThrift {
+	recurse true
+	thriftExecutable 'thrift-0.10.0.exe'
+//	generator 'html'
+	generator 'java', 'private-members'
+	outputDir "$projectDir/genThrift/"
 }
 
 
-//generateThriftSource {
-//	//
-//	// The output directory (optional)
-//	//
-//	out file('src/main/resources/response.thrift')
-//
-//	verbose false
-//	debug false
-//	strict true
-//
-//	//
-//	// Modify the include path (optional)
-//	//
-//	// path file('vendor/thrift')
-//
-//	//
-//	// Set the thrift executable (optional)
-//	//
-//	executable 'D:\\thrift\\thrift.exe'
-//
-//	generators {
-//		//
-//		// --gen java:hashcode,beans
-//		//
-//		java {
-//			//
-//			// Options passed to the `java` generator
-//			//
-//			option 'hashcode'
-//			option 'beans'
-//		}
-//
-//	}
-//}
+tasks.withType(JavaCompile) {
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+	options.encoding = "UTF-8"
+}

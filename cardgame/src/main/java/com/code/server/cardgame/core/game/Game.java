@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class Game {
 
+    public int number;
 
     public void startGame(List<Long> users,Room room){
 
