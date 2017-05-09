@@ -1,5 +1,6 @@
 package com.code.server.cardgame.core;
 
+import javax.smartcardio.Card;
 import java.util.*;
 
 import static com.code.server.cardgame.core.CardUtil.getCardType;
@@ -7,7 +8,7 @@ import static com.code.server.cardgame.core.CardUtil.getCardType;
 /**
  * Created by sunxianping on 2017/3/14.
  */
-public class PlayerCardInfo {
+public class PlayerCardInfoDouDiZhu {
     public long userId;
     public List<Integer> cards = new ArrayList<>();//手上的牌
     protected List<Integer> disCards = new ArrayList<>();//丢弃的牌
@@ -41,15 +42,6 @@ public class PlayerCardInfo {
         List<Integer> copyCards = new ArrayList<>();
         copyCards.addAll(cards);
 
-        if(currentCardStruct.getType() == CardStruct.type_三 || currentCardStruct.getType() == CardStruct.type_飞机){
-            copyCards.removeAll(currentCardStruct.getCards());
-            if(copyCards.size()<=0){
-                return true;
-            }else{
-                return false;
-            }
-        }
-
         boolean results = false;
 
         //判断牌型是否合法
@@ -62,9 +54,7 @@ public class PlayerCardInfo {
                 List<Integer> lastList = lastcardStruct.getCards();//获取上次出牌的牌型
                 List<Integer> list = currentCardStruct.getCards();//获取当前出牌类型
 
-                 if(list.size()>lastList.size()){     //3333 > 22
-                    results = true;
-                 }else if(CardUtil.getTypeByCard(list.get(0))>CardUtil.getTypeByCard(lastList.get(0))){
+                 if(CardUtil.getTypeByCard(list.get(0))>CardUtil.getTypeByCard(lastList.get(0))){
                     results = true;
                 }
             }else if(currenttype==CardStruct.type_火箭){ // 出牌是火箭
@@ -89,7 +79,7 @@ public class PlayerCardInfo {
     public Integer getListByIsType(List<Integer> cards) {
         int len = cards.size();
         if (len <= 4) {
-            if (cards.size() > 0 &&isSameType(cards)) {
+            if (cards.size() > 0 && isSameType(cards)) {
                 switch (len) {
                     case 1:
                         return CardStruct.type_单;
@@ -101,20 +91,13 @@ public class PlayerCardInfo {
                         return CardStruct.type_炸;
                 }
             }
-            if (len == 2 && CardUtil.getTypeByCard(cards.get(0)) == 12
-                    && CardUtil.getTypeByCard(cards.get(1)) == 12) {
-                return CardStruct.type_炸;
-            }
-            if (len == 2 && CardUtil.getTypeByCard(cards.get(0)) == 0
-                    && CardUtil.getTypeByCard(cards.get(1)) == 0) {
-                return CardStruct.type_炸;
-            }
+
             if (len == 2 && CardUtil.getTypeByCard(cards.get(0)) == 13
                     && CardUtil.getTypeByCard(cards.get(1)) == 14) {
                 return CardStruct.type_火箭;
             }
-            if (len == 4 && CardUtil.getTypeByCard(cards.get(0)).intValue() == CardUtil.getTypeByCard(cards.get(len - 2)).intValue()
-                    && CardUtil.getTypeByCard(cards.get(0)).intValue() == CardUtil.getTypeByCard(cards.get(len - 3)).intValue()) {
+            if (len == 4 && CardUtil.getTypeByCard(cards.get(0)).intValue() == CardUtil.getTypeByCard(cards.get(len - 3)).intValue()
+                    && CardUtil.getTypeByCard(cards.get(0)).intValue() == CardUtil.getTypeByCard(cards.get(len - 4)).intValue()) {
                 return CardStruct.type_三带单;
             } else {
                 return 0;
@@ -122,10 +105,23 @@ public class PlayerCardInfo {
         }
 
         if (len >= 5) {
+
+            if (len==5 && CardUtil.getTypeByCard(cards.get(0)).intValue() == CardUtil.getTypeByCard(cards.get(len - 3)).intValue()
+                    && CardUtil.getTypeByCard(cards.get(0)).intValue() == CardUtil.getTypeByCard(cards.get(len - 4)).intValue()
+                    && CardUtil.getTypeByCard(cards.get(len - 1)).intValue() == CardUtil.getTypeByCard(cards.get(len - 2)).intValue()){
+                    return CardStruct.type_三带对;
+            }
             if (len == 6 && CardUtil.getTypeByCard(cards.get(0)).intValue() == CardUtil.getTypeByCard(cards.get(len - 3)).intValue()
                     && CardUtil.getTypeByCard(cards.get(1)).intValue() == CardUtil.getTypeByCard(cards.get(len - 3)).intValue()
                     && CardUtil.getTypeByCard(cards.get(2)).intValue() == CardUtil.getTypeByCard(cards.get(len - 3)).intValue()
-                    && CardUtil.getTypeByCard(cards.get(len-1)).intValue() != CardUtil.getTypeByCard(cards.get(len - 2)).intValue()) {
+                    && CardUtil.getTypeByCard(cards.get(len - 1)).intValue() != CardUtil.getTypeByCard(cards.get(len - 2)).intValue()) {
+                return CardStruct.type_四带二;
+            }
+            if (len == 8 && CardUtil.getTypeByCard(cards.get(0)).intValue() == CardUtil.getTypeByCard(cards.get(len - 3)).intValue()
+                    && CardUtil.getTypeByCard(cards.get(1)).intValue() == CardUtil.getTypeByCard(cards.get(len - 3)).intValue()
+                    && CardUtil.getTypeByCard(cards.get(2)).intValue() == CardUtil.getTypeByCard(cards.get(len - 3)).intValue()
+                    && CardUtil.getTypeByCard(cards.get(len - 1)).intValue() == CardUtil.getTypeByCard(cards.get(len - 2)).intValue()
+                    && CardUtil.getTypeByCard(cards.get(len - 3)).intValue() == CardUtil.getTypeByCard(cards.get(len - 4)).intValue()) {
                 return CardStruct.type_四带二;
             }
             List<Integer> cardList = new ArrayList<>();
@@ -157,7 +153,7 @@ public class PlayerCardInfo {
     }
     //顺除 2 大王小王
     public boolean getShunDel2DaXiao(List<Integer> cards){
-        if(cards.contains(8) || cards.contains(6) || cards.contains(53) || cards.contains(54)){
+        if(cards.contains(8) || cards.contains(6) || cards.contains(5) || cards.contains(7) || cards.contains(53) || cards.contains(54)){
             return false;
         }else{
             return true;
@@ -290,7 +286,7 @@ public class PlayerCardInfo {
         return userId;
     }
 
-    public PlayerCardInfo setUserId(long userId) {
+    public PlayerCardInfoDouDiZhu setUserId(long userId) {
         this.userId = userId;
         return this;
     }
@@ -299,7 +295,7 @@ public class PlayerCardInfo {
         return cards;
     }
 
-    public PlayerCardInfo setCards(List<Integer> cards) {
+    public PlayerCardInfoDouDiZhu setCards(List<Integer> cards) {
         this.cards = cards;
         return this;
     }
@@ -308,7 +304,7 @@ public class PlayerCardInfo {
         return disCards;
     }
 
-    public PlayerCardInfo setDisCards(List<Integer> disCards) {
+    public PlayerCardInfoDouDiZhu setDisCards(List<Integer> disCards) {
         this.disCards = disCards;
         return this;
     }
@@ -317,7 +313,7 @@ public class PlayerCardInfo {
         return isQiang;
     }
 
-    public PlayerCardInfo setQiang(boolean qiang) {
+    public PlayerCardInfoDouDiZhu setQiang(boolean qiang) {
         isQiang = qiang;
         return this;
     }
@@ -326,7 +322,7 @@ public class PlayerCardInfo {
         return score;
     }
 
-    public PlayerCardInfo setScore(double score) {
+    public PlayerCardInfoDouDiZhu setScore(double score) {
         this.score = score;
         return this;
     }
@@ -335,7 +331,7 @@ public class PlayerCardInfo {
         return playCount;
     }
 
-    public PlayerCardInfo setPlayCount(int playCount) {
+    public PlayerCardInfoDouDiZhu setPlayCount(int playCount) {
         this.playCount = playCount;
         return this;
     }
