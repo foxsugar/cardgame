@@ -76,6 +76,8 @@ public class GameDouDiZhu extends Game{
         chooseDizhu(dizhuUser);
     }
 
+
+
     /**
      * 出牌
      * @param player

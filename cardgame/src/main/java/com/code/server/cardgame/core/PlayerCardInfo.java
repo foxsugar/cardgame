@@ -11,9 +11,9 @@ public class PlayerCardInfo {
     public long userId;
     public List<Integer> cards = new ArrayList<>();//手上的牌
     protected List<Integer> disCards = new ArrayList<>();//丢弃的牌
-    private boolean isQiang;
-    private double score;
-    private int playCount;
+    protected boolean isQiang;
+    protected double score;
+    protected int playCount;
 
 
 
