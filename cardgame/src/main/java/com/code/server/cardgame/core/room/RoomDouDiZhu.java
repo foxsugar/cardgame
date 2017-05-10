@@ -27,8 +27,7 @@ public class RoomDouDiZhu extends Room {
     public static final int PERSONNUM = 3;
 
 
-    protected static final String GAMETYPE_LINFEN = "0";//临汾斗地主
-    protected static final String GAMETYPE_QIANAN = "1";//乾安斗地主
+
 
     @Override
     protected Game getGameInstance() {

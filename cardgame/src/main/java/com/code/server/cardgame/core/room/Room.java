@@ -31,7 +31,8 @@ public class Room {
     public static final long FIVE_MIN = 1000L * 60 * 5;
     public static final int PERSONNUM = 3;
 
-
+    public static final String GAMETYPE_LINFEN = "0";//临汾斗地主
+    public static final String GAMETYPE_QIANAN = "1";//乾安斗地主
 
     protected String roomId;
     protected int createType;//房卡或金币
@@ -732,4 +733,6 @@ public class Room {
     public void setHasNine(int hasNine) {
         this.hasNine = hasNine;
     }
+
+    public String getGameType(){return gameType;}
 }

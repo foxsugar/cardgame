@@ -64,7 +64,7 @@ public class GameDouDiZhu extends Game{
     public void init(List<Long> users,long dizhuUser){
         //初始化玩家
         for(Long uid : users){
-            PlayerCardInfo playerCardInfo = new PlayerCardInfo();
+            PlayerCardInfo playerCardInfo = getGameTypePlayerCardInfo();
             playerCardInfo.userId = uid;
             playerCardInfos.put(uid,playerCardInfo);
         }
@@ -76,6 +76,16 @@ public class GameDouDiZhu extends Game{
         chooseDizhu(dizhuUser);
     }
 
+    public PlayerCardInfo getGameTypePlayerCardInfo(){
+        switch (room.getGameType()) {
+            case Room.GAMETYPE_LINFEN:
+                return new PlayerCardInfo();
+            case Room.GAMETYPE_QIANAN:
+                return new PlayerCardInfoDouDiZhu();
+            default:
+                return new PlayerCardInfoDouDiZhu();
+        }
+    }
 
 
     /**
