@@ -5,8 +5,6 @@ import com.code.server.db.Service.ServerService;
 import com.code.server.db.Service.UserService;
 import com.code.server.login.kafka.MsgProducer;
 import com.google.gson.Gson;
-import org.apache.http.client.ResponseHandler;
-import org.apache.sshd.common.RequestHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -34,9 +32,9 @@ public class LoginAction {
     @ResponseBody
     String home() {
 
-<<<<<<< HEAD
+
         String a;
-=======
+
 
 //        Test test = new Test();
 //        test.test();
@@ -48,7 +46,6 @@ public class LoginAction {
 
         producer.send();
 
->>>>>>> 2167c21487ee32d4f94d2c67cb4006d71487e422
         return "Hello World!";
     }
 
