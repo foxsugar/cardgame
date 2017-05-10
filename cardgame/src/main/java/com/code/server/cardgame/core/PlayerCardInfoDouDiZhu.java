@@ -136,10 +136,10 @@ public class PlayerCardInfoDouDiZhu {
             }
 
             if (len % 3 == 0 && (len / 3 == 2 || len / 3 > 2)
-                    && getFeiJi(cardList)) {
+                    && getFeiJi(cardList) && getShunDel2DaXiao(cards)) {
                 return CardStruct.type_飞机;
             }
-            if (getFeiJiChiBang(cardList)) {
+            if (getFeiJiChiBang(cardList) && getShunDel2DaXiao(cards)) {
                 return CardStruct.type_飞机带翅膀;
             } else {
                 return 0;
