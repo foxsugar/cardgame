@@ -39,8 +39,6 @@ public class PlayerCardInfoDouDiZhu {
             return true;
         }
 
-        List<Integer> copyCards = new ArrayList<>();
-        copyCards.addAll(cards);
 
         boolean results = false;
 
