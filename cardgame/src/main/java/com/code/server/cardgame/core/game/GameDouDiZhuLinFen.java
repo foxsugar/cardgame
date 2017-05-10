@@ -189,4 +189,22 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
         }
     }
 
+    protected void startPlay(long dizhu){
+        this.canQiangUser = -1;
+        this.canJiaoUser = -1;
+        this.dizhu = dizhu;
+        this.step = STEP_PLAY;
+        this.playTurn = dizhu;
+        //选定地主
+        pushChooseDizhu();
+
+        //把底牌加到地主身上
+        PlayerCardInfo playerCardInfo = playerCardInfos.get(dizhu);
+        if (playerCardInfo != null) {
+            playerCardInfo.cards.addAll(tableCards);
+            Player.sendMsg2Player(new ResponseVo("gameService","showTableCard",tableCards),dizhu);
+        }
+
+    }
+
 }

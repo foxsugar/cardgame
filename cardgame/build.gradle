@@ -56,7 +56,6 @@ dependencies {
 	compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.7'
 	compile 'com.fasterxml.jackson.core:jackson-databind:2.8.7'
 
-//    compile group: 'net.sf.json-lib', name: 'json-lib', version: '2.4'
 	compile "net.sf.json-lib:json-lib:2.4:jdk15"
 
 	compile 'com.google.code.gson:gson:2.6.2'
@@ -98,40 +97,9 @@ springBoot {
 	layout='DIR'
 }
 
+//不执行thrift的编译
 gradle.taskGraph.whenReady { graph ->
 	graph.allTasks.findAll { it.name ==~ /compileThrift.*/ }*.enabled = false
 }
-//启动服务
-bootRun {
-
-//	def springLoadedFile = configurations.springLoaded.find
-//			{ it.name == "springloaded-1.2.7.RELEASE.jar" }
-//
-//	systemProperty 'server.port', '8084'
-//	systemProperty 'spring.profiles.active', 'mysql'
-//	jvmArgs "-javaagent:$springLoadedFile", "-noverify"
-//	main = 'com.code.server.cardgame.CardgameApplication'
-}
-
-// project runtimes JVM options
-applicationDefaultJvmArgs = ["-server",
-//							 "-Dproject.home=${projectpath}",
-//							 "-Dlog4j.configurationFile=${projectpath}/conf/log4j2.xml",
-							 "-Xms3g",
-							 "-Xmx3g",
-							 //略
-]
 
 
-//task hello {
-//	doLast {
-//		exec {
-//			workingDir 'build/libs/'
-//			commandLine 'cmd','c','cd build/libs','jar -xf cardgame.jar'
-//		}
-//		exec {
-//			workingDir 'E:\\workspace\\game\\cardgame\\build\\libs'
-//			commandLine 'jar -xf E:\\workspace\\game\\cardgame\\build\\libs\\cardgame.jar'
-//		}
-//	}
-//}

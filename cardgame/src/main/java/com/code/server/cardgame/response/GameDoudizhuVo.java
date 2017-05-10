@@ -3,6 +3,7 @@ package com.code.server.cardgame.response;
 import com.code.server.cardgame.core.CardStruct;
 import com.code.server.cardgame.core.PlayerCardInfo;
 import com.code.server.cardgame.core.game.Game;
+import com.code.server.cardgame.core.game.GameDouDiZhu;
 import com.code.server.cardgame.core.game.GameDouDiZhuLinFen;
 
 import java.util.ArrayList;
@@ -29,12 +30,13 @@ public class GameDoudizhuVo extends GameVo {
 
     protected int step;//步骤
     protected int curMultiple;
+    protected int tableScore;
 
 
     public static GameVo getGameVo(Game game, long uid){
         GameDoudizhuVo vo = new GameDoudizhuVo();
-        if (game instanceof GameDouDiZhuLinFen) {
-            GameDouDiZhuLinFen douDiZhu = (GameDouDiZhuLinFen) game;
+        if (game instanceof GameDouDiZhu) {
+            GameDouDiZhu douDiZhu = (GameDouDiZhu) game;
 
             //设置地主
             vo.dizhu = douDiZhu.getDizhu();
@@ -47,6 +49,7 @@ public class GameDoudizhuVo extends GameVo {
             //该出牌的玩家
             vo.playTurn = douDiZhu.getPlayTurn();
             vo.curMultiple = douDiZhu.getMultiple();
+            vo.tableScore = douDiZhu.getTableScore();
             if(uid == douDiZhu.getDizhu()){//玩家是地主
                 vo.tableCards.addAll(douDiZhu.getTableCards());
             }
