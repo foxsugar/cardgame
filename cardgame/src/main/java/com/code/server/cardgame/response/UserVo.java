@@ -20,6 +20,7 @@ public class UserVo {
     public String marquee; // required
     public int referee;
     public UserInfo UserInfo;
+    public String download2;
 
     public long getId() {
         return id;
@@ -145,6 +146,14 @@ public class UserVo {
     public UserVo setReferee(int referee) {
         this.referee = referee;
         return this;
+    }
+
+    public String getDownload2() {
+        return download2;
+    }
+
+    public void setDownload2(String download2) {
+        this.download2 = download2;
     }
 
     public com.code.server.db.model.UserInfo getUserInfo() {
