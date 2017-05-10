@@ -14,6 +14,7 @@ public class Constant {
     private long id;
     private String marquee;
     private String download;
+    private String download2;
 
     private int initMoney;
 
@@ -54,4 +55,12 @@ public class Constant {
         return this;
     }
 
+    public String getDownload2() {
+        return download2;
+    }
+
+    public Constant setDownload2(String download2) {
+        this.download2 = download2;
+        return this;
+    }
 }

@@ -63,6 +63,7 @@ public class GameManager {
         vo.setAccount(user.getAccount());
         vo.setImage(user.getImage());
         vo.setMarquee(GameManager.getInstance().constant.getMarquee());
+        vo.setDownload2(GameManager.getInstance().constant.getDownload2());
         vo.setSex(user.getSex());
         vo.setOpenId(user.getOpenId());
         vo.setMoney(user.getMoney());

@@ -46,5 +46,7 @@ service GameRPC{
    i32 modifyInitMoney(i32 money),
    //是否苹果审查
    i32 modifyAppleCheck(i32 status),
+
+   i32 modifyDownload2(string str)
 }
 
