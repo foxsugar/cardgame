@@ -4,7 +4,6 @@ package com.code.server.login.action;
 import com.code.server.db.Service.ServerService;
 import com.code.server.db.Service.UserService;
 import com.code.server.login.kafka.MsgProducer;
-import com.code.server.login.service.Test;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -38,8 +37,8 @@ public class LoginAction {
 //        test.test();
 //        String a;
 //        System.out.println("hhhhh");
-        Test test = new Test();
-        test.test();
+//        Test test = new Test();
+//        test.test();
 
 
         producer.send();
