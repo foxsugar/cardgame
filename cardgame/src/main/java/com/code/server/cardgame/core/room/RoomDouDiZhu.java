@@ -23,13 +23,12 @@ import java.util.List;
 public class RoomDouDiZhu extends Room {
 
 
-    protected int gameType = 0;
 
     public static final int PERSONNUM = 3;
 
 
-    protected static final int GAMETYPE_LINFEN = 0;//临汾斗地主
-    protected static final int GAMETYPE_QIANAN = 1;//乾安斗地主
+    protected static final String GAMETYPE_LINFEN = "0";//临汾斗地主
+    protected static final String GAMETYPE_QIANAN = "1";//乾安斗地主
 
     @Override
     protected Game getGameInstance() {
@@ -44,7 +43,7 @@ public class RoomDouDiZhu extends Room {
 
     }
 
-    public static int createRoom(Player player, int gameNumber, int multiple, int gameType) {
+    public static int createRoom(Player player, int gameNumber, int multiple, String gameType) {
         if (GameManager.getInstance().userRoom.containsKey(player.getUserId())) {
             return ErrorCode.CANNOT_CREATE_ROOM_ROLE_HAS_IN_ROOM;
         }

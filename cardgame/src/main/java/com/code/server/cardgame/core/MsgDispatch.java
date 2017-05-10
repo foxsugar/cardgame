@@ -177,7 +177,7 @@ public class MsgDispatch {
 
                 int gameNumber = params.getInt("gameNumber");
                 int multiple = params.getInt("maxMultiple");
-                int gameType = params.optInt("gameType", 0);
+                String gameType = params.optString("gameType", "0");
                 return RoomDouDiZhu.createRoom(player, gameNumber, multiple,gameType);
             }
             case "createRoomTDK":{
