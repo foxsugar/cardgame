@@ -91,7 +91,6 @@ public class PlayerCardInfoDouDiZhu {
                         return CardStruct.type_炸;
                 }
             }
-
             if (len == 2 && CardUtil.getTypeByCard(cards.get(0)) == 13
                     && CardUtil.getTypeByCard(cards.get(1)) == 14) {
                 return CardStruct.type_火箭;
