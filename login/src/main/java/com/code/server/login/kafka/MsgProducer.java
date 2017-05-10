@@ -17,8 +17,12 @@ public class MsgProducer {
     @Autowired
     private KafkaTemplate<String,String> kafkaTemplate;
 
+    public void send(String topic, String data) {
+
+    }
     public void send() {
         kafkaTemplate.send("test","hello world");
+
 //        kafkaTemplate.send("my-replicated-topic","xiaojf");
 //        kafkaTemplate.flush();
 
