@@ -29,18 +29,18 @@ public class RoomDouDiZhu extends Room {
 
 
 
-    @Override
-    protected Game getGameInstance() {
-        switch (gameType) {
-            case GAMETYPE_LINFEN:
-                return new GameDouDiZhuLinFen();
-            case GAMETYPE_QIANAN:
-                return new GameDouDiZhuQianAn();
-            default:
-                return new GameDouDiZhu();
-        }
+        @Override
+        protected Game getGameInstance() {
+            switch (gameType) {
+                case GAMETYPE_LINFEN:
+                    return new GameDouDiZhuLinFen();
+                case GAMETYPE_QIANAN:
+                    return new GameDouDiZhuQianAn();
+                default:
+                    return new GameDouDiZhu();
+            }
 
-    }
+        }
 
     public static int createRoom(Player player, int gameNumber, int multiple, String gameType) {
         if (GameManager.getInstance().userRoom.containsKey(player.getUserId())) {
