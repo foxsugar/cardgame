@@ -1,9 +1,9 @@
-package com.code.server.cardgame.core.room;
+package com.code.server.cardgame.core.doudizhu;
 
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
-import com.code.server.cardgame.core.game.Game;
-import com.code.server.cardgame.core.game.GameDouDiZhuLinFenGold;
+import com.code.server.cardgame.core.Game;
+import com.code.server.cardgame.core.GoldRoomPool;
 import com.code.server.cardgame.response.ErrorCode;
 import com.code.server.db.model.User;
 

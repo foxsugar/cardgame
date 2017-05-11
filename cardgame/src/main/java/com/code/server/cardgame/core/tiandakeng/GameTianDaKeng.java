@@ -1,8 +1,6 @@
-package com.code.server.cardgame.core.game;
+package com.code.server.cardgame.core.tiandakeng;
 
 import com.code.server.cardgame.core.*;
-import com.code.server.cardgame.core.room.Room;
-import com.code.server.cardgame.core.room.RoomTanDaKeng;
 import com.code.server.cardgame.response.GameFinalResult;
 import com.code.server.cardgame.response.ResponseVo;
 import com.code.server.cardgame.utils.SpringUtil;
@@ -16,12 +14,12 @@ import com.code.server.cardgame.response.ErrorCodeTDK;
 
 import java.util.*;
 
-import static com.code.server.cardgame.core.CardUtil.getCardType;
+import static com.code.server.cardgame.core.doudizhu.CardUtil.getCardType;
 
 /**
  * Created by sunxianping on 2017/3/13.
  */
-public class GameTianDaKeng extends Game{
+public class GameTianDaKeng extends Game {
     private static final Logger logger = LoggerFactory.getLogger(GameTianDaKeng.class);
 
     private static final Double INIT_BOTTOM_CHIP = 1.0;//底注

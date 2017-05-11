@@ -1,4 +1,4 @@
-package com.code.server.cardgame.core;
+package com.code.server.cardgame.core.doudizhu;
 
 import java.util.List;
 

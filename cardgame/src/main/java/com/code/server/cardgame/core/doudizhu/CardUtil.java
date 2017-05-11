@@ -1,4 +1,4 @@
-package com.code.server.cardgame.core;
+package com.code.server.cardgame.core.doudizhu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,20 +66,6 @@ public class CardUtil {
             return 15;
         }
         return CardUtil.card.indexOf((card -1)/4+1);
-
-//
-//        for(int i=0;i<=CardUtil.typeCard.size();i++){
-//            if(card.intValue()==CardUtil.typeCard.get(i).get(0).intValue()){
-//                return i;
-//            }else if(card.intValue()==CardUtil.typeCard.get(i).get(1).intValue()){
-//                return i;
-//            }else if(card.intValue()==CardUtil.typeCard.get(i).get(2).intValue()){
-//                return i;
-//            }else if(card.intValue()==CardUtil.typeCard.get(i).get(3).intValue()){
-//                return i;
-//            }
-//        }
-//        return 0;
     }
 
 }

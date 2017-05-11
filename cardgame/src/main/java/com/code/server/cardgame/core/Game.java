@@ -1,13 +1,11 @@
-package com.code.server.cardgame.core.game;
-
-import com.code.server.cardgame.core.room.Room;
+package com.code.server.cardgame.core;
 
 import java.util.List;
 
 /**
  * Created by sunxianping on 2017/3/14.
  */
-public class Game {
+public class Game implements IGameConstant{
 
     public int number;
 

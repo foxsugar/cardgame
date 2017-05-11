@@ -1,9 +1,5 @@
 package com.code.server.cardgame.core;
 
-import com.code.server.cardgame.core.room.GoldRoomPool;
-import com.code.server.cardgame.core.room.Room;
-import com.code.server.cardgame.core.room.RoomDouDiZhu;
-import com.code.server.cardgame.core.room.RoomTanDaKeng;
 import com.code.server.cardgame.response.UserVo;
 import com.code.server.cardgame.utils.IdWorker;
 import com.code.server.db.model.Constant;
@@ -12,14 +8,9 @@ import com.code.server.db.model.User;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**

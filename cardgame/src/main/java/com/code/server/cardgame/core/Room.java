@@ -1,8 +1,5 @@
-package com.code.server.cardgame.core.room;
+package com.code.server.cardgame.core;
 
-import com.code.server.cardgame.core.GameManager;
-import com.code.server.cardgame.core.Player;
-import com.code.server.cardgame.core.game.Game;
 import com.code.server.cardgame.encoding.Notice;
 import com.code.server.cardgame.response.*;
 import com.code.server.cardgame.timer.GameTimer;
@@ -18,21 +15,8 @@ import java.util.*;
 /**
  * Created by sunxianping on 2017/3/14.
  */
-public class Room {
-    public static final int ROOM_CREATE_TYPE_CONMMON = 0;
-    public static final int ROOM_CREATE_TYPE_GOLD = 1;
+public class Room implements IGameConstant{
 
-    public static final int STATUS_JOIN = 0;
-    public static final int STATUS_READY = 1;
-    public static final int STATUS_IN_GAME = 2;
-    public static final int STATUS_DISSOLUTION = 3;
-    public static final int STATUS_AGREE_DISSOLUTION = 4;
-
-    public static final long FIVE_MIN = 1000L * 60 * 5;
-    public static final int PERSONNUM = 3;
-
-    public static final String GAMETYPE_LINFEN = "0";//临汾斗地主
-    public static final String GAMETYPE_QIANAN = "1";//乾安斗地主
 
     protected String roomId;
     protected int createType;//房卡或金币

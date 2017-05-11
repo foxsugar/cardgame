@@ -1,10 +1,5 @@
 package com.code.server.cardgame.response;
 
-import net.sf.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
 public class UserOfResult {
     
     private long userId;//id

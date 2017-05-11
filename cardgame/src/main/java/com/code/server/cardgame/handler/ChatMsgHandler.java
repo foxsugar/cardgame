@@ -3,7 +3,8 @@ package com.code.server.cardgame.handler;
 
 import com.code.server.cardgame.encoding.ChatUser;
 import com.code.server.cardgame.encoding.Notice;
-import com.code.server.cardgame.encoding.ResponseVo;
+import com.code.server.cardgame.response.ResponseVo;
+import com.google.gson.Gson;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import net.sf.json.JSONObject;
@@ -27,10 +28,11 @@ public class ChatMsgHandler extends ChannelInboundHandlerAdapter {
         if ("newChatService".equals(service)) {
             switch (method) {
                 case "login":
+                    Gson gson = new Gson();
                     int userId = Integer.valueOf(params.getString("userId"));
                     ChatUser.getInstance().users.put(userId, ctx);
                     ResponseVo vo = new ResponseVo("newChatService", "login", "");
-                    ctx.writeAndFlush(vo.toJsonObject());
+                    ctx.writeAndFlush(gson.toJson(vo));
                     break;
                 case "sendMessage":
                     String userIdOfMsg = params.getString("userId");

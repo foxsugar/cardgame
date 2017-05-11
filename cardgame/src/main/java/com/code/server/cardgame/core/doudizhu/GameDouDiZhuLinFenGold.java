@@ -1,6 +1,5 @@
-package com.code.server.cardgame.core.game;
+package com.code.server.cardgame.core.doudizhu;
 
-import com.code.server.cardgame.core.PlayerCardInfo;
 import com.code.server.cardgame.rpc.RpcManager;
 import com.code.server.db.model.User;
 import com.code.server.rpc.idl.Rebate;
@@ -19,7 +18,7 @@ public class GameDouDiZhuLinFenGold extends GameDouDiZhuLinFen {
 
         double subScore = 0;
         //地主
-        PlayerCardInfo playerCardInfoDizhu = playerCardInfos.get(dizhu);
+        PlayerCardInfoDouDiZhu playerCardInfoDizhu = playerCardInfos.get(dizhu);
         if (playerCardInfoDizhu.isQiang()) {
             multiple *= 2;
         }
@@ -27,7 +26,7 @@ public class GameDouDiZhuLinFenGold extends GameDouDiZhuLinFen {
 
         //地主赢
         if (isDizhuWin) {
-            for(PlayerCardInfo playerCardInfo : playerCardInfos.values()){
+            for(PlayerCardInfoDouDiZhu playerCardInfo : playerCardInfos.values()){
                 //不是地主 扣分
                 if(dizhu != playerCardInfo.getUserId()){
                     User user_nm = this.room.getUserMap().get(playerCardInfo.getUserId());
@@ -52,7 +51,7 @@ public class GameDouDiZhuLinFenGold extends GameDouDiZhuLinFen {
 
         } else {//地主输
             int part = 0;
-            for(PlayerCardInfo playerCardInfo : playerCardInfos.values()){
+            for(PlayerCardInfoDouDiZhu playerCardInfo : playerCardInfos.values()){
 
                 if(dizhu != playerCardInfo.getUserId()){
                     part += 1;
@@ -69,7 +68,7 @@ public class GameDouDiZhuLinFenGold extends GameDouDiZhuLinFen {
             subScore = user_dizhu.getMoney()>=subScore?subScore:user_dizhu.getMoney();
 
             double rebateSum = 0;
-            for(PlayerCardInfo playerCardInfo : playerCardInfos.values()){
+            for(PlayerCardInfoDouDiZhu playerCardInfo : playerCardInfos.values()){
 
                 //不是地主 扣分
                 if(dizhu != playerCardInfo.getUserId()){

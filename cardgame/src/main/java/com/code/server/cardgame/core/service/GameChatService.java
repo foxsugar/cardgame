@@ -1,8 +1,8 @@
-package com.code.server.cardgame.service;
+package com.code.server.cardgame.core.service;
 
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
-import com.code.server.cardgame.core.room.Room;
+import com.code.server.cardgame.core.Room;
 import com.code.server.cardgame.encoding.Notice;
 import com.code.server.cardgame.response.ErrorCode;
 import org.springframework.stereotype.Service;

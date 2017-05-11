@@ -1,11 +1,13 @@
-package com.code.server.cardgame.core;
+package com.code.server.cardgame.core.tiandakeng;
+
+import com.code.server.cardgame.core.PlayerCardInfo;
 
 import java.util.*;
 
 /**
  * Created by sunxianping on 2017/3/14.
  */
-public class PlayerCardInfoTianDaKeng {
+public class PlayerCardInfoTianDaKeng extends PlayerCardInfo{
     public long userId;
     public List<Integer> myselfCards = new ArrayList<>();//手上的牌(暗)
     public List<Integer> everyknowCards = new ArrayList<>();//手上的牌(明)

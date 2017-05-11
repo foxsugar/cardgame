@@ -1,8 +1,5 @@
 package com.code.server.cardgame.response;
 
-import com.google.gson.Gson;
-import net.sf.json.JSONObject;
-
 /**
  * Created by win7 on 2016/12/1.
  */

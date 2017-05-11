@@ -1,11 +1,9 @@
-package com.code.server.cardgame.core.room;
+package com.code.server.cardgame.core.doudizhu;
 
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
-import com.code.server.cardgame.core.game.Game;
-import com.code.server.cardgame.core.game.GameDouDiZhu;
-import com.code.server.cardgame.core.game.GameDouDiZhuLinFen;
-import com.code.server.cardgame.core.game.GameDouDiZhuQianAn;
+import com.code.server.cardgame.core.Game;
+import com.code.server.cardgame.core.Room;
 import com.code.server.cardgame.response.ErrorCode;
 import com.code.server.cardgame.response.ResponseVo;
 import com.code.server.cardgame.response.RoomVo;

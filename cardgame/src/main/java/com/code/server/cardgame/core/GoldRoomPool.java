@@ -1,16 +1,13 @@
-package com.code.server.cardgame.core.room;
-
-import com.code.server.cardgame.core.GameManager;
+package com.code.server.cardgame.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.code.server.cardgame.core.room.Room.ROOM_CREATE_TYPE_GOLD;
-import static com.code.server.cardgame.core.room.RoomDouDiZhu.PERSONNUM;
-import static com.code.server.cardgame.core.room.RoomDouDiZhu.genRoomId;
-import com.code.server.cardgame.core.Player;
+import static com.code.server.cardgame.core.doudizhu.RoomDouDiZhu.PERSONNUM;
+
+import com.code.server.cardgame.core.doudizhu.RoomDouDiZhuGold;
 
 /**
  * 项目名称：${project_name}
@@ -39,10 +36,10 @@ public class GoldRoomPool {
     }
 
     public static final int GAME_PERSON_NUMBER = 3;//游戏人数
-    Map<Double, RoomDouDiZhuGold> roomLock = new HashMap<>();
+    public Map<Double, RoomDouDiZhuGold> roomLock = new HashMap<>();
 
-    Map<Double, List<Room>> fullRoom = new HashMap<>();
-    Map<Double,List<Room>> notFullRoom = new HashMap<>();
+    public Map<Double, List<Room>> fullRoom = new HashMap<>();
+    public Map<Double,List<Room>> notFullRoom = new HashMap<>();
 
 
     public Map<Double, RoomDouDiZhuGold> getRoomLock() {
@@ -64,10 +61,10 @@ public class GoldRoomPool {
         } else {//新建room
             room = new RoomDouDiZhuGold();
             room.personNumber = PERSONNUM;
-            room.roomId = Room.getRoomIdStr(genRoomId());
+            room.roomId = Room.getRoomIdStr(Room.genRoomId());
             room.createNeedMoney = 0;
             room.init(1, -1);
-            room.setCreateType(ROOM_CREATE_TYPE_GOLD);
+            room.setCreateType(Room.ROOM_CREATE_TYPE_GOLD);
             room.setGoldRoomType(type);
             list.add(room);
         }
@@ -135,7 +132,7 @@ public class GoldRoomPool {
         } else {//不存在该类型的房间,加入人数为1
             RoomDouDiZhuGold room = new RoomDouDiZhuGold();
             room.personNumber = PERSONNUM;
-            room.roomId = room.getRoomIdStr(genRoomId());
+            room.roomId = room.getRoomIdStr(Room.genRoomId());
             room.init(gameNumber, multiple);
             room.roomAddUser(player);
             this.getRoomLock().put(roomType, room);

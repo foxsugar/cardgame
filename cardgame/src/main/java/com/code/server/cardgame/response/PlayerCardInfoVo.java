@@ -1,7 +1,6 @@
 package com.code.server.cardgame.response;
 
-import com.code.server.cardgame.core.Player;
-import com.code.server.cardgame.core.PlayerCardInfo;
+import com.code.server.cardgame.core.doudizhu.PlayerCardInfoDouDiZhu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,7 @@ public class PlayerCardInfoVo {
     public PlayerCardInfoVo() {
     }
 
-    public PlayerCardInfoVo(PlayerCardInfo playerCardInfo, long uid) {
+    public PlayerCardInfoVo(PlayerCardInfoDouDiZhu playerCardInfo, long uid) {
         this.userId = playerCardInfo.userId;
         if (playerCardInfo.userId == uid) {
             this.cards.addAll(playerCardInfo.cards);
@@ -29,7 +28,7 @@ public class PlayerCardInfoVo {
         }
     }
 
-    public PlayerCardInfoVo(PlayerCardInfo playerCardInfo) {
+    public PlayerCardInfoVo(PlayerCardInfoDouDiZhu playerCardInfo) {
         this.userId = playerCardInfo.userId;
         this.cards.addAll(playerCardInfo.cards);
         this.isQiang = playerCardInfo.isQiang();
