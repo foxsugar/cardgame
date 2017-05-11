@@ -1,18 +1,12 @@
-package com.code.server.cardgame.core.room;
+package com.code.server.cardgame.core.tiandakeng;
 
+import com.code.server.cardgame.core.Game;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
-import com.code.server.cardgame.core.game.Game;
-import com.code.server.cardgame.core.game.GameDouDiZhu;
-import com.code.server.cardgame.core.game.GameTianDaKeng;
-import com.code.server.cardgame.encoding.Notice;
+import com.code.server.cardgame.core.Room;
 import com.code.server.cardgame.response.*;
-import com.code.server.cardgame.timer.GameTimer;
-import com.code.server.cardgame.timer.TimerNode;
 import com.code.server.db.model.Record;
 import com.code.server.db.model.User;
-import com.code.server.db.model.UserInfo;
-import com.google.gson.Gson;
 import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 
@@ -23,7 +17,7 @@ import java.util.*;
 /**
  * Created by sunxianping on 2017/3/13.
  */
-public class RoomTanDaKeng extends Room{
+public class RoomTanDaKeng extends Room {
 
     public static final int NEEDMOENY = 1;
 
@@ -38,7 +32,7 @@ public class RoomTanDaKeng extends Room{
     }
 
 
-    public static int createRoom(Player player,int gameNumber,double roomType,int personNumber,int hasNine){
+    public static int createRoom(Player player, int gameNumber, double roomType, int personNumber, int hasNine){
         if(GameManager.getInstance().userRoom.containsKey(player.getUserId())){
             return ErrorCode.CANNOT_CREATE_ROOM_ROLE_HAS_IN_ROOM;
         }

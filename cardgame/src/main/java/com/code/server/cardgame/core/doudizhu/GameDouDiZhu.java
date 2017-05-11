@@ -1,7 +1,8 @@
-package com.code.server.cardgame.core.game;
+package com.code.server.cardgame.core.doudizhu;
 
 import com.code.server.cardgame.core.*;
-import com.code.server.cardgame.core.room.Room;
+import com.code.server.cardgame.core.Game;
+import com.code.server.cardgame.core.Room;
 import com.code.server.cardgame.response.*;
 import com.code.server.db.model.Record;
 import com.code.server.db.model.User;
@@ -13,19 +14,14 @@ import java.util.*;
 /**
  * Created by sunxianping on 2017/3/13.
  */
-public class GameDouDiZhu extends Game{
+public class GameDouDiZhu extends Game {
     private static final Logger logger = LoggerFactory.getLogger(GameDouDiZhu.class);
-
-    public static final int STEP_JIAO_DIZHU = 1;
-    public static final int STEP_QIANG_DIZHU = 2;
-    public static final int STEP_PLAY = 3;
-
 
     protected int initCardNum = 17;//每人17张
     protected List<Integer> cards = new ArrayList<>();//牌
     protected List<Integer> disCards = new ArrayList<>();//丢弃的牌
     protected List<Integer> tableCards = new ArrayList<>();//底牌
-    protected Map<Long,PlayerCardInfo> playerCardInfos = new HashMap<>();
+    protected Map<Long,PlayerCardInfoDouDiZhu> playerCardInfos = new HashMap<>();
     protected List<Long> users = new ArrayList<>();
     private Random rand = new Random();
     protected long dizhu = -1;//地主
@@ -64,7 +60,7 @@ public class GameDouDiZhu extends Game{
     public void init(List<Long> users,long dizhuUser){
         //初始化玩家
         for(Long uid : users){
-            PlayerCardInfo playerCardInfo = getGameTypePlayerCardInfo();
+            PlayerCardInfoDouDiZhu playerCardInfo = getGameTypePlayerCardInfo();
             playerCardInfo.userId = uid;
             playerCardInfos.put(uid,playerCardInfo);
         }
@@ -76,10 +72,10 @@ public class GameDouDiZhu extends Game{
         chooseDizhu(dizhuUser);
     }
 
-    public PlayerCardInfo getGameTypePlayerCardInfo(){
+    public PlayerCardInfoDouDiZhu getGameTypePlayerCardInfo(){
         switch (room.getGameType()) {
             case Room.GAMETYPE_LINFEN:
-                return new PlayerCardInfo();
+                return new PlayerCardInfoDouDiZhuLinfen();
             case Room.GAMETYPE_QIANAN:
                 return new PlayerCardInfoDouDiZhu();
             default:
@@ -93,7 +89,7 @@ public class GameDouDiZhu extends Game{
      * @param player
      */
     public int play(Player player,CardStruct cardStruct){
-        PlayerCardInfo playerCardInfo = playerCardInfos.get(player.getUserId());
+        PlayerCardInfoDouDiZhu playerCardInfo = playerCardInfos.get(player.getUserId());
         //不可出牌
         if(!playerCardInfo.checkPlayCard(lastCardStruct,cardStruct,lasttype)){
             return ErrorCode.CAN_NOT_PLAY;
@@ -119,7 +115,7 @@ public class GameDouDiZhu extends Game{
 
          //牌打完
         if (playerCardInfo.cards.size() == 0) {
-            PlayerCardInfo playerCardInfoDizhu = playerCardInfos.get(dizhu);
+            PlayerCardInfoDouDiZhu playerCardInfoDizhu = playerCardInfos.get(dizhu);
             //是否是春天
             if (userPlayCount.size() == 1 || playerCardInfoDizhu.getPlayCount() == 1) {
                 isSpring = true;
@@ -188,7 +184,7 @@ public class GameDouDiZhu extends Game{
      * 发牌
      */
     protected void deal(){
-        for(PlayerCardInfo playerCardInfo : playerCardInfos.values()){
+        for(PlayerCardInfoDouDiZhu playerCardInfo : playerCardInfos.values()){
             for(int i = 0; i< initCardNum; i++){
                 playerCardInfo.cards.add(cards.remove(0));
             }
@@ -303,11 +299,11 @@ public class GameDouDiZhu extends Game{
         double subScore = 0;
         int s = isDizhuWin?-1:1;
         //地主
-        PlayerCardInfo playerCardInfoDizhu = playerCardInfos.get(dizhu);
+        PlayerCardInfoDouDiZhu playerCardInfoDizhu = playerCardInfos.get(dizhu);
         if (playerCardInfoDizhu.isQiang()) {
             multiple *= 2;
         }
-        for(PlayerCardInfo playerCardInfo : playerCardInfos.values()){
+        for(PlayerCardInfoDouDiZhu playerCardInfo : playerCardInfos.values()){
             //不是地主 扣分
             if(dizhu != playerCardInfo.getUserId()){
                 double score = multiple * s;
@@ -331,7 +327,7 @@ public class GameDouDiZhu extends Game{
         gameResultDouDizhu.setSpring(isSpring);
         gameResultDouDizhu.setDizhuWin(isDizhuWin);
         gameResultDouDizhu.setReopen(isReopen);
-        for (PlayerCardInfo playerCardInfo : playerCardInfos.values()) {
+        for (PlayerCardInfoDouDiZhu playerCardInfo : playerCardInfos.values()) {
             gameResultDouDizhu.getPlayerCardInfos().add(new PlayerCardInfoVo(playerCardInfo));
 
         }
@@ -366,7 +362,7 @@ public class GameDouDiZhu extends Game{
         roomRecord.setTime(System.currentTimeMillis());
         roomRecord.setType(room.getCreateType());
         for (long userId : users) {
-            PlayerCardInfo playerCardInfo = playerCardInfos.get(userId);
+            PlayerCardInfoDouDiZhu playerCardInfo = playerCardInfos.get(userId);
             User user = room.getUserMap().get(userId);
             Record.UserRecord userRecord = new Record.UserRecord();
             userRecord.setName(user.getUsername());
@@ -396,7 +392,7 @@ public class GameDouDiZhu extends Game{
         this.step = STEP_PLAY;
         this.playTurn = dizhu;
         //把底牌加到地主身上
-        PlayerCardInfo playerCardInfo = playerCardInfos.get(dizhu);
+        PlayerCardInfoDouDiZhu playerCardInfo = playerCardInfos.get(dizhu);
         if (playerCardInfo != null) {
             playerCardInfo.cards.addAll(tableCards);
             Player.sendMsg2Player(new ResponseVo("gameService","showTableCard",tableCards),dizhu);
@@ -428,7 +424,7 @@ public class GameDouDiZhu extends Game{
             this.buqiangSet.add(player.getUserId());
         }
 
-        PlayerCardInfo playerCardInfo = playerCardInfos.get(player.getUserId());
+        PlayerCardInfoDouDiZhu playerCardInfo = playerCardInfos.get(player.getUserId());
         playerCardInfo.setQiang(isQiang);
 
         //两个农民都没抢
@@ -520,11 +516,11 @@ public class GameDouDiZhu extends Game{
         return this;
     }
 
-    public Map<Long, PlayerCardInfo> getPlayerCardInfos() {
+    public Map<Long, PlayerCardInfoDouDiZhu> getPlayerCardInfos() {
         return playerCardInfos;
     }
 
-    public GameDouDiZhu setPlayerCardInfos(Map<Long, PlayerCardInfo> playerCardInfos) {
+    public GameDouDiZhu setPlayerCardInfos(Map<Long, PlayerCardInfoDouDiZhu> playerCardInfos) {
         this.playerCardInfos = playerCardInfos;
         return this;
     }

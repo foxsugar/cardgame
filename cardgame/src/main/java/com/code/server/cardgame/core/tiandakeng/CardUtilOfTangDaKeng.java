@@ -1,8 +1,8 @@
-package com.code.server.cardgame.core;
+package com.code.server.cardgame.core.tiandakeng;
 
 import java.util.*;
 
-import static com.code.server.cardgame.core.CardUtil.getCardType;
+import static com.code.server.cardgame.core.doudizhu.CardUtil.getCardType;
 
 /**
  * Created by Administrator on 2017/3/21.

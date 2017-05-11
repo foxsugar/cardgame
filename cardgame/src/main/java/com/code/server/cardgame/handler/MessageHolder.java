@@ -1,4 +1,4 @@
-package com.code.server.cardgame.message;
+package com.code.server.cardgame.handler;
 
 import com.code.server.grpc.idl.Response;
 import io.grpc.stub.StreamObserver;

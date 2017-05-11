@@ -1,10 +1,9 @@
 package com.code.server.cardgame.response;
 
-import com.code.server.cardgame.core.CardStruct;
-import com.code.server.cardgame.core.PlayerCardInfo;
-import com.code.server.cardgame.core.game.Game;
-import com.code.server.cardgame.core.game.GameDouDiZhu;
-import com.code.server.cardgame.core.game.GameDouDiZhuLinFen;
+import com.code.server.cardgame.core.doudizhu.CardStruct;
+import com.code.server.cardgame.core.doudizhu.PlayerCardInfoDouDiZhu;
+import com.code.server.cardgame.core.Game;
+import com.code.server.cardgame.core.doudizhu.GameDouDiZhu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +54,7 @@ public class GameDoudizhuVo extends GameVo {
             }
 
             //玩家牌信息
-            for (PlayerCardInfo playerCardInfo : douDiZhu.getPlayerCardInfos().values()) {
+            for (PlayerCardInfoDouDiZhu playerCardInfo : douDiZhu.getPlayerCardInfos().values()) {
                 vo.playerCardInfos.put(playerCardInfo.userId, new PlayerCardInfoVo(playerCardInfo, uid));
             }
 

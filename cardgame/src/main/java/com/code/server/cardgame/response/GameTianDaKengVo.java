@@ -1,9 +1,8 @@
 package com.code.server.cardgame.response;
 
-import com.code.server.cardgame.core.PlayerCardInfoTianDaKeng;
-import com.code.server.cardgame.core.game.Game;
-import com.code.server.cardgame.core.game.GameTianDaKeng;
-import com.code.server.cardgame.core.room.RoomTanDaKeng;
+import com.code.server.cardgame.core.tiandakeng.PlayerCardInfoTianDaKeng;
+import com.code.server.cardgame.core.Game;
+import com.code.server.cardgame.core.tiandakeng.GameTianDaKeng;
 
 import java.util.*;
 

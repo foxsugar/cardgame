@@ -1,10 +1,7 @@
-package com.code.server.cardgame.core.game;
+package com.code.server.cardgame.core.doudizhu;
 
 import com.code.server.cardgame.core.*;
-import com.code.server.cardgame.core.room.Room;
 import com.code.server.cardgame.response.*;
-import com.code.server.db.model.Record;
-import com.code.server.db.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,11 +92,11 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
         double subScore = 0;
         int s = isDizhuWin?-1:1;
         //地主
-        PlayerCardInfo playerCardInfoDizhu = playerCardInfos.get(dizhu);
+        PlayerCardInfoDouDiZhu playerCardInfoDizhu = playerCardInfos.get(dizhu);
         if (playerCardInfoDizhu.isQiang()) {
             multiple *= 2;
         }
-        for(PlayerCardInfo playerCardInfo : playerCardInfos.values()){
+        for(PlayerCardInfoDouDiZhu playerCardInfo : playerCardInfos.values()){
             //不是地主 扣分
             if(dizhu != playerCardInfo.getUserId()){
                 double score = multiple * s;
@@ -134,7 +131,7 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
         this.chooseQiangSet.add(player.getUserId());
         int jiaoIndex = chooseJiaoSet.size();
 
-        PlayerCardInfo playerCardInfo = playerCardInfos.get(player.getUserId());
+        PlayerCardInfoDouDiZhu playerCardInfo = playerCardInfos.get(player.getUserId());
         playerCardInfo.setQiang(isQiang);
         if (jiaoIndex == 1) {
             handleQiang1(player.getUserId(),isQiang);
@@ -199,7 +196,7 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
         pushChooseDizhu();
 
         //把底牌加到地主身上
-        PlayerCardInfo playerCardInfo = playerCardInfos.get(dizhu);
+        PlayerCardInfoDouDiZhu playerCardInfo = playerCardInfos.get(dizhu);
         if (playerCardInfo != null) {
             playerCardInfo.cards.addAll(tableCards);
             Player.sendMsg2Player(new ResponseVo("gameService","showTableCard",tableCards),dizhu);

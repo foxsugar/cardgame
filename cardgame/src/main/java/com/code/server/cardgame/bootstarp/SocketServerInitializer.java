@@ -47,6 +47,6 @@ public class SocketServerInitializer extends ChannelInitializer<SocketChannel> {
         p.addLast("encoder", new GameCharsEncoder());
         p.addLast("decoder", new GameCharsDecoder());
 //        p.addLast(new SocketHandler());
-        p.addLast("chatHandler", new GameMsgHandler());
+        p.addLast("gameHandler", new GameMsgHandler());
     }
 }

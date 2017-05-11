@@ -1,6 +1,4 @@
-package com.code.server.cardgame.core.game;
-
-import java.util.Collections;
+package com.code.server.cardgame.core.doudizhu;
 
 /**
  * Created by sunxianping on 2017/5/3.

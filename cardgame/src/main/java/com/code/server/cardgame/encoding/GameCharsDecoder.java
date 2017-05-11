@@ -49,7 +49,7 @@ public class GameCharsDecoder extends ByteToMessageDecoder {
         buf.readBytes(data);
 
         String str = new String(data, "utf-8");
-        JSONObject json = JSONObject.fromObject(str);;
+        JSONObject json = JSONObject.fromObject(str);
 
         list.add(json);
     }

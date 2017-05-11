@@ -1,7 +1,7 @@
 package com.code.server.cardgame.rpc;
 
 import com.code.server.cardgame.bootstarp.Shutdown;
-import com.code.server.cardgame.message.MessageHolder;
+import com.code.server.cardgame.handler.MessageHolder;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.handler.GameProcessor;
@@ -10,8 +10,6 @@ import com.code.server.cardgame.utils.ThreadPool;
 import com.code.server.db.Service.ConstantService;
 import com.code.server.db.Service.ServerService;
 import com.code.server.db.Service.UserService;
-import com.code.server.db.model.Constant;
-import com.code.server.db.model.ServerInfo;
 import com.code.server.db.model.User;
 import com.code.server.rpc.idl.ChargeType;
 import com.code.server.rpc.idl.GameRPC;

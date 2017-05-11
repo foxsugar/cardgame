@@ -1,4 +1,4 @@
-package com.code.server.cardgame.service;
+package com.code.server.cardgame.core.service;
 
 /**
  * Created by win7 on 2017/3/13.

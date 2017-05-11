@@ -1,7 +1,6 @@
 package com.code.server.cardgame.response;
 
-import com.code.server.cardgame.core.PlayerCardInfo;
-import com.code.server.cardgame.core.PlayerCardInfoTianDaKeng;
+import com.code.server.cardgame.core.tiandakeng.PlayerCardInfoTianDaKeng;
 
 import java.util.ArrayList;
 import java.util.List;

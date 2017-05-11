@@ -1,19 +1,25 @@
-package com.code.server.cardgame.core;
+package com.code.server.cardgame.core.doudizhu;
 
-import javax.smartcardio.Card;
+import com.code.server.cardgame.core.PlayerCardInfo;
+
 import java.util.*;
 
-import static com.code.server.cardgame.core.CardUtil.getCardType;
+import static com.code.server.cardgame.core.doudizhu.CardUtil.getCardType;
 
 /**
  * Created by sunxianping on 2017/3/14.
  */
 public class PlayerCardInfoDouDiZhu extends PlayerCardInfo {
 
-
+    public long userId;
+    public List<Integer> cards = new ArrayList<>();//手上的牌
+    protected List<Integer> disCards = new ArrayList<>();//丢弃的牌
+    protected boolean isQiang;
+    protected double score;
+    protected int playCount;
 
     //检测出牌是否合法
-    public boolean checkPlayCard(CardStruct lastcardStruct ,CardStruct currentCardStruct , int lasttype){
+    public boolean checkPlayCard(CardStruct lastcardStruct , CardStruct currentCardStruct , int lasttype){
         if (lastcardStruct == null || lastcardStruct.getUserId()==0) {
             return true;
         }
@@ -130,6 +136,128 @@ public class PlayerCardInfoDouDiZhu extends PlayerCardInfo {
         }
 
     }
+
+    public boolean getFeiJiChiBang(List<Integer> cards){
+        boolean b = true;
+        Map<Integer,Integer> map = new HashMap<>();
+        List<Integer> threelist = new ArrayList<>();
+        List<Integer> twolist = new ArrayList<>();
+        List<Integer> onelist = new ArrayList<>();
+        for (Integer i:cards) {
+            if(map.containsKey(i)){
+                map.put(i,map.get(i)+1);
+            }else{
+                map.put(i,1);
+            }
+        }
+        for (Integer i:map.keySet()) {
+            if(map.get(i)==3){
+                threelist.add(i);
+            }else if(map.get(i)==2){
+                twolist.add(i);
+            }else{
+                onelist.add(i);
+            }
+        }
+        Collections.sort(threelist);
+
+        if(threelist.size()<2){
+            b = false;
+        }
+        if (onelist.size()!=0 && threelist.size()!=onelist.size()){
+            b = false;
+        }else if(twolist.size()!=0 && threelist.size()!=twolist.size()){
+            b = false;
+        }
+        for(int i = 0 ;i<threelist.size()-1;i++){
+            if(threelist.get(i+1) - threelist.get(i) != 1){
+                b =false;
+            }
+        }
+        return b;
+    }
+
+    public boolean getFeiJi(List<Integer> cards){
+        boolean b = true;
+        Map<Integer,Integer> map = new HashMap<>();
+        List<Integer> threelist = new ArrayList<>();
+
+        for (Integer i:cards) {
+            if(map.containsKey(i)){
+                map.put(i,map.get(i)+1);
+            }else{
+                map.put(i,1);
+            }
+        }
+        for (Integer i:map.keySet()) {
+            if(map.get(i)==3){
+                threelist.add(i);
+            }
+        }
+
+        Collections.sort(threelist);
+
+        if(threelist.size()<2){
+            b = false;
+        }
+        for(int i = 0 ;i<threelist.size()-1;i++){
+            if(threelist.get(i+1) - threelist.get(i) != 1){
+                b =false;
+            }
+        }
+
+        return b;
+    }
+
+
+    public boolean getShunZi(List<Integer> cards){
+        boolean b = true;
+
+        Collections.sort(cards);
+
+        if(cards.size()<5){
+            b = false;
+        }
+        for(int i = 0 ;i<cards.size()-1;i++){
+            if(cards.get(i+1) - cards.get(i) != 1){
+                b =false;
+            }
+        }
+        return b;
+    }
+
+    public boolean getLianDui(List<Integer> cards){
+        boolean b = true;
+        Map<Integer,Integer> map = new HashMap<>();
+        List<Integer> list = new ArrayList<>();
+
+        for (Integer i:cards) {
+            if(map.containsKey(i)){
+                map.put(i,map.get(i)+1);
+            }else{
+                map.put(i,1);
+            }
+        }
+        for (Integer i:map.keySet()) {
+            if(map.get(i)==2){
+                list.add(i);
+            }
+        }
+
+        Collections.sort(list);
+
+        if(list.size()<3){
+            b = false;
+        }
+        for(int i = 0 ;i<list.size()-1;i++){
+            if(list.get(i+1) - list.get(i) != 1){
+                b =false;
+            }
+        }
+        return b;
+    }
+
+
     //顺除 2 大王小王
     public boolean getShunDel2DaXiao(List<Integer> cards){
         if(cards.contains(8) || cards.contains(6) || cards.contains(5) || cards.contains(7) || cards.contains(53) || cards.contains(54)){
@@ -139,6 +267,60 @@ public class PlayerCardInfoDouDiZhu extends PlayerCardInfo {
         }
     }
 
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public PlayerCardInfoDouDiZhu setUserId(long userId) {
+        this.userId = userId;
+        return this;
+    }
+
+    public List<Integer> getCards() {
+        return cards;
+    }
+
+    public PlayerCardInfoDouDiZhu setCards(List<Integer> cards) {
+        this.cards = cards;
+        return this;
+    }
+
+    public List<Integer> getDisCards() {
+        return disCards;
+    }
+
+    public PlayerCardInfoDouDiZhu setDisCards(List<Integer> disCards) {
+        this.disCards = disCards;
+        return this;
+    }
+
+    public boolean isQiang() {
+        return isQiang;
+    }
+
+    public PlayerCardInfoDouDiZhu setQiang(boolean qiang) {
+        isQiang = qiang;
+        return this;
+    }
+
+    public double getScore() {
+        return score;
+    }
+
+    public PlayerCardInfoDouDiZhu setScore(double score) {
+        this.score = score;
+        return this;
+    }
+
+    public int getPlayCount() {
+        return playCount;
+    }
+
+    public PlayerCardInfoDouDiZhu setPlayCount(int playCount) {
+        this.playCount = playCount;
+        return this;
+    }
 }
 
 
