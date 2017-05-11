@@ -16,7 +16,8 @@ public class ServerConfig {
     private int gameRpcServerPort;
     private String adminRpcHost;
     private int adminRpcPort;
-    private int isStartRPC;
+    private int isStartRPC = 1;
+    private int isSendRPC = 1;
 
 
 
@@ -89,6 +90,15 @@ public class ServerConfig {
 
     public ServerConfig setIsStartRPC(int isStartRPC) {
         this.isStartRPC = isStartRPC;
+        return this;
+    }
+
+    public int getIsSendRPC() {
+        return isSendRPC;
+    }
+
+    public ServerConfig setIsSendRPC(int isSendRPC) {
+        this.isSendRPC = isSendRPC;
         return this;
     }
 }
