@@ -21,6 +21,7 @@ public class Room implements IGameConstant{
     protected String roomId;
     protected int createType;//房卡或金币
     protected double goldRoomType;
+    protected String gameType;//麻将项目名称
 
     protected int createNeedMoney;
     protected static Random random = new Random();
@@ -47,7 +48,7 @@ public class Room implements IGameConstant{
 
 
     protected int personNumber;
-    protected String gameType;//麻将项目名称
+
     protected boolean isOpen;
 
 

@@ -87,6 +87,25 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
     }
 
     @Override
+    protected void handleBomb(CardStruct cardStruct){
+        if(zhaCount < room.getMultiple() || room.getMultiple() == -1){
+            if(cardStruct.getType()==CardStruct.type_炸){
+                List<Integer> cards = cardStruct.getCards();
+                if(cards.size()==4 && CardUtil.getTypeByCard(cards.get(0)) == 0 && CardUtil.getTypeByCard(cards.get(cards.size()-1))==0){ //3333
+                    zhaCount += 1;//记录炸的数量
+                    multiple *= 8;//记录倍数
+                }else{ //除4个三的炸
+                    zhaCount += 1;//记录炸的数量
+                    multiple *= 2;//记录倍数
+                }
+            }else if(cardStruct.getType()==CardStruct.type_火箭){
+                zhaCount += 1;//记录炸的数量
+                multiple *= 2;//记录倍数
+            }
+        }
+    }
+
+    @Override
     protected void compute(boolean isDizhuWin){
 
         double subScore = 0;
@@ -122,6 +141,7 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
      * @param isQiang
      * @return
      */
+    @Override
     public int qiangDizhu(Player player,boolean isQiang) {
         logger.info(player.getUser().getAccount() +"  抢地主 "+isQiang);
 
@@ -186,6 +206,7 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
         }
     }
 
+    @Override
     protected void startPlay(long dizhu){
         this.canQiangUser = -1;
         this.canJiaoUser = -1;
