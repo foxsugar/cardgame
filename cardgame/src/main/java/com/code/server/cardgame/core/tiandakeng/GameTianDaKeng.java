@@ -153,22 +153,22 @@ public class GameTianDaKeng extends Game {
         cards.add();cards.add();cards.add();
         cards.add();cards.add();
          */
-        /*cards.add(3);cards.add(4);cards.add(45);
-        cards.add(38);cards.add(43);cards.add(1);
-        cards.add(44);cards.add(48);cards.add(37);
-        cards.add(49);cards.add(50);cards.add(46);
-        cards.add(51);cards.add(52);cards.add(41);
-        cards.add(42);cards.add(2);cards.add(47);
-        cards.add(39); cards.add(40);*/
 
-        cards.add(37);cards.add(49);cards.add(1);
-        cards.add(50);cards.add(2);cards.add(38);
-        cards.add(39);cards.add(41);cards.add(45);
-        cards.add(3);cards.add(42);cards.add(46);
-        cards.add(4);cards.add(40);cards.add(47);
+        /*cards.add(49);cards.add(50);cards.add(41);
+        cards.add(37);cards.add(1);cards.add(42);
+        cards.add(43);cards.add(45);cards.add(46);
+        cards.add(38);cards.add(51);cards.add(2);
 
-        cards.add(44);cards.add(43);cards.add(52);
-        cards.add(48);cards.add(51);
+        cards.add(3);cards.add(4);cards.add(39);cards.add(40);
+        cards.add(52);cards.add(47);cards.add(44);cards.add(48);*/
+
+        cards.add(37);cards.add(38);cards.add(52);
+        cards.add(39);cards.add(40);cards.add(48);
+        cards.add(41);cards.add(42);cards.add(44);
+        cards.add(45);cards.add(46);cards.add(51);
+
+        cards.add(47);cards.add(1);cards.add(2);cards.add(3);
+        //cards.add(52);cards.add(47);cards.add(44);cards.add(48);
 
         //cards.add(50);cards.add(51);cards.add(52);
     }
@@ -209,7 +209,6 @@ public class GameTianDaKeng extends Game {
     private void mustBet(){
         for (Long user : users) {
             allChip.put(user,INIT_BOTTOM_CHIP);
-            curChip.put(user,1.0);
         }
         //通知下底注
         Player.sendMsg2Player(new ResponseVo("gameService","mustBet",allChip),users);
@@ -224,10 +223,6 @@ public class GameTianDaKeng extends Game {
      * @return
      */
     public int bet(Player player,int chip){
-
-        for (Long l:users) {//去掉底注
-            curChip.put(l,0.0);
-        }
 
         gameuserStatus.put(player.getUserId(),12);
         gameuserStatus.put(nextTurnId(currentTurn),11);
@@ -633,6 +628,10 @@ public class GameTianDaKeng extends Game {
         noticeEveryCards(playerCardInfos);
         this.trunNumber += 1;//公开的牌+1
         dealFirst = currentTurn;
+
+        for (Long l:users) {//去掉底注
+            curChip.put(l,0.0);
+        }
     }
 
     /**
@@ -718,10 +717,6 @@ public class GameTianDaKeng extends Game {
      */
     private void noticeCanRaise(long userId){
 
-
-        for (Long l:users) {//清空当前下注
-            curChip.put(l,0.0);
-        }
         if(canRaiseUser.containsAll(aliveUser)){
             gameuserStatus.put(userId,311);
         }else{
