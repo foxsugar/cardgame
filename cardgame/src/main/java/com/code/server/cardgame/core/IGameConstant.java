@@ -24,4 +24,6 @@ public interface IGameConstant {
     int STEP_JIAO_DIZHU = 1;//步骤 叫地主
     int STEP_QIANG_DIZHU = 2;//步骤 抢地主
     int STEP_PLAY = 3;//步骤 打牌
+
+    long SECOND = 1000L;//秒
 }

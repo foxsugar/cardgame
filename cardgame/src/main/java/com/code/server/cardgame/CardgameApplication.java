@@ -5,6 +5,7 @@ import com.code.server.cardgame.config.ServerConfig;
 import com.code.server.cardgame.config.ServerState;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.handler.GameProcessor;
+import com.code.server.cardgame.robot.RobotManager;
 import com.code.server.cardgame.rpc.RpcManager;
 import com.code.server.cardgame.utils.SaveUserTimerTask;
 import com.code.server.cardgame.utils.SpringUtil;
@@ -42,11 +43,16 @@ public class CardgameApplication {
         });
 
 
+        //是否开启rpc服务
         if (serverConfig.getIsStartRPC() == 1) {
             //rpc服务
             RpcManager.getInstance().startGameRpcServer();
+
             RpcManager.getInstance().checkGameRpcServerWork();
         }
+
+        //机器人线程
+        ThreadPool.getInstance().executor.execute(RobotManager.getInstance());
 
         ServerState.isWork = true;
     }

@@ -18,6 +18,9 @@ public class ServerConfig {
     private int adminRpcPort;
     private int isStartRPC = 1;
     private int isSendRPC = 1;
+    //机器人执行周期
+    private int robotExeCycle = 1000;
+    private int isStartRobot = 1;
 
 
 
@@ -99,6 +102,15 @@ public class ServerConfig {
 
     public ServerConfig setIsSendRPC(int isSendRPC) {
         this.isSendRPC = isSendRPC;
+        return this;
+    }
+
+    public int getRobotExeCycle() {
+        return robotExeCycle;
+    }
+
+    public ServerConfig setRobotExeCycle(int robotExeCycle) {
+        this.robotExeCycle = robotExeCycle;
         return this;
     }
 }

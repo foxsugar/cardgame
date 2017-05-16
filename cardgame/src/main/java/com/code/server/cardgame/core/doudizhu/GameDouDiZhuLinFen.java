@@ -83,6 +83,7 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
         Player.sendMsg2Player("gameService","jiaoResponse",rs,users);
 
         player.sendMsg(new ResponseVo("gameService","jiaoDizhu",0));
+        updateLastOperateTime();
         return 0;
     }
 
@@ -165,6 +166,7 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
         Player.sendMsg2Player("gameService","qiangResponse",rs,users);
 
         player.sendMsg(new ResponseVo("gameService","qiangDizhu",0));
+        updateLastOperateTime();
         return 0;
     }
 
@@ -208,11 +210,6 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
 
     @Override
     protected void startPlay(long dizhu){
-        this.canQiangUser = -1;
-        this.canJiaoUser = -1;
-        this.dizhu = dizhu;
-        this.step = STEP_PLAY;
-        this.playTurn = dizhu;
         //选定地主
         pushChooseDizhu();
 
@@ -220,6 +217,7 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
         PlayerCardInfoDouDiZhu playerCardInfo = playerCardInfos.get(dizhu);
         if (playerCardInfo != null) {
             playerCardInfo.cards.addAll(tableCards);
+            //只给地主看
             Player.sendMsg2Player(new ResponseVo("gameService","showTableCard",tableCards),dizhu);
         }
 

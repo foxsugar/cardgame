@@ -185,8 +185,17 @@ public class RpcManager {
     }
 
 
-    public void startGameRpcServer() throws TTransportException {
-        gameRpcServer = GameRpcServer.StartServer(serverConfig.getGameRpcServerPort(), new GameRpcHandler());
+    public void startGameRpcServer() {
+        ThreadPool.getInstance().executor.execute(()->{
+
+            try {
+                gameRpcServer = GameRpcServer.StartServer(serverConfig.getGameRpcServerPort(), new GameRpcHandler());
+            } catch (TTransportException e) {
+                e.printStackTrace();
+                logger.error("启动rpc失败");
+
+            }
+        });
     }
 
     public void checkGameRpcServerWork() {
@@ -196,11 +205,9 @@ public class RpcManager {
                 RpcManager.getInstance().gameRpcServer.stop();
                 RpcManager.getInstance().gameRpcServer = null;
                 ThreadPool.getInstance().executor.execute(() -> {
-                    try {
+
                         RpcManager.getInstance().startGameRpcServer();
-                    } catch (TTransportException e) {
-                        e.printStackTrace();
-                    }
+
                 });
             }
         }));

@@ -50,11 +50,13 @@ public class GameDouDiZhu extends Game {
     protected Set<Long> userPlayCount = new HashSet<>();
     protected int tableScore;//底分
     protected boolean isNMQiang = false;//农民是否抢过
+    protected long lastOperateTime;
 
 
     public void startGame(List<Long> users, Room room) {
         this.room = room;
         init(users, room.getBankerId());
+        updateLastOperateTime();
     }
 
     public void init(List<Long> users, long dizhuUser) {
@@ -136,6 +138,7 @@ public class GameDouDiZhu extends Game {
 
         }
         player.sendMsg("gameService", "play", 0);
+        updateLastOperateTime();
         return 0;
     }
 
@@ -162,6 +165,7 @@ public class GameDouDiZhu extends Game {
         Player.sendMsg2Player("gameService", "passResponse", rs, this.users);
 
         player.sendMsg("gameService", "pass", 0);
+        updateLastOperateTime();
         return 0;
     }
 
@@ -280,11 +284,12 @@ public class GameDouDiZhu extends Game {
         Player.sendMsg2Player("gameService", "jiaoResponse", rs, users);
 
         player.sendMsg(new ResponseVo("gameService", "jiaoDizhu", 0));
+        updateLastOperateTime();
         return 0;
     }
 
 
-    private void qiangStepStart() {
+    protected void qiangStepStart() {
         pushChooseDizhu();
         step = STEP_QIANG_DIZHU;
         long nextId = nextTurnId(dizhu);
@@ -379,22 +384,26 @@ public class GameDouDiZhu extends Game {
 
     }
 
+    protected void playStepStart(long dizhu){
+        this.canQiangUser = -1;
+        this.canJiaoUser = -1;
+        this.dizhu = dizhu;
+        this.step = STEP_PLAY;
+        this.playTurn = dizhu;
+    }
     /**
      * 开始打牌
      *
      * @param dizhu
      */
     protected void startPlay(long dizhu) {
-        this.canQiangUser = -1;
-        this.canJiaoUser = -1;
-        this.dizhu = dizhu;
-        this.step = STEP_PLAY;
-        this.playTurn = dizhu;
+        playStepStart(dizhu);
         //把底牌加到地主身上
         PlayerCardInfoDouDiZhu playerCardInfo = playerCardInfos.get(dizhu);
         if (playerCardInfo != null) {
             playerCardInfo.cards.addAll(tableCards);
-            Player.sendMsg2Player(new ResponseVo("gameService", "showTableCard", tableCards), dizhu);
+            //给所有人看
+            Player.sendMsg2Player(new ResponseVo("gameService", "showTableCard", tableCards), users);
         }
 
     }
@@ -445,10 +454,13 @@ public class GameDouDiZhu extends Game {
 
         player.sendMsg(new ResponseVo("gameService", "qiangDizhu", 0));
 
-
+        updateLastOperateTime();
         return 0;
     }
 
+    protected void updateLastOperateTime(){
+        this.lastOperateTime = System.currentTimeMillis();
+    }
 
     /**
      * 通知可以叫地主
