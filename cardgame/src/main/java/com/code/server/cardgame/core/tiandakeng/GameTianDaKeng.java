@@ -93,11 +93,11 @@ public class GameTianDaKeng extends Game {
 
 
         if(this.room.getHasNine()==1){
-            //shuffleHasNine();
-            shuffleTest();
+            shuffleHasNine();
+            //shuffleTest();
         }else{
-            //shuffle();
-            shuffleTest();
+            shuffle();
+            //shuffleTest();
         }
         deal();
         if(!this.room.isLastDraw()){
