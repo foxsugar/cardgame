@@ -41,7 +41,7 @@ public class RobotManager implements Runnable{
                 robots.forEach(IRobot::execute);
                 //休眠
                 Thread.sleep(serverConfig.getRobotExeCycle());
-                System.out.println("机器人执行");
+                //System.out.println("机器人执行");
             }catch (Exception e){
                 e.printStackTrace();
                 logger.error("机器人执行出现错误: " + e);

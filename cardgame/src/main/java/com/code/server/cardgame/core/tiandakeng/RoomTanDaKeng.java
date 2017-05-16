@@ -27,6 +27,8 @@ public class RoomTanDaKeng extends Room {
 
     private int drawForLeaveChip = 0;//平局留下筹码
 
+    private Long dealFirstOfRoom;//第一个发牌的人
+
     protected Game getGameInstance(){
         return new GameTianDaKeng();
     }
@@ -94,6 +96,14 @@ public class RoomTanDaKeng extends Room {
 
     public void setDrawForLeaveChip(int drawForLeaveChip) {
         this.drawForLeaveChip = drawForLeaveChip;
+    }
+
+    public Long getDealFirstOfRoom() {
+        return dealFirstOfRoom;
+    }
+
+    public void setDealFirstOfRoom(Long dealFirstOfRoom) {
+        this.dealFirstOfRoom = dealFirstOfRoom;
     }
 
     public void spendMoney() {

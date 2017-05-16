@@ -84,14 +84,20 @@ public class GameTianDaKeng extends Game {
         this.curUser.addAll(users);
         this.canRaiseUser.addAll(users);
         this.trunNumber = 1;
-        this.dealFirst = users.get(0);
+        if (this.room.getDealFirstOfRoom()!=null){
+            this.dealFirst = this.room.getDealFirstOfRoom();
+        }else {
+            this.dealFirst = users.get(0);
+            this.room.setDealFirstOfRoom(dealFirst);
+        }
+
 
         if(this.room.getHasNine()==1){
-            shuffleHasNine();
-            //shuffleTest();
+            //shuffleHasNine();
+            shuffleTest();
         }else{
-            shuffle();
-            //shuffleTest();
+            //shuffle();
+            shuffleTest();
         }
         deal();
         if(!this.room.isLastDraw()){
@@ -154,23 +160,20 @@ public class GameTianDaKeng extends Game {
         cards.add();cards.add();
          */
 
-        /*cards.add(49);cards.add(50);cards.add(41);
-        cards.add(37);cards.add(1);cards.add(42);
-        cards.add(43);cards.add(45);cards.add(46);
-        cards.add(38);cards.add(51);cards.add(2);
+        cards.add(37);cards.add(45);cards.add(49);
+        cards.add(38);cards.add(46);cards.add(50);
+        cards.add(39);cards.add(47);cards.add(51);
+        cards.add(40);cards.add(41);cards.add(42);
+        cards.add(43);
 
-        cards.add(3);cards.add(4);cards.add(39);cards.add(40);
-        cards.add(52);cards.add(47);cards.add(44);cards.add(48);*/
 
-        cards.add(37);cards.add(38);cards.add(52);
+        /*cards.add(37);cards.add(38);cards.add(52);
         cards.add(39);cards.add(40);cards.add(48);
         cards.add(41);cards.add(42);cards.add(44);
         cards.add(45);cards.add(46);cards.add(51);
 
-        cards.add(47);cards.add(1);cards.add(2);cards.add(3);
-        //cards.add(52);cards.add(47);cards.add(44);cards.add(48);
+        cards.add(47);cards.add(1);cards.add(2);cards.add(3);*/
 
-        //cards.add(50);cards.add(51);cards.add(52);
     }
 
 
@@ -422,6 +425,7 @@ public class GameTianDaKeng extends Game {
                             noticeFinishScores(allChip);
                             endSth();
                         }else{
+                            this.room.setDealFirstOfRoom(getWhoWin());
                             dealScores();
                             this.room.setLastDraw(false);
                             this.room.setDrawForLeaveChip(0);
@@ -467,6 +471,7 @@ public class GameTianDaKeng extends Game {
                                 noticeFinishScores(allChip);
                                 endSth();
                             }else{
+                                this.room.setDealFirstOfRoom(getWhoWin());
                                 dealScores();
                                 this.room.setLastDraw(false);
                                 this.room.setDrawForLeaveChip(0);
@@ -487,6 +492,7 @@ public class GameTianDaKeng extends Game {
                     gameuserStatus.put(canRaiseUser.get(0),312);
                 }
             }else if(aliveUser.size()<2){//是一个人了，直接获胜
+                this.room.setDealFirstOfRoom(aliveUser.get(0));
                 dealScores();
                 this.room.setLastDraw(false);
                 this.room.setDrawForLeaveChip(0);
@@ -507,6 +513,7 @@ public class GameTianDaKeng extends Game {
                     gameuserStatus.put(getMaxCardUserForFord(),11);
                     dealFirst = currentTurn;
                 }else{
+                    this.room.setDealFirstOfRoom(aliveUser.get(0));
                     dealScores();
                     this.room.setLastDraw(false);
                     this.room.setDrawForLeaveChip(0);
@@ -617,6 +624,7 @@ public class GameTianDaKeng extends Game {
                    playerCardInfo.allCards.add(playerCardInfo.everyknowCards.get(playerCardInfo.everyknowCards.size()-1));
                }else{
                    playerCardInfo.everyknowCards.add(temp);
+                   playerCardInfo.allCards.add(playerCardInfo.everyknowCards.get(playerCardInfo.everyknowCards.size()-1));
                }
            }
         }
@@ -1401,7 +1409,32 @@ public class GameTianDaKeng extends Game {
     public Long getOneTurnMax(){
         Long userId = null;
         int temp = 0;
-        for (PlayerCardInfoTianDaKeng playerCardInfoTianDaKeng :playerCardInfos.values()) {
+
+        List<Long> userIdList = new ArrayList<>();
+        for(PlayerCardInfoTianDaKeng playerCardInfo : playerCardInfos.values()){
+            userIdList.add(playerCardInfo.userId);
+        }
+        int position = userIdList.indexOf(dealFirst);
+        ArrayList<PlayerCardInfoTianDaKeng> beforeList = new ArrayList<>();
+        ArrayList<PlayerCardInfoTianDaKeng> afterList = new ArrayList<>();
+        ArrayList<PlayerCardInfoTianDaKeng> lastList = new ArrayList<>();
+        ArrayList<PlayerCardInfoTianDaKeng> tempList = new ArrayList<>();
+        for(PlayerCardInfoTianDaKeng playerCardInfo : playerCardInfos.values()){
+            tempList.add(playerCardInfo);
+        }
+        for (PlayerCardInfoTianDaKeng playerCardInfo:tempList) {
+            if(tempList.indexOf(playerCardInfo)<position){
+                beforeList.add(playerCardInfo);
+            }else if(tempList.indexOf(playerCardInfo)==position){
+                lastList.add(playerCardInfo);
+            }else{
+                afterList.add(playerCardInfo);
+            }
+        }
+        lastList.addAll(afterList);
+        lastList.addAll(beforeList);
+
+        for (PlayerCardInfoTianDaKeng playerCardInfoTianDaKeng :lastList) {
             if(temp < CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(0))){
                     temp = CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(0));
                     userId = playerCardInfoTianDaKeng.userId;
