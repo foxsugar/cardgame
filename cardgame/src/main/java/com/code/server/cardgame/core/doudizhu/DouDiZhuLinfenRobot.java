@@ -23,7 +23,17 @@ public class DouDiZhuLinfenRobot implements IDouDiZhuRobot,IGameConstant {
             long now = System.currentTimeMillis();
             //执行
             if(now > game.lastOperateTime + SECOND * 30){
-
+                switch (game.step) {
+                    case STEP_JIAO_DIZHU:
+                        jiaoDizhu(game);
+                        break;
+                    case STEP_QIANG_DIZHU:
+                        qiangDizhu(game);
+                        break;
+                    case STEP_PLAY:
+                        play(game);
+                        break;
+                }
             }
         }
 
