@@ -14,6 +14,7 @@ public class GameDouDiZhuLinFenGold extends GameDouDiZhuLinFen {
 
 
 
+    @Override
     protected void compute(boolean isDizhuWin){
 
         double subScore = 0;

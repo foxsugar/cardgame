@@ -40,6 +40,11 @@ public class RoomDouDiZhu extends Room {
 
         }
 
+    public RoomDouDiZhu getRoomInstance(String gameType){
+        RoomDouDiZhu room = new RoomDouDiZhu();
+        return room;
+    }
+
     public static int createRoom(Player player, int gameNumber, int multiple, String gameType) {
         if (GameManager.getInstance().userRoom.containsKey(player.getUserId())) {
             return ErrorCode.CANNOT_CREATE_ROOM_ROLE_HAS_IN_ROOM;
@@ -70,11 +75,14 @@ public class RoomDouDiZhu extends Room {
             user.setMoney(user.getMoney() - createNeedMoney);
             GameManager.getInstance().getSaveUser2DB().add(user);
 
-            ThreadPool.getInstance().executor.execute(() -> {
-                List<Rebate> list = new ArrayList<>();
-                list.add(getRebate(user, createNeedMoney));
-                RpcManager.getInstance().sendRpcRebat(list);
-            });
+            //临汾斗地主 抽成
+            if(GAMETYPE_LINFEN.equals(gameType)){
+                ThreadPool.getInstance().executor.execute(() -> {
+                    List<Rebate> list = new ArrayList<>();
+                    list.add(getRebate(user, createNeedMoney));
+                    RpcManager.getInstance().sendRpcRebat(list);
+                });
+            }
         }
     }
 

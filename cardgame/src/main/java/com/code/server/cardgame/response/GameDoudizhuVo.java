@@ -1,6 +1,7 @@
 package com.code.server.cardgame.response;
 
 import com.code.server.cardgame.core.doudizhu.CardStruct;
+import com.code.server.cardgame.core.doudizhu.GameDouDiZhuLinFen;
 import com.code.server.cardgame.core.doudizhu.PlayerCardInfoDouDiZhu;
 import com.code.server.cardgame.core.Game;
 import com.code.server.cardgame.core.doudizhu.GameDouDiZhu;
@@ -49,7 +50,7 @@ public class GameDoudizhuVo extends GameVo {
             vo.playTurn = douDiZhu.getPlayTurn();
             vo.curMultiple = douDiZhu.getMultiple();
             vo.tableScore = douDiZhu.getTableScore();
-            if(uid == douDiZhu.getDizhu()){//玩家是地主
+            if(uid == douDiZhu.getDizhu() || !(game instanceof GameDouDiZhuLinFen)){//玩家是地主 并且是临汾斗地主
                 vo.tableCards.addAll(douDiZhu.getTableCards());
             }
 

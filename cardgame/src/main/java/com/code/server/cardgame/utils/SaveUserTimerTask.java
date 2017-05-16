@@ -50,6 +50,7 @@ public class SaveUserTimerTask extends TimerTask{
             long now = System.currentTimeMillis();
 
             List<Player> removePlayers = new ArrayList<>();
+            logger.warn("要删除玩家的个数 : "+ GameManager.getInstance().getKickUser().size());
             for (Player player : GameManager.getInstance().getKickUser()) {
                 //在房间中的玩家 不清理
                 if(GameManager.getInstance().getUserRoom().containsKey(player.getUserId())){

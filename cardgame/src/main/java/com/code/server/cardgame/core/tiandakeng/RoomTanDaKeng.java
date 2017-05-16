@@ -172,4 +172,12 @@ public class RoomTanDaKeng extends Room {
         Player.sendMsg2Player(noticeEndResult, this.users);
 
     }
+
+    protected void roomRemoveUser(Player player) {
+        User user = player.getUser();
+        long userId = user.getUserId();
+        this.users.remove(userId);
+        this.userStatus.remove(userId);
+        GameManager.getInstance().getUserRoom().remove(userId);
+    }
 }

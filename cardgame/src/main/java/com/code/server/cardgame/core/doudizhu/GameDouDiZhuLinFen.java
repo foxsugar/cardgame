@@ -83,7 +83,27 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
         Player.sendMsg2Player("gameService","jiaoResponse",rs,users);
 
         player.sendMsg(new ResponseVo("gameService","jiaoDizhu",0));
+        updateLastOperateTime();
         return 0;
+    }
+
+    @Override
+    protected void handleBomb(CardStruct cardStruct){
+        if(zhaCount < room.getMultiple() || room.getMultiple() == -1){
+            if(cardStruct.getType()==CardStruct.type_炸){
+                List<Integer> cards = cardStruct.getCards();
+                if(cards.size()==4 && CardUtil.getTypeByCard(cards.get(0)) == 0 && CardUtil.getTypeByCard(cards.get(cards.size()-1))==0){ //3333
+                    zhaCount += 1;//记录炸的数量
+                    multiple *= 8;//记录倍数
+                }else{ //除4个三的炸
+                    zhaCount += 1;//记录炸的数量
+                    multiple *= 2;//记录倍数
+                }
+            }else if(cardStruct.getType()==CardStruct.type_火箭){
+                zhaCount += 1;//记录炸的数量
+                multiple *= 2;//记录倍数
+            }
+        }
     }
 
     @Override
@@ -122,6 +142,7 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
      * @param isQiang
      * @return
      */
+    @Override
     public int qiangDizhu(Player player,boolean isQiang) {
         logger.info(player.getUser().getAccount() +"  抢地主 "+isQiang);
 
@@ -145,6 +166,7 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
         Player.sendMsg2Player("gameService","qiangResponse",rs,users);
 
         player.sendMsg(new ResponseVo("gameService","qiangDizhu",0));
+        updateLastOperateTime();
         return 0;
     }
 
@@ -186,12 +208,8 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
         }
     }
 
+    @Override
     protected void startPlay(long dizhu){
-        this.canQiangUser = -1;
-        this.canJiaoUser = -1;
-        this.dizhu = dizhu;
-        this.step = STEP_PLAY;
-        this.playTurn = dizhu;
         //选定地主
         pushChooseDizhu();
 
@@ -199,6 +217,7 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
         PlayerCardInfoDouDiZhu playerCardInfo = playerCardInfos.get(dizhu);
         if (playerCardInfo != null) {
             playerCardInfo.cards.addAll(tableCards);
+            //只给地主看
             Player.sendMsg2Player(new ResponseVo("gameService","showTableCard",tableCards),dizhu);
         }
 
