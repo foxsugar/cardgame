@@ -39,24 +39,31 @@ public class DouDiZhuLinfenRobot implements IDouDiZhuRobot,IGameConstant {
         }
 
     }
+
     @Override
     public void jiaoDizhu(GameDouDiZhu game) {
-
+        Player player = GameManager.getInstance().players.get(game.getPlayTurn());
+        game.jiaoDizhu(player, false,0);
     }
 
     @Override
     public void qiangDizhu(GameDouDiZhu game) {
-
+        Player player = GameManager.getInstance().players.get(game.getPlayTurn());
+        game.qiangDizhu(player,false);
     }
 
     @Override
     public void play(GameDouDiZhu game) {
-
+        Player player = GameManager.getInstance().players.get(game.getPlayTurn());
+        CardStruct cardStruct = new CardStruct();
+        cardStruct.dan.add(game.getPlayerCardInfos().get(game.getPlayTurn()).MinimumCards());
+        game.play(player,cardStruct);
     }
 
     @Override
     public void pass(GameDouDiZhu game) {
-
+        Player player = GameManager.getInstance().players.get(game.getPlayTurn());
+        game.pass(player);
     }
 
 }
