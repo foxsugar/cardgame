@@ -29,9 +29,11 @@ public class RobotManager implements Runnable{
     public List<IRobot> robots = new ArrayList<>();
 
 
-    public void addRobot(IRobot robot){
+    public RobotManager addRobot(IRobot robot){
         this.robots.add(robot);
+        return this;
     }
+
 
 
     @Override
@@ -41,7 +43,6 @@ public class RobotManager implements Runnable{
                 robots.forEach(IRobot::execute);
                 //休眠
                 Thread.sleep(serverConfig.getRobotExeCycle());
-                System.out.println("机器人执行");
             }catch (Exception e){
                 e.printStackTrace();
                 logger.error("机器人执行出现错误: " + e);

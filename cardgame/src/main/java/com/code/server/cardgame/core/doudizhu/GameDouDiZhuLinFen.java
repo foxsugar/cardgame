@@ -13,6 +13,7 @@ import java.util.*;
 public class GameDouDiZhuLinFen extends GameDouDiZhu{
     private static final Logger logger = LoggerFactory.getLogger(GameDouDiZhuLinFen.class);
 
+
     protected int initCardNum = 16;
 
 
@@ -32,7 +33,20 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
     }
 
 
+    @Override
+    protected void deal() {
+        for (PlayerCardInfoDouDiZhu playerCardInfo : playerCardInfos.values()) {
+            for (int i = 0; i < this.initCardNum; i++) {
+                playerCardInfo.cards.add(cards.remove(0));
+            }
+            //通知发牌
+            Player.sendMsg2Player(new ResponseVo("gameService", "deal", playerCardInfo.cards), playerCardInfo.userId);
+        }
 
+        //底牌
+        tableCards.addAll(cards);
+
+    }
 
     /**
      * 叫地主
@@ -64,6 +78,7 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
             }
         } else {//叫了 开始抢
             jiaoUser = player.getUserId();
+            dizhu = player.getUserId();
             //第三个人叫的 直接开始游戏
             if (chooseJiaoSet.size() >= users.size()) {
                 startPlay(jiaoUser);

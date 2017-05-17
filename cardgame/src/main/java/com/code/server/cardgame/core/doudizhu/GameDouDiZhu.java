@@ -185,7 +185,7 @@ public class GameDouDiZhu extends Game {
      */
     protected void deal() {
         for (PlayerCardInfoDouDiZhu playerCardInfo : playerCardInfos.values()) {
-            for (int i = 0; i < initCardNum; i++) {
+            for (int i = 0; i < this.initCardNum; i++) {
                 playerCardInfo.cards.add(cards.remove(0));
             }
             //通知发牌
