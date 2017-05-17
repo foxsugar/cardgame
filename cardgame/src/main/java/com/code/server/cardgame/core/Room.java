@@ -60,7 +60,7 @@ public class Room implements IGameConstant{
 
     protected boolean isCanDissloution = false;
 
-
+    protected Long dealFirstOfRoom;//第一个发牌的人
 
 
     public static int joinRoomQuick(Player player,int type){
@@ -720,4 +720,12 @@ public class Room implements IGameConstant{
     }
 
     public String getGameType(){return gameType;}
+
+    public Long getDealFirstOfRoom() {
+        return dealFirstOfRoom;
+    }
+
+    public void setDealFirstOfRoom(Long dealFirstOfRoom) {
+        this.dealFirstOfRoom = dealFirstOfRoom;
+    }
 }

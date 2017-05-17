@@ -1,14 +1,15 @@
 package com.code.server.cardgame.core.doudizhu;
 
-import com.code.server.cardgame.core.Game;
-import com.code.server.cardgame.core.GoldRoomPool;
-import com.code.server.cardgame.core.IGameConstant;
-import com.code.server.cardgame.core.Room;
+import com.code.server.cardgame.core.*;
+
+import java.lang.reflect.Method;
 
 /**
  * Created by sunxianping on 2017/5/16.
  */
 public class DouDiZhuLinfenRobot implements IDouDiZhuRobot,IGameConstant {
+
+
     @Override
     public void execute() {
         GoldRoomPool.getInstance().getFullRoom().values().forEach(list->list.forEach(this::doExecute));
@@ -57,4 +58,5 @@ public class DouDiZhuLinfenRobot implements IDouDiZhuRobot,IGameConstant {
     public void pass(GameDouDiZhu game) {
 
     }
+
 }
