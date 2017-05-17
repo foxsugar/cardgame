@@ -160,10 +160,10 @@ public class GameTianDaKeng extends Game {
         cards.add();cards.add();
          */
 
-        cards.add(37);cards.add(45);cards.add(49);
-        cards.add(38);cards.add(46);cards.add(50);
-        cards.add(39);cards.add(47);cards.add(51);
-        cards.add(40);cards.add(41);cards.add(42);
+        cards.add(2);cards.add(3);cards.add(1);
+        cards.add(37);cards.add(38);cards.add(49);
+        cards.add(39);cards.add(40);cards.add(45);
+        cards.add(41);cards.add(42);cards.add(50);
         cards.add(43);
 
 
@@ -399,7 +399,9 @@ public class GameTianDaKeng extends Game {
 
                         //Long temp = nextCanRaiseId(currentTurn);
                         noticeCanRaise(temp);//通知下一个可以加注（踢）
-                        gameuserStatus.put(temp,21);
+                        if(gameuserStatus.get(temp)!=311 && gameuserStatus.get(temp)!=312){
+                            gameuserStatus.put(temp,21);
+                        }
                         canRaiseUser.remove(temp);
                         currentTurn = temp;//下一个人
 
@@ -724,12 +726,6 @@ public class GameTianDaKeng extends Game {
      * @param userId
      */
     private void noticeCanRaise(long userId){
-
-        if(canRaiseUser.containsAll(aliveUser)){
-            gameuserStatus.put(userId,311);
-        }else{
-            gameuserStatus.put(userId,312);
-        }
 
         Map<String, Long> result = new HashMap<>();
         result.put("userId",userId);
