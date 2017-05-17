@@ -16,7 +16,7 @@ public class PlayerCardInfoDouDiZhuLinfen extends  PlayerCardInfoDouDiZhu{
     protected int playCount;
 
 
-    public Integer MinimumCards(){
+    public Integer getMinimumCards(){
         List<Integer> cardList = new ArrayList<>();
         for(Integer card :cards){
             cardList.add(CardUtil.getTypeByCard(card));
