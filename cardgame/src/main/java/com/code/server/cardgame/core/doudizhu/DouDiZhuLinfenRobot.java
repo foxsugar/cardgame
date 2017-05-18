@@ -52,30 +52,57 @@ public class DouDiZhuLinfenRobot implements IDouDiZhuRobot,IGameConstant {
         Map<String, Boolean> jiao = new HashMap<>();
         jiao.put("isJiao", false);
         ResponseVo vo = new ResponseVo("gameService","jiaoDizhu",jiao);
-//        String json = gson.toJson(vo);
         MessageHolder messageHolder = new MessageHolder();
         messageHolder.msgType = MessageHolder.MSG_TYPE_INNER;
         messageHolder.userId = game.canJiaoUser;
         JSONObject jsonObject = JSONObject.fromObject(vo);
         messageHolder.message = jsonObject;
         GameProcessor.getInstance().messageQueue.add(messageHolder);
-
-
     }
 
+    //{"service":"gameService","method":"qiangDizhu","params":{"isQiang":false}}
     @Override
     public void qiangDizhu(GameDouDiZhu game) {
-
+        Map<String, Boolean> qiang = new HashMap<>();
+        qiang.put("isQiang", false);
+        ResponseVo vo = new ResponseVo("gameService","qiangDizhu",qiang);
+        MessageHolder messageHolder = new MessageHolder();
+        messageHolder.msgType = MessageHolder.MSG_TYPE_INNER;
+        messageHolder.userId = game.canQiangUser;
+        JSONObject jsonObject = JSONObject.fromObject(vo);
+        messageHolder.message = jsonObject;
+        GameProcessor.getInstance().messageQueue.add(messageHolder);
     }
 
+    //{"service":"gameService","method":"play","params":{"cards":{"Userid":"25","cards":[16],"type":1,"dan":[16]}}}
     @Override
     public void play(GameDouDiZhu game) {
-
+        Map<String, Object> play = new HashMap<>();
+        play.put("Userid", game.getPlayTurn());
+        play.put("cards", game.getPlayerCardInfos().get(game.getPlayTurn()).MinimumCards());
+        play.put("dan", game.getPlayerCardInfos().get(game.getPlayTurn()).MinimumCards());
+        play.put("typetype", 1);
+        ResponseVo vo = new ResponseVo("gameService","play",play);
+        MessageHolder messageHolder = new MessageHolder();
+        messageHolder.msgType = MessageHolder.MSG_TYPE_INNER;
+        messageHolder.userId = game.getPlayTurn();
+        JSONObject jsonObject = JSONObject.fromObject(vo);
+        messageHolder.message = jsonObject;
+        GameProcessor.getInstance().messageQueue.add(messageHolder);
     }
 
+    // {"service":"gameService","method":"pass","params":{"Userid":"23"}}
     @Override
     public void pass(GameDouDiZhu game) {
-
+        Map<String, Long> pass = new HashMap<>();
+        pass.put("Userid", game.getPlayTurn());
+        ResponseVo vo = new ResponseVo("gameService","qiangDizhu",pass);
+        MessageHolder messageHolder = new MessageHolder();
+        messageHolder.msgType = MessageHolder.MSG_TYPE_INNER;
+        messageHolder.userId = game.getPlayTurn();
+        JSONObject jsonObject = JSONObject.fromObject(vo);
+        messageHolder.message = jsonObject;
+        GameProcessor.getInstance().messageQueue.add(messageHolder);
     }
 
 }

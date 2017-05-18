@@ -321,6 +321,30 @@ public class PlayerCardInfoDouDiZhu extends PlayerCardInfo {
         this.playCount = playCount;
         return this;
     }
+
+    public List<Integer> MinimumCards(){
+        List<Integer> cardList = new ArrayList<>();
+        for(Integer card :cards){
+            cardList.add(CardUtil.getTypeByCard(card));
+        }
+        Integer card = Collections.min(cardList);
+
+        Integer index = getListmin(cardList,card);
+
+        cardList.removeAll(cardList);
+        cardList.add(cards.get(index));
+        return cardList;
+    }
+
+    public Integer getListmin(List<Integer> cardList,Integer card){
+        Integer index = 0;
+        for(int i = 0 ;i<cardList.size();i++){
+            if(cardList.get(i).intValue()==card.intValue()){
+                index = i;
+            }
+        }
+        return index;
+    }
 }
 
 
