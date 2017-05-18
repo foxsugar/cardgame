@@ -17,7 +17,6 @@ import java.util.Map;
 public class DouDiZhuLinfenRobot implements IDouDiZhuRobot,IGameConstant {
 
 
-    Gson gson = new Gson();
     @Override
     public void execute() {
         GoldRoomPool.getInstance().getFullRoom().values().forEach(list->list.forEach(this::doExecute));

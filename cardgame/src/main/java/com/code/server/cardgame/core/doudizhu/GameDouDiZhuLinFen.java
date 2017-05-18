@@ -225,6 +225,7 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
 
     @Override
     protected void startPlay(long dizhu){
+        playStepStart(dizhu);
         //选定地主
         pushChooseDizhu();
 
