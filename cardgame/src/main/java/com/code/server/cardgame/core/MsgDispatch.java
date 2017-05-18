@@ -63,6 +63,23 @@ public class MsgDispatch {
                 }
                 break;
             }
+            case MessageHolder.MSG_TYPE_INNER:{
+                JSONObject jSONObject = (JSONObject) message;
+                String service = jSONObject.getString("service");
+                String method = jSONObject.getString("method");
+                JSONObject params = jSONObject.getJSONObject("params");
+                if("gameService".equals(service)){
+                    Player player = GameManager.getInstance().getPlayers().get(msgHolder.userId);
+                    if(player != null){
+                        int code = dispatchGameService(method, params, player);
+                        if (code != 0) {
+                            ResponseVo vo = new ResponseVo(service, method, code);
+                            sendMsg(msgHolder.ctx, vo);
+                        }
+                    }
+                }
+             break;
+            }
 
         }
 
@@ -79,13 +96,25 @@ public class MsgDispatch {
                 return dispatchUserService(method, params, ctx);
             case "roomService":
                 return dispatchRoomService(method, params, ctx);
-            case "gameService":
-                return dispatchGameService(method, params, ctx);
+            case "gameService":{
+
+                Player player = GameManager.getPlayerByCtx(ctx);
+                if (player == null) {
+                    return -1;
+                }
+                return dispatchGameService(method, params, player);
+            }
             case "chatService":
                 return dispatchChatService(method, params, ctx);
 
-            case "gameTDKService":
-                return dispatchGameService(method, params, ctx);
+            case "gameTDKService":{
+
+                Player player = GameManager.getPlayerByCtx(ctx);
+                if (player == null) {
+                    return -1;
+                }
+                return dispatchGameService(method, params, player);
+            }
             default:
                 return ErrorCode.REQUEST_PARAM_ERROR;
         }
@@ -233,11 +262,8 @@ public class MsgDispatch {
     }
 
 
-    private int dispatchGameService(String method, JSONObject params, ChannelHandlerContext ctx) {
-        Player player = GameManager.getPlayerByCtx(ctx);
-        if (player == null) {
-            return -1;
-        }
+    private int dispatchGameService(String method, JSONObject params, Player player) {
+
 
         Room room = getRoomByPlayer(player);
         if (room == null) {

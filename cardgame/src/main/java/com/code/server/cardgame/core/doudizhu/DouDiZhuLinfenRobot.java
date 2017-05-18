@@ -1,8 +1,15 @@
 package com.code.server.cardgame.core.doudizhu;
 
 import com.code.server.cardgame.core.*;
+import com.code.server.cardgame.handler.GameProcessor;
+import com.code.server.cardgame.handler.MessageHolder;
+import com.code.server.cardgame.response.ResponseVo;
+import com.google.gson.Gson;
+import net.sf.json.JSONObject;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by sunxianping on 2017/5/16.
@@ -10,6 +17,7 @@ import java.lang.reflect.Method;
 public class DouDiZhuLinfenRobot implements IDouDiZhuRobot,IGameConstant {
 
 
+    Gson gson = new Gson();
     @Override
     public void execute() {
         GoldRoomPool.getInstance().getFullRoom().values().forEach(list->list.forEach(this::doExecute));
@@ -23,7 +31,7 @@ public class DouDiZhuLinfenRobot implements IDouDiZhuRobot,IGameConstant {
             GameDouDiZhu game = (GameDouDiZhu) room.getGame();
             long now = System.currentTimeMillis();
             //执行
-            if(now > game.lastOperateTime + SECOND * 30){
+            if(now > game.lastOperateTime + SECOND * 5){
                 switch (game.step) {
                     case STEP_JIAO_DIZHU:
                         jiaoDizhu(game);
@@ -39,31 +47,36 @@ public class DouDiZhuLinfenRobot implements IDouDiZhuRobot,IGameConstant {
         }
 
     }
-
+    //{"service":"gameService","method":"jiaoDizhu","params":{"isJiao":true}}
     @Override
     public void jiaoDizhu(GameDouDiZhu game) {
-        Player player = GameManager.getInstance().players.get(game.getPlayTurn());
-        game.jiaoDizhu(player, false,0);
+        Map<String, Boolean> jiao = new HashMap<>();
+        jiao.put("isJiao", false);
+        ResponseVo vo = new ResponseVo("gameService","jiaoDizhu",jiao);
+//        String json = gson.toJson(vo);
+        MessageHolder messageHolder = new MessageHolder();
+        messageHolder.msgType = MessageHolder.MSG_TYPE_INNER;
+        messageHolder.userId = game.canJiaoUser;
+        JSONObject jsonObject = JSONObject.fromObject(vo);
+        messageHolder.message = jsonObject;
+        GameProcessor.getInstance().messageQueue.add(messageHolder);
+
+
     }
 
     @Override
     public void qiangDizhu(GameDouDiZhu game) {
-        Player player = GameManager.getInstance().players.get(game.getPlayTurn());
-        game.qiangDizhu(player,false);
+
     }
 
     @Override
     public void play(GameDouDiZhu game) {
-        Player player = GameManager.getInstance().players.get(game.getPlayTurn());
-        CardStruct cardStruct = new CardStruct();
-        cardStruct.dan.add(game.getPlayerCardInfos().get(game.getPlayTurn()).MinimumCards());
-        game.play(player,cardStruct);
+
     }
 
     @Override
     public void pass(GameDouDiZhu game) {
-        Player player = GameManager.getInstance().players.get(game.getPlayTurn());
-        game.pass(player);
+
     }
 
 }
