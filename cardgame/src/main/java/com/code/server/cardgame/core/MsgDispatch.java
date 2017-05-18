@@ -289,9 +289,12 @@ public class MsgDispatch {
                 int score = params.optInt("score", 0);
                 return game.jiaoDizhu(player, isJiao,score);
             case "qiangDizhu":
+                System.out.println("isQaing = "+params);
                 boolean isQiang = params.getBoolean("isQiang");
                 return game.qiangDizhu(player, isQiang);
             case "play":
+                System.out.println("param = "+params.toString());
+                System.out.println("json = "+params.getString("cards"));
                 CardStruct cardStruct = gson.fromJson(params.getString("cards"), CardStruct.class);
                 return game.play(player, cardStruct);
             case "pass":

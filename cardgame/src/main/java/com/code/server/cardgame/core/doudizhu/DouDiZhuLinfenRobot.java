@@ -7,7 +7,6 @@ import com.code.server.cardgame.response.ResponseVo;
 import com.google.gson.Gson;
 import net.sf.json.JSONObject;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,18 +76,33 @@ public class DouDiZhuLinfenRobot implements IDouDiZhuRobot,IGameConstant {
     //{"service":"gameService","method":"play","params":{"cards":{"Userid":"25","cards":[16],"type":1,"dan":[16]}}}
     @Override
     public void play(GameDouDiZhu game) {
-        Map<String, Object> play = new HashMap<>();
-        play.put("Userid", game.getPlayTurn());
-        play.put("cards", game.getPlayerCardInfos().get(game.getPlayTurn()).MinimumCards());
-        play.put("dan", game.getPlayerCardInfos().get(game.getPlayTurn()).MinimumCards());
-        play.put("typetype", 1);
-        ResponseVo vo = new ResponseVo("gameService","play",play);
-        MessageHolder messageHolder = new MessageHolder();
-        messageHolder.msgType = MessageHolder.MSG_TYPE_INNER;
-        messageHolder.userId = game.getPlayTurn();
-        JSONObject jsonObject = JSONObject.fromObject(vo);
-        messageHolder.message = jsonObject;
-        GameProcessor.getInstance().messageQueue.add(messageHolder);
+        PlayerCardInfoDouDiZhu playerInfo = game.getPlayerCardInfos().get(game.playTurn);
+        if(playerInfo.cards.size() ==0){
+            return;
+        }
+        if (game.lastCardStruct == null || game.playTurn == game.lastCardStruct.getUserId()) {
+
+            CardStruct cardStruct = new CardStruct();
+            cardStruct.type = 1;
+            cardStruct.dan = game.getPlayerCardInfos().get(game.getPlayTurn()).MinimumCards();
+            cardStruct.cards = game.getPlayerCardInfos().get(game.getPlayTurn()).MinimumCards();
+            cardStruct.setUserId(game.getPlayTurn());
+
+            Map<String, Object> cs = new HashMap<>();
+            cs.put("cards", cardStruct);
+
+            System.out.println("发送 = " + cardStruct);
+
+            ResponseVo vo = new ResponseVo("gameService", "play", cs);
+            MessageHolder messageHolder = new MessageHolder();
+            messageHolder.msgType = MessageHolder.MSG_TYPE_INNER;
+            messageHolder.userId = game.getPlayTurn();
+            JSONObject jsonObject = JSONObject.fromObject(vo);
+            messageHolder.message = jsonObject;
+            GameProcessor.getInstance().messageQueue.add(messageHolder);
+        } else {
+            pass(game);
+        }
     }
 
     // {"service":"gameService","method":"pass","params":{"Userid":"23"}}
@@ -96,7 +110,7 @@ public class DouDiZhuLinfenRobot implements IDouDiZhuRobot,IGameConstant {
     public void pass(GameDouDiZhu game) {
         Map<String, Long> pass = new HashMap<>();
         pass.put("Userid", game.getPlayTurn());
-        ResponseVo vo = new ResponseVo("gameService","qiangDizhu",pass);
+        ResponseVo vo = new ResponseVo("gameService","pass",pass);
         MessageHolder messageHolder = new MessageHolder();
         messageHolder.msgType = MessageHolder.MSG_TYPE_INNER;
         messageHolder.userId = game.getPlayTurn();
