@@ -12,6 +12,7 @@ import com.code.server.cardgame.utils.SpringUtil;
 import com.code.server.cardgame.utils.ThreadPool;
 import com.code.server.db.Service.UserService;
 import com.code.server.db.model.Constant;
+import com.code.server.db.model.Record;
 import com.code.server.db.model.ServerInfo;
 import com.code.server.db.model.User;
 import io.netty.channel.ChannelHandlerContext;
@@ -21,6 +22,8 @@ import org.springframework.stereotype.Service;
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static com.code.server.cardgame.core.GameManager.getUserVo;
@@ -173,8 +176,21 @@ public class GameUserService {
 
     public int getUserRecodeByUserId(Player player, int type){
         User user = player.getUser();
-        user.getRecord().getRoomRecords().get(type);
-        player.sendMsg("userService","getUserRecodeByUserId",user.getRecord().getRoomRecords().get(type));
+        List<Record.RoomRecord> records = user.getRecord().getRoomRecords().get(type);
+        List<Record.RoomRecord> recordNew = new ArrayList<Record.RoomRecord>();
+        for (Record.RoomRecord roomRecord:records) {
+            boolean temp = false;
+            a:for (Record.UserRecord userRecord:roomRecord.getRecords()) {
+                if(userRecord.getScore()!=0.0){
+                    temp=true;
+                    break a;
+                }
+            }
+            if(temp){
+                recordNew.add(roomRecord);
+            }
+        }
+        player.sendMsg("userService","getUserRecodeByUserId",recordNew);
         return 0;
     }
 
