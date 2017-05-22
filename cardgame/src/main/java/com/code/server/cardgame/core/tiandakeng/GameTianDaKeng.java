@@ -59,6 +59,7 @@ public class GameTianDaKeng extends Game {
     protected List<Long> twoPersonList = new ArrayList<>();//2人无限踢专用
     protected boolean fristBet = true;
     protected Long dealFirst;//第一个发牌的人
+    protected Long lastDealFirst;//上一轮最大的
 
     protected Map<Integer,List<Long>> trunRemoveUser = new HashMap<>();//每轮删除的人
 
@@ -160,11 +161,11 @@ public class GameTianDaKeng extends Game {
         cards.add();cards.add();
          */
 
-        cards.add(2);cards.add(3);cards.add(1);
-        cards.add(37);cards.add(38);cards.add(49);
-        cards.add(39);cards.add(40);cards.add(45);
-        cards.add(41);cards.add(42);cards.add(50);
-        cards.add(43);
+        cards.add(41);cards.add(42);cards.add(43);
+        cards.add(37);cards.add(38);cards.add(39);
+        cards.add(49);cards.add(50);cards.add(51);
+        cards.add(1);cards.add(2);cards.add(52);
+        cards.add(45);cards.add(46);cards.add(47);
 
 
         /*cards.add(37);cards.add(38);cards.add(52);
@@ -435,6 +436,7 @@ public class GameTianDaKeng extends Game {
                             endSth();
                         }
                     }else{
+                        lastDealFirst = dealFirst;
                         dealACard();//发牌
                         List<Long> list = new ArrayList();
                         list.addAll(aliveUser);
@@ -481,6 +483,7 @@ public class GameTianDaKeng extends Game {
                                 endSth();
                             }
                         }else{
+                            lastDealFirst = dealFirst;
                             dealACard();//发牌
                             List<Long> list = new ArrayList();
                             list.addAll(aliveUser);
@@ -489,9 +492,15 @@ public class GameTianDaKeng extends Game {
                         }
                     }
                 }else if(canRaiseUser.size()==2){
-                    noticeCanRaise(nextCanRaiseId(currentTurn));//通知第一个可以踢
-                    currentTurn = nextCanRaiseId(currentTurn);//下一个人
-                    gameuserStatus.put(canRaiseUser.get(0),312);
+                    if(aliveUser.contains(currentTurn)){
+                        noticeCanRaise(nextCanRaiseId(currentTurn));//通知第一个可以踢
+                        currentTurn = nextCanRaiseId(currentTurn);//下一个人
+                        gameuserStatus.put(canRaiseUser.get(0),312);
+                    }else{
+                        noticeCanRaise(getMax());//通知第一个可以踢
+                        currentTurn = getMax();//下一个人
+                        gameuserStatus.put(currentTurn,312);
+                    }
                 }
             }else if(aliveUser.size()<2){//是一个人了，直接获胜
                 this.room.setDealFirstOfRoom(aliveUser.get(0));
@@ -1528,4 +1537,79 @@ public class GameTianDaKeng extends Game {
         return userId;
     }
 
+
+    /**
+     * 牌面点数最大的
+     * @return
+     */
+    public Long getMax(){
+        Long userId = null;
+        int temp = 0;
+        Map<Integer,Integer> tempMap = new HashMap<>();
+        List<PlayerCardInfoTianDaKeng> userIdList = new ArrayList<>();
+        List<Long> list = new ArrayList<>();
+
+        for(PlayerCardInfoTianDaKeng playerCardInfo : playerCardInfos.values()){
+            list.add(playerCardInfo.getUserId());
+        }
+        int position = list.indexOf(lastDealFirst);
+        ArrayList<PlayerCardInfoTianDaKeng> beforeList = new ArrayList<>();
+        ArrayList<PlayerCardInfoTianDaKeng> afterList = new ArrayList<>();
+        ArrayList<PlayerCardInfoTianDaKeng> lastList = new ArrayList<>();
+        ArrayList<PlayerCardInfoTianDaKeng> tempList = new ArrayList<>();
+        for(PlayerCardInfoTianDaKeng playerCardInfo : playerCardInfos.values()){
+            tempList.add(playerCardInfo);
+        }
+        for (PlayerCardInfoTianDaKeng playerCardInfo:tempList) {
+            if(tempList.indexOf(playerCardInfo)<position){
+                beforeList.add(playerCardInfo);
+            }else if(tempList.indexOf(playerCardInfo)==position){
+                lastList.add(playerCardInfo);
+            }else{
+                afterList.add(playerCardInfo);
+            }
+        }
+        lastList.addAll(afterList);
+        lastList.addAll(beforeList);
+
+
+
+        for(PlayerCardInfoTianDaKeng playerCardInfo : playerCardInfos.values()){
+            if (aliveUser.contains(playerCardInfo.getUserId())){
+                userIdList.add(playerCardInfo);
+            }
+        }
+
+        for (PlayerCardInfoTianDaKeng playerCardInfoTianDaKeng :userIdList) {
+            if(tempMap.keySet().contains(CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1)))){
+                tempMap.put(CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1)),tempMap.get(CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1)))+1);
+            }else{
+                tempMap.put(CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1)),1);
+            }
+        }
+        for (Integer i:tempMap.keySet()) {
+            if(i>temp){
+                temp = i;
+            }
+        }
+        if(tempMap.get(temp)>1){
+            temp = 0;
+            for (PlayerCardInfoTianDaKeng playerCardInfoTianDaKeng : lastList) {
+                if(aliveUser.contains(playerCardInfoTianDaKeng.getUserId())){
+                    if(temp < CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1))){
+                        temp = CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1));
+                        userId = playerCardInfoTianDaKeng.userId;
+                    }
+                }
+            }
+        }else{
+            for (PlayerCardInfoTianDaKeng playerCardInfoTianDaKeng :userIdList) {
+                if(temp ==CardUtilOfTangDaKeng.getCardForScore().get(playerCardInfoTianDaKeng.everyknowCards.get(playerCardInfoTianDaKeng.everyknowCards.size()-1))){
+                    userId = playerCardInfoTianDaKeng.getUserId();
+                }
+            }
+        }
+
+        return userId;
+    }
 }
