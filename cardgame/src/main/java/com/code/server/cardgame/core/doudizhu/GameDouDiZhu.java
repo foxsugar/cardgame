@@ -104,11 +104,14 @@ public class GameDouDiZhu extends Game {
         long nextUserCard = nextTurnId(cardStruct.getUserId()); //下一个出牌的人
 
         cardStruct.setNextUserId(nextUserCard);
+        cardStruct.setUserId(player.getUserId());
+
         playTurn = nextUserCard;
 
         Player.sendMsg2Player(new ResponseVo("gameService", "playResponse", cardStruct), this.users);
         lasttype = cardStruct.getType();//保存这次出牌的类型
         lastCardStruct = cardStruct;//保存这次出牌的牌型
+
 
         //删除牌
         playerCardInfo.cards.removeAll(cardStruct.getCards());

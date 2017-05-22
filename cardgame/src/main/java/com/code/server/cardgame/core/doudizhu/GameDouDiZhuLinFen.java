@@ -14,9 +14,14 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
     private static final Logger logger = LoggerFactory.getLogger(GameDouDiZhuLinFen.class);
 
 
-    protected int initCardNum = 16;
 
 
+
+    @Override
+    public void init(List<Long> users, long dizhuUser) {
+        this.initCardNum = 16;
+        super.init(users,dizhuUser);
+    }
 
     /**
      * 洗牌
@@ -225,6 +230,7 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
 
     @Override
     protected void startPlay(long dizhu){
+        playStepStart(dizhu);
         //选定地主
         pushChooseDizhu();
 
