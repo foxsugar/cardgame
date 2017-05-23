@@ -32,7 +32,9 @@ public class MsgDispatch {
     private Gson gson = new Gson();
 
     public static void sendMsg(ChannelHandlerContext ctx, Object msg) {
-        ctx.writeAndFlush(msg);
+        if(ctx != null){
+            ctx.writeAndFlush(msg);
+        }
     }
 
 

@@ -198,9 +198,9 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
      */
     private void handleQiang1(long qiangUser,boolean isQiang){
         logger.info("第一个人叫");
-        if (isQiang) {
+//        if (isQiang) {
             this.qiangUser = qiangUser;
-        }
+//        }
         handleQiangNotice();
     }
 
