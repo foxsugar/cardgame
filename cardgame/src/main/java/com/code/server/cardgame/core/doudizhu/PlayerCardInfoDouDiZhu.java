@@ -20,10 +20,10 @@ public class PlayerCardInfoDouDiZhu extends PlayerCardInfo {
 
     //检测出牌是否合法
     public boolean checkPlayCard(CardStruct lastcardStruct , CardStruct currentCardStruct , int lasttype){
-        if (lastcardStruct == null || lastcardStruct.getUserId()==0) {
+        if (lastcardStruct == null || lastcardStruct.getUserid()==0) {
             return true;
         }
-        if (lastcardStruct.getUserId() == userId) {
+        if (lastcardStruct.getUserid() == userId) {
             return true;
         }
 

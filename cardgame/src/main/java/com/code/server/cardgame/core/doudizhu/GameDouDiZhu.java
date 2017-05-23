@@ -101,10 +101,10 @@ public class GameDouDiZhu extends Game {
         userPlayCount.add(player.getUserId());
         playerCardInfo.setPlayCount(playerCardInfo.getPlayCount() + 1);
 
-        long nextUserCard = nextTurnId(cardStruct.getUserId()); //下一个出牌的人
+        long nextUserCard = nextTurnId(cardStruct.getUserid()); //下一个出牌的人
 
         cardStruct.setNextUserId(nextUserCard);
-        cardStruct.setUserId(player.getUserId());
+        cardStruct.setUserid(player.getUserId());
 
         playTurn = nextUserCard;
 

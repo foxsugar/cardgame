@@ -26,7 +26,7 @@ public class CardStruct {
 
 
     int outCard = 0;//默认是出牌  0
-    long Userid;//当前出牌的人
+    long userid;//当前出牌的人
     long nextUserId;//下一个要出牌的人
     List<Integer> cards;
     int type;
@@ -80,7 +80,7 @@ public class CardStruct {
     public String toString() {
         return "CardStruct{" +
                 "outCard=" + outCard +
-                ", Userid=" + Userid +
+                ", userid=" + userid +
                 ", nextUserId=" + nextUserId +
                 ", cards=" + cards +
                 ", type=" + type +
@@ -109,8 +109,15 @@ public class CardStruct {
     public void setOutCard(int card){
         this.outCard = card;
     }
-    public void setUserId(long userid){ this.Userid = userid;}
-    public long getUserId(){ return this.Userid;}
+
+    public long getUserid() {
+        return userid;
+    }
+
+    public void setUserid(long userid) {
+        this.userid = userid;
+    }
+
     public void setNextUserId(long nextUserId){this.nextUserId = nextUserId;}
     public long getNextUserId(){return this.nextUserId;}
     public List<Integer> getCards(){return this.cards;}

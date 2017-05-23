@@ -39,7 +39,6 @@ public class GameProcessor implements Runnable{
     public void handle(){
         while(true){
             try {
-
                 MessageHolder messHolder = messageQueue.poll(10, TimeUnit.MILLISECONDS);
                 if(messHolder != null&&messHolder.message !=null){
                     handler.handleMessage(messHolder);
