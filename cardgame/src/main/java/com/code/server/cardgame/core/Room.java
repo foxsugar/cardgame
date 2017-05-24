@@ -211,11 +211,11 @@ public class Room implements IGameConstant{
         if (this.createUser == player.getUserId()) {//房主解散
 
             //退钱
-            User user = userMap.get(createUser);
+/*            User user = userMap.get(createUser);
             if (user != null) {
                 user.setMoney(user.getMoney() + getNeedMoney(this.gameNumber));
                 GameManager.getInstance().getSaveUser2DB().add(user);
-            }
+            }*/
             Notice n = new Notice();
             n.setMessage("roomNum "+this.getRoomId()+" :has destroy success!");
             Player.sendMsg2Player(new ResponseVo("roomService","destroyRoom",n), this.getUsers());
