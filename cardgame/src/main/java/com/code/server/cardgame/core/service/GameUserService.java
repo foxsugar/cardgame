@@ -178,16 +178,18 @@ public class GameUserService {
         User user = player.getUser();
         List<Record.RoomRecord> records = user.getRecord().getRoomRecords().get(type);
         List<Record.RoomRecord> recordNew = new ArrayList<Record.RoomRecord>();
-        for (Record.RoomRecord roomRecord:records) {
-            boolean temp = false;
-            a:for (Record.UserRecord userRecord:roomRecord.getRecords()) {
-                if(userRecord.getScore()!=0.0){
-                    temp=true;
-                    break a;
+        if(records!= null){
+            for (Record.RoomRecord roomRecord:records) {
+                boolean temp = false;
+                a:for (Record.UserRecord userRecord:roomRecord.getRecords()) {
+                    if(userRecord.getScore()!=0.0){
+                        temp=true;
+                        break a;
+                    }
                 }
-            }
-            if(temp){
-                recordNew.add(roomRecord);
+                if(temp){
+                    recordNew.add(roomRecord);
+                }
             }
         }
         player.sendMsg("userService","getUserRecodeByUserId",recordNew);
