@@ -72,9 +72,7 @@ public class DiceNumberUtils {
         listEffective.add(card);
         listEffective.add(card1);
 
-
         listInvalid.addAll(list);
-
         listInvalid.removeAll(listEffective);
 
         special1.add(1);
@@ -124,21 +122,39 @@ public class DiceNumberUtils {
        return null;
     }
 
+    /**
+     * 判断是否是通杀
+     * @param list
+     * @return
+     */
+    public static boolean getKill(List<Integer> list){
+        return getCardScore(list) == 6;
+    }
+
+    /**
+     * 判断是否是通杀
+     * @param list
+     * @return
+     */
+    public static boolean getCompensate(List<Integer> list){
+        return getCardScore(list) == 1;
+    }
+
 
     /**
      * 获取筛子分数
-     * @param demo
+     * @param list
      * @return
      */
-    public static Integer getCardScore(List<Integer> demo){
-        if(demo.containsAll(special1)){
+    public static Integer getCardScore(List<Integer> list){
+        if(list.containsAll(special1)){
             return 1;
         }
-        if(demo.containsAll(special2)){
+        if(list.containsAll(special2)){
             return 6;
         }
         Map<Integer,Integer> map = new HashMap<Integer,Integer>();
-        for(Integer a : demo){
+        for(Integer a : list){
             if(map.containsKey(a)){
                 map.put(a,map.get(a)+1);
             }else{
@@ -149,7 +165,7 @@ public class DiceNumberUtils {
             if(map.get(i)==1){
                 return i;
             }else if(map.get(i)==3){
-                return 1;//豹子所有的大小都一样
+                return 6;//豹子所有的大小都一样
             }
         }
         return 0;
