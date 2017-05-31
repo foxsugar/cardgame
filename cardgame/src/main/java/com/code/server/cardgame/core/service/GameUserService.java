@@ -72,8 +72,6 @@ public class GameUserService {
 
 
         } else {
-
-
             ThreadPool.getInstance().executor.execute(()->{
                 ResponseVo vo = new ResponseVo("userService","login",0);
                 UserService userService = SpringUtil.getBean(UserService.class);

@@ -104,6 +104,7 @@ public class PlayerCardInfoDouDiZhuLinfen extends  PlayerCardInfoDouDiZhu{
         }
         return types.size() == 1;
     }
+
     public Integer getListByIsType(List<Integer> cards) {
         int len = cards.size();
         if (len <= 4) {
