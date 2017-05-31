@@ -2,16 +2,17 @@ package com.code.server.cardgame.core;
 
 import com.code.server.cardgame.core.doudizhu.CardStruct;
 import com.code.server.cardgame.core.doudizhu.GameDouDiZhu;
+import com.code.server.cardgame.core.doudizhu.RoomDouDiZhu;
+import com.code.server.cardgame.core.service.GameChatService;
+import com.code.server.cardgame.core.service.GameUserService;
 import com.code.server.cardgame.core.tiandakeng.GameTianDaKeng;
 import com.code.server.cardgame.core.tiandakeng.RoomTanDaKeng;
 import com.code.server.cardgame.grpc.GRpcMsgDispatch;
 import com.code.server.cardgame.handler.MessageHolder;
-import com.code.server.cardgame.core.doudizhu.RoomDouDiZhu;
+import com.code.server.cardgame.playdice.RoomDice;
 import com.code.server.cardgame.response.ErrorCode;
 import com.code.server.cardgame.response.ResponseVo;
 import com.code.server.cardgame.rpc.ThriftMsgDispatch;
-import com.code.server.cardgame.core.service.GameChatService;
-import com.code.server.cardgame.core.service.GameUserService;
 import com.code.server.cardgame.utils.SpringUtil;
 import com.google.gson.Gson;
 import io.netty.channel.ChannelHandlerContext;
@@ -209,6 +210,14 @@ public class MsgDispatch {
                 return RoomDouDiZhu.createRoom(player, gameNumber, multiple,gameType);
             }
             case "createRoomTDK":{
+
+                int cricle = params.getInt("cricle");
+                int personNumber = params.getInt("personNumber");
+                int isSelf = params.getInt("isSelf");
+
+                return RoomDice.createRoom(player, cricle,personNumber,isSelf);
+            }
+            case "createRoomDice":{
 
                 int gameNumber = params.getInt("gameNumber");
                 double multiple = params.getDouble("maxMultiple");
