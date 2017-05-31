@@ -101,14 +101,17 @@ public class GameDouDiZhu extends Game {
         userPlayCount.add(player.getUserId());
         playerCardInfo.setPlayCount(playerCardInfo.getPlayCount() + 1);
 
-        long nextUserCard = nextTurnId(cardStruct.getUserId()); //下一个出牌的人
+        long nextUserCard = nextTurnId(cardStruct.getUserid()); //下一个出牌的人
 
         cardStruct.setNextUserId(nextUserCard);
+        cardStruct.setUserid(player.getUserId());
+
         playTurn = nextUserCard;
 
         Player.sendMsg2Player(new ResponseVo("gameService", "playResponse", cardStruct), this.users);
         lasttype = cardStruct.getType();//保存这次出牌的类型
         lastCardStruct = cardStruct;//保存这次出牌的牌型
+
 
         //删除牌
         playerCardInfo.cards.removeAll(cardStruct.getCards());
@@ -185,7 +188,7 @@ public class GameDouDiZhu extends Game {
      */
     protected void deal() {
         for (PlayerCardInfoDouDiZhu playerCardInfo : playerCardInfos.values()) {
-            for (int i = 0; i < initCardNum; i++) {
+            for (int i = 0; i < this.initCardNum; i++) {
                 playerCardInfo.cards.add(cards.remove(0));
             }
             //通知发牌

@@ -63,6 +63,7 @@ public class GoldRoomPool {
             room.personNumber = PERSONNUM;
             room.roomId = Room.getRoomIdStr(Room.genRoomId());
             room.createNeedMoney = 0;
+            room.gameType = IGameConstant.GAMETYPE_LINFEN;
             room.init(1, -1);
             room.setCreateType(Room.ROOM_CREATE_TYPE_GOLD);
             room.setGoldRoomType(type);
@@ -99,6 +100,7 @@ public class GoldRoomPool {
             list = new ArrayList<>();
         }
         list.add(room);
+        map.put(room.goldRoomType, list);
     }
 
     public static void removeRoomFromMap(Map<Double, List<Room>> map,Room room){

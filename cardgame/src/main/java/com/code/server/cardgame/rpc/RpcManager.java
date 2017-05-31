@@ -110,7 +110,7 @@ public class RpcManager {
         }
     }
 
-    private static void charge(String ip,int id,int num) throws TException {
+    private static void charge(String ip, int id, int num) throws TException {
 
         TTransport adminTransport = TransportManager.getTransport(ip, 9090);
 
@@ -132,21 +132,22 @@ public class RpcManager {
         client.modifyAppleCheck(1);
 
     }
+
     private static void testGame(int count) {
         for (int i = 0; i < count; i++) {
             try {
                 synchronized (rpcLock) {
 
 
-                TTransport adminTransport = TransportManager.getTransport("192.168.1.132", 9090);
+                    TTransport adminTransport = TransportManager.getTransport("192.168.1.132", 9090);
 
-                GameRPC.Client client = GameRpcClient.getAClient(adminTransport);
+                    GameRPC.Client client = GameRpcClient.getAClient(adminTransport);
 //                    client.getUserInfo(1);
-                Order order = new Order();
-                order.setUserId(1);
-                order.setNum(1);
+                    Order order = new Order();
+                    order.setUserId(1);
+                    order.setNum(1);
                     order.setType(1);
-                client.charge(order);
+                    client.charge(order);
                     adminTransport.close();
                 }
 
@@ -186,7 +187,7 @@ public class RpcManager {
 
 
     public void startGameRpcServer() {
-        ThreadPool.getInstance().executor.execute(()->{
+        ThreadPool.getInstance().executor.execute(() -> {
 
             try {
                 gameRpcServer = GameRpcServer.StartServer(serverConfig.getGameRpcServerPort(), new GameRpcHandler());
@@ -206,7 +207,7 @@ public class RpcManager {
                 RpcManager.getInstance().gameRpcServer = null;
                 ThreadPool.getInstance().executor.execute(() -> {
 
-                        RpcManager.getInstance().startGameRpcServer();
+                    RpcManager.getInstance().startGameRpcServer();
 
                 });
             }

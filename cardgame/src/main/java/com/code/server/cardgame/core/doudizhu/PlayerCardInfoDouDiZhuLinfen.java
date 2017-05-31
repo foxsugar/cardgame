@@ -8,12 +8,7 @@ import static com.code.server.cardgame.core.doudizhu.CardUtil.getCardType;
  * Created by sunxianping on 2017/3/14.
  */
 public class PlayerCardInfoDouDiZhuLinfen extends  PlayerCardInfoDouDiZhu{
-    public long userId;
-    public List<Integer> cards = new ArrayList<>();//手上的牌
-    protected List<Integer> disCards = new ArrayList<>();//丢弃的牌
-    protected boolean isQiang;
-    protected double score;
-    protected int playCount;
+
 
 
     public Integer getMinimumCards(){
@@ -49,10 +44,10 @@ public class PlayerCardInfoDouDiZhuLinfen extends  PlayerCardInfoDouDiZhu{
 
     //检测出牌是否合法
     public boolean checkPlayCard(CardStruct lastcardStruct ,CardStruct currentCardStruct , int lasttype){
-        if (lastcardStruct == null || lastcardStruct.getUserId()==0) {
+        if (lastcardStruct == null || lastcardStruct.getUserid()==0) {
             return true;
         }
-        if (lastcardStruct.getUserId() == userId) {
+        if (lastcardStruct.getUserid() == userId) {
             return true;
         }
 

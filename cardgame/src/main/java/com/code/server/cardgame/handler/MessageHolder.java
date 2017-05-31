@@ -12,6 +12,9 @@ public class MessageHolder<T> {
     public static final int MSG_TYPE_CLIENT_JSON = 0;
     public static final int MSG_TYPE_THRIFT = 1;
     public static final int MSG_TYPE_GRPC = 2;
+    public static final int MSG_TYPE_INNER = 3;
+
+    public long userId;
     public int msgType;
     public Object message;
     public ChannelHandlerContext ctx;

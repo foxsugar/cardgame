@@ -13,9 +13,15 @@ import java.util.*;
 public class GameDouDiZhuLinFen extends GameDouDiZhu{
     private static final Logger logger = LoggerFactory.getLogger(GameDouDiZhuLinFen.class);
 
-    protected int initCardNum = 16;
 
 
+
+
+    @Override
+    public void init(List<Long> users, long dizhuUser) {
+        this.initCardNum = 16;
+        super.init(users,dizhuUser);
+    }
 
     /**
      * 洗牌
@@ -32,7 +38,20 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
     }
 
 
+    @Override
+    protected void deal() {
+        for (PlayerCardInfoDouDiZhu playerCardInfo : playerCardInfos.values()) {
+            for (int i = 0; i < this.initCardNum; i++) {
+                playerCardInfo.cards.add(cards.remove(0));
+            }
+            //通知发牌
+            Player.sendMsg2Player(new ResponseVo("gameService", "deal", playerCardInfo.cards), playerCardInfo.userId);
+        }
 
+        //底牌
+        tableCards.addAll(cards);
+
+    }
 
     /**
      * 叫地主
@@ -64,6 +83,7 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
             }
         } else {//叫了 开始抢
             jiaoUser = player.getUserId();
+            dizhu = player.getUserId();
             //第三个人叫的 直接开始游戏
             if (chooseJiaoSet.size() >= users.size()) {
                 startPlay(jiaoUser);
@@ -178,9 +198,9 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
      */
     private void handleQiang1(long qiangUser,boolean isQiang){
         logger.info("第一个人叫");
-        if (isQiang) {
+//        if (isQiang) {
             this.qiangUser = qiangUser;
-        }
+//        }
         handleQiangNotice();
     }
 
@@ -210,6 +230,7 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
 
     @Override
     protected void startPlay(long dizhu){
+        playStepStart(dizhu);
         //选定地主
         pushChooseDizhu();
 

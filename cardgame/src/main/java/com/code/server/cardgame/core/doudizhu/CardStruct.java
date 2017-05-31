@@ -26,7 +26,7 @@ public class CardStruct {
 
 
     int outCard = 0;//默认是出牌  0
-    long Userid;//当前出牌的人
+    long userid;//当前出牌的人
     long nextUserId;//下一个要出牌的人
     List<Integer> cards;
     int type;
@@ -75,6 +75,31 @@ public class CardStruct {
             return null;
         }
     }
+
+    @Override
+    public String toString() {
+        return "CardStruct{" +
+                "outCard=" + outCard +
+                ", userid=" + userid +
+                ", nextUserId=" + nextUserId +
+                ", cards=" + cards +
+                ", type=" + type +
+                ", dan=" + dan +
+                ", dui=" + dui +
+                ", san=" + san +
+                ", zha=" + zha +
+                ", feiji=" + feiji +
+                ", shun=" + shun +
+                ", liandui=" + liandui +
+                ", sandaidan=" + sandaidan +
+                ", sandaidui=" + sandaidui +
+                ", sidaier=" + sidaier +
+                ", feiji_chibang_dan=" + feiji_chibang_dan +
+                ", feiji_chibang_dui=" + feiji_chibang_dui +
+                ", huojian=" + huojian +
+                '}';
+    }
+
     public int getType(){
         return type;
     }
@@ -84,10 +109,133 @@ public class CardStruct {
     public void setOutCard(int card){
         this.outCard = card;
     }
-    public void setUserId(long userid){ this.Userid = userid;}
-    public long getUserId(){ return this.Userid;}
+
+    public long getUserid() {
+        return userid;
+    }
+
+    public void setUserid(long userid) {
+        this.userid = userid;
+    }
+
     public void setNextUserId(long nextUserId){this.nextUserId = nextUserId;}
     public long getNextUserId(){return this.nextUserId;}
     public List<Integer> getCards(){return this.cards;}
 
+    public List<Integer> getDan() {
+        return dan;
+    }
+
+    public CardStruct setDan(List<Integer> dan) {
+        this.dan = dan;
+        return this;
+    }
+
+    public List<Integer> getDui() {
+        return dui;
+    }
+
+    public CardStruct setDui(List<Integer> dui) {
+        this.dui = dui;
+        return this;
+    }
+
+    public List<Integer> getSan() {
+        return san;
+    }
+
+    public CardStruct setSan(List<Integer> san) {
+        this.san = san;
+        return this;
+    }
+
+    public List<Integer> getZha() {
+        return zha;
+    }
+
+    public CardStruct setZha(List<Integer> zha) {
+        this.zha = zha;
+        return this;
+    }
+
+    public List<Integer> getFeiji() {
+        return feiji;
+    }
+
+    public CardStruct setFeiji(List<Integer> feiji) {
+        this.feiji = feiji;
+        return this;
+    }
+
+    public List<Integer> getShun() {
+        return shun;
+    }
+
+    public CardStruct setShun(List<Integer> shun) {
+        this.shun = shun;
+        return this;
+    }
+
+    public List<Integer> getLiandui() {
+        return liandui;
+    }
+
+    public CardStruct setLiandui(List<Integer> liandui) {
+        this.liandui = liandui;
+        return this;
+    }
+
+    public List<Integer> getSandaidan() {
+        return sandaidan;
+    }
+
+    public CardStruct setSandaidan(List<Integer> sandaidan) {
+        this.sandaidan = sandaidan;
+        return this;
+    }
+
+    public List<Integer> getSandaidui() {
+        return sandaidui;
+    }
+
+    public CardStruct setSandaidui(List<Integer> sandaidui) {
+        this.sandaidui = sandaidui;
+        return this;
+    }
+
+    public List<Integer> getSidaier() {
+        return sidaier;
+    }
+
+    public CardStruct setSidaier(List<Integer> sidaier) {
+        this.sidaier = sidaier;
+        return this;
+    }
+
+    public List<Integer> getFeiji_chibang_dan() {
+        return feiji_chibang_dan;
+    }
+
+    public CardStruct setFeiji_chibang_dan(List<Integer> feiji_chibang_dan) {
+        this.feiji_chibang_dan = feiji_chibang_dan;
+        return this;
+    }
+
+    public List<Integer> getFeiji_chibang_dui() {
+        return feiji_chibang_dui;
+    }
+
+    public CardStruct setFeiji_chibang_dui(List<Integer> feiji_chibang_dui) {
+        this.feiji_chibang_dui = feiji_chibang_dui;
+        return this;
+    }
+
+    public List<Integer> getHuojian() {
+        return huojian;
+    }
+
+    public CardStruct setHuojian(List<Integer> huojian) {
+        this.huojian = huojian;
+        return this;
+    }
 }

@@ -2,16 +2,17 @@ package com.code.server.cardgame.core;
 
 import com.code.server.cardgame.core.doudizhu.CardStruct;
 import com.code.server.cardgame.core.doudizhu.GameDouDiZhu;
+import com.code.server.cardgame.core.doudizhu.RoomDouDiZhu;
+import com.code.server.cardgame.core.service.GameChatService;
+import com.code.server.cardgame.core.service.GameUserService;
 import com.code.server.cardgame.core.tiandakeng.GameTianDaKeng;
 import com.code.server.cardgame.core.tiandakeng.RoomTanDaKeng;
 import com.code.server.cardgame.grpc.GRpcMsgDispatch;
 import com.code.server.cardgame.handler.MessageHolder;
-import com.code.server.cardgame.core.doudizhu.RoomDouDiZhu;
+import com.code.server.cardgame.playdice.RoomDice;
 import com.code.server.cardgame.response.ErrorCode;
 import com.code.server.cardgame.response.ResponseVo;
 import com.code.server.cardgame.rpc.ThriftMsgDispatch;
-import com.code.server.cardgame.core.service.GameChatService;
-import com.code.server.cardgame.core.service.GameUserService;
 import com.code.server.cardgame.utils.SpringUtil;
 import com.google.gson.Gson;
 import io.netty.channel.ChannelHandlerContext;
@@ -32,7 +33,9 @@ public class MsgDispatch {
     private Gson gson = new Gson();
 
     public static void sendMsg(ChannelHandlerContext ctx, Object msg) {
-        ctx.writeAndFlush(msg);
+        if(ctx != null){
+            ctx.writeAndFlush(msg);
+        }
     }
 
 
@@ -63,6 +66,23 @@ public class MsgDispatch {
                 }
                 break;
             }
+            case MessageHolder.MSG_TYPE_INNER:{
+                JSONObject jSONObject = (JSONObject) message;
+                String service = jSONObject.getString("service");
+                String method = jSONObject.getString("method");
+                JSONObject params = jSONObject.getJSONObject("params");
+                if("gameService".equals(service)){
+                    Player player = GameManager.getInstance().getPlayers().get(msgHolder.userId);
+                    if(player != null){
+                        int code = dispatchGameService(method, params, player);
+                        if (code != 0) {
+                            ResponseVo vo = new ResponseVo(service, method, code);
+                            sendMsg(msgHolder.ctx, vo);
+                        }
+                    }
+                }
+             break;
+            }
 
         }
 
@@ -79,13 +99,25 @@ public class MsgDispatch {
                 return dispatchUserService(method, params, ctx);
             case "roomService":
                 return dispatchRoomService(method, params, ctx);
-            case "gameService":
-                return dispatchGameService(method, params, ctx);
+            case "gameService":{
+
+                Player player = GameManager.getPlayerByCtx(ctx);
+                if (player == null) {
+                    return -1;
+                }
+                return dispatchGameService(method, params, player);
+            }
             case "chatService":
                 return dispatchChatService(method, params, ctx);
 
-            case "gameTDKService":
-                return dispatchGameService(method, params, ctx);
+            case "gameTDKService":{
+
+                Player player = GameManager.getPlayerByCtx(ctx);
+                if (player == null) {
+                    return -1;
+                }
+                return dispatchGameService(method, params, player);
+            }
             default:
                 return ErrorCode.REQUEST_PARAM_ERROR;
         }
@@ -179,6 +211,14 @@ public class MsgDispatch {
             }
             case "createRoomTDK":{
 
+                int cricle = params.getInt("cricle");
+                int personNumber = params.getInt("personNumber");
+                int isSelf = params.getInt("isSelf");
+
+                return RoomDice.createRoom(player, cricle,personNumber,isSelf);
+            }
+            case "createRoomDice":{
+
                 int gameNumber = params.getInt("gameNumber");
                 double multiple = params.getDouble("maxMultiple");
                 int personNumber = params.getInt("personNumber");
@@ -233,11 +273,8 @@ public class MsgDispatch {
     }
 
 
-    private int dispatchGameService(String method, JSONObject params, ChannelHandlerContext ctx) {
-        Player player = GameManager.getPlayerByCtx(ctx);
-        if (player == null) {
-            return -1;
-        }
+    private int dispatchGameService(String method, JSONObject params, Player player) {
+
 
         Room room = getRoomByPlayer(player);
         if (room == null) {
@@ -263,9 +300,12 @@ public class MsgDispatch {
                 int score = params.optInt("score", 0);
                 return game.jiaoDizhu(player, isJiao,score);
             case "qiangDizhu":
+                System.out.println("isQaing = "+params);
                 boolean isQiang = params.getBoolean("isQiang");
                 return game.qiangDizhu(player, isQiang);
             case "play":
+                System.out.println("param = "+params.toString());
+                System.out.println("json = "+params.getString("cards"));
                 CardStruct cardStruct = gson.fromJson(params.getString("cards"), CardStruct.class);
                 return game.play(player, cardStruct);
             case "pass":
