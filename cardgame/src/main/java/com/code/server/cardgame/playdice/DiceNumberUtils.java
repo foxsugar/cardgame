@@ -22,7 +22,7 @@ public class DiceNumberUtils {
 
    public static List<List<Integer>> listEffective = new ArrayList<List<Integer>>();//有效的筛子点数
 
-    public static List<List<Integer>> listInvalid = new ArrayList<List<Integer>>();//有效的筛子点数
+    public static List<List<Integer>> listInvalid = new ArrayList<List<Integer>>();// 无效的筛子点数
 
     public static List<Integer> special1 = new ArrayList<Integer>();//123
 
