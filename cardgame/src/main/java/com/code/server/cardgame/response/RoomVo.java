@@ -5,6 +5,8 @@ import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.Room;
 import com.code.server.cardgame.core.doudizhu.RoomDouDiZhu;
 import com.code.server.cardgame.core.tiandakeng.RoomTanDaKeng;
+import com.code.server.cardgame.playdice.GameDiceVo;
+import com.code.server.cardgame.playdice.RoomDice;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +27,7 @@ public class RoomVo {
     private int curGameNumber;
     protected int createType;
     protected double goldRoomType;
+    protected int curCricle;
 
     //填大坑专用
     protected boolean isLastDraw;//是否平局
@@ -52,6 +55,7 @@ public class RoomVo {
         this.drawForLeaveChip = room.getDrawForLeaveChip();
         this.personNumber = room.getPersonNumber();
         this.hasNine = room.getHasNine();
+        this.curCricle = room.getCurCricle();
 
         for(long uid : room.getUsers()){
             userList.add(GameManager.getUserVo(room.getUserMap().get(uid)));
@@ -63,6 +67,10 @@ public class RoomVo {
            if(room.getGame()!=null){
                this.game = GameTianDaKengVo.getGameTianDaKengVo(room.getGame(), player.getUserId());
            }
+        }else if(room instanceof RoomDice) {
+            if(room.getGame()!=null){
+                this.game = GameDiceVo.getGameDiceVo(room.getGame(), player.getUserId());
+            }
         }
 
     }

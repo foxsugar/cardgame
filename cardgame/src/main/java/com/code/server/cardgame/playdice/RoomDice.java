@@ -5,6 +5,12 @@ import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.Room;
 import com.code.server.cardgame.response.ErrorCode;
 import com.code.server.cardgame.response.ResponseVo;
+import com.code.server.cardgame.timer.GameTimer;
+import com.code.server.cardgame.timer.ITimeHandler;
+import com.code.server.cardgame.timer.TimerNode;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 项目名称：${project_name}
@@ -20,11 +26,19 @@ import com.code.server.cardgame.response.ResponseVo;
  */
 public class RoomDice extends Room {
 
+    public static final long ONE_HOUR = 1000L * 60 * 60;
+
+    //玩家状态:
+
     private int cricle;
     private int isSelf;//代开房,0代开房，1自己用
 
-    private int curCricleNumber;
-    private int curBanker;
+    private int curCricleNumber=1;
+    private Long curBanker;
+
+    protected Map<Long,Integer> allDiceNumber = new HashMap<>();//所有玩家分数
+
+
 
     public void init(int cricle, int personNumber, int isSelf) {
         this.cricle = cricle;
@@ -51,6 +65,20 @@ public class RoomDice extends Room {
         //房间加入列表
         if(isSelf==1){
             room.roomAddUser(player);
+        }else{
+            long start = System.currentTimeMillis();
+            TimerNode node = new TimerNode(start, ONE_HOUR, false, new ITimeHandler() {
+                @Override
+                public void fire() {
+                    try {
+                        GameManager.getInstance().rooms.remove(room.roomId);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            room.timerNode = node;
+            GameTimer.getInstance().addTimerNode(node);
         }
         GameManager.getInstance().rooms.put(room.roomId, room);
 
@@ -88,11 +116,19 @@ public class RoomDice extends Room {
         this.curCricleNumber = curCricleNumber;
     }
 
-    public int getCurBanker() {
+    public Long getCurBanker() {
         return curBanker;
     }
 
-    public void setCurBanker(int curBanker) {
+    public void setCurBanker(Long curBanker) {
         this.curBanker = curBanker;
+    }
+
+    public Map<Long, Integer> getAllDiceNumber() {
+        return allDiceNumber;
+    }
+
+    public void setAllDiceNumber(Map<Long, Integer> allDiceNumber) {
+        this.allDiceNumber = allDiceNumber;
     }
 }

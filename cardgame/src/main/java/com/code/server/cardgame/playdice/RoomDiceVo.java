@@ -33,7 +33,7 @@ public class RoomDiceVo {
     protected long createUser;
     private GameVo game;
     private int curCricleNumber;
-    private int curBanker;
+    private Long curBanker;
 
     protected Map<Long, Integer> userStatus = new HashMap<>();//用户状态
     protected List<UserVo> userList = new ArrayList<>();//用户列表
@@ -121,11 +121,11 @@ public class RoomDiceVo {
         this.curCricleNumber = curCricleNumber;
     }
 
-    public int getCurBanker() {
+    public Long getCurBanker() {
         return curBanker;
     }
 
-    public void setCurBanker(int curBanker) {
+    public void setCurBanker(Long curBanker) {
         this.curBanker = curBanker;
     }
 

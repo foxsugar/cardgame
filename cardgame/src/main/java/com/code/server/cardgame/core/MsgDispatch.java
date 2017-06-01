@@ -9,6 +9,7 @@ import com.code.server.cardgame.core.tiandakeng.GameTianDaKeng;
 import com.code.server.cardgame.core.tiandakeng.RoomTanDaKeng;
 import com.code.server.cardgame.grpc.GRpcMsgDispatch;
 import com.code.server.cardgame.handler.MessageHolder;
+import com.code.server.cardgame.playdice.GameDice;
 import com.code.server.cardgame.playdice.RoomDice;
 import com.code.server.cardgame.response.ErrorCode;
 import com.code.server.cardgame.response.ResponseVo;
@@ -20,6 +21,9 @@ import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sun on 2015/8/21.
@@ -209,7 +213,7 @@ public class MsgDispatch {
                 String gameType = params.optString("gameType", "0");
                 return RoomDouDiZhu.createRoom(player, gameNumber, multiple,gameType);
             }
-            case "createRoomTDK":{
+            case "createRoomDice":{
 
                 int cricle = params.getInt("cricle");
                 int personNumber = params.getInt("personNumber");
@@ -217,7 +221,7 @@ public class MsgDispatch {
 
                 return RoomDice.createRoom(player, cricle,personNumber,isSelf);
             }
-            case "createRoomDice":{
+            case "createRoomTDK":{
 
                 int gameNumber = params.getInt("gameNumber");
                 double multiple = params.getDouble("maxMultiple");
@@ -238,6 +242,23 @@ public class MsgDispatch {
                 return GoldRoomPool.getInstance().addRoom(player, type);
 
 
+            }
+            case "kickPerson":{//踢人
+                String roomId = params.getString("roomId");
+                long kickPlayerId = params.getLong("kickPlayerId");
+                Room room = GameManager.getInstance().rooms.get(roomId);
+                if(GameManager.getInstance().blackList.keySet().contains(roomId)){
+                    List<Long> list = GameManager.getInstance().blackList.get(roomId);
+                    if(!list.contains(kickPlayerId)){
+                        list.add(kickPlayerId);
+                    }
+                    GameManager.getInstance().blackList.put(roomId,list);
+                }else {
+                    List<Long> list = new ArrayList<>();
+                    list.add(kickPlayerId);
+                    GameManager.getInstance().blackList.put(roomId,list);
+                }
+                return room.kickPlayer(player,kickPlayerId);
             }
             case "quitRoom": {
                 Room room = getRoomByPlayer(player);
@@ -289,6 +310,8 @@ public class MsgDispatch {
             return dispatchGameDDZService(method,(GameDouDiZhu) game,params,player);
         }else if(game instanceof GameTianDaKeng){
            return dispatchGameTDKService(method,(GameTianDaKeng) game,params,player);
+        }else if(game instanceof GameDice){
+            return dispatchGameDiceService(method,(GameDice) game,params,player);
         }
         return -1;
     }
@@ -331,6 +354,22 @@ public class MsgDispatch {
                 return game.pass(player);
             case "fold"://弃牌
                 return game.fold(player);
+            default:
+                return ErrorCode.REQUEST_PARAM_ERROR;
+        }
+    }
+
+    private int dispatchGameDiceService(String method, GameDice game, JSONObject params, Player player) {
+
+        switch (method) {
+            case "bet"://下注
+                int betChip = params.getInt("chip");
+                return game.bet(player, betChip);
+            case "rock"://摇骰子
+                return game.rock(player);
+            case "kill"://杀
+                Long userId = params.getLong("userId");
+                return game.kill(player,userId);
             default:
                 return ErrorCode.REQUEST_PARAM_ERROR;
         }

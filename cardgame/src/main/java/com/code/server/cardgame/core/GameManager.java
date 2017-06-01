@@ -9,6 +9,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -33,6 +34,7 @@ public class GameManager {
     public Constant constant;
     public Set<Player> kickUser = new CopyOnWriteArraySet<>();//可以踢出内存的玩家
 
+    public Map<String,List<Long>> blackList= new HashMap<>();//黑名单
 
 //    public Map<Long, User> usersSaveInDB = new HashMap<>();
     public Set<User> saveUser2DB = new CopyOnWriteArraySet<>();
@@ -147,6 +149,7 @@ public class GameManager {
         if (room.getCreateType() == 1) {
             GoldRoomPool.removeRoomFromMap(GoldRoomPool.getInstance().getFullRoom(),room);
         }
+        GameManager.getInstance().blackList.remove(room.roomId);//删除黑名单中房间号
     }
 
     public Map<Long, String> getUserRoom() {
@@ -169,6 +172,14 @@ public class GameManager {
     public GameManager setSaveUser2DB(Set<User> saveUser2DB) {
         this.saveUser2DB = saveUser2DB;
         return this;
+    }
+
+    public Map<String, List<Long>> getBlackList() {
+        return blackList;
+    }
+
+    public void setBlackList(Map<String, List<Long>> blackList) {
+        this.blackList = blackList;
     }
 
     public Set<Player> getKickUser() {

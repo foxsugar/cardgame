@@ -16,6 +16,8 @@ import com.code.server.cardgame.core.PlayerCardInfo;
  */
 public class PlayerCardInfoDice extends PlayerCardInfo {
 
+    public long userId;
 
+    //public int rockTime;//摇了多少次
 
 }

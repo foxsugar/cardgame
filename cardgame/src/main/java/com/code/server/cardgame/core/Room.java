@@ -1,6 +1,7 @@
 package com.code.server.cardgame.core;
 
 import com.code.server.cardgame.encoding.Notice;
+import com.code.server.cardgame.playdice.ErrorCodeDice;
 import com.code.server.cardgame.response.*;
 import com.code.server.cardgame.timer.GameTimer;
 import com.code.server.cardgame.timer.TimerNode;
@@ -38,11 +39,10 @@ public class Room implements IGameConstant{
     protected int curGameNumber = 1;
     protected long createUser;
     protected long bankerId;//庄家
-
+    protected int curCricle;//圈
     protected boolean isInGame;
 
     protected boolean isHasDissolutionRequest;
-    protected transient TimerNode timerNode;
 
     protected Game game;
 
@@ -62,6 +62,7 @@ public class Room implements IGameConstant{
 
     protected Long dealFirstOfRoom;//第一个发牌的人
 
+    protected transient TimerNode timerNode;
 
     public static int joinRoomQuick(Player player,int type){
 
@@ -128,13 +129,25 @@ public class Room implements IGameConstant{
         if (!isCanJoinCheckMoney(player)) {
             return ErrorCode.CANNOT_JOIN_ROOM_NO_MONEY;
         }
-
-
+        if(GameManager.getInstance().blackList.get(roomId).contains(player.getUserId())){//黑名单判断
+            return ErrorCodeDice.CANNOT_ADD_REFUSE_ROOM;
+        }
 
         roomAddUser(player);
         //加进玩家-房间映射表
         noticeJoinRoom(player);
 
+        return 0;
+    }
+
+    //踢人
+    public int kickPlayer(Player player,Long kickPlayerId) {
+        Player kickPlayer = GameManager.getInstance().getPlayers().get(kickPlayerId);
+        if (!this.users.contains(kickPlayerId)) {
+            return ErrorCodeDice.NOT_IN_THIS_ROOM;
+        }
+        roomRemoveUser(player);
+        noticeKickPlayer(player,kickPlayerId);
         return 0;
     }
 
@@ -158,6 +171,13 @@ public class Room implements IGameConstant{
         GameManager.getInstance().getUserRoom().remove(userId);
     }
 
+    public void noticeKickPlayer(Player player,Long kickPlayerId){
+        Map<String, Object> result = new HashMap<>();
+        result.put("kickPlayerId",kickPlayerId);
+        Player.sendMsg2Player(new ResponseVo("roomService","noticeKickPlayer",result), this.getUsers());
+
+
+    }
 
     public void noticeJoinRoom(Player player){
         List<UserVo> usersList = new ArrayList<>();
@@ -727,5 +747,13 @@ public class Room implements IGameConstant{
 
     public void setDealFirstOfRoom(Long dealFirstOfRoom) {
         this.dealFirstOfRoom = dealFirstOfRoom;
+    }
+
+    public int getCurCricle() {
+        return curCricle;
+    }
+
+    public void setCurCricle(int curCricle) {
+        this.curCricle = curCricle;
     }
 }

@@ -1,7 +1,5 @@
 package com.code.server.cardgame.playdice;
 
-import com.code.server.cardgame.core.Room;
-
 import java.util.*;
 
 /**
@@ -117,7 +115,7 @@ public class DiceNumberUtils {
        }else if(getCardScore(listUser1) < getCardScore(listUser2)){
                 return user2;
        }else if(getCardScore(listUser1).intValue() == getCardScore(listUser2).intValue()){
-                return new Long(1);
+                return user2;
        }
        return null;
     }
@@ -132,11 +130,11 @@ public class DiceNumberUtils {
     }
 
     /**
-     * 判断是否是通杀
+     * 判断是否是通赔
      * @param list
      * @return
      */
-    public static boolean getCompensate(List<Integer> list){
+   public static boolean getCompensate(List<Integer> list){
         return getCardScore(list) == 1;
     }
 
