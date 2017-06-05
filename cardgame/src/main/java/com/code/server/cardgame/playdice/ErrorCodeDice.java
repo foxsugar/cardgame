@@ -26,4 +26,6 @@ public class ErrorCodeDice extends ErrorCode {
 
     public static final int CANNOT_ADD_REFUSE_ROOM = 400005;
 
+    public static final int CANNOT_ROCK_NO_KILL = 400006;//没杀不能摇色子
+
 }

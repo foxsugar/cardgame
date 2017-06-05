@@ -129,8 +129,10 @@ public class Room implements IGameConstant{
         if (!isCanJoinCheckMoney(player)) {
             return ErrorCode.CANNOT_JOIN_ROOM_NO_MONEY;
         }
-        if(GameManager.getInstance().blackList.get(roomId).contains(player.getUserId())){//黑名单判断
-            return ErrorCodeDice.CANNOT_ADD_REFUSE_ROOM;
+        if(GameManager.getInstance().blackList!=null&&GameManager.getInstance().blackList.get(roomId)!=null){
+            if(GameManager.getInstance().blackList.get(roomId).contains(player.getUserId())){//黑名单判断
+                return ErrorCodeDice.CANNOT_ADD_REFUSE_ROOM;
+            }
         }
 
         roomAddUser(player);
@@ -315,6 +317,9 @@ public class Room implements IGameConstant{
         //开始游戏
         if (readyNum >= personNumber) {
             startGame();
+            if(GameManager.getInstance().userRoomList!=null&&GameManager.getInstance().userRoomList.get(this.createUser)!=null){
+                GameManager.getInstance().userRoomList.get(this.createUser).remove(this);//带开房列表中删除此房间
+            }
         }
         player.sendMsg(new ResponseVo("roomService","getReady",0));
         return 0;
@@ -337,10 +342,8 @@ public class Room implements IGameConstant{
         if (curGameNumber == 1) {
             spendMoney();
         }
+
         game.startGame(users,this);
-
-
-
 
         //通知其他人游戏已经开始
         CardEntity cardBegin = new CardEntity();

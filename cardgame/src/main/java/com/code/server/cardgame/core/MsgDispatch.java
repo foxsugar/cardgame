@@ -143,21 +143,21 @@ public class MsgDispatch {
                 String image = params.getString("image");
                 int sex = Integer.parseInt(params.getString("sex"));
                 return gameUserService.checkOpenId(openId, username, image, sex, ctx);
-            case "getUserMessage":{
+            case "getUserMessage": {
                 Player player = GameManager.getPlayerByCtx(ctx);
                 if (player == null) {
                     return ErrorCode.YOU_HAVE_NOT_LOGIN;
                 }
                 return gameUserService.getUserMessage(player);
             }
-            case "reconnection":{
+            case "reconnection": {
                 Player player = GameManager.getPlayerByCtx(ctx);
                 if (player == null) {
                     return ErrorCode.YOU_HAVE_NOT_LOGIN;
                 }
                 return gameUserService.reconnection(player);
             }
-            case "getUserRecodeByUserId":{
+            case "getUserRecodeByUserId": {
 
                 Player player = GameManager.getPlayerByCtx(ctx);
                 if (player == null) {
@@ -167,31 +167,42 @@ public class MsgDispatch {
                 return gameUserService.getUserRecodeByUserId(player, type);
 
             }
-            case "bindReferrer":{
+            case "bindReferrer": {
                 Player player = GameManager.getPlayerByCtx(ctx);
                 if (player == null) {
                     return ErrorCode.YOU_HAVE_NOT_LOGIN;
                 }
                 int referrerId = params.getInt("referrerId");
-                return gameUserService.bindReferrer(player,referrerId);
+                return gameUserService.bindReferrer(player, referrerId);
             }
 
-            case "getUserImage":
+            case "getUserImage": {
 //                return gameUserService.getUserImage(userId,ctx);
-
-            case "register":
+            }
+            case "register": {
 //                return gameUserService.register(userId,ctx);
-
-            case "giveOtherMoney":
+            }
+            case "giveOtherMoney": {
                 Player player = GameManager.getPlayerByCtx(ctx);
                 Long accepterId = Long.parseLong(params.getString("accepterId"));
                 int money = Integer.parseInt(params.getString("money"));
-                return gameUserService.giveOtherMoney(player,accepterId, money);
-
-            case "getNickNamePlayer":
+                return gameUserService.giveOtherMoney(player, accepterId, money);
+            }
+            case "getNickNamePlayer":{
                 Player giver = GameManager.getPlayerByCtx(ctx);
-                Long accepterUserId= Long.parseLong(params.getString("accepterId"));
-                return gameUserService.getNickNamePlayer(giver,accepterUserId);
+                Long accepterUserId = Long.parseLong(params.getString("accepterId"));
+                return gameUserService.getNickNamePlayer(giver, accepterUserId);
+            }
+            case "getUserCreateRoomList": {
+                Player player = GameManager.getPlayerByCtx(ctx);
+                return gameUserService.getUserCreateRoomList(player);
+            }
+
+            case "deleteRoomByRoomId": {
+                Player player = GameManager.getPlayerByCtx(ctx);
+                String roomId = params.getString("roomId");
+                return gameUserService.deleteRoomByRoomId(player,roomId);
+            }
 
             default:
 
@@ -370,6 +381,8 @@ public class MsgDispatch {
             case "kill"://杀
                 Long userId = params.getLong("userId");
                 return game.kill(player,userId);
+            case "killAll"://杀
+                return game.killAll(player);
             default:
                 return ErrorCode.REQUEST_PARAM_ERROR;
         }
