@@ -11,9 +11,7 @@ import com.code.server.cardgame.timer.ITimeHandler;
 import com.code.server.cardgame.timer.TimerNode;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 项目名称：${project_name}
@@ -38,8 +36,6 @@ public class RoomDice extends Room {
 
     private int curCricleNumber=1;
     private Long curBanker;
-
-    protected Map<Long,Integer> allDiceNumber = new HashMap<>();//所有玩家分数
 
     protected Game getGameInstance(){
         return new GameDice();
@@ -142,11 +138,4 @@ public class RoomDice extends Room {
         this.curBanker = curBanker;
     }
 
-    public Map<Long, Integer> getAllDiceNumber() {
-        return allDiceNumber;
-    }
-
-    public void setAllDiceNumber(Map<Long, Integer> allDiceNumber) {
-        this.allDiceNumber = allDiceNumber;
-    }
 }

@@ -127,14 +127,20 @@ public class GameDice extends Game {
         if(temp<0){
             return ErrorCodeDice.CANNOT_ROCK_NO_KILL;//已经下注
         }
-
-
+        if(gameUserStatus.get(player.getUserId())>50){
+            return ErrorCodeDice.CANNOT_ROCK_HAVE_ROCK;//已经下注
+        }
         RoomDice roomDice = (RoomDice)room;
         gameUserStatus.put(player.getUserId(),50);
         List<Integer> list = DiceNumberUtils.getPoints();//获取点数
-        allDiceNumber.put(player.getUserId(),list);
+        noticeRockResult(player.getUserId(),list);
         if(player.getUserId()==roomDice.getCurBanker()){//判断是否是庄家
-            if(player.getUserId()==roomDice.getCurBanker() && DiceNumberUtils.getKill(list)){//庄营
+            if(!DiceNumberUtils.getIsEffective(list)){
+                System.out.println("骰子点数为"+list+":重新摇骰子");
+                noticeOtherCanRock(player.getUserId());
+            }
+            else if(player.getUserId()==roomDice.getCurBanker() && DiceNumberUtils.getKill(list)){//庄营
+                allDiceNumber.put(player.getUserId(),list);
                 gameUserStatus.put(roomDice.getCurBanker(),61);
                 for(Long l:room.getUsers()){
                     if(gameUserStatus.get(l)==41){
@@ -145,6 +151,7 @@ public class GameDice extends Game {
                 winAllEnd();
                 noticeGG();
             }else if (player.getUserId()==roomDice.getCurBanker() && DiceNumberUtils.getCompensate(list)){//庄输
+                allDiceNumber.put(player.getUserId(),list);
                 gameUserStatus.put(roomDice.getCurBanker(),60);
                 for(Long l:room.getUsers()){
                     if(gameUserStatus.get(l)==41){
@@ -154,17 +161,17 @@ public class GameDice extends Game {
                 noticeBankerLost();
                 loseAllEnd();
                 noticeGG();
-            }else if(!DiceNumberUtils.getIsEffective(list)){
-                noticeOtherCanRock(player.getUserId());
             }else{//等待闲家摇
+                allDiceNumber.put(player.getUserId(),list);
                 Long userId = nextRockOne(room.getUsers(),player.getUserId());
                 noticeOtherCanRock(userId);
             }
         }else{
             if(!DiceNumberUtils.getIsEffective(list)){
+                System.out.println("骰子点数为"+list+":重新摇骰子");
                 noticeOtherCanRock(player.getUserId());
-                return 0;
             }
+            allDiceNumber.put(player.getUserId(),list);
             Long winner = DiceNumberUtils.getMaxUser(this,roomDice.getCurBanker(),player.getUserId());
             noticeWhoWin(winner);
             if(winner==roomDice.getCurBanker()){//庄赢
@@ -182,6 +189,7 @@ public class GameDice extends Game {
                 noticeGG();
             }
         }
+        player.sendMsg(new ResponseVo("gameService","rock",0));
         return 0;
     }
 
@@ -208,6 +216,7 @@ public class GameDice extends Game {
             gameUserStatus.put(l,41);
         }
         noticeWhoKilled(null);
+        player.sendMsg(new ResponseVo("gameService","killAll",0));
         return 0;
     }
 
@@ -253,6 +262,19 @@ public class GameDice extends Game {
         ResponseVo vo = new ResponseVo("gameService","noticeOtherCanRock",result);
         Player.sendMsg2Player(vo,room.getUsers());
     }
+
+
+    /**
+     * 通知通知所有人下注完毕
+     */
+    private void noticeRockResult(Long userId,List<Integer> rockResult){
+        Map<String, Object> result = new HashMap<>();
+        result.put("rockUserId",userId);
+        result.put("rockResult",rockResult);
+        ResponseVo vo = new ResponseVo("gameService","noticeRockResult",result);
+        Player.sendMsg2Player(vo,room.getUsers());
+    }
+
     /**
      * 通知再摇一次
      */
@@ -316,6 +338,7 @@ public class GameDice extends Game {
         RoomDice roomDice = (RoomDice)room;
         Map<String, Object> result = new HashMap<>();
         result.put("allDiceNumber",allDiceNumber);
+        result.put("gameResultScore",gameResultScore);
         result.put("curBanker",roomDice.getCurBanker());
         ResponseVo vo = new ResponseVo("gameService","noticeGG",result);
         Player.sendMsg2Player(vo,room.getUsers());
@@ -452,7 +475,7 @@ public class GameDice extends Game {
 
         int nextId = index + 1;
         if (nextId >= list.size()) {
-            nextId = 0;
+            return 0l;
         }
         result = list.get(nextId);
         if(gameUserStatus.get(result)==40){

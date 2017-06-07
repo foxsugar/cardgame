@@ -13,6 +13,7 @@ package com.code.server.cardgame.playdice;
  * @version 1.0
  */
 public class PlayerCardInfoDiceVo {
+
     public long userId;
 
     public PlayerCardInfoDiceVo() {

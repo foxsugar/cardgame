@@ -28,4 +28,6 @@ public class ErrorCodeDice extends ErrorCode {
 
     public static final int CANNOT_ROCK_NO_KILL = 400006;//没杀不能摇色子
 
+    public static final int CANNOT_ROCK_HAVE_ROCK = 400007;//不能摇因为已经摇过了
+
 }
