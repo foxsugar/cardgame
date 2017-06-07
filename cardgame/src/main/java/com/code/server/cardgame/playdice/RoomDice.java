@@ -1,5 +1,6 @@
 package com.code.server.cardgame.playdice;
 
+import com.code.server.cardgame.core.Game;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.Player;
 import com.code.server.cardgame.core.Room;
@@ -9,7 +10,9 @@ import com.code.server.cardgame.timer.GameTimer;
 import com.code.server.cardgame.timer.ITimeHandler;
 import com.code.server.cardgame.timer.TimerNode;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,12 +41,16 @@ public class RoomDice extends Room {
 
     protected Map<Long,Integer> allDiceNumber = new HashMap<>();//所有玩家分数
 
-
+    protected Game getGameInstance(){
+        return new GameDice();
+    }
 
     public void init(int cricle, int personNumber, int isSelf) {
         this.cricle = cricle;
         this.personNumber = personNumber;
         this.isSelf = isSelf;
+
+        this.createNeedMoney = cricle*personNumber;
     }
 
 
@@ -72,6 +79,11 @@ public class RoomDice extends Room {
                 public void fire() {
                     try {
                         GameManager.getInstance().rooms.remove(room.roomId);
+                        //删除带开房的房间
+                        List<Room> roomList = new ArrayList<>();
+                        roomList = GameManager.getInstance().userRoomList.get(player.getUserId());
+                        roomList.remove(room);
+                        GameManager.getInstance().userRoomList.put(player.getUserId(),roomList);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -79,6 +91,11 @@ public class RoomDice extends Room {
             });
             room.timerNode = node;
             GameTimer.getInstance().addTimerNode(node);
+            //记录到带开房的列表
+            List<Room> roomList = new ArrayList<>();
+            roomList = GameManager.getInstance().userRoomList.get(player.getUserId());
+            roomList.add(room);
+            GameManager.getInstance().userRoomList.put(player.getUserId(),roomList);
         }
         GameManager.getInstance().rooms.put(room.roomId, room);
 

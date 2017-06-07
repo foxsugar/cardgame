@@ -36,6 +36,8 @@ public class GameManager {
 
     public Map<String,List<Long>> blackList= new HashMap<>();//黑名单
 
+    public Map<Long,List<Room>> userRoomList= new HashMap<>();//代开房间列表
+
 //    public Map<Long, User> usersSaveInDB = new HashMap<>();
     public Set<User> saveUser2DB = new CopyOnWriteArraySet<>();
 
@@ -189,6 +191,14 @@ public class GameManager {
     public GameManager setKickUser(Set<Player> kickUser) {
         this.kickUser = kickUser;
         return this;
+    }
+
+    public Map<Long, List<Room>> getUserRoomList() {
+        return userRoomList;
+    }
+
+    public void setUserRoomList(Map<Long, List<Room>> userRoomList) {
+        this.userRoomList = userRoomList;
     }
 
     @Override

@@ -422,8 +422,27 @@ public class GameUserService {
             }
         });
         return 0;
-
-
-
     }
+    //获取用户带建房的列表
+    public int getUserCreateRoomList(Player player) {
+        List<Room> roomlist = GameManager.getInstance().userRoomList.get(player.getUserId());
+        player.sendMsg("userService","getUserCreateRoomList",roomlist);
+        return 0;
+    }
+
+    //删除用户
+    public int deleteRoomByRoomId(Player player,String roomId) {
+        Room room = GameManager.getInstance().rooms.get(roomId);
+
+        //通知房间被删除
+        ResponseVo vo = new ResponseVo("userService","noticeRoomIsDelete",0);
+        Player.sendMsg2Player(vo,room.getUsers());
+
+        List<Room> roomlist = GameManager.getInstance().userRoomList.get(player.getUserId());
+        roomlist.remove(room);
+        GameManager.getInstance().userRoomList.put(player.getUserId(),roomlist);
+        player.sendMsg("userService","deleteRoomByRoomId",0);
+        return 0;
+    }
+
 }
