@@ -6,6 +6,8 @@ package com.code.server.cardgame.core;
 public interface IGameConstant {
     int ROOM_CREATE_TYPE_CONMMON = 0;
     int ROOM_CREATE_TYPE_GOLD = 1;
+    int ROOM_CREATE_TYPE_TIANDAKENG = 2;
+    int ROOM_CREATE_TYPE_DICE = 3;
 
     //房间加入状态
     int STATUS_JOIN = 0;//加入

@@ -67,6 +67,7 @@ public class RoomDice extends Room {
         room.personNumber = personNumber;
         room.roomId = getRoomIdStr(genRoomId());
         room.createUser = player.getUserId();
+        room.setCreateType(Room.ROOM_CREATE_TYPE_DICE);
         room.init(cricle,personNumber,isSelf);
 
         //房间加入列表
