@@ -34,7 +34,7 @@ public class GameDouDiZhuLinFen extends GameDouDiZhu{
         //去掉两张2
         cards.remove((Integer)7);
         cards.remove((Integer)5);
-        //Collections.shuffle(cards);
+        Collections.shuffle(cards);
     }
 
 
