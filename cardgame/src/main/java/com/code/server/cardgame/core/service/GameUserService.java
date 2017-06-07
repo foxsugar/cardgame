@@ -85,7 +85,6 @@ public class GameUserService {
                         user = createUser(account, password);
                         userService.save(user);
                     } else {
-
                         vo.setCode(ErrorCode.USERID_ERROR);
                         MsgDispatch.sendMsg(ctx,vo);
                         return;
@@ -288,7 +287,6 @@ public class GameUserService {
             String img = image;
             if(img == null || img.equals("")){
                 img = "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=253777390,947512827&fm=23&gp=0.jpg/96";
-
             }
 
             if(user == null) {

@@ -73,6 +73,7 @@ public class DouDiZhuLinfenRobot implements IDouDiZhuRobot,IGameConstant {
         GameProcessor.getInstance().messageQueue.add(messageHolder);
     }
 
+
     //{"service":"gameService","method":"play","params":{"cards":{"userid":"25","cards":[16],"type":1,"dan":[16]}}}
     @Override
     public void play(GameDouDiZhu game) {
