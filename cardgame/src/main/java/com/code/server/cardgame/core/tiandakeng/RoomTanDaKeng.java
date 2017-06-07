@@ -49,7 +49,9 @@ public class RoomTanDaKeng extends Room {
         room.roomId = getRoomIdStr(genRoomId());
         room.createUser = player.getUserId();
         room.hasNine = hasNine;
+        room.setCreateType(Room.ROOM_CREATE_TYPE_TIANDAKENG);
         room.init(gameNumber,roomType,hasNine);
+
 
         if(room.getMultiple()!=25 && room.getMultiple()!=50 && room.getMultiple()!=100 && room.getMultiple()!=200){
             return ErrorCodeTDK.CREATE_ROOM_MULTIPLE;
