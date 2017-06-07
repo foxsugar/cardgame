@@ -158,7 +158,7 @@ public class PlayerCardInfoDouDiZhuLinfen extends  PlayerCardInfoDouDiZhu{
                     && getFeiJi(cardList) && getShunDel2DaXiao(cards)) {
                 return CardStruct.type_飞机;
             }
-            if (getFeiJiChiBangLinfen(cardList) && getShunDel2DaXiao(cards)) {
+            if (getFeiJiChiBang(cardList) && getShunDel2DaXiao(cards)) {
                 return CardStruct.type_飞机带翅膀;
             } else {
                 return 0;
@@ -169,6 +169,75 @@ public class PlayerCardInfoDouDiZhuLinfen extends  PlayerCardInfoDouDiZhu{
         }
 
     }
+
+
+    public boolean getFeiJiChiBang(List<Integer> cards){
+        boolean b = true;
+        Map<Integer,Integer> map = new HashMap<>();
+        List<Integer> fourlist = new ArrayList<>();
+        List<Integer> threelist = new ArrayList<>();
+        List<Integer> twolist = new ArrayList<>();
+        List<Integer> onelist = new ArrayList<>();
+        List<Integer> zerohourlist = new ArrayList<>();
+
+        for (Integer i:cards) {
+            if(map.containsKey(i)){
+                map.put(i,map.get(i)+1);
+            }else{
+                map.put(i,1);
+            }
+        }
+        for (Integer i:map.keySet()) {
+            if(map.get(i)==4){
+                fourlist.add(i);
+            }else if(map.get(i)==3){
+                threelist.add(i);
+            }else if(map.get(i)==2){
+                twolist.add(i);
+            }else{
+                onelist.add(i);
+            }
+        }
+
+        Collections.sort(threelist);
+
+        for(int i = 0 ;i<threelist.size()-1;i++){
+            if(threelist.get(i+1) - threelist.get(i) != 1){
+                zerohourlist.add(threelist.get(i+1));
+                threelist.remove(i+1);
+            }
+        }
+
+        if(threelist.size()<2){
+            b = false;
+        }
+        if (onelist.size()!=0 && threelist.size()!=onelist.size()){
+            b = false;
+        }else if(twolist.size()!=0){
+            if(threelist.size() - twolist.size() <0 && threelist.size() - twolist.size() !=0){ //dan
+                b = false;
+            }else{
+                b = true;
+            }
+        }else if(fourlist.size()!=0 && threelist.size()!=4){
+            b = false;
+        }
+
+
+        for(int i = 0 ;i<threelist.size()-1;i++){
+            if(threelist.get(i+1) - threelist.get(i) != 1){
+                b =false;
+            }
+        }
+
+
+        return b;
+    }
+
+
+
+
+
     //顺除 2 大王小王
     public boolean getShunDel2DaXiao(List<Integer> cards){
         if(cards.contains(8) || cards.contains(6) || cards.contains(53) || cards.contains(54)){
