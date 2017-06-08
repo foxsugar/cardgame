@@ -38,6 +38,7 @@ public class RoomVo {
     protected List<UserVo> userList = new ArrayList<>();//用户列表
     protected Map<Long, Double> userScores = new HashMap<>();
     protected int personNumber;
+    protected long curbanker;
 
     public RoomVo(){}
 
@@ -56,6 +57,7 @@ public class RoomVo {
         this.personNumber = room.getPersonNumber();
         this.hasNine = room.getHasNine();
         this.curCricle = room.getCurCricle();
+        this.curbanker = room.getBankerId();
 
         for(long uid : room.getUsers()){
             userList.add(GameManager.getUserVo(room.getUserMap().get(uid)));

@@ -31,7 +31,9 @@ public class GameDiceVo extends GameVo{
 
     protected Map<Long,List<Integer>> allDiceNumber = new HashMap<>();//所有玩家点数
 
-    private long currentTurn;
+    protected Long curBanker;
+
+    private List<Long> currentTurn;
 
     public static GameVo getGameDiceVo(Game game, long uid){
         GameDiceVo vo = new GameDiceVo();
@@ -41,12 +43,20 @@ public class GameDiceVo extends GameVo{
             vo.gameUserScore = gameDice.getGameUserScore();
             vo.gameResultScore = gameDice.getGameResultScore();
             vo.allDiceNumber = gameDice.getAllDiceNumber();
+            vo.currentTurn = gameDice.getCurrentTurn();
             //玩家牌信息
             for (PlayerCardInfoDice playerCardInfo : gameDice.getPlayerCardInfos().values()) {
                 vo.playerCardInfos.put(playerCardInfo.userId, new PlayerCardInfoDiceVo(playerCardInfo, uid));
             }
         }
         return vo;
+    }
 
+    public Long getCurBanker() {
+        return curBanker;
+    }
+
+    public void setCurBanker(Long curBanker) {
+        this.curBanker = curBanker;
     }
 }

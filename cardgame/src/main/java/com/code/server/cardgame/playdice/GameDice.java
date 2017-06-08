@@ -13,10 +13,7 @@ import com.code.server.db.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 项目名称：${project_name}
@@ -37,7 +34,7 @@ public class GameDice extends Game {
     private static final Logger logger = LoggerFactory.getLogger(GameDice.class);
 
     /*
-        下注		    21已下注   20未下注
+        下注		    22全下注(用于庄)  21已下注   20未下注
         杀/不杀		41杀       40不杀
         摇筛子		50
         结果        61赢       60输
@@ -52,7 +49,9 @@ public class GameDice extends Game {
 
     protected Map<Long,List<Integer>> allDiceNumber = new HashMap<>();//所有玩家点数
 
-    private long currentTurn;//当前操作人
+    private List<Long> currentTurn = new ArrayList<>();//当前操作人
+
+    protected boolean ifAgainBanker = true;
 
     protected Room room;//房间
 
@@ -62,6 +61,7 @@ public class GameDice extends Game {
         RoomDice roomDice = (RoomDice)room;
         if(roomDice.getCurBanker()==null){
             roomDice.setCurBanker(users.get(0));
+            room.setBankerId(users.get(0));
         }
         init(users);
     }
@@ -75,6 +75,13 @@ public class GameDice extends Game {
             gameResultScore.put(uid,0.0);
         }
         noticeWhoIsBanker();
+
+
+        //断线专用
+        List<Long> currentTurnList = new ArrayList<>();
+        currentTurnList.addAll(users);
+        currentTurnList.remove(room.getBankerId());
+        currentTurn.addAll(currentTurnList);
     }
 
 
@@ -85,6 +92,11 @@ public class GameDice extends Game {
      */
     public int bet(Player player,int chip){
         gameUserStatus.put(player.getUserId(),21);
+        currentTurn.remove(player.getUserId());
+        if(currentTurn.size()==0){
+            currentTurn.add(room.getBankerId());
+            gameUserStatus.put(room.getBankerId(),22);
+        }
 
         logger.info(player.getUser().getAccount() +"  下注: "+ chip);
 
@@ -133,11 +145,14 @@ public class GameDice extends Game {
         RoomDice roomDice = (RoomDice)room;
         gameUserStatus.put(player.getUserId(),50);
         List<Integer> list = DiceNumberUtils.getPoints();//获取点数
+        room.setMultiple(DiceNumberUtils.);
         noticeRockResult(player.getUserId(),list);
         if(player.getUserId()==roomDice.getCurBanker()){//判断是否是庄家
             if(!DiceNumberUtils.getIsEffective(list)){
                 System.out.println("骰子点数为"+list+":重新摇骰子");
                 noticeOtherCanRock(player.getUserId());
+                player.sendMsg(new ResponseVo("gameService","rock",0));
+                return 0;
             }
             else if(player.getUserId()==roomDice.getCurBanker() && DiceNumberUtils.getKill(list)){//庄营
                 allDiceNumber.put(player.getUserId(),list);
@@ -160,28 +175,40 @@ public class GameDice extends Game {
                 }
                 noticeBankerLost();
                 loseAllEnd();
+                ifAgainBanker = false;
                 noticeGG();
             }else{//等待闲家摇
                 allDiceNumber.put(player.getUserId(),list);
                 Long userId = nextRockOne(room.getUsers(),player.getUserId());
                 noticeOtherCanRock(userId);
+                currentTurn.remove(room.getBankerId());
+                currentTurn.add(userId);
             }
         }else{
             if(!DiceNumberUtils.getIsEffective(list)){
                 System.out.println("骰子点数为"+list+":重新摇骰子");
                 noticeOtherCanRock(player.getUserId());
+                player.sendMsg(new ResponseVo("gameService","rock",0));
+                return 0;
             }
             allDiceNumber.put(player.getUserId(),list);
             Long winner = DiceNumberUtils.getMaxUser(this,roomDice.getCurBanker(),player.getUserId());
             noticeWhoWin(winner);
             if(winner==roomDice.getCurBanker()){//庄赢
+                gameResultScore.put(winner,room.getUserScores().get(winner)+gameUserScore.get(player.getUserId()));
+                gameResultScore.put(player.getUserId(),room.getUserScores().get(player.getUserId())-gameUserScore.get(player.getUserId()));
                 room.getUserScores().put(winner,room.getUserScores().get(winner)+gameUserScore.get(player.getUserId()));
                 room.getUserScores().put(player.getUserId(),room.getUserScores().get(player.getUserId())-gameUserScore.get(player.getUserId()));
             }else{
-                room.getUserScores().put(winner,room.getUserScores().get(winner)+gameUserScore.get(player.getUserId()));
-                room.getUserScores().put(roomDice.getCurBanker(),room.getUserScores().get(roomDice.getCurBanker())-gameUserScore.get(player.getUserId()));
+                gameResultScore.put(winner,room.getUserScores().get(winner)+gameUserScore.get(winner));
+                gameResultScore.put(roomDice.getCurBanker(),room.getUserScores().get(roomDice.getCurBanker())-gameUserScore.get(winner));
+                room.getUserScores().put(winner,room.getUserScores().get(winner)+gameUserScore.get(winner));
+                room.getUserScores().put(roomDice.getCurBanker(),room.getUserScores().get(roomDice.getCurBanker())-gameUserScore.get(winner));
+                ifAgainBanker = false;
             }
-            Long userId = nextRockOne(room.getUsers(),player.getUserId());
+            Long userId = nextRockOne2(room.getUsers(),player.getUserId());
+            currentTurn.remove(player.getUserId());
+            currentTurn.add(userId);
             if(userId!=0l){
                 noticeOtherCanRock(userId);
             }else{
@@ -335,6 +362,9 @@ public class GameDice extends Game {
      * 通知此局结束
      */
     private void noticeGG(){
+        if(ifAgainBanker){
+            this.room.setBankerId(nextOne(room.getUsers(),room.getBankerId()));
+        }
         RoomDice roomDice = (RoomDice)room;
         Map<String, Object> result = new HashMap<>();
         result.put("allDiceNumber",allDiceNumber);
@@ -355,9 +385,11 @@ public class GameDice extends Game {
             if(l!=roomDice.getCurBanker()){
                 temp+=gameUserScore.get(l);
                 gameResultScore.put(l,gameResultScore.get(l)-gameUserScore.get(l));
+                room.getUserScores().put(l,gameResultScore.get(l)-gameUserScore.get(l));
             }
         }
         gameResultScore.put(bankerId,gameResultScore.get(bankerId)+temp);
+        room.getUserScores().put(bankerId,gameResultScore.get(bankerId)+temp);
         genRecord();
         room.clearReadyStatus(true);
     }
@@ -370,9 +402,11 @@ public class GameDice extends Game {
             if(l!=roomDice.getCurBanker()){
                 temp+=gameUserScore.get(l);
                 gameResultScore.put(l,gameResultScore.get(l)+gameUserScore.get(l));
+                room.getUserScores().put(l,gameResultScore.get(l)+gameUserScore.get(l));
             }
         }
         gameResultScore.put(bankerId,gameResultScore.get(bankerId)-temp);
+        room.getUserScores().put(bankerId,gameResultScore.get(bankerId)-temp);
         roomDice.setCurBanker(nextOne(room.getUsers(),bankerId));
         genRecord();
         room.clearReadyStatus(true);
@@ -478,13 +512,47 @@ public class GameDice extends Game {
             return 0l;
         }
         result = list.get(nextId);
-        if(gameUserStatus.get(result)==40){
+        if(gameUserStatus.get(result)==21){
             nextRockOne(list,result);
         }else if(gameUserStatus.get(result)==41){
             return result;
         }else{
             return result;
         }
+        return result;
+    }
+
+
+    /**
+     * 下个人摇色子
+     * @param curId
+     * @return
+     */
+    public long nextRockOne2(List<Long> list, long curId) {
+        Long result = 0l;
+        List<Long> beforeList = new ArrayList<>();
+        List<Long> afterList = new ArrayList<>();
+        List<Long> lastList = new ArrayList<>();
+
+        int indexBanker = list.indexOf(room.getBankerId());
+        for (Long l:list) {
+            if(list.indexOf(l)<indexBanker){
+                afterList.add(l);
+            }else if(list.indexOf(l)>indexBanker){
+                beforeList.add(l);
+            }else if(list.indexOf(l)==indexBanker){
+                lastList.add(l);
+            }
+        }
+        lastList.addAll(beforeList);
+        lastList.addAll(afterList);
+        int position = lastList.indexOf(curId);
+        for (Long l:lastList) {
+            if(lastList.indexOf(l)>position && gameUserStatus.get(result)==41){
+                result = l;
+            }
+        }
+
         return result;
     }
 
@@ -526,5 +594,13 @@ public class GameDice extends Game {
 
     public void setAllDiceNumber(Map<Long, List<Integer>> allDiceNumber) {
         this.allDiceNumber = allDiceNumber;
+    }
+
+    public List<Long> getCurrentTurn() {
+        return currentTurn;
+    }
+
+    public void setCurrentTurn(List<Long> currentTurn) {
+        this.currentTurn = currentTurn;
     }
 }
