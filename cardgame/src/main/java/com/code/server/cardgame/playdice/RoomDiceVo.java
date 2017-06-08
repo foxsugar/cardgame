@@ -39,6 +39,7 @@ public class RoomDiceVo {
     protected List<UserVo> userList = new ArrayList<>();//用户列表
     protected Map<Long, Double> userScores = new HashMap<>();
 
+    protected Map<Long,Integer> allDiceNumber = new HashMap<>();//所有玩家分数
 
     public RoomDiceVo(){}
 

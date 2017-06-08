@@ -5,9 +5,6 @@ package com.code.server.cardgame.response;
  */
 public class GameVo {
 
-
-
-
     public GameVo(){}
 
 
