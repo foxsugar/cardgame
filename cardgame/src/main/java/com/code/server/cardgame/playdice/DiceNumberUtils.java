@@ -81,6 +81,15 @@ public class DiceNumberUtils {
         special2.add(6);
     }
 
+
+    /**
+     * 返回int筛子
+     * @return
+     */
+    public static int getListTurnInt(List<Integer> list){
+       return list.get(0) + list.get(1)*10 + list.get(2)*100;
+    }
+
     /**
      * 摇筛子
      * @return
