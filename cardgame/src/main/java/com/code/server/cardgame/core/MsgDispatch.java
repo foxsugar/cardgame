@@ -9,6 +9,7 @@ import com.code.server.cardgame.core.tiandakeng.GameTianDaKeng;
 import com.code.server.cardgame.core.tiandakeng.RoomTanDaKeng;
 import com.code.server.cardgame.grpc.GRpcMsgDispatch;
 import com.code.server.cardgame.handler.MessageHolder;
+import com.code.server.cardgame.playdice.ErrorCodeDice;
 import com.code.server.cardgame.playdice.GameDice;
 import com.code.server.cardgame.playdice.RoomDice;
 import com.code.server.cardgame.response.ErrorCode;
@@ -258,6 +259,9 @@ public class MsgDispatch {
                 String roomId = params.getString("roomId");
                 long kickPlayerId = params.getLong("kickPlayerId");
                 Room room = GameManager.getInstance().rooms.get(roomId);
+                if(kickPlayerId==room.createUser){
+                    return ErrorCodeDice.CANNOT_KICK_CREATER;
+                }
                 if(GameManager.getInstance().blackList.keySet().contains(roomId)){
                     List<Long> list = GameManager.getInstance().blackList.get(roomId);
                     if(!list.contains(kickPlayerId)){

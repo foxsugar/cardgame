@@ -44,11 +44,6 @@ public class GameManager {
     private IdWorker idWorker;
 
 
-
-
-
-
-
     public static UserVo getUserVo(User user){
         UserVo vo = new UserVo();
 

@@ -2,6 +2,7 @@ package com.code.server.cardgame.core;
 
 import com.code.server.cardgame.encoding.Notice;
 import com.code.server.cardgame.playdice.ErrorCodeDice;
+import com.code.server.cardgame.playdice.RoomDice;
 import com.code.server.cardgame.response.*;
 import com.code.server.cardgame.timer.GameTimer;
 import com.code.server.cardgame.timer.TimerNode;
@@ -148,7 +149,8 @@ public class Room implements IGameConstant{
         if (!this.users.contains(kickPlayerId)) {
             return ErrorCodeDice.NOT_IN_THIS_ROOM;
         }
-        roomRemoveUser(player);
+        roomRemoveUser(kickPlayer);
+        noticeJoinRoom(player);
         noticeKickPlayer(player,kickPlayerId);
         return 0;
     }
@@ -176,9 +178,7 @@ public class Room implements IGameConstant{
     public void noticeKickPlayer(Player player,Long kickPlayerId){
         Map<String, Object> result = new HashMap<>();
         result.put("kickPlayerId",kickPlayerId);
-        Player.sendMsg2Player(new ResponseVo("roomService","noticeKickPlayer",result), this.getUsers());
-
-
+        Player.sendMsg2Player(new ResponseVo("roomService","noticeKickPlayer",result), kickPlayerId);
     }
 
     public void noticeJoinRoom(Player player){
@@ -482,9 +482,32 @@ public class Room implements IGameConstant{
 
 
         boolean isChange = scoreIsChange();
-        if (this.isInGame && this.curGameNumber == 1 && !isChange) {
-//            drawBack();
+/*        if (this.isInGame && this.curGameNumber == 1 && !isChange) {
+            drawBack();
+        }*/
+
+        RoomDice roomDice = (RoomDice)this;
+
+        if(createType==3){
+            boolean temp = true;
+            for (Long l:userScores.keySet()) {
+                if(userScores.get(l)!=0.0){
+                    temp = false;
+                }
+            }
+            if(this.curCricle>0){
+                temp = false;
+            }
+            if(roomDice.getIsSelf()==1){
+                if(this.createUser!=this.bankerId){
+                    temp = false;
+                }
+            }
+            if(temp){
+                drawBack();
+            }
         }
+
 
 
 
@@ -533,6 +556,12 @@ public class Room implements IGameConstant{
         if (user != null) {
             user.setMoney(user.getMoney() + createNeedMoney);
             GameManager.getInstance().getSaveUser2DB().add(user);
+        }else {
+            User creater =  GameManager.getInstance().getPlayers().get(this.createUser).getUser();
+            if (creater != null) {
+                creater.setMoney(creater.getMoney() + createNeedMoney);
+                GameManager.getInstance().getSaveUser2DB().add(creater);
+            }
         }
     }
 
@@ -541,6 +570,12 @@ public class Room implements IGameConstant{
         if (user != null) {
             user.setMoney(user.getMoney() - createNeedMoney);
             GameManager.getInstance().getSaveUser2DB().add(user);
+        }else {
+            User creater =  GameManager.getInstance().getPlayers().get(this.createUser).getUser();
+            if (creater != null) {
+                creater.setMoney(creater.getMoney() - createNeedMoney);
+                GameManager.getInstance().getSaveUser2DB().add(creater);
+            }
         }
     }
 

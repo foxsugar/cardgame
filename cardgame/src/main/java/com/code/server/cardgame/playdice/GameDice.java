@@ -61,7 +61,8 @@ public class GameDice extends Game {
         RoomDice roomDice = (RoomDice)room;
         if(roomDice.getCurBanker()==null){
             roomDice.setCurBanker(users.get(0));
-            room.setBankerId(users.get(0));
+            this.room.setBankerId(users.get(0));
+            this.room.setLastDraw(true);//表示开局的标识
         }
         init(users);
     }
@@ -75,7 +76,6 @@ public class GameDice extends Game {
             gameResultScore.put(uid,0.0);
         }
         noticeWhoIsBanker();
-
 
         //断线专用
         List<Long> currentTurnList = new ArrayList<>();
@@ -143,9 +143,8 @@ public class GameDice extends Game {
             return ErrorCodeDice.CANNOT_ROCK_HAVE_ROCK;//已经下注
         }
         RoomDice roomDice = (RoomDice)room;
-        gameUserStatus.put(player.getUserId(),50);
         List<Integer> list = DiceNumberUtils.getPoints();//获取点数
-        room.setMultiple(DiceNumberUtils.);
+        room.setMultiple(DiceNumberUtils.getListTurnInt(list));
         noticeRockResult(player.getUserId(),list);
         if(player.getUserId()==roomDice.getCurBanker()){//判断是否是庄家
             if(!DiceNumberUtils.getIsEffective(list)){
@@ -178,8 +177,9 @@ public class GameDice extends Game {
                 ifAgainBanker = false;
                 noticeGG();
             }else{//等待闲家摇
+                gameUserStatus.put(player.getUserId(),50);
                 allDiceNumber.put(player.getUserId(),list);
-                Long userId = nextRockOne(room.getUsers(),player.getUserId());
+                Long userId = nextRockOne2(room.getUsers(),player.getUserId());
                 noticeOtherCanRock(userId);
                 currentTurn.remove(room.getBankerId());
                 currentTurn.add(userId);
@@ -195,15 +195,15 @@ public class GameDice extends Game {
             Long winner = DiceNumberUtils.getMaxUser(this,roomDice.getCurBanker(),player.getUserId());
             noticeWhoWin(winner);
             if(winner==roomDice.getCurBanker()){//庄赢
-                gameResultScore.put(winner,room.getUserScores().get(winner)+gameUserScore.get(player.getUserId()));
-                gameResultScore.put(player.getUserId(),room.getUserScores().get(player.getUserId())-gameUserScore.get(player.getUserId()));
-                room.getUserScores().put(winner,room.getUserScores().get(winner)+gameUserScore.get(player.getUserId()));
-                room.getUserScores().put(player.getUserId(),room.getUserScores().get(player.getUserId())-gameUserScore.get(player.getUserId()));
+                gameResultScore.put(winner,gameResultScore.get(winner)+gameUserScore.get(player.getUserId()));
+                gameResultScore.put(player.getUserId(),gameResultScore.get(player.getUserId())-gameUserScore.get(player.getUserId()));
+                //room.getUserScores().put(winner,room.getUserScores().get(winner)+gameUserScore.get(player.getUserId()));
+                //room.getUserScores().put(player.getUserId(),room.getUserScores().get(player.getUserId())-gameUserScore.get(player.getUserId()));
             }else{
-                gameResultScore.put(winner,room.getUserScores().get(winner)+gameUserScore.get(winner));
-                gameResultScore.put(roomDice.getCurBanker(),room.getUserScores().get(roomDice.getCurBanker())-gameUserScore.get(winner));
-                room.getUserScores().put(winner,room.getUserScores().get(winner)+gameUserScore.get(winner));
-                room.getUserScores().put(roomDice.getCurBanker(),room.getUserScores().get(roomDice.getCurBanker())-gameUserScore.get(winner));
+                gameResultScore.put(winner,gameResultScore.get(winner)+gameUserScore.get(winner));
+                gameResultScore.put(roomDice.getCurBanker(),gameResultScore.get(roomDice.getCurBanker())-gameUserScore.get(winner));
+                //room.getUserScores().put(winner,room.getUserScores().get(winner)+gameUserScore.get(winner));
+                //room.getUserScores().put(roomDice.getCurBanker(),room.getUserScores().get(roomDice.getCurBanker())-gameUserScore.get(winner));
                 ifAgainBanker = false;
             }
             Long userId = nextRockOne2(room.getUsers(),player.getUserId());
@@ -212,7 +212,6 @@ public class GameDice extends Game {
             if(userId!=0l){
                 noticeOtherCanRock(userId);
             }else{
-                sendFinalResult();
                 noticeGG();
             }
         }
@@ -239,10 +238,14 @@ public class GameDice extends Game {
      * @return
      */
     public int killAll(Player player){
+        List<Long> userIdList = new ArrayList<>();
         for (Long l:room.getUsers()) {
-            gameUserStatus.put(l,41);
+            if(room.getBankerId()!=l){
+                gameUserStatus.put(l,41);
+                userIdList.add(l);
+            }
         }
-        noticeWhoKilled(null);
+        noticeWhoKilledAll(userIdList);
         player.sendMsg(new ResponseVo("gameService","killAll",0));
         return 0;
     }
@@ -313,13 +316,24 @@ public class GameDice extends Game {
     }*/
 
     /**
-     * 通知通知谁赢
+     * 通知通知谁被杀
      */
     private void noticeWhoKilled(Long userId){
         Map<String, Object> result = new HashMap<>();
         result.put("killedUserId",userId);
         result.put("gameUserStatus",gameUserStatus);
         ResponseVo vo = new ResponseVo("gameService","noticeWhoKilled",result);
+        Player.sendMsg2Player(vo,room.getUsers());
+    }
+
+    /**
+     * 通知通知谁被杀
+     */
+    private void noticeWhoKilledAll(List<Long> userIdList){
+        Map<String, Object> result = new HashMap<>();
+        result.put("userIdList",userIdList);
+        result.put("gameUserStatus",gameUserStatus);
+        ResponseVo vo = new ResponseVo("gameService","noticeWhoKilledAll",result);
         Player.sendMsg2Player(vo,room.getUsers());
     }
 
@@ -362,16 +376,22 @@ public class GameDice extends Game {
      * 通知此局结束
      */
     private void noticeGG(){
-        if(ifAgainBanker){
-            this.room.setBankerId(nextOne(room.getUsers(),room.getBankerId()));
-        }
         RoomDice roomDice = (RoomDice)room;
+        if(!ifAgainBanker){
+            long bankerId = nextOne(room.getUsers(),room.getBankerId());
+            this.room.setBankerId(bankerId);
+            roomDice.setCurBanker(bankerId);
+        }
         Map<String, Object> result = new HashMap<>();
         result.put("allDiceNumber",allDiceNumber);
         result.put("gameResultScore",gameResultScore);
         result.put("curBanker",roomDice.getCurBanker());
         ResponseVo vo = new ResponseVo("gameService","noticeGG",result);
         Player.sendMsg2Player(vo,room.getUsers());
+
+        genRecord();
+        room.clearReadyStatus(true);
+        sendFinalResult();
     }
 
 
@@ -382,16 +402,14 @@ public class GameDice extends Game {
         long bankerId = roomDice.getCurBanker();
         int temp = 0;
         for (Long l:gameUserScore.keySet()) {
-            if(l!=roomDice.getCurBanker()){
+            if(l!=roomDice.getCurBanker() && gameUserStatus.get(l)==60){
                 temp+=gameUserScore.get(l);
                 gameResultScore.put(l,gameResultScore.get(l)-gameUserScore.get(l));
-                room.getUserScores().put(l,gameResultScore.get(l)-gameUserScore.get(l));
+                //room.getUserScores().put(l,gameResultScore.get(l)-gameUserScore.get(l));
             }
         }
         gameResultScore.put(bankerId,gameResultScore.get(bankerId)+temp);
-        room.getUserScores().put(bankerId,gameResultScore.get(bankerId)+temp);
-        genRecord();
-        room.clearReadyStatus(true);
+        //room.getUserScores().put(bankerId,gameResultScore.get(bankerId)+temp);
     }
 
     public void loseAllEnd(){
@@ -399,17 +417,15 @@ public class GameDice extends Game {
         long bankerId = roomDice.getCurBanker();
         int temp = 0;
         for (Long l:gameUserScore.keySet()) {
-            if(l!=roomDice.getCurBanker()){
+            if(l!=roomDice.getCurBanker() && gameUserStatus.get(l)==61){
                 temp+=gameUserScore.get(l);
                 gameResultScore.put(l,gameResultScore.get(l)+gameUserScore.get(l));
-                room.getUserScores().put(l,gameResultScore.get(l)+gameUserScore.get(l));
+                //room.getUserScores().put(l,gameResultScore.get(l)+gameUserScore.get(l));
             }
         }
         gameResultScore.put(bankerId,gameResultScore.get(bankerId)-temp);
-        room.getUserScores().put(bankerId,gameResultScore.get(bankerId)-temp);
-        roomDice.setCurBanker(nextOne(room.getUsers(),bankerId));
-        genRecord();
-        room.clearReadyStatus(true);
+        //room.getUserScores().put(bankerId,gameResultScore.get(bankerId)-temp);
+        //roomDice.setCurBanker(nextOne(room.getUsers(),bankerId));
     }
 
 
@@ -503,6 +519,7 @@ public class GameDice extends Game {
      * @param curId
      * @return
      */
+    @Deprecated
     public long nextRockOne(List<Long> list, long curId) {
         Long result = 0l;
         int index = list.indexOf(curId);
@@ -548,11 +565,11 @@ public class GameDice extends Game {
         lastList.addAll(afterList);
         int position = lastList.indexOf(curId);
         for (Long l:lastList) {
-            if(lastList.indexOf(l)>position && gameUserStatus.get(result)==41){
+            if(lastList.indexOf(l)>position && gameUserStatus.get(l)==41){
                 result = l;
+                return result;
             }
         }
-
         return result;
     }
 

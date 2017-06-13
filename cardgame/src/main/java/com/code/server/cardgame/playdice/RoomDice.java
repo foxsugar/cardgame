@@ -45,7 +45,7 @@ public class RoomDice extends Room {
         this.cricle = cricle;
         this.personNumber = personNumber;
         this.isSelf = isSelf;
-
+        this.isInGame = false;
         this.createNeedMoney = cricle*personNumber;
     }
 
@@ -89,10 +89,15 @@ public class RoomDice extends Room {
             room.timerNode = node;
             GameTimer.getInstance().addTimerNode(node);
             //记录到带开房的列表
-            List<Room> roomList = new ArrayList<>();
-            roomList = GameManager.getInstance().userRoomList.get(player.getUserId());
-            roomList.add(room);
-            GameManager.getInstance().userRoomList.put(player.getUserId(),roomList);
+            List<Room> roomList = GameManager.getInstance().userRoomList.get(player.getUserId());
+            if(roomList==null){
+                roomList = new ArrayList<>();
+                roomList.add(room);
+                GameManager.getInstance().userRoomList.put(player.getUserId(),roomList);
+            }else{
+                roomList.add(room);
+                GameManager.getInstance().userRoomList.put(player.getUserId(),roomList);
+            }
         }
         GameManager.getInstance().rooms.put(room.roomId, room);
 
