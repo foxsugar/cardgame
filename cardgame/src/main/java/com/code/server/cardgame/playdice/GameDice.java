@@ -64,6 +64,7 @@ public class GameDice extends Game {
             this.room.setBankerId(users.get(0));
             this.room.setLastDraw(true);//表示开局的标识
         }
+        this.room.setMultiple(0);
         init(users);
     }
     public void init(List<Long> users){
@@ -115,7 +116,7 @@ public class GameDice extends Game {
         }
 
         player.sendMsg(new ResponseVo("gameService","bet",0));
-        noticeGameUserScore();//通知所有人当前下注的情况
+        noticeGameUserScore(player.getUserId());//通知所有人当前下注的情况
 
         if(gameUserScore.keySet().size()==this.room.getPersonNumber()-1){
             noticeBankerCanKill();
@@ -264,9 +265,10 @@ public class GameDice extends Game {
     /**
      * 通知通知所有人下的注数
      */
-    private void noticeGameUserScore(){
+    private void noticeGameUserScore(Long userId){
         Map<String, Object> result = new HashMap<>();
         result.put("gameUserScore",gameUserScore);
+        result.put("userId",userId);
         ResponseVo vo = new ResponseVo("gameService","noticeGameUserScorer",result);
         Player.sendMsg2Player(vo,room.getUsers());
     }
@@ -301,6 +303,7 @@ public class GameDice extends Game {
         Map<String, Object> result = new HashMap<>();
         result.put("rockUserId",userId);
         result.put("rockResult",rockResult);
+        result.put("point",DiceNumberUtils.getPoint(rockResult));
         ResponseVo vo = new ResponseVo("gameService","noticeRockResult",result);
         Player.sendMsg2Player(vo,room.getUsers());
     }

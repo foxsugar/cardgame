@@ -178,11 +178,44 @@ public class DiceNumberUtils {
         return 0;
     }
 
+    /**
+     * 获取筛子分数
+     * @param list
+     * @return
+     */
+    public static Integer getPoint(List<Integer> list){
+        if(!getIsEffective(list)){
+            return 0;
+        }
+        if(list.containsAll(special1)){
+            return 8;
+        }
+        if(list.containsAll(special2)){
+            return 9;
+        }
+        Map<Integer,Integer> map = new HashMap<Integer,Integer>();
+        for(Integer a : list){
+            if(map.containsKey(a)){
+                map.put(a,map.get(a)+1);
+            }else{
+                map.put(a,1);
+            }
+        }
+        for (Integer i:map.keySet()) {
+            if(map.get(i)==1){
+                return i;
+            }else if(map.get(i)==3){
+                return 7;//豹子所有的大小都一样
+            }
+        }
+        return 0;
+    }
+
     public static void main(String[] args) {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
-        list.add(5);
-        System.out.println(listEffective.contains(list));
+        list.add(3);
+        System.out.println(getPoint(list));
     }
 }
