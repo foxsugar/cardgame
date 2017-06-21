@@ -18,6 +18,10 @@ public class Constant {
 
     private int initMoney;
 
+    private String android;
+    private String ios;
+
+
 
     public long getId() {
         return id;
@@ -62,5 +66,21 @@ public class Constant {
     public Constant setDownload2(String download2) {
         this.download2 = download2;
         return this;
+    }
+
+    public String getAndroid() {
+        return android;
+    }
+
+    public void setAndroid(String android) {
+        this.android = android;
+    }
+
+    public String getIos() {
+        return ios;
+    }
+
+    public void setIos(String ios) {
+        this.ios = ios;
     }
 }
