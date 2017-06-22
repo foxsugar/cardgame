@@ -130,7 +130,7 @@ public class Room implements IGameConstant{
         this.maxZhaCount = multiple;
 
         //todo
-        this.createNeedMoney = 1;
+        this.createNeedMoney = getNeedMoney(gameNumber);
     }
 
 
