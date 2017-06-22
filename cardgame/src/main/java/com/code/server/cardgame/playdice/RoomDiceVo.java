@@ -23,7 +23,7 @@ import java.util.Map;
  *
  * @version 1.0
  */
-public class RoomDiceVo {
+public class RoomDiceVo{
 
     protected String roomId;
     protected int cricle;
@@ -34,6 +34,17 @@ public class RoomDiceVo {
     private GameVo game;
     private int curCricleNumber;
     private Long curBanker;
+
+
+    protected double multiple;//倍数
+    protected int gameNumber;
+    private int curGameNumber;
+    protected int hasNine;
+
+
+    private boolean isLastDraw = false;//是否平局
+    private int drawForLeaveChip = 0;//平局留下筹码
+
 
     protected Map<Long, Integer> userStatus = new HashMap<>();//用户状态
     protected List<UserVo> userList = new ArrayList<>();//用户列表
@@ -55,6 +66,13 @@ public class RoomDiceVo {
 
         this.userStatus.putAll(roomDice.getUserStatus());
         this.userScores.putAll(roomDice.getUserScores());
+
+        this.multiple = 0;
+        this.gameNumber = 0;
+        this.curGameNumber = 0;
+        this.isLastDraw = false;
+        this.drawForLeaveChip = 0;
+        this.hasNine = 0;
 
         for(long uid : roomDice.getUsers()){
             userList.add(GameManager.getUserVo(roomDice.getUserMap().get(uid)));

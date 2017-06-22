@@ -40,9 +40,14 @@ public class RoomVo {
     protected int personNumber;
     protected long curbanker;
 
+    protected int cricle;
+    protected int isSelf;
+
     public RoomVo(){}
 
     public RoomVo(Room room, Player player){
+        this.isSelf = room.getIsSelf();
+        this.cricle = room.getCricle();
         this.createType = room.getCreateType();
         this.roomId = room.getRoomId();
         this.multiple = room.getMultiple();

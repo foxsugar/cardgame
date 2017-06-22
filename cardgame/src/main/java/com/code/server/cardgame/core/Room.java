@@ -65,7 +65,27 @@ public class Room implements IGameConstant{
 
     protected transient TimerNode timerNode;
 
-    public static int joinRoomQuick(Player player,int type){
+    protected int cricle;
+    protected int isSelf;
+
+
+    public int getCricle() {
+        return cricle;
+    }
+
+    public void setCricle(int cricle) {
+        this.cricle = cricle;
+    }
+
+    public int getIsSelf() {
+        return isSelf;
+    }
+
+    public void setIsSelf(int isSelf) {
+        this.isSelf = isSelf;
+    }
+
+    public static int joinRoomQuick(Player player, int type){
 
         return 0;
     }
