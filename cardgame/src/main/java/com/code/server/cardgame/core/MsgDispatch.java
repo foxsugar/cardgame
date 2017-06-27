@@ -379,7 +379,9 @@ public class MsgDispatch {
         switch (method) {
             case "bet"://下注
                 int betChip = params.getInt("chip");
-                return game.bet(player, betChip);
+                int betChip2 = params.getInt("chip2");
+                int betChip3 = params.getInt("chip3");
+                return game.bet(player, betChip,betChip2,betChip3);
             case "rock"://摇骰子
                 return game.rock(player);
             case "kill"://杀

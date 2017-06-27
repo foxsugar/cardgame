@@ -7,6 +7,7 @@ import com.code.server.cardgame.core.doudizhu.RoomDouDiZhu;
 import com.code.server.cardgame.core.tiandakeng.RoomTanDaKeng;
 import com.code.server.cardgame.playdice.GameDiceVo;
 import com.code.server.cardgame.playdice.RoomDice;
+import com.code.server.cardgame.playdice.ThreePlayerScore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +43,7 @@ public class RoomVo {
 
     protected int cricle;
     protected int isSelf;
+    protected Map<Long,ThreePlayerScore> gameThreeScore = new HashMap<>();
 
     public RoomVo(){}
 
@@ -63,6 +65,7 @@ public class RoomVo {
         this.hasNine = room.getHasNine();
         this.curCricle = room.getCurCricle();
         this.curbanker = room.getBankerId();
+        this.gameThreeScore = room.getGameThreeScore();
 
         for(long uid : room.getUsers()){
             userList.add(GameManager.getUserVo(room.getUserMap().get(uid)));
@@ -81,10 +84,5 @@ public class RoomVo {
         }
 
     }
-
-
-
-
-
 
 }

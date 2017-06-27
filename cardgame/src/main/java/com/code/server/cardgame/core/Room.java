@@ -3,6 +3,7 @@ package com.code.server.cardgame.core;
 import com.code.server.cardgame.encoding.Notice;
 import com.code.server.cardgame.playdice.ErrorCodeDice;
 import com.code.server.cardgame.playdice.RoomDice;
+import com.code.server.cardgame.playdice.ThreePlayerScore;
 import com.code.server.cardgame.response.*;
 import com.code.server.cardgame.timer.GameTimer;
 import com.code.server.cardgame.timer.TimerNode;
@@ -67,6 +68,7 @@ public class Room implements IGameConstant{
 
     protected int cricle;
     protected int isSelf;
+    protected Map<Long,ThreePlayerScore> gameThreeScore = new HashMap<>();
 
 
     public int getCricle() {
@@ -399,7 +401,7 @@ public class Room implements IGameConstant{
             this.isHasDissolutionRequest = true;
             //第一次申请 五分钟后解散
             long start = System.currentTimeMillis();
-            TimerNode node = new TimerNode(start, FIVE_MIN, false, ()-> {
+            TimerNode node = new TimerNode(start, ONE_MIN, false, ()-> {
 
                 if (isCanDissloution) {
                     dissolutionRoom();
@@ -813,5 +815,13 @@ public class Room implements IGameConstant{
 
     public void setCurCricle(int curCricle) {
         this.curCricle = curCricle;
+    }
+
+    public Map<Long, ThreePlayerScore> getGameThreeScore() {
+        return gameThreeScore;
+    }
+
+    public void setGameThreeScore(Map<Long, ThreePlayerScore> gameThreeScore) {
+        this.gameThreeScore = gameThreeScore;
     }
 }

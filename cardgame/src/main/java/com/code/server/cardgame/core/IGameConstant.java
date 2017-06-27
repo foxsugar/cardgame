@@ -17,7 +17,7 @@ public interface IGameConstant {
     int STATUS_AGREE_DISSOLUTION = 4;//同意解散
 
     long FIVE_MIN = 1000L * 60 * 5;//五分钟
-
+    long ONE_MIN = 1000L * 60 ;//1分钟
 
     String GAMETYPE_LINFEN = "0";//临汾斗地主
     String GAMETYPE_QIANAN = "1";//乾安斗地主
