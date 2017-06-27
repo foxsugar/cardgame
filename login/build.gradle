@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '1.5.2.RELEASE'
+		springBootVersion = '1.5.3.RELEASE'
 	}
 	repositories {
 //		mavenCentral()
@@ -15,6 +15,7 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'scala'
+apply plugin: 'groovy'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'war'
 
@@ -62,6 +63,8 @@ dependencies {
 	compile "org.scala-lang:scala-library:2.12.2"
 	compile "org.scala-lang:scala-compiler:2.12.2"
 	compile "org.scala-lang:scala-reflect:2.12.2"
+
+	compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.11'
 
 	compile group: 'org.springframework.kafka', name: 'spring-kafka', version: '1.2.0.RELEASE'
 

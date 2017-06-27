@@ -7,4 +7,9 @@ class Test {
   def test():Unit={
     println("test")
   }
+
+  def main(args: Array[String]): Unit = {
+    println("ss")
+  }
+
 }

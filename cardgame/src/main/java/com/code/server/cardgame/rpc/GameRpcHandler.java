@@ -11,10 +11,7 @@ import com.code.server.db.Service.ConstantService;
 import com.code.server.db.Service.ServerService;
 import com.code.server.db.Service.UserService;
 import com.code.server.db.model.User;
-import com.code.server.rpc.idl.ChargeType;
-import com.code.server.rpc.idl.GameRPC;
-import com.code.server.rpc.idl.Order;
-import com.code.server.rpc.idl.RPCError;
+import com.code.server.rpc.idl.*;
 import org.apache.thrift.TException;
 import org.apache.thrift.async.AsyncMethodCallback;
 
@@ -140,6 +137,14 @@ public class GameRpcHandler implements GameRPC.AsyncIface {
         GameManager.getInstance().constant.setDownload2(str);
         constantService.constantDao.save(GameManager.getInstance().constant);
         resultHandler.onComplete(0);
+    }
+
+    @Override
+    public void getOnlineUser(AsyncMethodCallback<OnlineNum> resultHandler) throws TException {
+        OnlineNum onlineNum = new OnlineNum();
+        onlineNum.setRoomNum(GameManager.getInstance().rooms.size());
+        onlineNum.setUserNum(GameManager.getInstance().players.size());
+        resultHandler.onComplete(onlineNum);
     }
 
     private static void saveUser(User user){
