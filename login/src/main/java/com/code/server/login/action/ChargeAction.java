@@ -22,7 +22,6 @@ public class ChargeAction {
     @RequestMapping("/charge")
     @ResponseBody
     String charge(HttpServletRequest request, HttpServletResponse response){
-
         System.out.println("======");
         return "";
     }

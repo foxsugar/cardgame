@@ -1,6 +1,8 @@
 package com.code.server.login.kafka;
 
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.PartitionOffset;
+import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.stereotype.Component;
 
 /**
@@ -9,17 +11,17 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class MsgConsumer {
-    @KafkaListener(topics = {"test","my-replicated-topic2"})
+//    int count = 0;
+//    @KafkaListener(topics = {"test","testkey"})
+    @KafkaListener(id = "bar", topicPartitions =
+            { @TopicPartition(topic = "test", partitions = { "0" })})
     public void processMessage(String content) {
+//        count ++;
         System.out.println("开始接受消息");
         System.out.println(content);
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         System.out.println("处理完毕");
         System.out.println("");
+//        System.out.println(count);
 
     }
 

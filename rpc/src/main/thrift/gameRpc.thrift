@@ -22,6 +22,11 @@ struct Order{
     6:i64 id,
 }
 
+struct OnlineNum{
+    1:i32 userNum,
+    2:i32 roomNum,
+}
+
 service GameRPC{
     //充值
     i32 charge(Order order),
@@ -48,5 +53,7 @@ service GameRPC{
    i32 modifyAppleCheck(i32 status),
 
    i32 modifyDownload2(string str)
+
+   OnlineNum getOnlineUser()
 }
 
