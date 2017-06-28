@@ -54,7 +54,7 @@ public class RoomDice extends Room {
         if(GameManager.getInstance().userRoom.containsKey(player.getUserId())){
             return ErrorCode.CANNOT_CREATE_ROOM_ROLE_HAS_IN_ROOM;
         }
-        int needMoney = getNeedMoney(cricle,personNumber);
+        int needMoney = getNeedMoney(cricle);
         if (player.getUser().getMoney() < needMoney) {
             return ErrorCode.CANNOT_CREATE_ROOM_MONEY;
         }
@@ -107,8 +107,8 @@ public class RoomDice extends Room {
     }
 
 
-    public static int getNeedMoney(int cricle,int gameNumber) {
-        return cricle * gameNumber;
+    public static int getNeedMoney(int cricle) {
+        return cricle==1?3:5;
     }
 
     public int getCricle() {
