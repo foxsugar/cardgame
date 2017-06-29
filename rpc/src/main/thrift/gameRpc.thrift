@@ -52,7 +52,13 @@ service GameRPC{
    //是否苹果审查
    i32 modifyAppleCheck(i32 status),
 
-   i32 modifyDownload2(string str)
+   i32 modifyDownload2(string str),
+
+   i32 addBlackList(i64 userId),
+
+   i32 removeBlackList(i64 userId),
+
+   set<i64> getBlackList();
 
    OnlineNum getOnlineUser()
 }
