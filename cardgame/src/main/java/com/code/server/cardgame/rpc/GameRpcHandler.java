@@ -15,6 +15,9 @@ import com.code.server.rpc.idl.*;
 import org.apache.thrift.TException;
 import org.apache.thrift.async.AsyncMethodCallback;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by sunxianping on 2017/3/29.
  */
@@ -137,6 +140,36 @@ public class GameRpcHandler implements GameRPC.AsyncIface {
         GameManager.getInstance().constant.setDownload2(str);
         constantService.constantDao.save(GameManager.getInstance().constant);
         resultHandler.onComplete(0);
+    }
+
+    @Override
+    public void addBlackList(long userId, AsyncMethodCallback<Integer> resultHandler) throws TException {
+        ConstantService constantService = SpringUtil.getBean(ConstantService.class);
+        if(GameManager.getInstance().constant.getBlackList() == null){
+            GameManager.getInstance().constant.setBlackList(new HashSet<>());
+        }
+        GameManager.getInstance().constant.getBlackList().add(userId);
+        constantService.constantDao.save(GameManager.getInstance().constant);
+        resultHandler.onComplete(0);
+    }
+
+    @Override
+    public void removeBlackList(long userId, AsyncMethodCallback<Integer> resultHandler) throws TException {
+        ConstantService constantService = SpringUtil.getBean(ConstantService.class);
+        if(GameManager.getInstance().constant.getBlackList() == null){
+            GameManager.getInstance().constant.setBlackList(new HashSet<>());
+        }
+        GameManager.getInstance().constant.getBlackList().remove(userId);
+        constantService.constantDao.save(GameManager.getInstance().constant);
+        resultHandler.onComplete(0);
+    }
+
+    @Override
+    public void getBlackList(AsyncMethodCallback<Set<Long>> resultHandler) throws TException {
+        if(GameManager.getInstance().constant.getBlackList() == null){
+            GameManager.getInstance().constant.setBlackList(new HashSet<>());
+        }
+        resultHandler.onComplete(GameManager.getInstance().constant.getBlackList());
     }
 
     @Override

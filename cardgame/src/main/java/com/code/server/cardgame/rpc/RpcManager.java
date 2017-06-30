@@ -130,6 +130,9 @@ public class RpcManager {
 
         GameRPC.Client client = GameRpcClient.getAClient(adminTransport);
         client.modifyAppleCheck(1);
+//        client.addBlackList(1);
+//        client.getBlackList();
+        client.removeBlackList(1);
 
     }
 

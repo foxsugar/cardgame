@@ -1,6 +1,10 @@
 package com.code.server.db.model;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by win7 on 2017/3/10.
@@ -20,6 +24,12 @@ public class Constant {
 
     private String android;
     private String ios;
+
+
+    @Type(type = "json")
+    @Lob
+    @Column(columnDefinition = "longtext")
+    private Set<Long> blackList = new HashSet<>();
 
 
 
@@ -83,4 +93,15 @@ public class Constant {
     public void setIos(String ios) {
         this.ios = ios;
     }
+
+    public Set<Long> getBlackList() {
+        return blackList;
+    }
+
+    public Constant setBlackList(Set<Long> blackList) {
+        this.blackList = blackList;
+        return this;
+    }
+
+
 }

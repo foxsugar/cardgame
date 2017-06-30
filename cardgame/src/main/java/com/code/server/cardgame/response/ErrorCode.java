@@ -73,6 +73,8 @@ public class ErrorCode {
 	public static final int NOT_HAVE_THIS_ACCEPTER = 300002;
 	public static final int NOT_HAVE_MORE_MONEY = 300003;
 
+	public static final int CAN_NOT_LOGIN_IN_BALCKLIST = 400003;
+
 	
 	static class ErrorCodeRepeatChecker {
     	public void check() {
