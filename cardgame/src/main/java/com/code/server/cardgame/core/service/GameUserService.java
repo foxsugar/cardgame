@@ -61,7 +61,7 @@ public class GameUserService {
         Player player = GameManager.getInstance().getPlayerByAccount(account);
         if (player != null) {
 
-            if (GameManager.getInstance().constant.getBlackList().contains(player.getUserId())) {
+            if (isInBlackList(player.getUserId())) {
                 return ErrorCode.CAN_NOT_LOGIN_IN_BALCKLIST;
             }
             //密码不正确
@@ -82,11 +82,7 @@ public class GameUserService {
                 ResponseVo vo = new ResponseVo("userService","login",0);
                 UserService userService = SpringUtil.getBean(UserService.class);
                 User user = userService.getUserByAccountAndPassword(account, password);
-                if (GameManager.getInstance().constant.getBlackList().contains(user.getUserId())) {
-                    vo.setCode(ErrorCode.CAN_NOT_LOGIN_IN_BALCKLIST);
-                    MsgDispatch.sendMsg(ctx,vo);
-                    return;
-                }
+
                 //密码错误
                 if (user == null) {
                     if (GameManager.getInstance().serverInfo.getAppleCheck() == 1) {
@@ -98,6 +94,11 @@ public class GameUserService {
                         return;
                     }
                 }
+                if (isInBlackList(user.getUserId())) {
+                    vo.setCode(ErrorCode.CAN_NOT_LOGIN_IN_BALCKLIST);
+                    MsgDispatch.sendMsg(ctx,vo);
+                    return;
+                }
                 //加入缓存
                 doLogin(user, ctx);
                 vo.setParams(getUserVo(user));
@@ -108,6 +109,12 @@ public class GameUserService {
         return 0;
     }
 
+    private boolean isInBlackList(long userId){
+        if(GameManager.getInstance().constant.getBlackList()==null){
+            return false;
+        }
+        return GameManager.getInstance().constant.getBlackList().contains(userId);
+    }
     /**
      * 给人充钱
      * @param player
@@ -321,7 +328,7 @@ public class GameUserService {
                 MsgDispatch.sendMsg(ctx,vo);
 
             }else{
-                if (GameManager.getInstance().constant.getBlackList().contains(user.getUserId())) {
+                if (isInBlackList(user.getUserId())) {
                     vo = new ResponseVo("userService", "checkOpenId", getUserVo(user));
                     MsgDispatch.sendMsg(ctx,vo);
                     return;
