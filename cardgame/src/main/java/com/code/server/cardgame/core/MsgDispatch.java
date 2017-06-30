@@ -233,6 +233,11 @@ public class MsgDispatch {
 
                 return RoomDice.createRoom(player, cricle,personNumber,isSelf);
             }
+            case "searchRoomDice":{
+                Long createId = params.getLong("createId");
+                return RoomDice.searchRoomDice(player,createId);
+            }
+
             case "createRoomTDK":{
 
                 int gameNumber = params.getInt("gameNumber");
@@ -252,8 +257,6 @@ public class MsgDispatch {
             case "joinRoomQuick":{
                 double type = params.getDouble("type");
                 return GoldRoomPool.getInstance().addRoom(player, type);
-
-
             }
             case "kickPerson":{//踢人
                 String roomId = params.getString("roomId");

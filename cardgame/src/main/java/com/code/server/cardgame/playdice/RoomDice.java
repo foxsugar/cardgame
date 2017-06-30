@@ -31,8 +31,7 @@ public class RoomDice extends Room {
 
     //玩家状态:
 
-    private int cricle;
-    private int isSelf;//代开房,0代开房，1自己用
+    //private int isSelf;//代开房,0代开房，1自己用
 
     private int curCricleNumber=1;
     private Long curBanker;
@@ -94,6 +93,7 @@ public class RoomDice extends Room {
                 roomList = new ArrayList<>();
                 roomList.add(room);
                 GameManager.getInstance().userRoomList.put(player.getUserId(),roomList);
+                System.out.println(GameManager.getInstance().userRoomList.get(player.getUserId()).size());
             }else{
                 roomList.add(room);
                 GameManager.getInstance().userRoomList.put(player.getUserId(),roomList);
@@ -106,6 +106,11 @@ public class RoomDice extends Room {
         return 0;
     }
 
+    public static int searchRoomDice(Player player, Long createId){
+        GameManager.getInstance().userRoomList.get(createId);
+        player.sendMsg(new ResponseVo("roomService","searchRoomDice",GameManager.getInstance().userRoomList.get(createId)));
+        return 0;
+    }
 
     public static int getNeedMoney(int cricle) {
         return cricle==1?3:5;

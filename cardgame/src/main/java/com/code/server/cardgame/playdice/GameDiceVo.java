@@ -31,6 +31,8 @@ public class GameDiceVo extends GameVo{
 
     protected Map<Long,List<Integer>> allDiceNumber = new HashMap<>();//所有玩家点数
 
+    protected Map<Long,ThreePlayerScore> gameThreeScore = new HashMap<>();
+
     protected Long curBanker;
 
     private List<Long> currentTurn;
@@ -44,6 +46,7 @@ public class GameDiceVo extends GameVo{
             vo.gameResultScore = gameDice.getGameResultScore();
             vo.allDiceNumber = gameDice.getAllDiceNumber();
             vo.currentTurn = gameDice.getCurrentTurn();
+            vo.gameThreeScore = gameDice.getGameThreeScore();
             //玩家牌信息
             for (PlayerCardInfoDice playerCardInfo : gameDice.getPlayerCardInfos().values()) {
                 vo.playerCardInfos.put(playerCardInfo.userId, new PlayerCardInfoDiceVo(playerCardInfo, uid));

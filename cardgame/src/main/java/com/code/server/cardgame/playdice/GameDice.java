@@ -125,9 +125,9 @@ public class GameDice extends Game {
             return ErrorCodeDice.HAVE_BET;//已经下注
         }
 
-        gameThreeScore.get(player.getUser()).setOne(gameThreeScore.get(player.getUser()).getOne()+chip);
-        gameThreeScore.get(player.getUser()).setTwo(gameThreeScore.get(player.getUser()).getTwo()+chip2);
-        gameThreeScore.get(player.getUser()).setThree(gameThreeScore.get(player.getUser()).getThree()+chip3);
+        gameThreeScore.get(player.getUser().getUserId()).setOne(gameThreeScore.get(player.getUser().getUserId()).getOne()+chip);
+        gameThreeScore.get(player.getUser().getUserId()).setTwo(gameThreeScore.get(player.getUser().getUserId()).getTwo()+chip2);
+        gameThreeScore.get(player.getUser().getUserId()).setThree(gameThreeScore.get(player.getUser().getUserId()).getThree()+chip3);
 
         player.sendMsg(new ResponseVo("gameService","bet",0));
         noticeGameUserScore(player.getUserId());//通知所有人当前下注的情况
@@ -216,12 +216,12 @@ public class GameDice extends Game {
                 //room.getUserScores().put(player.getUserId(),room.getUserScores().get(player.getUserId())-gameUserScore.get(player.getUserId()));
                 if(DiceNumberUtils.getPoint(list)==8){//2dao
                     gameResultScore.put(winner,gameResultScore.get(winner)+gameThreeScore.get(player.getUserId()).getOne());
-                    gameResultScore.put(player.getUserId(),gameResultScore.get(player.getUserId())-gameResultScore.get(winner)+gameThreeScore.get(player.getUserId()).getOne());
+                    gameResultScore.put(player.getUserId(),gameResultScore.get(player.getUserId())-gameThreeScore.get(player.getUserId()).getOne());
                     gameResultScore.put(winner,gameResultScore.get(winner)+gameThreeScore.get(player.getUserId()).getTwo());
-                    gameResultScore.put(player.getUserId(),gameResultScore.get(player.getUserId())-gameResultScore.get(winner)+gameThreeScore.get(player.getUserId()).getTwo());
+                    gameResultScore.put(player.getUserId(),gameResultScore.get(player.getUserId())-gameThreeScore.get(player.getUserId()).getTwo());
                 }else{//1dao
                     gameResultScore.put(winner,gameResultScore.get(winner)+gameThreeScore.get(player.getUserId()).getOne());
-                    gameResultScore.put(player.getUserId(),gameResultScore.get(player.getUserId())-gameResultScore.get(winner)+gameThreeScore.get(player.getUserId()).getOne());
+                    gameResultScore.put(player.getUserId(),gameResultScore.get(player.getUserId())-gameThreeScore.get(player.getUserId()).getOne());
                 }
 
             }else{
@@ -231,19 +231,19 @@ public class GameDice extends Game {
                 //room.getUserScores().put(roomDice.getCurBanker(),room.getUserScores().get(roomDice.getCurBanker())-gameUserScore.get(winner));
                 if(DiceNumberUtils.getPoint(list)==7){//3dao
                     gameResultScore.put(winner,gameResultScore.get(winner)+gameThreeScore.get(winner).getOne());
-                    gameResultScore.put(roomDice.getCurBanker(),gameResultScore.get(roomDice.getCurBanker())-gameResultScore.get(winner)+gameThreeScore.get(winner).getOne());
+                    gameResultScore.put(roomDice.getCurBanker(),gameResultScore.get(roomDice.getCurBanker())-gameThreeScore.get(winner).getOne());
                     gameResultScore.put(winner,gameResultScore.get(winner)+gameThreeScore.get(winner).getTwo());
-                    gameResultScore.put(roomDice.getCurBanker(),gameResultScore.get(roomDice.getCurBanker())-gameResultScore.get(winner)+gameThreeScore.get(winner).getTwo());
+                    gameResultScore.put(roomDice.getCurBanker(),gameResultScore.get(roomDice.getCurBanker())-gameThreeScore.get(winner).getTwo());
                     gameResultScore.put(winner,gameResultScore.get(winner)+gameThreeScore.get(winner).getThree());
-                    gameResultScore.put(roomDice.getCurBanker(),gameResultScore.get(roomDice.getCurBanker())-gameResultScore.get(winner)+gameThreeScore.get(winner).getThree());
+                    gameResultScore.put(roomDice.getCurBanker(),gameResultScore.get(roomDice.getCurBanker())-gameThreeScore.get(winner).getThree());
                 }else if(DiceNumberUtils.getPoint(list)==9){//2dao
                     gameResultScore.put(winner,gameResultScore.get(winner)+gameThreeScore.get(winner).getOne());
-                    gameResultScore.put(roomDice.getCurBanker(),gameResultScore.get(roomDice.getCurBanker())-gameResultScore.get(winner)+gameThreeScore.get(winner).getOne());
+                    gameResultScore.put(roomDice.getCurBanker(),gameResultScore.get(roomDice.getCurBanker())-gameThreeScore.get(winner).getOne());
                     gameResultScore.put(winner,gameResultScore.get(winner)+gameThreeScore.get(winner).getTwo());
-                    gameResultScore.put(roomDice.getCurBanker(),gameResultScore.get(roomDice.getCurBanker())-gameResultScore.get(winner)+gameThreeScore.get(winner).getTwo());
+                    gameResultScore.put(roomDice.getCurBanker(),gameResultScore.get(roomDice.getCurBanker())-gameThreeScore.get(winner).getTwo());
                 }else{
                     gameResultScore.put(winner,gameResultScore.get(winner)+gameThreeScore.get(winner).getOne());
-                    gameResultScore.put(roomDice.getCurBanker(),gameResultScore.get(roomDice.getCurBanker())-gameResultScore.get(winner)+gameThreeScore.get(winner).getOne());
+                    gameResultScore.put(roomDice.getCurBanker(),gameResultScore.get(roomDice.getCurBanker())-gameThreeScore.get(winner).getOne());
                 }
                 ifAgainBanker = false;
             }
@@ -515,20 +515,20 @@ public class GameDice extends Game {
         //roomDice.setCurBanker(nextOne(room.getUsers(),bankerId));
         if(DiceNumberUtils.getPoint(list)==1){
             for (Long l:gameThreeScore.keySet()) {
-                if(l!=roomDice.getCurBanker() && gameUserStatus.get(l)==60){
+                if(l!=roomDice.getCurBanker() && gameUserStatus.get(l)==61){
                     temp+=gameThreeScore.get(l).getOne();
                     gameResultScore.put(l,gameResultScore.get(l)+gameThreeScore.get(l).getOne());
                 }
             }
         }else if(DiceNumberUtils.getPoint(list)==8){
-            for (Long l:gameUserScore.keySet()) {
-                if(l!=roomDice.getCurBanker() && gameUserStatus.get(l)==60){
+            for (Long l:gameThreeScore.keySet()) {
+                if(l!=roomDice.getCurBanker() && gameUserStatus.get(l)==61){
                     temp+=gameThreeScore.get(l).getOne();
                     gameResultScore.put(l,gameResultScore.get(l)+gameThreeScore.get(l).getOne());
                 }
             }
-            for (Long l:gameUserScore.keySet()) {
-                if(l!=roomDice.getCurBanker() && gameUserStatus.get(l)==60){
+            for (Long l:gameThreeScore.keySet()) {
+                if(l!=roomDice.getCurBanker() && gameUserStatus.get(l)==61){
                     temp+=gameThreeScore.get(l).getTwo();
                     gameResultScore.put(l,gameResultScore.get(l)+gameThreeScore.get(l).getTwo());
                 }

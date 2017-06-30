@@ -425,8 +425,12 @@ public class GameUserService {
     }
     //获取用户带建房的列表
     public int getUserCreateRoomList(Player player) {
-        List<Room> roomlist = GameManager.getInstance().userRoomList.get(player.getUserId());
-        player.sendMsg("userService","getUserCreateRoomList",roomlist);
+        List<Room> roomList = GameManager.getInstance().userRoomList.get(player.getUserId());
+        if(roomList!=null){
+            player.sendMsg("userService","getUserCreateRoomList",roomList);
+        }else{
+            player.sendMsg("userService","getUserCreateRoomList",null);
+        }
         return 0;
     }
 
