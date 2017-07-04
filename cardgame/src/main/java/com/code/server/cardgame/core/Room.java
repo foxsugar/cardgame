@@ -70,6 +70,11 @@ public class Room implements IGameConstant{
     protected int isSelf;
     protected Map<Long,ThreePlayerScore> gameThreeScore = new HashMap<>();
 
+    public Long lastOperateTime;
+
+    protected void updateLastOperateTime(){
+        this.lastOperateTime = System.currentTimeMillis();
+    }
 
     public int getCricle() {
         return cricle;
@@ -133,11 +138,13 @@ public class Room implements IGameConstant{
 
         //todo
         this.createNeedMoney = getNeedMoney(gameNumber);
+        this.lastOperateTime = System.currentTimeMillis();
     }
 
 
 
     public int joinRoom(Player player) {
+        updateLastOperateTime();
         long userId = player.getUserId();
         if(GameManager.getInstance().getRoomByUser(player.getUserId())!=null){
             return ErrorCode.CANNOT_CREATE_ROOM_USER_HAS_IN_ROOM;
@@ -824,4 +831,5 @@ public class Room implements IGameConstant{
     public void setGameThreeScore(Map<Long, ThreePlayerScore> gameThreeScore) {
         this.gameThreeScore = gameThreeScore;
     }
+
 }

@@ -46,6 +46,7 @@ public class RoomDice extends Room {
         this.isSelf = isSelf;
         this.isInGame = false;
         this.createNeedMoney = cricle*personNumber;
+        this.lastOperateTime = System.currentTimeMillis();
     }
 
 

@@ -5,8 +5,8 @@ import com.code.server.cardgame.config.ServerConfig;
 import com.code.server.cardgame.config.ServerState;
 import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.doudizhu.DouDiZhuLinfenRobot;
-import com.code.server.cardgame.core.doudizhu.GameDouDiZhu;
 import com.code.server.cardgame.handler.GameProcessor;
+import com.code.server.cardgame.playdice.PlayDiceRobot;
 import com.code.server.cardgame.robot.RobotManager;
 import com.code.server.cardgame.rpc.RpcManager;
 import com.code.server.cardgame.utils.SaveUserTimerTask;
@@ -57,6 +57,7 @@ public class CardgameApplication {
         RobotManager robotManager = RobotManager.getInstance();
         //添加斗地主的机器人
         robotManager.addRobot(new DouDiZhuLinfenRobot());
+        robotManager.addRobot(new PlayDiceRobot());
         ThreadPool.getInstance().executor.execute(robotManager);
 
         ServerState.isWork = true;

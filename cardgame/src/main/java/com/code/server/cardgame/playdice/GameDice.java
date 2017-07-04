@@ -57,6 +57,8 @@ public class GameDice extends Game {
 
     protected Room room;//房间
 
+    protected long lastOperateTime;
+
     @Override
     public void startGame(List<Long> users,Room room){
         this.room = room;
