@@ -59,6 +59,10 @@ public class GameDice extends Game {
 
     protected long lastOperateTime;
 
+    protected int step;
+
+    protected Long currentOperaterJust4AutoRock;
+
     @Override
     public void startGame(List<Long> users,Room room){
         this.room = room;
@@ -72,6 +76,7 @@ public class GameDice extends Game {
         init(users);
     }
     public void init(List<Long> users){
+        step = DICESTEP_BET;
         //初始化玩家
         for(Long uid : users){
             PlayerCardInfoDice playerCardInfo = new PlayerCardInfoDice();
@@ -95,6 +100,7 @@ public class GameDice extends Game {
         currentTurnList.addAll(users);
         currentTurnList.remove(room.getBankerId());
         currentTurn.addAll(currentTurnList);
+        updateLastOperateTime();
     }
 
 
@@ -135,9 +141,10 @@ public class GameDice extends Game {
         noticeGameUserScore(player.getUserId());//通知所有人当前下注的情况
 
         if(gameUserScore.keySet().size()==this.room.getPersonNumber()-1){
+            step = DICESTEP_KILL;
             noticeBankerCanKill();
         }
-
+        updateLastOperateTime();
         return 0;
     }
 
@@ -171,6 +178,7 @@ public class GameDice extends Game {
                 return 0;
             }
             else if(player.getUserId()==roomDice.getCurBanker() && DiceNumberUtils.getKill(list)){//庄营
+                step = -1;
                 allDiceNumber.put(player.getUserId(),list);
                 gameUserStatus.put(roomDice.getCurBanker(),61);
                 for(Long l:room.getUsers()){
@@ -182,6 +190,7 @@ public class GameDice extends Game {
                 winAllEnd(list);
                 noticeGG();
             }else if (player.getUserId()==roomDice.getCurBanker() && DiceNumberUtils.getCompensate(list)){//庄输
+                step = -1;
                 allDiceNumber.put(player.getUserId(),list);
                 gameUserStatus.put(roomDice.getCurBanker(),60);
                 for(Long l:room.getUsers()){
@@ -200,6 +209,7 @@ public class GameDice extends Game {
                 noticeOtherCanRock(userId);
                 currentTurn.remove(room.getBankerId());
                 currentTurn.add(userId);
+                currentOperaterJust4AutoRock = userId;
             }
         }else{
             if(!DiceNumberUtils.getIsEffective(list)){
@@ -254,11 +264,14 @@ public class GameDice extends Game {
             currentTurn.add(userId);
             if(userId!=0l){
                 noticeOtherCanRock(userId);
+                currentOperaterJust4AutoRock = userId;
             }else{
+                step = -1;
                 noticeGG();
             }
         }
         player.sendMsg(new ResponseVo("gameService","rock",0));
+        updateLastOperateTime();
         return 0;
     }
 
@@ -268,10 +281,13 @@ public class GameDice extends Game {
      * @return
      */
     public int kill(Player player,Long userId){
+        step = DICESTEP_ROCK;
         gameUserStatus.put(userId,41);
         noticeWhoKilled(userId);
         ResponseVo vo = new ResponseVo("gameService","kill",0);
         Player.sendMsg2Player(vo,player.getUserId());
+        updateLastOperateTime();
+        currentOperaterJust4AutoRock = room.getBankerId();
         return 0;
     }
 
@@ -281,6 +297,7 @@ public class GameDice extends Game {
      * @return
      */
     public int killAll(Player player){
+        step = DICESTEP_ROCK;
         List<Long> userIdList = new ArrayList<>();
         for (Long l:room.getUsers()) {
             if(room.getBankerId()!=l){
@@ -290,6 +307,8 @@ public class GameDice extends Game {
         }
         noticeWhoKilledAll(userIdList);
         player.sendMsg(new ResponseVo("gameService","killAll",0));
+        currentOperaterJust4AutoRock = room.getBankerId();
+        updateLastOperateTime();
         return 0;
     }
 
@@ -422,6 +441,7 @@ public class GameDice extends Game {
      * 通知此局结束
      */
     private void noticeGG(){
+        currentOperaterJust4AutoRock = 0l;
         RoomDice roomDice = (RoomDice)room;
         if(!ifAgainBanker){
             long bankerId = nextOne(room.getUsers(),room.getBankerId());
@@ -435,7 +455,7 @@ public class GameDice extends Game {
         ResponseVo vo = new ResponseVo("gameService","noticeGG",result);
         Player.sendMsg2Player(vo,room.getUsers());
 
-        genRecord();
+        //genRecord();
         room.clearReadyStatus(true);
         sendFinalResult();
     }
@@ -738,5 +758,9 @@ public class GameDice extends Game {
 
     public void setGameThreeScore(Map<Long, ThreePlayerScore> gameThreeScore) {
         this.gameThreeScore = gameThreeScore;
+    }
+
+    protected void updateLastOperateTime(){
+        this.lastOperateTime = System.currentTimeMillis();
     }
 }

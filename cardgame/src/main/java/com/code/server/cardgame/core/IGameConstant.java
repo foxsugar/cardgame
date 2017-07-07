@@ -27,5 +27,10 @@ public interface IGameConstant {
     int STEP_QIANG_DIZHU = 2;//步骤 抢地主
     int STEP_PLAY = 3;//步骤 打牌
 
+    int DICESTEP_BET = 1;
+    int DICESTEP_KILL = 2;
+    int DICESTEP_ROCK = 3;
+
+
     long SECOND = 1000L;//秒
 }

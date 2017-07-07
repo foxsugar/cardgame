@@ -147,6 +147,9 @@ public class GameManager {
             GoldRoomPool.removeRoomFromMap(GoldRoomPool.getInstance().getFullRoom(),room);
         }
         GameManager.getInstance().blackList.remove(room.roomId);//删除黑名单中房间号
+        List<Room> roomtemp = GameManager.getInstance().getUserRoomList().get(room.getCreateUser());
+        roomtemp.remove(room);
+        GameManager.getInstance().getUserRoomList().put(room.getCreateUser(),roomtemp);
     }
 
     public Map<Long, String> getUserRoom() {

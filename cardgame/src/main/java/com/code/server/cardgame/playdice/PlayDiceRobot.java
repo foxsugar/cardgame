@@ -1,6 +1,5 @@
 package com.code.server.cardgame.playdice;
 
-import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.IGameConstant;
 import com.code.server.cardgame.core.Room;
 import com.code.server.cardgame.handler.GameProcessor;
@@ -18,7 +17,7 @@ public class PlayDiceRobot implements IPlayDiceRobot,IGameConstant {
 
     @Override
     public void execute() {
-        GameManager.getInstance().rooms.values().forEach(this::doExecute);
+        //GameManager.getInstance().rooms.values().forEach(this::doExecute);
     }
 
     private void doExecute(Room room){
@@ -42,29 +41,71 @@ public class PlayDiceRobot implements IPlayDiceRobot,IGameConstant {
             long now = System.currentTimeMillis();
             //执行
             if(now > game.lastOperateTime + SECOND * 15){
-
+                switch (game.step) {
+                    case DICESTEP_BET:
+                        for (Long l : game.getGameUserStatus().keySet()) {
+                            if(game.getGameUserStatus().get(l)==20 && room.getBankerId()!=l){
+                                bet(game,l);
+                            }
+                        }
+                        break;
+                    case DICESTEP_KILL:
+                        killAll(game,room.getBankerId());
+                        break;
+                    case DICESTEP_ROCK:
+                        rock(game,game.currentOperaterJust4AutoRock);
+                        break;
+                }
             }
         }
     }
 
+    //{"service":"gameService","method":"bet","params":{"chip":"8","chip2":"6","chip3":"4"}}
     @Override
-    public void bet(GameDice game) {
-
+    public void bet(GameDice game,Long userId) {
+        Map<String, String> params = new HashMap<>();
+        params.put("chip", "1");
+        params.put("chip2", "0");
+        params.put("chip3", "0");
+        ResponseVo vo = new ResponseVo("gameService","bet",params);
+        MessageHolder messageHolder = new MessageHolder();
+        messageHolder.msgType = MessageHolder.MSG_TYPE_INNER;
+        messageHolder.userId = userId;
+        JSONObject jsonObject = JSONObject.fromObject(vo);
+        messageHolder.message = jsonObject;
+        GameProcessor.getInstance().messageQueue.add(messageHolder);
     }
 
     @Override
-    public void rock(GameDice game) {
-
+    public void rock(GameDice game,Long userId) {
+        Map<String, String> params = new HashMap<>();
+        params.put("userId", "userId");
+        ResponseVo vo = new ResponseVo("gameService","rock",params);
+        MessageHolder messageHolder = new MessageHolder();
+        messageHolder.msgType = MessageHolder.MSG_TYPE_INNER;
+        messageHolder.userId = userId;
+        JSONObject jsonObject = JSONObject.fromObject(vo);
+        messageHolder.message = jsonObject;
+        GameProcessor.getInstance().messageQueue.add(messageHolder);
     }
 
     @Override
-    public void kill(GameDice game) {
-
+    public void kill(GameDice game,Long userId) {
+        //暂时不用
     }
 
+    // {"service":"gameService","method":"killAll","params":{"userID":"22"}}
     @Override
-    public void killAll(GameDice game) {
-
+    public void killAll(GameDice game,Long userId) {
+        Map<String, String> params = new HashMap<>();
+        params.put("userID", userId+"");
+        ResponseVo vo = new ResponseVo("gameService","killAll",params);
+        MessageHolder messageHolder = new MessageHolder();
+        messageHolder.msgType = MessageHolder.MSG_TYPE_INNER;
+        messageHolder.userId = userId;
+        JSONObject jsonObject = JSONObject.fromObject(vo);
+        messageHolder.message = jsonObject;
+        GameProcessor.getInstance().messageQueue.add(messageHolder);
     }
 
     @Override

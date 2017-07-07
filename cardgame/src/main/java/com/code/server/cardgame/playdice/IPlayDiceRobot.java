@@ -17,13 +17,13 @@ import com.code.server.cardgame.robot.IRobot;
  */
 public interface IPlayDiceRobot extends IRobot{
 
-    public void bet(GameDice game);
+    public void bet(GameDice game,Long userId);
 
-    public void rock(GameDice game);
+    public void rock(GameDice game,Long userId);
 
-    public void kill(GameDice game);
+    public void kill(GameDice game,Long userId);
 
-    public void killAll(GameDice game);
+    public void killAll(GameDice game,Long userId);
 
     public  void getReady(Room room,String userId);
 }

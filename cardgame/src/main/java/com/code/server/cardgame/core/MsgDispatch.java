@@ -76,7 +76,7 @@ public class MsgDispatch {
                 String service = jSONObject.getString("service");
                 String method = jSONObject.getString("method");
                 JSONObject params = jSONObject.getJSONObject("params");
-                if("gameService".equals(service)){
+                if("gameService".equals(service) || "roomService".equals(service) ){
                     Player player = GameManager.getInstance().getPlayers().get(msgHolder.userId);
                     if(player != null){
                         int code = dispatchGameService(method, params, player);
@@ -321,8 +321,12 @@ public class MsgDispatch {
         }
         Game game = room.getGame();
         if (game == null) {
-            return ErrorCode.CAN_NOT_NO_GAME;
+            if(room instanceof RoomDice){
+                return dispatchRoomService(method,params,player.getCtx());
+            }
         }
+
+
 
         if(game instanceof GameDouDiZhu){
             return dispatchGameDDZService(method,(GameDouDiZhu) game,params,player);

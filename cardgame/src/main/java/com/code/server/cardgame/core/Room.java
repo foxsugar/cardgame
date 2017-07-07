@@ -181,6 +181,7 @@ public class Room implements IGameConstant{
         roomRemoveUser(kickPlayer);
         noticeJoinRoom(player);
         noticeKickPlayer(player,kickPlayerId);
+        player.sendMsg(new ResponseVo("roomService","kickPerson",0));
         return 0;
     }
 
@@ -564,6 +565,7 @@ public class Room implements IGameConstant{
         if (isAddGameNum) {
             this.curGameNumber += 1;
         }
+        updateLastOperateTime();
     }
 
     public void addUserSocre(long userId, double score) {
