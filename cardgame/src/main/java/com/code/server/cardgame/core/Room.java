@@ -179,7 +179,7 @@ public class Room implements IGameConstant{
             return ErrorCodeDice.NOT_IN_THIS_ROOM;
         }
         roomRemoveUser(kickPlayer);
-        noticeJoinRoom(player);
+        noticeJoinRoomForKick(player);
         noticeKickPlayer(player,kickPlayerId);
         player.sendMsg(new ResponseVo("roomService","kickPerson",0));
         return 0;
@@ -220,17 +220,28 @@ public class Room implements IGameConstant{
             usersList.add(GameManager.getUserVo(user));
         }
 
-
         userOfRoom.setUserList(usersList);
         userOfRoom.setInRoomNumber(users.size());
         userOfRoom.setReadyNumber(readyNumber);
 
-
         player.sendMsg(new ResponseVo("roomService","joinRoom",new RoomVo(this,player)));
 
         Player.sendMsg2Player(new ResponseVo("roomService","roomNotice",userOfRoom), this.getUsers());
+    }
 
-
+    //更新房间数据
+    public void noticeJoinRoomForKick(Player player){
+        List<UserVo> usersList = new ArrayList<>();
+        UserOfRoom userOfRoom = new UserOfRoom();
+        int readyNumber = 0;
+        for (long userId : users) {
+            User user = this.userMap.get(userId);
+            usersList.add(GameManager.getUserVo(user));
+        }
+        userOfRoom.setUserList(usersList);
+        userOfRoom.setInRoomNumber(users.size());
+        userOfRoom.setReadyNumber(readyNumber);
+        Player.sendMsg2Player(new ResponseVo("roomService","roomNotice",userOfRoom), this.getUsers());
     }
 
     protected boolean isCanJoinCheckMoney(Player player) {

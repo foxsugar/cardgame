@@ -1,5 +1,6 @@
 package com.code.server.cardgame.playdice;
 
+import com.code.server.cardgame.core.GameManager;
 import com.code.server.cardgame.core.IGameConstant;
 import com.code.server.cardgame.core.Room;
 import com.code.server.cardgame.handler.GameProcessor;
@@ -17,7 +18,7 @@ public class PlayDiceRobot implements IPlayDiceRobot,IGameConstant {
 
     @Override
     public void execute() {
-        //GameManager.getInstance().rooms.values().forEach(this::doExecute);
+        GameManager.getInstance().rooms.values().forEach(this::doExecute);
     }
 
     private void doExecute(Room room){
@@ -27,7 +28,7 @@ public class PlayDiceRobot implements IPlayDiceRobot,IGameConstant {
         if(room != null && room.getGame() == null){//准备
             if (room instanceof RoomDice) {
                 long now = System.currentTimeMillis();
-                if(now > room.lastOperateTime + SECOND * 15){
+                if(now > room.lastOperateTime + SECOND * 10){
                     for (Long l : room.getUserStatus().keySet()) {
                         if(0==room.getUserStatus().get(l)){
                             getReady(room,l+"");
@@ -40,7 +41,7 @@ public class PlayDiceRobot implements IPlayDiceRobot,IGameConstant {
             GameDice game = (GameDice) room.getGame();
             long now = System.currentTimeMillis();
             //执行
-            if(now > game.lastOperateTime + SECOND * 15){
+            if(now > game.lastOperateTime + SECOND * 10){
                 switch (game.step) {
                     case DICESTEP_BET:
                         for (Long l : game.getGameUserStatus().keySet()) {
