@@ -28,7 +28,7 @@ public class PlayDiceRobot implements IPlayDiceRobot,IGameConstant {
         if(room != null && room.getGame() == null){//准备
             if (room instanceof RoomDice) {
                 long now = System.currentTimeMillis();
-                if(now > room.lastOperateTime + SECOND * 10){
+                if(now > room.lastOperateTime + SECOND * 15){
                     for (Long l : room.getUserStatus().keySet()) {
                         if(0==room.getUserStatus().get(l)){
                             getReady(room,l+"");
@@ -41,7 +41,7 @@ public class PlayDiceRobot implements IPlayDiceRobot,IGameConstant {
             GameDice game = (GameDice) room.getGame();
             long now = System.currentTimeMillis();
             //执行
-            if(now > game.lastOperateTime + SECOND * 10){
+            if(now > game.lastOperateTime + SECOND * 15){
                 switch (game.step) {
                     case DICESTEP_BET:
                         for (Long l : game.getGameUserStatus().keySet()) {
