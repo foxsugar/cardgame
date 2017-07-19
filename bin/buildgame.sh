@@ -1,7 +1,7 @@
 #!/bin/sh
 baseDir="/root/cardgame/"
 srcDir="cardgame"
-desDir="/root/cardgame"
+desDir="/root/game"
 cd ../
 git pull
 cd $srcDir

@@ -1,5 +1,5 @@
 #!/bin/sh
-dir="/root/cardgame"
+dir="/root/game"
 jar_prefix="cardgame"
 cd $dir
 rm -rf log
