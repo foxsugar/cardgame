@@ -7,6 +7,9 @@ import com.code.server.cardgame.playdice.ThreePlayerScore;
 import com.code.server.cardgame.response.*;
 import com.code.server.cardgame.timer.GameTimer;
 import com.code.server.cardgame.timer.TimerNode;
+import com.code.server.cardgame.utils.SpringUtil;
+import com.code.server.db.Service.UserService;
+import com.code.server.db.model.Record;
 import com.code.server.db.model.User;
 import com.google.gson.Gson;
 import net.sf.json.JSONObject;
@@ -530,6 +533,27 @@ public class Room implements IGameConstant{
         RoomDice roomDice = (RoomDice)this;
 
         if(createType==3){
+
+            UserService userService = SpringUtil.getBean(UserService.class);
+            Record.RoomRecord roomRecord = new Record.RoomRecord();
+            roomRecord.setTime(System.currentTimeMillis());
+            roomRecord.setType(roomDice.getCreateType());
+            for (long userId : roomDice.getUsers()) {
+                User user = roomDice.getUserMap().get(userId);
+                Record.UserRecord userRecord = new Record.UserRecord();
+                userRecord.setName(user.getUsername());
+                userRecord.setScore(roomDice.getUserScores().get(userId));
+                userRecord.setUserId(userId);
+                userRecord.setRoomId(roomDice.getRoomId());
+
+                userService.save(user);
+                roomRecord.addRecord(userRecord);
+            }
+            roomDice.getUserMap().forEach((k,v)->v.getRecord().addRoomRecord(roomRecord));
+
+            //加入数据库保存列表
+            GameManager.getInstance().getSaveUser2DB().addAll(roomDice.getUserMap().values());
+
             boolean temp = true;
             for (Long l:userScores.keySet()) {
                 if(userScores.get(l)!=0.0){
