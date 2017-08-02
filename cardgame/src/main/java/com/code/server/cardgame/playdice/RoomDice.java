@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class RoomDice extends Room {
 
-    public static final long ONE_HOUR = 1000L * 60 * 60;
+    public static final long FOUR_HOUR = 1000L * 60 * 60 * 4;
 
     //玩家状态:
 
@@ -45,7 +45,7 @@ public class RoomDice extends Room {
         this.personNumber = personNumber;
         this.isSelf = isSelf;
         this.isInGame = false;
-        this.createNeedMoney = cricle*personNumber;
+        this.createNeedMoney = cricle==1?3:5;
         this.lastOperateTime = System.currentTimeMillis();
     }
 
@@ -69,7 +69,7 @@ public class RoomDice extends Room {
                 }
             }
         }
-        if (player.getUser().getMoney() < needMoney+notSelfUserMoney) {
+        if (player.getUser().getMoney() < needMoney + notSelfUserMoney) {
             return ErrorCode.CANNOT_CREATE_ROOM_MONEY;
         }
 
@@ -85,16 +85,18 @@ public class RoomDice extends Room {
             room.roomAddUser(player);
         }else{
             long start = System.currentTimeMillis();
-            TimerNode node = new TimerNode(start, ONE_HOUR, false, new ITimeHandler() {
+            TimerNode node = new TimerNode(start, FOUR_HOUR, false, new ITimeHandler() {
                 @Override
                 public void fire() {
                     try {
-                        GameManager.getInstance().rooms.remove(room.roomId);
-                        //删除带开房的房间
-                        List<Room> roomList = new ArrayList<>();
-                        roomList = GameManager.getInstance().userRoomList.get(player.getUserId());
-                        roomList.remove(room);
-                        GameManager.getInstance().userRoomList.put(player.getUserId(),roomList);
+                        if(!room.isInGame()){
+                            GameManager.getInstance().rooms.remove(room.roomId);
+                            //删除带开房的房间
+                            List<Room> roomList = new ArrayList<>();
+                            roomList = GameManager.getInstance().userRoomList.get(player.getUserId());
+                            roomList.remove(room);
+                            GameManager.getInstance().userRoomList.put(player.getUserId(),roomList);
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
