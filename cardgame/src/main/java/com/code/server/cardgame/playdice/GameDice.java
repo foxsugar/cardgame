@@ -458,6 +458,7 @@ public class GameDice extends Game {
         //genRecord();
         room.clearReadyStatus(true);
         sendFinalResult();
+        updateLastOperateTime();
     }
 
 
@@ -762,5 +763,6 @@ public class GameDice extends Game {
 
     protected void updateLastOperateTime(){
         this.lastOperateTime = System.currentTimeMillis();
+        this.room.lastOperateTime =  System.currentTimeMillis();
     }
 }

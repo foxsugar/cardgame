@@ -159,9 +159,9 @@ public class Room implements IGameConstant{
             return ErrorCode.CANNOT_JOIN_ROOM_IS_FULL;
 
         }
-        if (!isCanJoinCheckMoney(player)) {
+        /*if (!isCanJoinCheckMoney(player)) {
             return ErrorCode.CANNOT_JOIN_ROOM_NO_MONEY;
-        }
+        }*/
         if(GameManager.getInstance().blackList!=null&&GameManager.getInstance().blackList.get(roomId)!=null){
             if(GameManager.getInstance().blackList.get(roomId).contains(player.getUserId())){//黑名单判断
                 return ErrorCodeDice.CANNOT_ADD_REFUSE_ROOM;
@@ -568,6 +568,11 @@ public class Room implements IGameConstant{
                     temp = false;
                 }
             }
+
+            if(!roomDice.isInGame){
+                temp = false;
+            }
+
             if(temp){
                 drawBack();
             }

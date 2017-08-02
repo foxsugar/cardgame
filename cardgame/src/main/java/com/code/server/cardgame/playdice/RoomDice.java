@@ -55,7 +55,21 @@ public class RoomDice extends Room {
             return ErrorCode.CANNOT_CREATE_ROOM_ROLE_HAS_IN_ROOM;
         }
         int needMoney = getNeedMoney(cricle);
-        if (player.getUser().getMoney() < needMoney) {
+
+        int notSelfUserMoney = 0;
+        List<Room>  notSelfRoomList = GameManager.getInstance().userRoomList.get(player.getUserId());
+        if(notSelfRoomList!=null){
+            for (Room room:notSelfRoomList) {
+                if(!room.isInGame()){
+                    if(room.getCricle()==1){
+                        notSelfUserMoney+=3;
+                    }else{
+                        notSelfUserMoney+=5;
+                    }
+                }
+            }
+        }
+        if (player.getUser().getMoney() < needMoney+notSelfUserMoney) {
             return ErrorCode.CANNOT_CREATE_ROOM_MONEY;
         }
 

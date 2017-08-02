@@ -80,7 +80,7 @@ public class PlayDiceRobot implements IPlayDiceRobot,IGameConstant {
     @Override
     public void rock(GameDice game,Long userId) {
         Map<String, String> params = new HashMap<>();
-        params.put("userId", "userId");
+        params.put("userId", userId+"");
         ResponseVo vo = new ResponseVo("gameService","rock",params);
         MessageHolder messageHolder = new MessageHolder();
         messageHolder.msgType = MessageHolder.MSG_TYPE_INNER;
